@@ -66,7 +66,6 @@ export class StyleguideMaps extends Component{
                     let marker = L.marker([el.Latitude, el.Longitude], {icon: leafletIcon}).addTo(mymap);
                     marker.bindPopup("<b>"+el.name+"</b> <br/>" + el.Categorie).openPopup();
                 })
-                console.log(response.data)
             })
         ;
 
@@ -77,11 +76,27 @@ export class StyleguideMaps extends Component{
             height: '50vh'
         };
 
+        let choiceItems = [
+            {id: 0, label: 'Ecoles maternelles', icon: 'book'}
+        ]
+
+        let choices = [];
+        choiceItems.forEach(el => {
+            choices.push(<div className="maps-choice" key={el.id}>
+                <div className="map-label">
+                    <div className="icon"><span className={"icon-" + el.icon} /></div>
+                    <div>{el.label}</div>
+                </div>
+            </div>)
+        })
         return (
             <section>
                 <h2>OpenstreetMaps - Leaflet</h2>
                 <div className="maps-items">
                     <div id="mapid" style={divStyle} />
+                    <div className="maps-choices">
+                        {choices}
+                    </div>
                 </div>
             </section>
         )

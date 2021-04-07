@@ -1,0 +1,78 @@
+.marker-pin {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  background: #c30b82;
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+}
+
+.marker-pin::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  margin: 3px 0 0 3px;
+  background: #fff;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.custom-div-icon i {
+  position: absolute;
+  width: 16px;
+  font-size: 16px;
+  left: 0;
+  top: 3px;
+  right: 0;
+  margin: 10px auto;
+  text-align: center;
+}
+
+.custom-div-icon i.awesome {
+  margin: 12px auto;
+  font-size: 17px;
+}
+
+.maps-choices{
+  margin: 24px 0;
+  
+  .maps-choice{
+    position: relative;
+    width: calc(320px - 24px);
+    transition: all 0.2s ease-in-out;
+    background-color: var(--alpha);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px var(--greyShadow);
+    cursor: pointer;
+    opacity: 0.7;
+    overflow: hidden;
+
+    .map-label{
+      @include flex(row, flex-start, flex-start);
+      padding: 12px 8px 12px 12px;
+    }
+
+    &:before{
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: var(--grey);
+      width: 4px;
+      height: 100%;
+      display: block;
+    }
+
+    &:hover{
+      opacity: 1;
+    };
+
+    .icon{
+      margin-right: 8px;
+    }
+
+  }
+}
