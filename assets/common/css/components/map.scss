@@ -20,7 +20,7 @@
   border-radius: 50%;
 }
 
-.custom-div-icon i {
+.map-marker-icon > span {
   position: absolute;
   width: 16px;
   font-size: 16px;
@@ -31,9 +31,16 @@
   text-align: center;
 }
 
-.custom-div-icon i.awesome {
-  margin: 12px auto;
-  font-size: 17px;
+.map-marker-icon{
+  opacity: 0;
+  display: none !important;
+}
+
+.maps-choices-0{
+  .map-marker-icon-0{
+    opacity: 1;
+    display: block !important;
+  }
 }
 
 .maps-choices{
@@ -64,6 +71,14 @@
       width: 4px;
       height: 100%;
       display: block;
+    }
+
+    &.active{
+      opacity: 1;
+
+      &:before{
+        background-color: var(--primary);
+      }
     }
 
     &:hover{

@@ -6,6 +6,37 @@ import L from "leaflet/dist/leaflet";
 import "leaflet-ajax/dist/leaflet.ajax.min";
 
 export class StyleguideMaps extends Component{
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            choices: []
+        }
+
+        this.handleChoice = this.handleChoice.bind(this);
+    }
+
+    handleChoice = (id) => {
+        const { choices } = this.state;
+        let newChoices = [];
+
+        let isIn = false;
+        choices.forEach(el => {
+            if(el === id){
+                isIn = true;
+            }
+            newChoices.push(el);
+        })
+
+        if(isIn){
+            newChoices = choices.filter(el => el !== id);
+        }else{
+            newChoices.push(id);
+        }
+
+        this.setState({choices: newChoices})
+    }
+
     componentDidMount = () => {
         let mymap = L.map('mapid').setView([51.505, -0.09], 13);
         L.tileLayer('https://b.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -23,8 +54,8 @@ export class StyleguideMaps extends Component{
         //     popupAnchor:  [4, -35] // point from which the popup should open relative to the iconAnchor
         // })
         let leafletIcon = L.divIcon({
-            className: 'custom-div-icon',
-            html: "<div style='background-color:#4838cc;' class='marker-pin'></div><i class='icon-book'>",
+            className: 'map-marker-icon map-marker-icon-0',
+            html: "<div style='background-color:#4838cc;' class='marker-pin'></div><span class='icon-book'>",
             iconSize: [30, 42],
             iconAnchor: [15, 42],
             popupAnchor:  [0, -35]
@@ -72,6 +103,7 @@ export class StyleguideMaps extends Component{
     }
 
     render () {
+        const { choices } = this.state;
         const divStyle = {
             height: '50vh'
         };
@@ -80,22 +112,32 @@ export class StyleguideMaps extends Component{
             {id: 0, label: 'Ecoles maternelles', icon: 'book'}
         ]
 
-        let choices = [];
+        let mapChoices = [];
         choiceItems.forEach(el => {
-            choices.push(<div className="maps-choice" key={el.id}>
+            let active = "";
+            if(choices.includes(el.id)){
+                active = " active"
+            }
+            mapChoices.push(<div className={"maps-choice" + active} onClick={() => this.handleChoice(el.id)} key={el.id}>
                 <div className="map-label">
                     <div className="icon"><span className={"icon-" + el.icon} /></div>
                     <div>{el.label}</div>
                 </div>
             </div>)
         })
+
+        let choicesActive = "";
+        choices.forEach(el => {
+            choicesActive += " maps-choices-" + el
+        })
+
         return (
             <section>
                 <h2>OpenstreetMaps - Leaflet</h2>
-                <div className="maps-items">
+                <div className={"maps-items" + choicesActive}>
                     <div id="mapid" style={divStyle} />
                     <div className="maps-choices">
-                        {choices}
+                        {mapChoices}
                     </div>
                 </div>
             </section>
