@@ -3,8 +3,8 @@
 namespace App\Command;
 
 use App\Service\ApiConnect;
-use Exception;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,9 +12,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use ZipArchive;
@@ -25,6 +22,10 @@ class ImmoDataCreateCommand extends Command
 
     protected $filenameData = 'annonces.csv';
     protected $filenameDataMaj = 'Annonces.csv';
+
+    const ANNONCE_CSV = 0;
+    const ANNONCE_XML = 1;
+    const ANNONCE_JSON = 2;
 
     private $url;
     private $params;
@@ -68,6 +69,9 @@ class ImmoDataCreateCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     protected function process(SymfonyStyle $io, OutputInterface $output, $call): int
     {
         // --------------  RECHERCHE DES ZIP  -----------------------
@@ -99,7 +103,7 @@ class ImmoDataCreateCommand extends Command
 
             // --------------  TRANSFERT DES DATA  -----------------------
             $io->title('Traitement du dossier');
-            $this->transfertData($io, $folder);
+            $this->transfertData($io, $output, $folder);
 //            try {
 //
 //            } catch (Exception $e) {$io->error('Error load CSV file : ' . $e);}
@@ -196,24 +200,21 @@ class ImmoDataCreateCommand extends Command
     /**
      * Transfert des data d'un folder
      * @param SymfonyStyle $io
+     * @param OutputInterface $output
      * @param $folder
      * @throws TransportExceptionInterface
-     * @throws ClientExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
      */
-    protected function transfertData(SymfonyStyle $io, $folder){
-//        $tabPathImg = [
-//            'images' => $this->PATH_IMAGES,
-//            'thumbs' => $this->PATH_THUMBS
-//        ];
-
+    protected function transfertData(SymfonyStyle $io, OutputInterface $output, $folder)
+    {
         $io->comment('------- Dossier : ' . $folder);
 
         $file = $this->PATH_EXTRACT . $folder . '/' . $this->filenameData;
         $fileMaj = $this->PATH_EXTRACT . $folder . '/' . $this->filenameDataMaj;
 
         if (file_exists($file) || file_exists($fileMaj)) {
+
+            $file = file_exists($file) ? $file : $fileMaj;
+
             $data = [
                 'dirname' => $folder,
                 'identifiant' => $folder,
@@ -226,12 +227,42 @@ class ImmoDataCreateCommand extends Command
                 'body' => $formData->bodyToIterable()
             ]);
 
-            dump(json_decode($response->getContent()));
+            $this->traitement(self::ANNONCE_CSV, $io, $output, $folder, json_decode($response->getContent()));
 
         } else { // XML --- PERICLES
 
         }
     }
 
+    /**
+     * Lance le traitement de du transfert de data
+     * @param $type
+     * @param SymfonyStyle $io
+     * @param $output
+     * @param $folder
+     * @param $data
+     */
+    protected function traitement($type, SymfonyStyle $io, $output, $folder, $data){
+        $count = count($data);
+        if ($count != 0) {
+            $progressBar = new ProgressBar($output, $count);
+            $progressBar->setFormat("%current%/%max% [%bar%] %percent:3s%%  Ψ");
+            $progressBar->setOverwrite(true);
+            $progressBar->start();
+
+            // Insertion des data csv dans la DBB
+            foreach ($data as $item) {
+//                $this->import->import($type, $folder, $item, $tabPathImg);
+                $progressBar->advance();
+            }
+
+            $progressBar->finish();
+            $io->text('------- Completed !');
+            $reader = null;unset($reader);unset($records);
+        } else {
+            $io->warning("Aucune donnée contenu dans le fichier.");
+        }
+        $io->newLine(1);
+    }
 
 }
