@@ -2,7 +2,9 @@
 
 namespace App\Command;
 
+use App\Entity\Immo\ImAgency;
 use App\Service\ApiConnect;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,6 +14,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use ZipArchive;
@@ -27,6 +32,7 @@ class ImmoDataCreateCommand extends Command
     const ANNONCE_XML = 1;
     const ANNONCE_JSON = 2;
 
+    private $em;
     private $url;
     private $params;
     private $api_immo;
@@ -34,18 +40,18 @@ class ImmoDataCreateCommand extends Command
     private $PATH_EXTRACT;
     private $PATH_ARCHIVE;
 
-    public function __construct(ParameterBagInterface $params, HttpClientInterface $api_immo, ApiConnect $apiConnect)
+    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params, HttpClientInterface $api_immo, ApiConnect $apiConnect)
     {
         parent::__construct();
-        $this->params = $params;
+        $this->em       = $em;
+        $this->params   = $params;
+        $this->api_immo = $api_immo;
 
         $path_data = $this->params->get('kernel.project_dir') . '/documents/immo/data/';
 
         $this->PATH_DEPOT   = $path_data . 'depot/';
         $this->PATH_EXTRACT = $path_data . 'extract/';
         $this->PATH_ARCHIVE = $path_data . 'archive/';
-
-        $this->api_immo = $api_immo;
 
         $this->url = $apiConnect->getUrlApiImmo();
     }
@@ -203,6 +209,9 @@ class ImmoDataCreateCommand extends Command
      * @param OutputInterface $output
      * @param $folder
      * @throws TransportExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
      */
     protected function transfertData(SymfonyStyle $io, OutputInterface $output, $folder)
     {
@@ -250,9 +259,15 @@ class ImmoDataCreateCommand extends Command
             $progressBar->setOverwrite(true);
             $progressBar->start();
 
+            $agency = $this->em->getRepository(ImAgency::class)->findOneBy(['dirname' => $folder]);
+            if(!$agency){
+                $agency = new ImAgency();
+            }
+
             // Insertion des data csv dans la DBB
             foreach ($data as $item) {
-//                $this->import->import($type, $folder, $item, $tabPathImg);
+                // set data agency
+                // set data ad
                 $progressBar->advance();
             }
 
