@@ -19,6 +19,6 @@ framework:
 
     http_client:
         scoped_clients:
-            maps_api:
-                base_uri: 'https://api.demodirecte.fr/'
-                auth_bearer: '9abfff71c2ac00a35c3496b2bbf9a0d989f7ad2d30a917e867e5dba3ea6d20415558193361c2f0750a1fd72b4965b9dcd182c335c90eda2e935bc226d6e3bd37'
+            api_immo:
+                base_uri: '%env(API_IMMO_URL)%'
+                auth_bearer: '%env(API_IMMO_BEAR)%'
