@@ -37,3 +37,7 @@ services:
         arguments:
             $publicDirectory: '%public_directory%'
             $privateDirectory: '%private_directory%'
+
+    App\Service\ApiConnect:
+        arguments:
+            $urlImmo: '%env(resolve:API_IMMO_URL)%'

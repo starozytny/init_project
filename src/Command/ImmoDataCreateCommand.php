@@ -2,23 +2,38 @@
 
 namespace App\Command;
 
+use App\Service\ApiConnect;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use ZipArchive;
 
 class ImmoDataCreateCommand extends Command
 {
     protected static $defaultName = 'immo:data:create';
+
+    protected $filenameData = 'annonces.csv';
+    protected $filenameDataMaj = 'Annonces.csv';
+
+    private $url;
     private $params;
+    private $api_immo;
     private $PATH_DEPOT;
     private $PATH_EXTRACT;
     private $PATH_ARCHIVE;
 
-    public function __construct(ParameterBagInterface $params)
+    public function __construct(ParameterBagInterface $params, HttpClientInterface $api_immo, ApiConnect $apiConnect)
     {
         parent::__construct();
         $this->params = $params;
@@ -29,6 +44,9 @@ class ImmoDataCreateCommand extends Command
         $this->PATH_EXTRACT = $path_data . 'extract/';
         $this->PATH_ARCHIVE = $path_data . 'archive/';
 
+        $this->api_immo = $api_immo;
+
+        $this->url = $apiConnect->getUrlApiImmo();
     }
 
     protected function configure()
@@ -73,16 +91,17 @@ class ImmoDataCreateCommand extends Command
             }
 
             // --------------  START PROCESS FOLDER  -----------------------
-//            $folder = $folders[0]; // get first folder
-//            $archives = $this->getOriginalArchives($archives);
-//            $archive = $archives[0];
+            $folder = $folders[0]; // get first folder
+            $archives = $this->getOriginalArchives($archives);
+            $archive = $archives[0];
 
             // --------------  Reinitialise les dossiers images du folder + MOVE IMG TO PUBLIC  -----------------------
 
             // --------------  TRANSFERT DES DATA  -----------------------
-//            $io->title('Traitement du dossier');
+            $io->title('Traitement du dossier');
+            $this->transfertData($io, $folder);
 //            try {
-//                $this->transfertData($folder, $output, $io);
+//
 //            } catch (Exception $e) {$io->error('Error load CSV file : ' . $e);}
 
             // --------------  TRANSFERT DES ARCHIVES  -----------------------
@@ -162,5 +181,57 @@ class ImmoDataCreateCommand extends Command
         $nameFolder = strtolower(substr($item,0, (strlen($item)-4)));
         return str_replace(" ", "_", $nameFolder);
     }
+
+    protected function getOriginalArchives($archives): array
+    {
+        $folders = array();
+        foreach ($archives as $item) {
+            if(preg_match('/([^\s]+(\.(?i)(zip))$)/i', $item, $matches)){
+                array_push($folders, $item);
+            }
+        }
+        return $folders;
+    }
+
+    /**
+     * Transfert des data d'un folder
+     * @param SymfonyStyle $io
+     * @param $folder
+     * @throws TransportExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    protected function transfertData(SymfonyStyle $io, $folder){
+//        $tabPathImg = [
+//            'images' => $this->PATH_IMAGES,
+//            'thumbs' => $this->PATH_THUMBS
+//        ];
+
+        $io->comment('------- Dossier : ' . $folder);
+
+        $file = $this->PATH_EXTRACT . $folder . '/' . $this->filenameData;
+        $fileMaj = $this->PATH_EXTRACT . $folder . '/' . $this->filenameDataMaj;
+
+        if (file_exists($file) || file_exists($fileMaj)) {
+            $data = [
+                'dirname' => $folder,
+                'identifiant' => $folder,
+                'file' => DataPart::fromPath($file),
+            ];
+
+            $formData = new FormDataPart($data);
+            $response = $this->api_immo->request("POST", $this->url . "api/immo/ad/csv", [
+                'headers'=> $formData->getPreparedHeaders()->toArray(),
+                'body' => $formData->bodyToIterable()
+            ]);
+
+            dump(json_decode($response->getContent()));
+
+        } else { // XML --- PERICLES
+
+        }
+    }
+
 
 }

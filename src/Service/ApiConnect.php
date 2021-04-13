@@ -13,10 +13,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class ApiConnect
 {
     private $api_immo; //scope client
+    private $urlImmo;
 
-    public function __construct(HttpClientInterface $api_immo)
+    public function __construct(HttpClientInterface $api_immo, $urlImmo)
     {
         $this->api_immo = $api_immo;
+        $this->urlImmo = $urlImmo;
     }
 
     /**
@@ -40,5 +42,10 @@ class ApiConnect
         // $content = ['id' => 521583, 'name' => 'symfony-docs', ...]
 
         return $response->getContent();
+    }
+
+    public function getUrlApiImmo()
+    {
+        return $this->urlImmo;
     }
 }
