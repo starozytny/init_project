@@ -25,7 +25,7 @@ class CreateBien
     public function createFromJson($data, $biens, ImAgency $agency): ImBien
     {
         /** @var ImBien $b */
-        $bien = new ImBien(); $existe = false;
+        $bien = new ImBien();
         foreach($biens as $b){
             if($b->getRef() == $data->bien->ref && $agency->getId() == $b->getAgency()->getId()){
                 $bien = $b;
