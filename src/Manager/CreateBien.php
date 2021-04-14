@@ -8,6 +8,7 @@ use App\Entity\Immo\ImAddress;
 use App\Entity\Immo\ImAgency;
 use App\Entity\Immo\ImBien;
 use App\Entity\Immo\ImFeature;
+use App\Entity\Immo\ImFeatureExt;
 use App\Entity\Immo\ImFinancial;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,14 +33,19 @@ class CreateBien
         $address = new ImAddress();
         $financial = new ImFinancial();
         $feature = new ImFeature();
+        $featureExt = null;
         foreach($biens as $b){
             if($b->getRef() == $data->bien->ref && $agency->getId() == $b->getAgency()->getId()){
                 $bien = $b;
                 $address = $b->getAddress();
                 $financial = $b->getFinancial();
                 $feature = $b->getFeature();
+                $featureExt = $b->getFeatureExt();
             }
         }
+
+        $featureExt = $this->createFeatureExtFromJson($featureExt, $data->featuresExt);
+        if($featureExt){ $this->em->persist($featureExt); }
 
         $feature = $this->createFeatureFromJson($feature, $data->features);
         $this->em->persist($feature);
@@ -50,7 +56,7 @@ class CreateBien
         $address = $this->createAddressFromJson($address, $data->address);
         $this->em->persist($address);
 
-        $bien = $this->createBienFromJson($bien, $data->bien, $agency, $address, $financial, $feature);
+        $bien = $this->createBienFromJson($bien, $data->bien, $agency, $address, $financial, $feature, $featureExt);
         $this->em->persist($bien);
 
        return $bien;
@@ -60,7 +66,7 @@ class CreateBien
      * @throws Exception
      */
     private function createBienFromJson(ImBien $bien, $item, ImAgency $agency, ImAddress $address,
-                                        ImFinancial $financial, ImFeature $feature): ImBien
+                                        ImFinancial $financial, ImFeature $feature, ?ImFeatureExt $featureExt): ImBien
     {
         return ($bien)
             ->setRef($item->ref)
@@ -77,6 +83,7 @@ class CreateBien
             ->setAddress($address)
             ->setFinancial($financial)
             ->setFeature($feature)
+            ->setFeatureExt($featureExt)
             ->setIsSync(true)
         ;
     }
@@ -144,5 +151,34 @@ class CreateBien
         }
 
         return $feature;
+    }
+
+    private function createFeatureExtFromJson(?ImFeatureExt $featureExt, $item): ?ImFeatureExt
+    {
+        if($item){
+            $featureExt = $featureExt ?? new ImFeatureExt();
+        }
+
+        if($featureExt){
+            if($item->parking != null){
+                $featureExt = ($featureExt)
+                    ->setNbParking($item->parking->nbParking)
+                    ->setNbBox($item->parking->nbBox)
+                ;
+            }
+            if($item->plus != null){
+                $featureExt = ($featureExt)
+                    ->setHasElevator($item->plus->hasElevator)
+                    ->setHasCellar($item->plus->hasCella)
+                    ->setHasIntercom($item->plus->hasIntercom)
+                    ->setHasConcierge($item->plus->hasConcierge)
+                    ->setHasTerrace($item->plus->hasTerrace)
+                    ->setHasClim($item->plus->hasClim)
+                    ->setHasPiscine($item->plus->hasPiscine)
+                ;
+            }
+        }
+
+        return $featureExt;
     }
 }
