@@ -4,11 +4,71 @@
 namespace App\Manager;
 
 
+use App\Entity\Immo\ImBien;
+use App\Entity\Immo\ImImage;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CreateImage
 {
-    public function transferImages(SymfonyStyle $io, $source, $destinationImages, $destinationThumbs, $folder, $tailleW = 150, $tailleH = 150)
+    private $em;
+    const TAILLE_W = 150;
+    const TAILLE_H = 150;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+    }
+
+    public function createFromJson($items, ImBien $bien, $sourceImages, $sourceThumbs, $folder)
+    {
+        $sourceImages = $sourceImages . $folder . "/";
+        $sourceThumbs = $sourceThumbs . $folder . "/";
+
+        $rank = 0;
+        foreach ($items as $item) {
+            if($item){
+
+                $file = $sourceImages.$item;
+                $filename = $item;
+                $filenameThumbs = substr($filename, 0, strripos($filename, '.')) . '-thumbs.jpg';
+
+                // check if i have to download image
+                // if yes, download and move image to right images and thumbs folder
+                $isUrl = substr($file, 0,4);
+                if($isUrl == "http" || $isUrl == "https"){
+                    $filename = $this->downloadImgURL($file, $sourceImages, $sourceThumbs);
+
+                    if ($filename != null){
+                        $filenameThumbs = $this->createThumb($sourceImages, $sourceThumbs, $item, self::TAILLE_W, self::TAILLE_H);
+                    }
+                }
+
+                // create image if existe
+                if(file_exists($sourceImages.$filename)){
+                    $orientation = true;
+                    list($width, $height) = getimagesize($file);
+                    if ($width > $height) {
+                        $orientation = false;
+                    }
+
+                    $image = (new ImImage())
+                        ->setFile($filename)
+                        ->setThumb($filenameThumbs)
+                        ->setIsPortrait($orientation)
+                        ->setRank($rank)
+                        ->setBien($bien)
+                    ;
+                    $rank++;
+
+                    $this->em->persist($image);
+                }
+            }
+        }
+    }
+
+    public function transferImages(SymfonyStyle $io, $source, $destinationImages, $destinationThumbs, $folder, $tailleW = self::TAILLE_W, $tailleH = self::TAILLE_H)
     {
         $source = $source . $folder . "/";
         $destinationImages = $destinationImages . $folder . "/";
@@ -107,8 +167,9 @@ class CreateImage
      * @param $item
      * @param $tailleW
      * @param $tailleH
+     * @return string
      */
-    protected function createThumb($source, $destinationThumbs, $item, $tailleW, $tailleH)
+    protected function createThumb($source, $destinationThumbs, $item, $tailleW, $tailleH): string
     {
         $file = $source . $item;
         list($width, $height) = getimagesize($file);
@@ -132,5 +193,35 @@ class CreateImage
         $name = $nameWithoutExt . '-thumbs.jpg';
 
         @imagejpeg($thumb, $destinationThumbs . "/" . $name,75);
+
+        return $name;
     }
+
+    /**
+     * Download et déplace l'image via une URL
+     * @param $file
+     * @param $destinationImages
+     * @param $destinationThumbs
+     * @return bool|string
+     */
+    public function downloadImgURL($file, $destinationImages, $destinationThumbs)
+    {
+        try{
+            if(!is_dir($destinationImages)){
+                mkdir($destinationImages);
+            }
+            if(!is_dir($destinationThumbs)){
+                mkdir($destinationThumbs);
+            }
+            $current = file_get_contents($file);
+            $filename = substr($file, strripos($file, "/")+1 , strlen($file));
+            $file = $destinationImages.$filename;
+            file_put_contents($file, $current);
+
+            return $filename;
+        }catch (Exception $e){
+            return  null;
+        }
+    }
+
 }

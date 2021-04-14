@@ -12,6 +12,7 @@ use App\Entity\Immo\ImDiagnostic;
 use App\Entity\Immo\ImFeature;
 use App\Entity\Immo\ImFeatureExt;
 use App\Entity\Immo\ImFinancial;
+use App\Entity\Immo\ImImage;
 use App\Entity\Immo\ImResponsable;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +24,6 @@ class CreateBien
 
     public function __construct(EntityManagerInterface $entityManager)
     {
-
         $this->em = $entityManager;
     }
     /**
@@ -40,6 +40,7 @@ class CreateBien
         $diagnostic = null;
         $copro = null;
         $responsable = null;
+        $images = [];
         foreach($biens as $b){
             if($b->getRef() == $data->bien->ref && $agency->getId() == $b->getAgency()->getId()){
                 $bien = $b;
@@ -50,8 +51,11 @@ class CreateBien
                 $diagnostic = $b->getDiagnostic();
                 $copro = $b->getCopro();
                 $responsable = $b->getResponsable();
+                $images = $b->getImages();
             }
         }
+
+        $this->deleteImages($images, $data->images);
 
         $responsable = $this->createResponsableFromJson($responsable, $data->responsable);
         if($responsable){ $this->em->persist($responsable); }
@@ -256,5 +260,12 @@ class CreateBien
         }
 
         return $responsable;
+    }
+
+    private function deleteImages($images)
+    {
+        foreach ($images as $img){
+            $this->em->remove($img);
+        }
     }
 }

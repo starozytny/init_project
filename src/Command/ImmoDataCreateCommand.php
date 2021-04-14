@@ -94,6 +94,12 @@ class ImmoDataCreateCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     protected function process(SymfonyStyle $io, OutputInterface $output, $call): int
     {
         // --------------  RECHERCHE DES ZIP  -----------------------
@@ -227,6 +233,7 @@ class ImmoDataCreateCommand extends Command
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
+     * @throws Exception
      */
     protected function transfertData(SymfonyStyle $io, OutputInterface $output, $folder)
     {
@@ -297,7 +304,9 @@ class ImmoDataCreateCommand extends Command
                     $agencyToCreate = false;
                 }
 
-                $this->createBien->createFromJson($item, $biens, $agency);
+                $bien = $this->createBien->createFromJson($item, $biens, $agency);
+
+                $this->createImage->createFromJson($item->images, $bien, $this->PATH_IMAGES, $this->PATH_THUMBS, $folder);
 
                 $progressBar->advance();
             }
