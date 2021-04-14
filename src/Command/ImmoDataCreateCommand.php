@@ -3,9 +3,12 @@
 namespace App\Command;
 
 use App\Entity\Immo\ImAgency;
+use App\Entity\Immo\ImBien;
 use App\Manager\CreateAgency;
+use App\Manager\CreateBien;
 use App\Service\ApiConnect;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,9 +45,11 @@ class ImmoDataCreateCommand extends Command
     private $PATH_ARCHIVE;
 
     private $createAgency;
+    private $createBien;
 
     public function __construct(EntityManagerInterface $em, ParameterBagInterface $params,
-                                HttpClientInterface $api_immo, ApiConnect $apiConnect, CreateAgency $createAgency)
+                                HttpClientInterface $api_immo, ApiConnect $apiConnect,
+                                CreateAgency $createAgency, CreateBien $createBien)
     {
         parent::__construct();
         $this->em       = $em;
@@ -59,6 +64,7 @@ class ImmoDataCreateCommand extends Command
 
         $this->url = $apiConnect->getUrlApiImmo();
         $this->createAgency = $createAgency;
+        $this->createBien = $createBien;
     }
 
     protected function configure()
@@ -255,6 +261,7 @@ class ImmoDataCreateCommand extends Command
      * @param $output
      * @param $folder
      * @param $data
+     * @throws Exception
      */
     protected function traitement($type, SymfonyStyle $io, $output, $folder, $data){
         $count = count($data);
@@ -271,6 +278,13 @@ class ImmoDataCreateCommand extends Command
                 $agencyToCreate = true;
             }
 
+            // get biens and init biens with sync false for delete
+            $biens = $this->em->getRepository(ImBien::class)->findAll();
+            foreach($biens as $b){
+                $b->setIsSync(false);
+            }
+            $this->em->flush();
+
             // Insertion des data csv dans la DBB
             foreach ($data as $item) {
                 $agency = $this->createAgency->createFromJson($agency, $item->agency);
@@ -280,7 +294,8 @@ class ImmoDataCreateCommand extends Command
                     $agencyToCreate = false;
                 }
 
-                // set data ad
+                $bien = $this->createBien->createFromJson($item, $biens, $agency);
+
                 $progressBar->advance();
             }
             $progressBar->finish();
@@ -288,6 +303,14 @@ class ImmoDataCreateCommand extends Command
             $reader = null;unset($reader);unset($records);
 
             $this->em->flush();
+
+            //delete all biens with sync false
+            $biens = $this->em->getRepository(ImBien::class)->findBy(['isSync' => false]);
+            foreach($biens as $b){
+                $this->em->remove($b);
+            }
+            $this->em->flush();
+
         } else {
             $io->warning("Aucune donnée contenu dans le fichier.");
         }

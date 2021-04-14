@@ -3,6 +3,8 @@
 namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImAgencyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -111,6 +113,16 @@ class ImAgency
      * @ORM\Column(type="string", length=255)
      */
     private $identifiant;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ImBien::class, mappedBy="agency", orphanRemoval=true)
+     */
+    private $biens;
+
+    public function __construct()
+    {
+        $this->biens = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -341,6 +353,36 @@ class ImAgency
     public function setIdentifiant(string $identifiant): self
     {
         $this->identifiant = $identifiant;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ImBien[]
+     */
+    public function getBiens(): Collection
+    {
+        return $this->biens;
+    }
+
+    public function addBien(ImBien $bien): self
+    {
+        if (!$this->biens->contains($bien)) {
+            $this->biens[] = $bien;
+            $bien->setAgency($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBien(ImBien $bien): self
+    {
+        if ($this->biens->removeElement($bien)) {
+            // set the owning side to null (unless already changed)
+            if ($bien->getAgency() === $this) {
+                $bien->setAgency(null);
+            }
+        }
 
         return $this;
     }
