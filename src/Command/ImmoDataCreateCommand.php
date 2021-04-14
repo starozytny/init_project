@@ -136,28 +136,30 @@ class ImmoDataCreateCommand extends Command
             } catch (Exception $e) {$io->error('Error load CSV file : ' . $e);}
 
             // --------------  TRANSFERT DES ARCHIVES  -----------------------
-//            $io->title('Création des archives');
-//            $this->archive($archive);
-//            $io->comment('Archives terminées');
+            $io->title('Création des archives');
+            $this->archive($archive);
+            $io->comment('Archives terminées');
 
             // --------------  SUPPRESSION DES ZIP  -----------------------
-//            $io->title('Suppresion du ZIP');
-//            if (preg_match('/([^\s]+(\.(?i)(zip))$)/i', $archive, $matches)) {
-//                $this->deleteZip($archive);
-//                $io->text('Suppression du Zip ' . $archive);
-//            }
+            $io->title('Suppresion du ZIP');
+            if (preg_match('/([^\s]+(\.(?i)(zip))$)/i', $archive, $matches)) {
+                if(file_exists($this->PATH_DEPOT . $archive)){
+                    unlink($this->PATH_DEPOT . $archive);
+                }
+                $io->text('Suppression du Zip ' . $archive);
+            }
             // --------------  SUPPRESSION DES EXTRACTS  -----------------------
-//            $io->title('Suppresion des dossiers Extracts');
-//            $folders = scandir($this->PATH_EXTRACT);
-//            foreach ($folders as $item) {
-//                if ($item != "." && $item != "..") {
-//                    $this->deleteFolder($this->PATH_EXTRACT . $item);
-//                    $io->text('Suppression du folder ' . $item);
-//                }
-//            }
+            $io->title('Suppresion des dossiers extracted');
+            $folders = scandir($this->PATH_EXTRACT);
+            foreach ($folders as $item) {
+                if ($item != "." && $item != "..") {
+                    $this->deleteFolder($this->PATH_EXTRACT . $item);
+                    $io->text('Suppression du dossier ' . $item);
+                }
+            }
 
-//            $io->success('SUIVANT');
-//            $this->process($io, $output, 0);
+            $io->success('SUIVANT');
+            $this->process($io, $output, 0);
         }
 
         return Command::SUCCESS;
@@ -343,7 +345,33 @@ class ImmoDataCreateCommand extends Command
                     unlink($folder . '/' . $entry);
                 }
             }
-            rmdir($folder);
+//            rmdir($folder);
         }
+    }
+
+    protected function archive($archive)
+    {
+        if(preg_match('/([^\s]+(\.(?i)(zip))$)/i', $archive, $matches)){
+
+            $nameFolder = $this->getDirname($archive);
+            $fileOri = $this->PATH_DEPOT . $archive;
+            $fileOld1 =  $this->PATH_ARCHIVE . $nameFolder . '_1.zip';
+            $fileOld2 =  $this->PATH_ARCHIVE . $nameFolder . '_2.zip';
+
+            if(file_exists($fileOld2)){
+                unlink($fileOld2);
+                copy($fileOld1, $fileOld2);
+                unlink($fileOld1);
+            }
+
+            if(file_exists($fileOld1)){
+                copy($fileOld1, $fileOld2);
+                unlink($fileOld1);
+                copy($fileOri, $fileOld1);
+            }else{
+                copy($fileOri, $fileOld1);
+            }
+        }
+
     }
 }
