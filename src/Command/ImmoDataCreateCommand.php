@@ -6,6 +6,7 @@ use App\Entity\Immo\ImAgency;
 use App\Entity\Immo\ImBien;
 use App\Manager\CreateAgency;
 use App\Manager\CreateBien;
+use App\Manager\CreateImage;
 use App\Service\ApiConnect;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -43,13 +44,16 @@ class ImmoDataCreateCommand extends Command
     private $PATH_DEPOT;
     private $PATH_EXTRACT;
     private $PATH_ARCHIVE;
+    private $PATH_IMAGES;
+    private $PATH_THUMBS;
 
     private $createAgency;
     private $createBien;
+    private $createImage;
 
     public function __construct(EntityManagerInterface $em, ParameterBagInterface $params,
                                 HttpClientInterface $api_immo, ApiConnect $apiConnect,
-                                CreateAgency $createAgency, CreateBien $createBien)
+                                CreateAgency $createAgency, CreateBien $createBien, CreateImage $createImage)
     {
         parent::__construct();
         $this->em       = $em;
@@ -57,14 +61,18 @@ class ImmoDataCreateCommand extends Command
         $this->api_immo = $api_immo;
 
         $path_data = $this->params->get('kernel.project_dir') . '/documents/immo/data/';
+        $path_public = $this->params->get('kernel.project_dir') . '/public/';
 
         $this->PATH_DEPOT   = $path_data . 'depot/';
         $this->PATH_EXTRACT = $path_data . 'extract/';
         $this->PATH_ARCHIVE = $path_data . 'archive/';
+        $this->PATH_IMAGES = $path_public . 'annonces/images/';
+        $this->PATH_THUMBS = $path_public . 'annonces/thumbs/';
 
         $this->url = $apiConnect->getUrlApiImmo();
         $this->createAgency = $createAgency;
         $this->createBien = $createBien;
+        $this->createImage = $createImage;
     }
 
     protected function configure()
@@ -86,9 +94,6 @@ class ImmoDataCreateCommand extends Command
         return Command::SUCCESS;
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     */
     protected function process(SymfonyStyle $io, OutputInterface $output, $call): int
     {
         // --------------  RECHERCHE DES ZIP  -----------------------
@@ -105,25 +110,24 @@ class ImmoDataCreateCommand extends Command
             return Command::SUCCESS;
         }else {
 
-            // -------------- SI CEST LE PREMIER CALL  -----------------------
-            if($call == 1){
-                // --------------  SAVE OLD DATA  -----------------------
-                // --------------  RESET TABLE  -----------------------
-            }
-
             // --------------  START PROCESS FOLDER  -----------------------
             $folder = $folders[0]; // get first folder
             $archives = $this->getOriginalArchives($archives);
             $archive = $archives[0];
 
             // --------------  Reinitialise les dossiers images du folder + MOVE IMG TO PUBLIC  -----------------------
+            $io->comment('Suppression des images de ' . $folder);
+            $this->deleteFolder($this->PATH_IMAGES . $folder);
+            $this->deleteFolder($this->PATH_THUMBS . $folder);
+            $io->title('Transfert des images');
+            $this->createImage->transferImages($io, $this->PATH_EXTRACT, $this->PATH_IMAGES, $this->PATH_THUMBS, $folder);
 
             // --------------  TRANSFERT DES DATA  -----------------------
             $io->title('Traitement du dossier');
-            $this->transfertData($io, $output, $folder);
-//            try {
-//
-//            } catch (Exception $e) {$io->error('Error load CSV file : ' . $e);}
+
+            try {
+              $this->transfertData($io, $output, $folder);
+            } catch (Exception $e) {$io->error('Error load CSV file : ' . $e);}
 
             // --------------  TRANSFERT DES ARCHIVES  -----------------------
 //            $io->title('Création des archives');
@@ -250,7 +254,6 @@ class ImmoDataCreateCommand extends Command
             $this->traitement(self::ANNONCE_CSV, $io, $output, $folder, json_decode($response->getContent()));
 
         } else { // XML --- PERICLES
-
         }
     }
 
@@ -294,7 +297,7 @@ class ImmoDataCreateCommand extends Command
                     $agencyToCreate = false;
                 }
 
-                $bien = $this->createBien->createFromJson($item, $biens, $agency);
+                $this->createBien->createFromJson($item, $biens, $agency);
 
                 $progressBar->advance();
             }
@@ -317,4 +320,21 @@ class ImmoDataCreateCommand extends Command
         $io->newLine(1);
     }
 
+    /**
+     * Delete folder
+     * @param $folder
+     */
+    protected function deleteFolder($folder)
+    {
+        if(is_dir($folder)){
+            $clean = scandir($folder);
+
+            foreach ($clean as $entry) {
+                if ($entry != "." && $entry != "..") {
+                    unlink($folder . '/' . $entry);
+                }
+            }
+            rmdir($folder);
+        }
+    }
 }
