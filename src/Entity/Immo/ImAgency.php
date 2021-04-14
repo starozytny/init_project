@@ -78,7 +78,7 @@ class ImAgency
     private $tarif;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $legal;
 
@@ -106,6 +106,11 @@ class ImAgency
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lon;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $identifiant;
 
     public function getId(): ?int
     {
@@ -324,6 +329,18 @@ class ImAgency
     public function setLon(?string $lon): self
     {
         $this->lon = $lon;
+
+        return $this;
+    }
+
+    public function getIdentifiant(): ?string
+    {
+        return $this->identifiant;
+    }
+
+    public function setIdentifiant(string $identifiant): self
+    {
+        $this->identifiant = $identifiant;
 
         return $this;
     }

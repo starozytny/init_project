@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Immo\ImAgency;
+use App\Manager\CreateAgency;
 use App\Service\ApiConnect;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -40,7 +41,10 @@ class ImmoDataCreateCommand extends Command
     private $PATH_EXTRACT;
     private $PATH_ARCHIVE;
 
-    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params, HttpClientInterface $api_immo, ApiConnect $apiConnect)
+    private $createAgency;
+
+    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params,
+                                HttpClientInterface $api_immo, ApiConnect $apiConnect, CreateAgency $createAgency)
     {
         parent::__construct();
         $this->em       = $em;
@@ -54,6 +58,7 @@ class ImmoDataCreateCommand extends Command
         $this->PATH_ARCHIVE = $path_data . 'archive/';
 
         $this->url = $apiConnect->getUrlApiImmo();
+        $this->createAgency = $createAgency;
     }
 
     protected function configure()
@@ -259,21 +264,30 @@ class ImmoDataCreateCommand extends Command
             $progressBar->setOverwrite(true);
             $progressBar->start();
 
+            $agencyToCreate = false;
             $agency = $this->em->getRepository(ImAgency::class)->findOneBy(['dirname' => $folder]);
             if(!$agency){
                 $agency = new ImAgency();
+                $agencyToCreate = true;
             }
 
             // Insertion des data csv dans la DBB
             foreach ($data as $item) {
-                // set data agency
+                $agency = $this->createAgency->createFromJson($agency, $item->agency);
+                if($agencyToCreate){
+                    $this->em->persist($agency);
+                    $this->em->flush();
+                    $agencyToCreate = false;
+                }
+
                 // set data ad
                 $progressBar->advance();
             }
-
             $progressBar->finish();
             $io->text('------- Completed !');
             $reader = null;unset($reader);unset($records);
+
+            $this->em->flush();
         } else {
             $io->warning("Aucune donnée contenu dans le fichier.");
         }
