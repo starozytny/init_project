@@ -101,6 +101,11 @@ class ImBien
      */
     private $featureExt;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ImDiagnostic::class, cascade={"persist", "remove"})
+     */
+    private $diagnostic;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -294,6 +299,18 @@ class ImBien
     public function setFeatureExt(?ImFeatureExt $featureExt): self
     {
         $this->featureExt = $featureExt;
+
+        return $this;
+    }
+
+    public function getDiagnostic(): ?ImDiagnostic
+    {
+        return $this->diagnostic;
+    }
+
+    public function setDiagnostic(?ImDiagnostic $diagnostic): self
+    {
+        $this->diagnostic = $diagnostic;
 
         return $this;
     }

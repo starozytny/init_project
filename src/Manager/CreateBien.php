@@ -7,6 +7,7 @@ namespace App\Manager;
 use App\Entity\Immo\ImAddress;
 use App\Entity\Immo\ImAgency;
 use App\Entity\Immo\ImBien;
+use App\Entity\Immo\ImDiagnostic;
 use App\Entity\Immo\ImFeature;
 use App\Entity\Immo\ImFeatureExt;
 use App\Entity\Immo\ImFinancial;
@@ -34,6 +35,7 @@ class CreateBien
         $financial = new ImFinancial();
         $feature = new ImFeature();
         $featureExt = null;
+        $diagnostic = null;
         foreach($biens as $b){
             if($b->getRef() == $data->bien->ref && $agency->getId() == $b->getAgency()->getId()){
                 $bien = $b;
@@ -41,8 +43,12 @@ class CreateBien
                 $financial = $b->getFinancial();
                 $feature = $b->getFeature();
                 $featureExt = $b->getFeatureExt();
+                $diagnostic = $b->getDiagnostic();
             }
         }
+
+        $diagnostic = $this->createDiagnosticFromJson($diagnostic, $data->diagnostic);
+        if($diagnostic){ $this->em->persist($diagnostic); }
 
         $featureExt = $this->createFeatureExtFromJson($featureExt, $data->featuresExt);
         if($featureExt){ $this->em->persist($featureExt); }
@@ -56,7 +62,8 @@ class CreateBien
         $address = $this->createAddressFromJson($address, $data->address);
         $this->em->persist($address);
 
-        $bien = $this->createBienFromJson($bien, $data->bien, $agency, $address, $financial, $feature, $featureExt);
+        $bien = $this->createBienFromJson($bien, $data->bien, $agency, $address, $financial, $feature,
+                                          $featureExt, $diagnostic);
         $this->em->persist($bien);
 
        return $bien;
@@ -66,7 +73,8 @@ class CreateBien
      * @throws Exception
      */
     private function createBienFromJson(ImBien $bien, $item, ImAgency $agency, ImAddress $address,
-                                        ImFinancial $financial, ImFeature $feature, ?ImFeatureExt $featureExt): ImBien
+                                        ImFinancial $financial, ImFeature $feature, ?ImFeatureExt $featureExt,
+                                        ?ImDiagnostic $diagnostic): ImBien
     {
         return ($bien)
             ->setRef($item->ref)
@@ -84,6 +92,7 @@ class CreateBien
             ->setFinancial($financial)
             ->setFeature($feature)
             ->setFeatureExt($featureExt)
+            ->setDiagnostic($diagnostic)
             ->setIsSync(true)
         ;
     }
@@ -180,5 +189,23 @@ class CreateBien
         }
 
         return $featureExt;
+    }
+
+    private function createDiagnosticFromJson(?ImDiagnostic $diagnostic, $item): ?ImDiagnostic
+    {
+        if($item){
+            $diagnostic = $diagnostic ?? new ImDiagnostic();
+        }
+
+        if($diagnostic){
+            $diagnostic = ($diagnostic)
+                ->setDpeVal($item->dpeVal)
+                ->setDpeLettre($item->dpeLettre)
+                ->setGesVal($item->gesVal)
+                ->setGesLettre($item->gesLettre)
+            ;
+        }
+
+        return $diagnostic;
     }
 }
