@@ -80,8 +80,15 @@ class ImBien
 
     /**
      * @ORM\OneToOne(targetEntity=ImAddress::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
      */
     private $address;
+
+    /**
+     * @ORM\OneToOne(targetEntity=ImFinancial::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $financial;
 
     public function getId(): ?int
     {
@@ -237,9 +244,21 @@ class ImBien
         return $this->address;
     }
 
-    public function setAddress(?ImAddress $address): self
+    public function setAddress(ImAddress $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getFinancial(): ?ImFinancial
+    {
+        return $this->financial;
+    }
+
+    public function setFinancial(ImFinancial $financial): self
+    {
+        $this->financial = $financial;
 
         return $this;
     }

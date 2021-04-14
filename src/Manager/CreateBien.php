@@ -7,6 +7,7 @@ namespace App\Manager;
 use App\Entity\Immo\ImAddress;
 use App\Entity\Immo\ImAgency;
 use App\Entity\Immo\ImBien;
+use App\Entity\Immo\ImFinancial;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -28,17 +29,22 @@ class CreateBien
         /** @var ImBien $b */
         $bien = new ImBien();
         $address = new ImAddress();
+        $financial = new ImFinancial();
         foreach($biens as $b){
             if($b->getRef() == $data->bien->ref && $agency->getId() == $b->getAgency()->getId()){
                 $bien = $b;
                 $address = $b->getAddress();
+                $financial = $b->getFinancial();
             }
         }
+
+        $financial = $this->createFinancialFromJson($financial, $data->financial);
+        $this->em->persist($financial);
 
         $address = $this->createAddressFromJson($address, $data->address);
         $this->em->persist($address);
 
-        $bien = $this->createBienFromJson($bien, $data->bien, $agency, $address);
+        $bien = $this->createBienFromJson($bien, $data->bien, $agency, $address, $financial);
         $this->em->persist($bien);
 
        return $bien;
@@ -47,7 +53,7 @@ class CreateBien
     /**
      * @throws Exception
      */
-    private function createBienFromJson(ImBien $bien, $item, ImAgency $agency, ImAddress $address): ImBien
+    private function createBienFromJson(ImBien $bien, $item, ImAgency $agency, ImAddress $address, ImFinancial $financial): ImBien
     {
         return ($bien)
             ->setRef($item->ref)
@@ -62,6 +68,7 @@ class CreateBien
             ->setContent($item->content)
             ->setAgency($agency)
             ->setAddress($address)
+            ->setFinancial($financial)
             ->setIsSync(true)
         ;
     }
@@ -76,6 +83,24 @@ class CreateBien
             ->setArdt($item->ardt)
             ->setLat($item->lat)
             ->setLon($item->lon)
+        ;
+    }
+
+    private function createFinancialFromJson(ImFinancial $financial, $item): ImFinancial
+    {
+        return ($financial)
+            ->setPrice($item->price)
+            ->setCommission($item->commission)
+            ->setCharges($item->charges)
+            ->setFoncier($item->foncier)
+            ->setDeposit($item->deposit)
+            ->setPartHonoEdl($item->partHonoEdl)
+            ->setComplementLoyer($item->complementLoyer)
+            ->setHonoChargesDe($item->honoChargesDe)
+            ->setHorsHonoAcquereur($item->horsHonoAcquereur)
+            ->setModalitesChargesLocataire($item->modalitesChargesLocataire)
+            ->setBouquet($item->bouquet)
+            ->setRente($item->rente)
         ;
     }
 }
