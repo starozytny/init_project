@@ -111,6 +111,11 @@ class ImBien
      */
     private $copro;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ImResponsable::class, cascade={"persist", "remove"})
+     */
+    private $responsable;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -328,6 +333,18 @@ class ImBien
     public function setCopro(?ImCopro $copro): self
     {
         $this->copro = $copro;
+
+        return $this;
+    }
+
+    public function getResponsable(): ?ImResponsable
+    {
+        return $this->responsable;
+    }
+
+    public function setResponsable(?ImResponsable $responsable): self
+    {
+        $this->responsable = $responsable;
 
         return $this;
     }

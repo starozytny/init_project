@@ -12,6 +12,7 @@ use App\Entity\Immo\ImDiagnostic;
 use App\Entity\Immo\ImFeature;
 use App\Entity\Immo\ImFeatureExt;
 use App\Entity\Immo\ImFinancial;
+use App\Entity\Immo\ImResponsable;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -38,6 +39,7 @@ class CreateBien
         $featureExt = null;
         $diagnostic = null;
         $copro = null;
+        $responsable = null;
         foreach($biens as $b){
             if($b->getRef() == $data->bien->ref && $agency->getId() == $b->getAgency()->getId()){
                 $bien = $b;
@@ -47,8 +49,12 @@ class CreateBien
                 $featureExt = $b->getFeatureExt();
                 $diagnostic = $b->getDiagnostic();
                 $copro = $b->getCopro();
+                $responsable = $b->getResponsable();
             }
         }
+
+        $responsable = $this->createResponsableFromJson($responsable, $data->responsable);
+        if($responsable){ $this->em->persist($responsable); }
 
         $copro = $this->createCoproFromJson($copro, $data->copro);
         if($copro){ $this->em->persist($copro); }
@@ -232,5 +238,23 @@ class CreateBien
         }
 
         return $copro;
+    }
+
+    private function createResponsableFromJson(?ImResponsable $responsable, $item): ?ImResponsable
+    {
+        if($item){
+            $responsable = $responsable ?? new ImResponsable();
+        }
+
+        if($responsable){
+            $responsable = ($responsable)
+                ->setName($item->name)
+                ->setPhone($item->phone)
+                ->setEmail($item->email)
+                ->setCodeNego($item->codeNego)
+            ;
+        }
+
+        return $responsable;
     }
 }
