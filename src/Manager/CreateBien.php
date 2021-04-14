@@ -7,6 +7,7 @@ namespace App\Manager;
 use App\Entity\Immo\ImAddress;
 use App\Entity\Immo\ImAgency;
 use App\Entity\Immo\ImBien;
+use App\Entity\Immo\ImCopro;
 use App\Entity\Immo\ImDiagnostic;
 use App\Entity\Immo\ImFeature;
 use App\Entity\Immo\ImFeatureExt;
@@ -36,6 +37,7 @@ class CreateBien
         $feature = new ImFeature();
         $featureExt = null;
         $diagnostic = null;
+        $copro = null;
         foreach($biens as $b){
             if($b->getRef() == $data->bien->ref && $agency->getId() == $b->getAgency()->getId()){
                 $bien = $b;
@@ -44,8 +46,12 @@ class CreateBien
                 $feature = $b->getFeature();
                 $featureExt = $b->getFeatureExt();
                 $diagnostic = $b->getDiagnostic();
+                $copro = $b->getCopro();
             }
         }
+
+        $copro = $this->createCoproFromJson($copro, $data->copro);
+        if($copro){ $this->em->persist($copro); }
 
         $diagnostic = $this->createDiagnosticFromJson($diagnostic, $data->diagnostic);
         if($diagnostic){ $this->em->persist($diagnostic); }
@@ -63,7 +69,7 @@ class CreateBien
         $this->em->persist($address);
 
         $bien = $this->createBienFromJson($bien, $data->bien, $agency, $address, $financial, $feature,
-                                          $featureExt, $diagnostic);
+                                          $featureExt, $diagnostic, $copro);
         $this->em->persist($bien);
 
        return $bien;
@@ -74,7 +80,7 @@ class CreateBien
      */
     private function createBienFromJson(ImBien $bien, $item, ImAgency $agency, ImAddress $address,
                                         ImFinancial $financial, ImFeature $feature, ?ImFeatureExt $featureExt,
-                                        ?ImDiagnostic $diagnostic): ImBien
+                                        ?ImDiagnostic $diagnostic, ?ImCopro $copro): ImBien
     {
         return ($bien)
             ->setRef($item->ref)
@@ -93,6 +99,7 @@ class CreateBien
             ->setFeature($feature)
             ->setFeatureExt($featureExt)
             ->setDiagnostic($diagnostic)
+            ->setCopro($copro)
             ->setIsSync(true)
         ;
     }
@@ -207,5 +214,23 @@ class CreateBien
         }
 
         return $diagnostic;
+    }
+
+    private function createCoproFromJson(?ImCopro $copro, $item): ?ImCopro
+    {
+        if($item){
+            $copro = $copro ?? new ImCopro();
+        }
+
+        if($copro){
+            $copro = ($copro)
+                ->setNbLot($item->nbLot)
+                ->setChargesAnnuelle($item->chargesAnnuelle)
+                ->setHasProced($item->hasProced)
+                ->setDetailsProced($item->detailsProced)
+            ;
+        }
+
+        return $copro;
     }
 }

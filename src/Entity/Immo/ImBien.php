@@ -106,6 +106,11 @@ class ImBien
      */
     private $diagnostic;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ImCopro::class, cascade={"persist", "remove"})
+     */
+    private $copro;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -311,6 +316,18 @@ class ImBien
     public function setDiagnostic(?ImDiagnostic $diagnostic): self
     {
         $this->diagnostic = $diagnostic;
+
+        return $this;
+    }
+
+    public function getCopro(): ?ImCopro
+    {
+        return $this->copro;
+    }
+
+    public function setCopro(?ImCopro $copro): self
+    {
+        $this->copro = $copro;
 
         return $this;
     }
