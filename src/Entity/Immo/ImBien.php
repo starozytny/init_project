@@ -78,6 +78,11 @@ class ImBien
      */
     private $isSync;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ImAddress::class, cascade={"persist", "remove"})
+     */
+    private $address;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -223,6 +228,18 @@ class ImBien
     public function setIsSync(bool $isSync): self
     {
         $this->isSync = $isSync;
+
+        return $this;
+    }
+
+    public function getAddress(): ?ImAddress
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?ImAddress $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
