@@ -90,6 +90,12 @@ class ImBien
      */
     private $financial;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ImFeature::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $feature;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -259,6 +265,18 @@ class ImBien
     public function setFinancial(ImFinancial $financial): self
     {
         $this->financial = $financial;
+
+        return $this;
+    }
+
+    public function getFeature(): ?ImFeature
+    {
+        return $this->feature;
+    }
+
+    public function setFeature(ImFeature $feature): self
+    {
+        $this->feature = $feature;
 
         return $this;
     }

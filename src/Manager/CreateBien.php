@@ -7,6 +7,7 @@ namespace App\Manager;
 use App\Entity\Immo\ImAddress;
 use App\Entity\Immo\ImAgency;
 use App\Entity\Immo\ImBien;
+use App\Entity\Immo\ImFeature;
 use App\Entity\Immo\ImFinancial;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,13 +31,18 @@ class CreateBien
         $bien = new ImBien();
         $address = new ImAddress();
         $financial = new ImFinancial();
+        $feature = new ImFeature();
         foreach($biens as $b){
             if($b->getRef() == $data->bien->ref && $agency->getId() == $b->getAgency()->getId()){
                 $bien = $b;
                 $address = $b->getAddress();
                 $financial = $b->getFinancial();
+                $feature = $b->getFeature();
             }
         }
+
+        $feature = $this->createFeatureFromJson($feature, $data->features);
+        $this->em->persist($feature);
 
         $financial = $this->createFinancialFromJson($financial, $data->financial);
         $this->em->persist($financial);
@@ -44,7 +50,7 @@ class CreateBien
         $address = $this->createAddressFromJson($address, $data->address);
         $this->em->persist($address);
 
-        $bien = $this->createBienFromJson($bien, $data->bien, $agency, $address, $financial);
+        $bien = $this->createBienFromJson($bien, $data->bien, $agency, $address, $financial, $feature);
         $this->em->persist($bien);
 
        return $bien;
@@ -53,7 +59,8 @@ class CreateBien
     /**
      * @throws Exception
      */
-    private function createBienFromJson(ImBien $bien, $item, ImAgency $agency, ImAddress $address, ImFinancial $financial): ImBien
+    private function createBienFromJson(ImBien $bien, $item, ImAgency $agency, ImAddress $address,
+                                        ImFinancial $financial, ImFeature $feature): ImBien
     {
         return ($bien)
             ->setRef($item->ref)
@@ -69,6 +76,7 @@ class CreateBien
             ->setAgency($agency)
             ->setAddress($address)
             ->setFinancial($financial)
+            ->setFeature($feature)
             ->setIsSync(true)
         ;
     }
@@ -102,5 +110,39 @@ class CreateBien
             ->setBouquet($item->bouquet)
             ->setRente($item->rente)
         ;
+    }
+
+    private function createFeatureFromJson(ImFeature $feature, $item): ImFeature
+    {
+        $feature = ($feature)
+            ->setArea($item->area->area)
+            ->setAreaLand($item->area->areaLand)
+            ->setAreaLiving($item->area->areaLiving)
+            ->setNbSdb($item->bathroom->nbSdb)
+            ->setNbSle($item->bathroom->nbSle)
+            ->setNbWc($item->bathroom->nbWc)
+            ->setIsWcSeparate($item->bathroom->isWcSeparate)
+            ->setFloor($item->floor->floor)
+            ->setNbFloor($item->floor->nbFloor)
+            ->setNbPiece($item->nbPiece)
+            ->setNbRoom($item->nbRoom)
+            ->setNbBalcony($item->nbBalcony)
+            ->setIsMeuble($item->isMeuble)
+            ->setConstructionYear($item->constructionYear)
+            ->setIsRefaitNeuf($item->isRefaitNeuf)
+            ->setHeating($item->heating)
+            ->setKitchen($item->kitchen)
+        ;
+
+        if($item->exposition){
+            $feature = ($feature)
+                ->setIsSouth($item->exposition->isSouth)
+                ->setIsEast($item->exposition->isEast)
+                ->setIsWest($item->exposition->isWest)
+                ->setIsNorth($item->exposition->isNorth)
+            ;
+        }
+
+        return $feature;
     }
 }
