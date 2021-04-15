@@ -54,6 +54,7 @@ class ImBien
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups("admin-list:read")
      */
     private $codeTypeAd;
 

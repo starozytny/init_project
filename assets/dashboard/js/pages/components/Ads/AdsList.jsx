@@ -46,7 +46,7 @@ export class AdsList extends Component {
                 </div>
 
                 <div className="items-table">
-                    <div className="items items-default items-user">
+                    <div className="items items-default items-user items-ad">
                         {data && data.length !== 0 ? data.map(elem => {
                             return <AdsItem {...this.props} elem={elem} key={elem.id}/>
                         }) : <Alert>Aucun résultat</Alert>}

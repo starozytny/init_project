@@ -16,7 +16,7 @@ export class AdsItem extends Component {
                         {elem.thumb ? <img src={`/annonces/thumbs/${elem.agency.dirname}/${elem.thumb}`} alt={`Image de ${elem.ref}`}/> : <img src={`https://robohash.org/${elem.ref}?size=150x150`} alt={`Image de ${elem.ref}`}/>}
                     </div>
                     <div className="infos">
-                        <div>
+                        <div className="ad-info">
                             <div className="name">
                                 <div>{elem.label}</div>
                             </div>
@@ -24,11 +24,11 @@ export class AdsItem extends Component {
                             <div className="sub sub-username">{elem.agency.name}</div>
                             <div className="sub">{elem.ref} - {elem.realRef}</div>
                         </div>
-                        <div>
-                            <div className="role">{elem.typeAd}</div>
+                        <div className="ad-ad">
+                            <div className={"role type-ad ad-" + elem.codeTypeAd}>{elem.typeAd}</div>
                         </div>
-                        <div>
-                            <div className="role">{elem.typeBien}</div>
+                        <div className="ad-bien">
+                            <div className="role type-bien">{elem.typeBien}</div>
                         </div>
                     </div>
                 </div>
