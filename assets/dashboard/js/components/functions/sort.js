@@ -1,3 +1,7 @@
+function compareName(a, b){
+    return comparison(a.name, b.name);
+}
+
 function compareFirstname(a, b){
     return comparison(a.firstname, b.firstname);
 }
@@ -23,5 +27,6 @@ function comparison (objA, objB){
 module.exports = {
     compareUsername,
     compareLastname,
-    compareFirstname
+    compareFirstname,
+    compareName
 }

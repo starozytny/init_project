@@ -6,26 +6,31 @@ use App\Repository\Immo\ImBienRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImBienRepository::class)
  */
 class ImBien
 {
+    const ADMIN_LIST_READ = ['admin-list:read'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("admin-list:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("admin-list:read")
      */
     private $ref;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("admin-list:read")
      */
     private $realRef;
 
@@ -36,11 +41,13 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("admin-list:read")
      */
     private $typeAd;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("admin-list:read")
      */
     private $typeBien;
 
@@ -61,11 +68,13 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("admin-list:read")
      */
     private $label;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups("admin-list:read")
      */
     private $content;
 

@@ -108,7 +108,7 @@ export class User extends Component {
     }
 
     render () {
-        const { loadPageError, context, loadData, data, currentData, element, filters } = this.state;
+        const { loadPageError, context, loadData, data, currentData, element, perPage, filters } = this.state;
 
         let content, havePagination = false;
         switch (context){
@@ -131,7 +131,7 @@ export class User extends Component {
         }
 
         return <>
-            <Page ref={this.page} haveLoadPageError={loadPageError}
+            <Page ref={this.page} haveLoadPageError={loadPageError} perPage={perPage}
                   havePagination={havePagination} taille={data && data.length} data={data} onUpdate={this.handleUpdateData}
             >
                 {content}
