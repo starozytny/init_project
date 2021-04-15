@@ -350,7 +350,9 @@ class ImmoDataCreateCommand extends Command
 
             foreach ($clean as $entry) {
                 if ($entry != "." && $entry != "..") {
-                    unlink($folder . '/' . $entry);
+                    if(file_exists($folder . '/' . $entry)){
+                        unlink($folder . '/' . $entry);
+                    }
                 }
             }
 //            rmdir($folder);
