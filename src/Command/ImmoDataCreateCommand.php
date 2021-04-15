@@ -154,9 +154,9 @@ class ImmoDataCreateCommand extends Command
             foreach ($folders as $item) {
                 if ($item != "." && $item != "..") {
                     $this->deleteFolder($this->PATH_EXTRACT . $item);
-                    $io->text('Suppression du dossier ' . $item);
                 }
             }
+            $io->text('Suppression du contenu du dossier ' . $folder);
 
             $io->success('SUIVANT');
             $this->process($io, $output, 0);
@@ -263,6 +263,7 @@ class ImmoDataCreateCommand extends Command
             $this->traitement(self::ANNONCE_CSV, $io, $output, $folder, json_decode($response->getContent()));
 
         } else { // XML --- PERICLES
+            $io->comment('------- [ERROR] Fichier introuvable : ' . $folder);
         }
     }
 
