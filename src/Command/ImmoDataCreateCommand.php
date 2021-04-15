@@ -133,7 +133,7 @@ class ImmoDataCreateCommand extends Command
 
             try {
               $this->transfertData($io, $output, $folder);
-            } catch (Exception $e) {$io->error('Error load CSV file : ' . $e);}
+            } catch (Exception $e) {$io->error('Error transfert data : ' . $e);}
 
             // --------------  TRANSFERT DES ARCHIVES  -----------------------
             $io->title('Création des archives');
@@ -293,7 +293,15 @@ class ImmoDataCreateCommand extends Command
             // get biens and init biens with sync false for delete
             $biens = $this->em->getRepository(ImBien::class)->findAll();
             foreach($biens as $b){
-                $b->setIsSync(false);
+                if($agencyToCreate){
+                    $b->setIsSync(true);
+                }else{
+                    if($b->getAgency()->getId() != $agency->getId()){
+                        $b->setIsSync(true);
+                    }else{
+                        $b->setIsSync(false);
+                    }
+                }
             }
             $this->em->flush();
 
@@ -355,7 +363,7 @@ class ImmoDataCreateCommand extends Command
 
             $nameFolder = $this->getDirname($archive);
             $fileOri = $this->PATH_DEPOT . $archive;
-            $fileOld1 =  $this->PATH_ARCHIVE . $nameFolder . '_1.zip';
+            $fileOld1 =  $this->PATH_ARCHIVE . $nameFolder . '.zip';
             $fileOld2 =  $this->PATH_ARCHIVE . $nameFolder . '_2.zip';
 
             if(file_exists($fileOld2)){
@@ -367,10 +375,8 @@ class ImmoDataCreateCommand extends Command
             if(file_exists($fileOld1)){
                 copy($fileOld1, $fileOld2);
                 unlink($fileOld1);
-                copy($fileOri, $fileOld1);
-            }else{
-                copy($fileOri, $fileOld1);
             }
+            copy($fileOri, $fileOld1);
         }
 
     }

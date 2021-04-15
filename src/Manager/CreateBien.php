@@ -12,7 +12,6 @@ use App\Entity\Immo\ImDiagnostic;
 use App\Entity\Immo\ImFeature;
 use App\Entity\Immo\ImFeatureExt;
 use App\Entity\Immo\ImFinancial;
-use App\Entity\Immo\ImImage;
 use App\Entity\Immo\ImResponsable;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -55,7 +54,7 @@ class CreateBien
             }
         }
 
-        $this->deleteImages($images, $data->images);
+        $this->deleteImages($images);
 
         $responsable = $this->createResponsableFromJson($responsable, $data->responsable);
         if($responsable){ $this->em->persist($responsable); }
@@ -267,5 +266,7 @@ class CreateBien
         foreach ($images as $img){
             $this->em->remove($img);
         }
+
+        $this->em->flush();
     }
 }
