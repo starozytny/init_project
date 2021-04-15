@@ -1,0 +1,17 @@
+{% extends 'admin/layout/layout.html.twig' %}
+
+{% set page_title %}Liste des annonces{% endset %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('dashboard_ads') }}
+{% endblock %}
+
+{% block main_content %}
+    <div id="ads"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('dashboard_ads') }}
+{% endblock %}

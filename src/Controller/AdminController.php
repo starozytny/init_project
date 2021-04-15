@@ -52,4 +52,12 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/pages/settings/index.html.twig');
     }
+
+    /**
+     * @Route("/immobilier/annonces", name="immo_ads")
+     */
+    public function ads(): Response
+    {
+        return $this->render('admin/pages/immo/index.html.twig');
+    }
 }
