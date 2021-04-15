@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Entity(repositoryClass=ImBienRepository::class)
@@ -81,6 +82,7 @@ class ImBien
     /**
      * @ORM\ManyToOne(targetEntity=ImAgency::class, inversedBy="biens")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("admin-list:read")
      */
     private $agency;
 
@@ -128,7 +130,7 @@ class ImBien
     private $responsable;
 
     /**
-     * @ORM\OneToMany(targetEntity=ImImage::class, mappedBy="bien", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ImImage::class, mappedBy="bien", orphanRemoval=true, fetch="EAGER")
      */
     private $images;
 
@@ -398,5 +400,14 @@ class ImBien
         }
 
         return $this;
+    }
+
+    /**
+     * @Groups("admin-list:read")
+     * @SerializedName("thumb")
+     */
+    public function getFirstThumb()
+    {
+        return $this->getImages() && $this->getImages()[0] ? $this->getImages()[0]->getThumb() : null;
     }
 }

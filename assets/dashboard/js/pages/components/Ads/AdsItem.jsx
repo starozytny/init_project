@@ -13,7 +13,8 @@ export class AdsItem extends Component {
             <div className="item-content">
                 <div className="item-body">
                     <div className="avatar">
-                        {/*<img src={`https://robohash.org/${elem.username}?size=64x64`} alt={`Avatar de ${elem.username}`}/>*/}
+                        {elem.thumb ? <img src={`/annonces/thumbs/${elem.agency.dirname}/${elem.thumb}`} alt={`Image de ${elem.ref}`}/> : <img src={`https://robohash.org/${elem.ref}?size=150x150`} alt={`Image de ${elem.ref}`}/>}
+
                     </div>
                     <div className="infos">
                         <div>

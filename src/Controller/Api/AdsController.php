@@ -36,8 +36,6 @@ class AdsController extends AbstractController
     public function index(ApiResponse $apiResponse, ImBienRepository $repository): JsonResponse
     {
         $ads = $repository->findAll();
-        dump(count($ads));
-
         return $apiResponse->apiJsonResponse($ads, ImBien::ADMIN_LIST_READ);
     }
 }

@@ -36,27 +36,27 @@ class CreateImage
 
                 // check if i have to download image
                 // if yes, download and move image to right images and thumbs folder
-                $isUrl = substr($file, 0,4);
+                $isUrl = substr($item, 0,4);
                 if($isUrl == "http" || $isUrl == "https"){
-                    $filename = $this->downloadImgURL($file, $sourceImages, $sourceThumbs);
+                    $filename = $this->downloadImgURL($item, $sourceImages, $sourceThumbs);
 
                     if ($filename != null){
-                        $filenameThumbs = $this->createThumb($sourceImages, $sourceThumbs, $item, self::TAILLE_W, self::TAILLE_H);
+                        $filenameThumbs = $this->createThumb($sourceImages, $sourceThumbs, $filename, self::TAILLE_W, self::TAILLE_H);
                     }
                 }
 
                 // create image if existe
                 if(file_exists($sourceImages.$filename)){
-                    $orientation = true;
+                    $isPortrait = true;
                     list($width, $height) = getimagesize($file);
                     if ($width > $height) {
-                        $orientation = false;
+                        $isPortrait = false;
                     }
 
                     $image = (new ImImage())
                         ->setFile($filename)
                         ->setThumb($filenameThumbs)
-                        ->setIsPortrait($orientation)
+                        ->setIsPortrait($isPortrait)
                         ->setRank($rank)
                         ->setBien($bien)
                     ;
@@ -173,6 +173,9 @@ class CreateImage
     {
         $file = $source . $item;
         list($width, $height) = getimagesize($file);
+        if ($width < $height) { // == portrait
+            $tailleH = 200;
+        }
 
         $ratio_orig = $width/$height;
         $w = $tailleW;
