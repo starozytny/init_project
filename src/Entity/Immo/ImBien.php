@@ -80,16 +80,16 @@ class ImBien
     private $content;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ImAgency::class, inversedBy="biens")
+     * @ORM\Column(type="boolean")
+     */
+    private $isSync;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=ImAgency::class, inversedBy="biens", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      * @Groups("admin-list:read")
      */
     private $agency;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isSync;
 
     /**
      * @ORM\OneToOne(targetEntity=ImAddress::class, cascade={"persist", "remove"})
