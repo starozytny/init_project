@@ -94,6 +94,7 @@ class ImBien
     /**
      * @ORM\OneToOne(targetEntity=ImAddress::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("admin-list:read")
      */
     private $address;
 

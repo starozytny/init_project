@@ -19,10 +19,13 @@ function axiosGetData(self, url){
     ;
 }
 
-function axiosGetDataPagination(self, url, perPage=10){
+function axiosGetDataPagination(self, url, perPage=10, sorter=null){
     axios.get(url, {})
         .then(function (response) {
             let data = response.data;
+            if(sorter){
+                data.sort(sorter);
+            }
             self.setState({ dataImmuable: data, data: data, currentData: data.slice(0, perPage) });
         })
         .catch(function () {

@@ -9,6 +9,16 @@ import Sort              from "@dashboardComponents/functions/sort";
 
 import { AdsList } from "./AdsList";
 
+function compareLabelThenZipcode(a, b) {
+    if (a.label > b.label) {
+        return 1;
+    } else if (a.label < b.label) {
+        return -1;
+    }
+
+    return Sort.comparison(a.address.zipcode, b.address.zipcode)
+}
+
 export class Ads extends Component {
     constructor(props) {
         super();
@@ -31,11 +41,11 @@ export class Ads extends Component {
         this.handleUpdateList = this.handleUpdateList.bind(this);
     }
 
-    componentDidMount() { Formulaire.axiosGetDataPagination(this, Routing.generate('api_ads_index'), this.state.perPage) }
+    componentDidMount() { Formulaire.axiosGetDataPagination(this, Routing.generate('api_immo_ads_index'), this.state.perPage, compareLabelThenZipcode) }
     handleUpdateData = (data) => { this.setState({ currentData: data })  }
     handleUpdateList = (element, newContext=null) => {
         const { data, context, perPage } = this.state
-        Formulaire.updateDataPagination(this, Sort.compareName, newContext, context, data, element, perPage);
+        Formulaire.updateDataPagination(this, compareLabelThenZipcode, newContext, context, data, element, perPage);
     }
     handleChangeContext = (context, element=null) => {
         this.setState({ context, element });

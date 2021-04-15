@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 
 /**
- * @Route("/api/ads", name="api_ads_")
+ * @Route("/api/immo/ads", name="api_immo_ads_")
  */
 class AdsController extends AbstractController
 {

@@ -4,6 +4,7 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImAddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImAddressRepository::class)
@@ -24,11 +25,13 @@ class ImAddress
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
+     * @Groups("admin-list:read")
      */
     private $zipcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("admin-list:read")
      */
     private $city;
 

@@ -1,3 +1,7 @@
+function compareLabel(a, b){
+    return comparison(a.label, b.label);
+}
+
 function compareName(a, b){
     return comparison(a.name, b.name);
 }
@@ -25,8 +29,10 @@ function comparison (objA, objB){
 }
 
 module.exports = {
+    comparison,
     compareUsername,
     compareLastname,
     compareFirstname,
-    compareName
+    compareName,
+    compareLabel
 }

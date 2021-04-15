@@ -22,6 +22,7 @@ class ImAgency
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("admin-list:read")
      */
     private $name;
 
