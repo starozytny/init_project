@@ -56,7 +56,7 @@ export class AdItem extends Component {
                         <div className="role type-bien">{elem.typeBien}</div>
                     </div>
                 </div>
-                <Navigation onChangeContext={this.handleChangeSubContext} />
+                <Navigation subContext={subContext} onChangeContext={this.handleChangeSubContext} />
                 <div className="details-content">
                     {content}
                 </div>
@@ -65,14 +65,21 @@ export class AdItem extends Component {
     }
 }
 
-function Navigation({ onChangeContext }){
+function Navigation({ onChangeContext, subContext }){
+
+    let items = [
+        {context: "infos",       label: "Infos"},
+        {context: "features",    label: "Caractéristique"},
+        {context: "diag",        label: "Diagnostic"},
+        {context: "financial",   label: "Financier"},
+    ]
+
     return (
         <div className="details-nav">
             <div className="details-nav-items">
-                <div className="active" onClick={() => onChangeContext("infos")}>Infos</div>
-                <div onClick={() => onChangeContext("features")}>Caractéristique</div>
-                <div onClick={() => onChangeContext("diag")}>Diagnostic</div>
-                <div onClick={() => onChangeContext("financial")}>Financier</div>
+                {items.map(el => {
+                    return <div className={subContext === el.context ? "active" : ""} onClick={() => onChangeContext(el.context)}>{el.label}</div>
+                })}
             </div>
         </div>
     )
