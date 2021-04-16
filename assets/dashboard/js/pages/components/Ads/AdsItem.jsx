@@ -4,9 +4,9 @@ import Sanitize from "@dashboardComponents/functions/sanitaze";
 
 export class AdsItem extends Component {
     render () {
-        const { elem, onChangeContext, onDelete, onSelectors } = this.props
+        const { elem, onChangeContext } = this.props
 
-        return <div className="item">
+        return <div className="item" onClick={() => onChangeContext("show", elem)}>
             <div className="selector">
                 <div>#{elem.id}</div>
             </div>

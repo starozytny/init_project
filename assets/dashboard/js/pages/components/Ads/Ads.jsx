@@ -8,6 +8,7 @@ import Formulaire        from "@dashboardComponents/functions/Formulaire";
 import Sort              from "@dashboardComponents/functions/sort";
 
 import { AdsList } from "./AdsList";
+import {AdItem} from "./AdItem";
 
 function compareLabelThenZipcode(a, b) {
     if (a.label > b.label) {
@@ -59,6 +60,10 @@ export class Ads extends Component {
 
         let content, havePagination = false;
         switch (context){
+            case "show":
+                content = loadData ? <LoaderElement /> : <AdItem onChangeContext={this.handleChangeContext}
+                                                                    elem={element}/>
+                break;
             default:
                 havePagination = true;
                 content = loadData ? <LoaderElement /> : <AdsList onChangeContext={this.handleChangeContext}

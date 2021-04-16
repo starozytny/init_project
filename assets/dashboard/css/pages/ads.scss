@@ -1,5 +1,7 @@
 @import "../vars/vars";
 
+@import "split/ad/details";
+
 .items-table{
   .selector{
     width: 60px;
@@ -12,6 +14,9 @@
 }
 
 .items-ad{
+  .item:not(.item-header){
+    cursor: pointer;
+  }
   .avatar{
     width: auto;
     max-width: 150px;
@@ -35,28 +40,28 @@
     margin-bottom: 4px;
   }
 
-  .type-ad, .type-bien{
-    opacity: 0.8;
-  }
-
-  .type-ad{
-    margin-bottom: 4px;
-    margin-top: 12px;
-    font-size: 15px;
-
-    &.ad-1{
-      background-color: var(--dangerShadow);
-    }
-  }
-  .type-bien{
-    margin-bottom: 0;
-    font-size: 15px;
-    background-color: var(--greyShadow);
-  }
-
   .ad-price{
     margin-top: 8px;
   }
+}
+
+.type-ad, .type-bien{
+  opacity: 0.8;
+}
+
+.type-ad{
+  margin-bottom: 4px;
+  margin-top: 12px;
+  font-size: 15px;
+
+  &.ad-1{
+    background-color: var(--dangerShadow);
+  }
+}
+.type-bien{
+  margin-bottom: 0;
+  font-size: 15px;
+  background-color: var(--greyShadow);
 }
 
 //                      __   _____ __    ___    __
