@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Immo;
 
 use App\Entity\Immo\ImBien;
 use App\Repository\Immo\ImBienRepository;
@@ -19,9 +19,7 @@ class AdsController extends AbstractController
     /**
      * Get ads data
      *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
-     * @Route("/", name="index", options={"expose"=true}, methods={"GET"})
+     * @Route("/", name="read", options={"expose"=true}, methods={"GET"})
      *
      * @OA\Response(
      *     response=200,
@@ -33,9 +31,9 @@ class AdsController extends AbstractController
      * @param ImBienRepository $repository
      * @return JsonResponse
      */
-    public function index(ApiResponse $apiResponse, ImBienRepository $repository): JsonResponse
+    public function read(ApiResponse $apiResponse, ImBienRepository $repository): JsonResponse
     {
         $ads = $repository->findAll();
-        return $apiResponse->apiJsonResponse($ads, ImBien::ADMIN_LIST_READ);
+        return $apiResponse->apiJsonResponse($ads, ImBien::LIST_READ);
     }
 }

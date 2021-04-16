@@ -25,13 +25,13 @@ class ImAddress
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $zipcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $city;
 

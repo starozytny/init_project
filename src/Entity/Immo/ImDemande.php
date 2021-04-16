@@ -3,6 +3,7 @@
 namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImDemandeRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,12 +51,18 @@ class ImDemande
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $bienRef;
+    private $bienIdentifiant;
 
     /**
      * @ORM\ManyToOne(targetEntity=ImBien::class, inversedBy="demandes")
      */
     private $bien;
+
+    public function __construct()
+    {
+        $this->createAt = new DateTime();
+        $this->isSeen = false;
+    }
 
     public function getId(): ?int
     {
@@ -134,14 +141,14 @@ class ImDemande
         return $this;
     }
 
-    public function getBienRef(): ?string
+    public function getBienIdentifiant(): ?string
     {
-        return $this->bienRef;
+        return $this->bienIdentifiant;
     }
 
-    public function setBienRef(string $bienRef): self
+    public function setBienIdentifiant(string $bienIdentifiant): self
     {
-        $this->bienRef = $bienRef;
+        $this->bienIdentifiant = $bienIdentifiant;
 
         return $this;
     }

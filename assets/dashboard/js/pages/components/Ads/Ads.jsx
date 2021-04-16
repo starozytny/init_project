@@ -41,7 +41,7 @@ export class Ads extends Component {
         this.handleUpdateList = this.handleUpdateList.bind(this);
     }
 
-    componentDidMount() { Formulaire.axiosGetDataPagination(this, Routing.generate('api_immo_ads_index'), this.state.perPage, compareLabelThenZipcode) }
+    componentDidMount() { Formulaire.axiosGetDataPagination(this, Routing.generate('api_immo_ads_read'), this.state.perPage, compareLabelThenZipcode) }
     handleUpdateData = (data) => { this.setState({ currentData: data })  }
     handleUpdateList = (element, newContext=null) => {
         const { data, context, perPage } = this.state

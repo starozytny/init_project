@@ -22,13 +22,13 @@ class ImAgency
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $dirname;
 

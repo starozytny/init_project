@@ -14,24 +14,24 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  */
 class ImBien
 {
-    const ADMIN_LIST_READ = ['admin-list:read'];
+    const LIST_READ = ['list:read'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $ref;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $realRef;
 
@@ -42,19 +42,19 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $typeAd;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $typeBien;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $codeTypeAd;
 
@@ -70,13 +70,13 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $label;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $content;
 
@@ -88,14 +88,14 @@ class ImBien
     /**
      * @ORM\ManyToOne(targetEntity=ImAgency::class, inversedBy="biens", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $agency;
 
     /**
      * @ORM\OneToOne(targetEntity=ImAddress::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      */
     private $address;
 
@@ -416,7 +416,7 @@ class ImBien
     }
 
     /**
-     * @Groups("admin-list:read")
+     * @Groups("list:read")
      * @SerializedName("thumb")
      */
     public function getFirstThumb()

@@ -368,8 +368,12 @@ class ImmoDataCreateCommand extends Command
             $this->em->flush();
 
             //delete all biens with sync false
+            /** @var ImBien $b */
             $biens = $this->em->getRepository(ImBien::class)->findBy(['isSync' => false]);
             foreach($biens as $b){
+                foreach($b->getDemandes() as $demande){
+                    $demande->setBien(null);
+                }
                 $this->em->remove($b);
             }
             $this->em->flush();
@@ -432,6 +436,12 @@ class ImmoDataCreateCommand extends Command
             if(!in_array($agency->getDirname(), $this->synchroAgencies)){
                 $io->comment($agency->getName());
                 foreach($agency->getBiens() as $bien){
+                    // remove bien of demandes
+                    foreach($bien->getDemandes() as $demande){
+                        $demande->setBien(null);
+                    }
+
+                    // remove pictures
                     foreach($bien->getImages() as $image){
                         $img = $this->PATH_IMAGES . $agency->getDirname() . '/' . $image->getFile();
                         $thumb = $this->PATH_THUMBS . $agency->getDirname() . '/' . $image->getThumb();
