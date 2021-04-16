@@ -136,9 +136,20 @@ class ImBien
      */
     private $images;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $identifiant;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ImDemande::class, mappedBy="bien")
+     */
+    private $demandes;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->demandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -411,5 +422,47 @@ class ImBien
     public function getFirstThumb()
     {
         return $this->getImages() && $this->getImages()[0] ? $this->getImages()[0]->getThumb() : null;
+    }
+
+    public function getIdentifiant(): ?string
+    {
+        return $this->identifiant;
+    }
+
+    public function setIdentifiant(string $identifiant): self
+    {
+        $this->identifiant = $identifiant;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ImDemande[]
+     */
+    public function getDemandes(): Collection
+    {
+        return $this->demandes;
+    }
+
+    public function addDemande(ImDemande $demande): self
+    {
+        if (!$this->demandes->contains($demande)) {
+            $this->demandes[] = $demande;
+            $demande->setBien($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDemande(ImDemande $demande): self
+    {
+        if ($this->demandes->removeElement($demande)) {
+            // set the owning side to null (unless already changed)
+            if ($demande->getBien() === $this) {
+                $demande->setBien(null);
+            }
+        }
+
+        return $this;
     }
 }

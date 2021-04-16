@@ -40,9 +40,18 @@ class CreateBien
         $copro = null;
         $responsable = null;
         $images = [];
+        $identifiant = uniqid().bin2hex(random_bytes(8));
         foreach($biens as $b){
-            if($b->getRef() == $data->bien->ref && $agency->getId() == $b->getAgency()->getId()){
-                $bien = $b;
+            if($agency->getId() == $b->getAgency()->getId()){
+                if($b->getRealRef()){
+                    if($b->getRealRef() == $data->bien->realRef){
+                        $bien = $b;
+                    }
+                }else{
+                    if($b->getRef() == $data->bien->ref){
+                        $bien = $b;
+                    }
+                }
                 $address = $b->getAddress();
                 $financial = $b->getFinancial();
                 $feature = $b->getFeature();
@@ -51,6 +60,7 @@ class CreateBien
                 $copro = $b->getCopro();
                 $responsable = $b->getResponsable();
                 $images = $b->getImages();
+                $identifiant = $b->getIdentifiant();
             }
         }
 
@@ -77,7 +87,7 @@ class CreateBien
         $address = $this->createAddressFromJson($address, $data->address);
         $this->em->persist($address);
 
-        $bien = $this->createBienFromJson($bien, $data->bien, $agency, $address, $financial, $feature,
+        $bien = $this->createBienFromJson($bien, $data->bien, $identifiant, $agency, $address, $financial, $feature,
                                           $featureExt, $diagnostic, $copro);
         $this->em->persist($bien);
 
@@ -87,7 +97,7 @@ class CreateBien
     /**
      * @throws Exception
      */
-    private function createBienFromJson(ImBien $bien, $item, ImAgency $agency, ImAddress $address,
+    private function createBienFromJson(ImBien $bien, $item, $identifiant, ImAgency $agency, ImAddress $address,
                                         ImFinancial $financial, ImFeature $feature, ?ImFeatureExt $featureExt,
                                         ?ImDiagnostic $diagnostic, ?ImCopro $copro): ImBien
     {
@@ -110,6 +120,7 @@ class CreateBien
             ->setDiagnostic($diagnostic)
             ->setCopro($copro)
             ->setIsSync(true)
+            ->setIdentifiant($identifiant)
         ;
     }
 
