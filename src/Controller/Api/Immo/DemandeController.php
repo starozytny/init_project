@@ -4,10 +4,7 @@ namespace App\Controller\Api\Immo;
 
 use App\Entity\Immo\ImBien;
 use App\Entity\Immo\ImDemande;
-use App\Repository\Immo\ImBienRepository;
-use App\Repository\Immo\ImDemandeRepository;
 use App\Service\ApiResponse;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,28 +59,6 @@ class DemandeController extends AbstractController
         $em->persist($demande);
         $em->flush();
 
-        return $apiResponse->apiJsonResponse("ok");
-    }
-    /**
-     * Get demandes data
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
-     * @Route("/", name="read", options={"expose"=true}, methods={"GET"})
-     *
-     * @OA\Response(
-     *     response=200,
-     *     description="Returns ads list objects",
-     * )
-     * @OA\Tag(name="Ads")
-     *
-     * @param ApiResponse $apiResponse
-     * @param ImDemandeRepository $repository
-     * @return JsonResponse
-     */
-    public function read(ApiResponse $apiResponse, ImDemandeRepository $repository): JsonResponse
-    {
-        $demandes = $repository->findAll();
-        return $apiResponse->apiJsonResponse($demandes);
+        return $apiResponse->apiJsonResponse("Demande envoyée.");
     }
 }
