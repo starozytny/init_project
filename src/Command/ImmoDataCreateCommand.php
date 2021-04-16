@@ -47,6 +47,8 @@ class ImmoDataCreateCommand extends Command
     private $PATH_IMAGES;
     private $PATH_THUMBS;
 
+    private $synchroAgencies = [];
+
     private $createAgency;
     private $createBien;
     private $createImage;
@@ -98,6 +100,7 @@ class ImmoDataCreateCommand extends Command
         $call = $input->getArgument('call');
         $haveApimmo = $input->getArgument('haveApimmo');
         $this->process($io, $output, $call, $haveApimmo);
+        $this->removeAgencyNoSynchronized($io);
 
         return Command::SUCCESS;
     }
@@ -270,6 +273,8 @@ class ImmoDataCreateCommand extends Command
             $identifiant = $agency->getIdentifiant();
         }
 
+        array_push($this->synchroAgencies, $dirname);
+
         if($haveApimmo == 0){
             $file    = $this->PATH_EXTRACT . $folder . '/' . $this->filenameData;
             $fileMaj = $this->PATH_EXTRACT . $folder . '/' . $this->filenameDataMaj;
@@ -416,6 +421,31 @@ class ImmoDataCreateCommand extends Command
             }
             copy($fileOri, $fileOld1);
         }
+    }
 
+    protected function removeAgencyNoSynchronized(SymfonyStyle $io)
+    {
+        $io->title("Suppression des biens des agences non synchronisées.");
+        $agencies = $this->em->getRepository(ImAgency::class)->findAll();
+        /** @var ImAgency $agency */
+        foreach($agencies as $agency){
+            if(!in_array($agency->getDirname(), $this->synchroAgencies)){
+                $io->comment($agency->getName());
+                foreach($agency->getBiens() as $bien){
+                    foreach($bien->getImages() as $image){
+                        $img = $this->PATH_IMAGES . $agency->getDirname() . '/' . $image->getFile();
+                        $thumb = $this->PATH_THUMBS . $agency->getDirname() . '/' . $image->getThumb();
+                        if(file_exists($img)){
+                            unlink($img);
+                        }
+                        if(file_exists($thumb)){
+                            unlink($thumb);
+                        }
+                    }
+                    $this->em->remove($bien);
+                }
+            }
+        }
+        $this->em->flush();
     }
 }
