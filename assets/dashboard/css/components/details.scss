@@ -1,0 +1,54 @@
+@import "../vars/vars";
+
+.details-title{
+  @include fontSemibold();
+  font-size: 20px;
+}
+
+.details-nav{
+  position: relative;
+  margin-top: 24px;
+  overflow: hidden;
+
+  .details-nav-items{
+    @include flex(row, flex-start, flex-start);
+    overflow: auto;
+    padding-bottom: 4px;
+    margin-bottom: 24px;
+
+    &:after{
+      content: "";
+      width: 50px;
+      height: 100%;
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: linear-gradient(to left, var(--fondContent), transparent);
+    }
+
+    & > div{
+      margin-right: 12px;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: all 0.2s ease-in-out;
+
+      &:hover{
+        opacity: 1;
+        border-color: var(--grey);
+      }
+
+      &.active{
+        opacity: 1;
+        color: var(--primary);
+        border-color: var(--primary);
+      }
+    }
+
+    & > div:last-child{
+      margin-right: 26px;
+    }
+  }
+}
