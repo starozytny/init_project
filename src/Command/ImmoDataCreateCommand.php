@@ -35,7 +35,7 @@ class ImmoDataCreateCommand extends Command
 
     const ANNONCE_CSV = 0;
     const ANNONCE_XML = 1;
-    const ANNONCE_JSON = 2;
+    const ANNONCE_APIMMO = 2;
 
     private $em;
     private $url;
@@ -80,16 +80,24 @@ class ImmoDataCreateCommand extends Command
         $this
             ->setDescription('Create data immo with api immo custom')
             ->addArgument('call', InputArgument::REQUIRED, '1 si first call command 0 sinon')
+            ->addArgument('haveApimmo', InputArgument::OPTIONAL, '1 si have Apimmo 0 sinon')
         ;
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
         // --------------  PROCESSUS  -----------------------
         $call = $input->getArgument('call');
-        $this->process($io, $output, $call);
+        $haveApimmo = $input->getArgument('haveApimmo');
+        $this->process($io, $output, $call, $haveApimmo);
 
         return Command::SUCCESS;
     }
@@ -100,7 +108,7 @@ class ImmoDataCreateCommand extends Command
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    protected function process(SymfonyStyle $io, OutputInterface $output, $call): int
+    protected function process(SymfonyStyle $io, OutputInterface $output, $call, $haveApimmo): int
     {
         // --------------  RECHERCHE DES ZIP  -----------------------
         $io->title('Recherche et décompression des zips');
@@ -116,50 +124,58 @@ class ImmoDataCreateCommand extends Command
             return Command::SUCCESS;
         }else {
 
-            // --------------  START PROCESS FOLDER  -----------------------
-            $folder = $folders[0]; // get first folder
-            $archives = $this->getOriginalArchives($archives);
-            $archive = $archives[0];
+            // --------------  START WITH APIMMO if have it  -----------------------
+            if($call == 1 && $haveApimmo == 1){
+                // --------------  TRANSFERT DES DATA  -----------------------
+                $io->title('Traitement ' . $_ENV['APIMMO_FOLDER']);
+                try {
+                    $this->transfertData($io, $output, $_ENV['APIMMO_FOLDER'], $haveApimmo);
+                } catch (Exception $e) {$io->error('Error transfert data APIMMO : ' . $e);}
+            }else{
+                // --------------  START PROCESS FOLDER  -----------------------
+                $folder = $folders[0]; // get first folder
+                $archives = $this->getOriginalArchives($archives);
+                $archive = $archives[0];
 
-            // --------------  Reinitialise les dossiers images du folder + MOVE IMG TO PUBLIC  -----------------------
-            $io->comment('Suppression des images de ' . $folder);
-            $this->deleteFolder($this->PATH_IMAGES . $folder);
-            $this->deleteFolder($this->PATH_THUMBS . $folder);
-            $io->title('Transfert des images');
-            $this->createImage->transferImages($io, $this->PATH_EXTRACT, $this->PATH_IMAGES, $this->PATH_THUMBS, $folder);
+                // --------------  Reinitialise les dossiers images du folder + MOVE IMG TO PUBLIC  -----------------------
+                $io->comment('Suppression des images de ' . $folder);
+                $this->deleteFolder($this->PATH_IMAGES . $folder);
+                $this->deleteFolder($this->PATH_THUMBS . $folder);
+                $io->title('Transfert des images');
+                $this->createImage->transferImages($io, $this->PATH_EXTRACT, $this->PATH_IMAGES, $this->PATH_THUMBS, $folder);
 
-            // --------------  TRANSFERT DES DATA  -----------------------
-            $io->title('Traitement du dossier');
+                // --------------  TRANSFERT DES DATA  -----------------------
+                $io->title('Traitement du dossier');
+                try {
+                    $this->transfertData($io, $output, $folder, $haveApimmo);
+                } catch (Exception $e) {$io->error('Error transfert data : ' . $e);}
 
-            try {
-              $this->transfertData($io, $output, $folder);
-            } catch (Exception $e) {$io->error('Error transfert data : ' . $e);}
+                // --------------  TRANSFERT DES ARCHIVES  -----------------------
+                $io->title('Création des archives');
+                $this->archive($archive);
+                $io->comment('Archives terminées');
 
-            // --------------  TRANSFERT DES ARCHIVES  -----------------------
-            $io->title('Création des archives');
-            $this->archive($archive);
-            $io->comment('Archives terminées');
-
-            // --------------  SUPPRESSION DES ZIP  -----------------------
-            $io->title('Suppresion du ZIP');
-            if (preg_match('/([^\s]+(\.(?i)(zip))$)/i', $archive, $matches)) {
-                if(file_exists($this->PATH_DEPOT . $archive)){
-                    unlink($this->PATH_DEPOT . $archive);
+                // --------------  SUPPRESSION DES ZIP  -----------------------
+                $io->title('Suppresion du ZIP');
+                if (preg_match('/([^\s]+(\.(?i)(zip))$)/i', $archive, $matches)) {
+                    if(file_exists($this->PATH_DEPOT . $archive)){
+                        unlink($this->PATH_DEPOT . $archive);
+                    }
+                    $io->text('Suppression du Zip ' . $archive);
                 }
-                $io->text('Suppression du Zip ' . $archive);
-            }
-            // --------------  SUPPRESSION DES EXTRACTS  -----------------------
-            $io->title('Suppresion des dossiers extracted');
-            $folders = scandir($this->PATH_EXTRACT);
-            foreach ($folders as $item) {
-                if ($item != "." && $item != "..") {
-                    $this->deleteFolder($this->PATH_EXTRACT . $item);
+                // --------------  SUPPRESSION DES EXTRACTS  -----------------------
+                $io->title('Suppresion des dossiers extracted');
+                $folders = scandir($this->PATH_EXTRACT);
+                foreach ($folders as $item) {
+                    if ($item != "." && $item != "..") {
+                        $this->deleteFolder($this->PATH_EXTRACT . $item);
+                    }
                 }
+                $io->text('Suppression du contenu du dossier ' . $folder);
             }
-            $io->text('Suppression du contenu du dossier ' . $folder);
 
             $io->success('SUIVANT');
-            $this->process($io, $output, 0);
+            $this->process($io, $output, 0, 0);
         }
 
         return Command::SUCCESS;
@@ -231,65 +247,84 @@ class ImmoDataCreateCommand extends Command
      * @param SymfonyStyle $io
      * @param OutputInterface $output
      * @param $folder
-     * @throws TransportExceptionInterface
+     * @param $haveApimmo
+     * @return null
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
      * @throws Exception
      */
-    protected function transfertData(SymfonyStyle $io, OutputInterface $output, $folder)
+    protected function transfertData(SymfonyStyle $io, OutputInterface $output, $folder, $haveApimmo)
     {
         $io->comment('------- Dossier : ' . $folder);
 
-        $file = $this->PATH_EXTRACT . $folder . '/' . $this->filenameData;
-        $fileMaj = $this->PATH_EXTRACT . $folder . '/' . $this->filenameDataMaj;
-
-        if (file_exists($file) || file_exists($fileMaj)) {
-
-            $file = file_exists($file) ? $file : $fileMaj;
-
-            $data = [
-                'dirname' => $folder,
-                'identifiant' => $folder,
-                'file' => DataPart::fromPath($file),
-            ];
-
-            $formData = new FormDataPart($data);
-            $response = $this->api_immo->request("POST", $this->url . "api/immo/ad/csv", [
-                'headers'=> $formData->getPreparedHeaders()->toArray(),
-                'body' => $formData->bodyToIterable()
-            ]);
-
-            $this->traitement(self::ANNONCE_CSV, $io, $output, $folder, json_decode($response->getContent()));
-
-        } else { // XML --- PERICLES
-            $io->comment('------- [ERROR] Fichier introuvable : ' . $folder);
+        $agencyToCreate = false;
+        $agency = $this->em->getRepository(ImAgency::class)->findOneBy(['dirname' => $folder]);
+        if(!$agency){
+            $agency = new ImAgency();
+            $agencyToCreate = true;
+            $dirname = $folder; $identifiant = $folder;
+        }else{
+            $dirname = $agency->getDirname();
+            $identifiant = $agency->getIdentifiant();
         }
+
+        if($haveApimmo == 0){
+            $file    = $this->PATH_EXTRACT . $folder . '/' . $this->filenameData;
+            $fileMaj = $this->PATH_EXTRACT . $folder . '/' . $this->filenameDataMaj;
+
+            if (file_exists($file) || file_exists($fileMaj)) {
+
+                $file = file_exists($file) ? $file : $fileMaj;
+
+                $data = [
+                    'dirname'       => $dirname,
+                    'identifiant'   => $identifiant,
+                    'file'          => DataPart::fromPath($file),
+                ];
+
+                $formData = new FormDataPart($data);
+                $response = $this->api_immo->request("POST", $this->url . "api/immo/ad/csv", [
+                    'headers'=> $formData->getPreparedHeaders()->toArray(),
+                    'body' => $formData->bodyToIterable()
+                ]);
+            } else { // XML --- PERICLES
+                $io->comment('------- [ERROR] Fichier introuvable : ' . $folder);
+                return null;
+            }
+        }else{
+            $response = $this->api_immo->request("POST", $this->url . "api/immo/ad/apimmo", [
+                'body' => [
+                    'dirname'           => $dirname,
+                    'identifiant'       => $identifiant,
+                    'apimmo_agency'     => $_ENV['APIMMO_AGENCY'],
+                    'apimmo_provider'   => $_ENV['APIMMO_PROVIDER'],
+                    'apimmo_token'      => $_ENV['APIMMO_TOKEN']
+                ]
+            ]);
+        }
+
+        $this->traitement($io, $output, $folder, $agency, $agencyToCreate, json_decode($response->getContent()));
     }
 
     /**
      * Lance le traitement de du transfert de data
-     * @param $type
      * @param SymfonyStyle $io
      * @param $output
      * @param $folder
+     * @param $agency
+     * @param $agencyToCreate
      * @param $data
      * @throws Exception
      */
-    protected function traitement($type, SymfonyStyle $io, $output, $folder, $data){
+    protected function traitement(SymfonyStyle $io, $output, $folder, $agency, $agencyToCreate, $data){
         $count = count($data);
         if ($count != 0) {
             $progressBar = new ProgressBar($output, $count);
             $progressBar->setFormat("%current%/%max% [%bar%] %percent:3s%%  Ψ");
             $progressBar->setOverwrite(true);
             $progressBar->start();
-
-            $agencyToCreate = false;
-            $agency = $this->em->getRepository(ImAgency::class)->findOneBy(['dirname' => $folder]);
-            if(!$agency){
-                $agency = new ImAgency();
-                $agencyToCreate = true;
-            }
 
             // get biens and init biens with sync false for delete
             $biens = $this->em->getRepository(ImBien::class)->findAll();

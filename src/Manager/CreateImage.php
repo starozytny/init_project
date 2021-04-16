@@ -46,7 +46,7 @@ class CreateImage
                 }
 
                 // create image if existe
-                if(file_exists($sourceImages.$filename)){
+                if(file_exists($file)){
                     $isPortrait = true;
                     list($width, $height) = getimagesize($file);
                     if ($width > $height) {
