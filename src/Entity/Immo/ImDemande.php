@@ -60,7 +60,9 @@ class ImDemande
 
     public function __construct()
     {
-        $this->createAt = new DateTime();
+        $createAt = new DateTime();
+        $createAt->setTimezone(new \DateTimeZone('Europe/Paris'));
+        $this->createAt = $createAt;
         $this->isSeen = false;
     }
 
