@@ -53,6 +53,10 @@
     font-size: 15px;
     background-color: var(--greyShadow);
   }
+
+  .ad-price{
+    margin-top: 8px;
+  }
 }
 
 //                      __   _____ __    ___    __
@@ -81,7 +85,35 @@
     }
 
     .ad-info{
-      width: calc(100% - 325px);
+      width: calc(100% - 350px);
+    }
+    .ad-price{
+      margin-top: 0;
+      width: 125px;
+    }
+    .ad-ad{
+      width: 100px;
+    }
+    .ad-bien{
+      width: 125px;
+    }
+  }
+}
+
+
+//                      __   _ ____  ___   ___    __
+//                     | _| / |___ \( _ ) / _ \  |_ |
+//    _____ _____ _____| |  | | __) / _ \| | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | |/ __/ (_) | |_| |  | |_____|_____|_____|
+//                     | |  |_|_____\___/ \___/   | |
+//                     |__|                      |__|
+@media (min-width: 1280px) {
+  .items-ad{
+    .ad-info{
+      width: calc(100% - 525px);
+    }
+    .ad-price{
+      width: 200px;
     }
     .ad-ad{
       width: 200px;

@@ -4,6 +4,7 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImFinancialRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImFinancialRepository::class)
@@ -19,6 +20,7 @@ class ImFinancial
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $price;
 

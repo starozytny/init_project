@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import Sanitize from "@dashboardComponents/functions/sanitaze";
 
 export class AdsItem extends Component {
     render () {
@@ -23,6 +24,9 @@ export class AdsItem extends Component {
                             <div className="sub sub-username">{elem.address.zipcode}, {elem.address.city}</div>
                             <div className="sub sub-username">{elem.agency.name}</div>
                             <div className="sub">{elem.ref} - {elem.realRef}</div>
+                        </div>
+                        <div className="ad-price">
+                            <div>{Sanitize.toFormatCurrency(elem.financial.price)}</div>
                         </div>
                         <div className="ad-ad">
                             <div className={"role type-ad ad-" + elem.codeTypeAd}>{elem.typeAd}</div>
