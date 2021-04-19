@@ -47,11 +47,13 @@ class ImAddress
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $lat;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $lon;
 

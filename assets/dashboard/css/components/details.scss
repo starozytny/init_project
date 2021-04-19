@@ -1,8 +1,17 @@
 @import "../vars/vars";
 
+.details-pretitle{
+  font-size: 14px;
+}
+
 .details-title{
   @include fontSemibold();
   font-size: 20px;
+}
+
+.details-subtitle{
+  margin-top: 12px;
+  opacity: 0.8;
 }
 
 .details-nav{
