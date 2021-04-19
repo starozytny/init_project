@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
+import { ButtonIcon } from "@dashboardComponents/Tools/Button";
 
-import { Filter, FilterSelected } from "@dashboardComponents/Layout/Filter";
-import { Search }     from "@dashboardComponents/Layout/Search";
 import { Alert }      from "@dashboardComponents/Tools/Alert";
 
 import { AdsItem }   from "./AdsItem";
+import { AdsSearch } from "./AdsSearch";
 
 export class AdsList extends Component {
     constructor(props) {
@@ -24,26 +23,15 @@ export class AdsList extends Component {
     }
 
     render () {
-        const { data, onChangeContext, onGetFilters, filters, onSearch, onDeleteAll } = this.props;
-
-        // let itemsFiltersLabelArray = ["Utilisateur", "Développeur", "Administrateur"];
-        // let itemsFiltersIdArray = ["f-user", "f-dev", "f-admin"];
-        //
-        // let itemsFilter = [
-        //     { value: 0, id: itemsFiltersIdArray[0], label: itemsFiltersLabelArray[0]},
-        //     { value: 1, id: itemsFiltersIdArray[1], label: itemsFiltersLabelArray[1] },
-        //     { value: 2, id: itemsFiltersIdArray[2], label: itemsFiltersLabelArray[2]}
-        // ]
+        const { data } = this.props;
 
         return <>
             <div>
-                {/*<div className="toolbar">*/}
-                {/*    <div className="item filter-search">*/}
-                {/*        <Filter ref={this.filter} items={itemsFilter} onGetFilters={onGetFilters} />*/}
-                {/*        <Search onSearch={onSearch} />*/}
-                {/*        <FilterSelected filters={filters} itemsFiltersLabel={itemsFiltersLabelArray} itemsFiltersId={itemsFiltersIdArray} onChange={this.handleFilter}/>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+                <div className="toolbar">
+                    <div className="item ads-search">
+                        <AdsSearch />
+                    </div>
+                </div>
 
                 <div className="items-table">
                     <div className="items items-default items-user items-ad">

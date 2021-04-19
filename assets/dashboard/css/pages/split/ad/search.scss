@@ -1,0 +1,47 @@
+@import "../../../vars/vars";
+
+.ads-search{
+  @include flex(column, flex-start, flex-start);
+}
+
+.ads-search-nature{
+  @include flex(row, flex-start, flex-start);
+  margin-bottom: 12px;
+  width: 100%;
+
+  div{
+    cursor: pointer;
+    padding: 11px 24px;
+    background-color: var(--greyShadow);
+    border: 1px solid transparent;
+    width: 50%;
+    text-align: center;
+    color: var(--grey2);
+    transition: all 0.2s ease-in-out;
+
+    &.active{
+      background-color: var(--primary);
+      color: var(--alpha);
+    }
+  }
+
+  div:first-child{
+    border-radius: 4px 0 0 4px;
+  }
+
+  div:last-child{
+    border-radius: 0 4px 4px 0;
+  }
+}
+
+//                      __   _____ __    ___    __
+//                     | _| |___  / /_  ( _ )  |_ |
+//    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
+//   |_____|_____|_____| |    / /| (_) | (_) |  | |_____|_____|_____|
+//                     | |   /_/  \___/ \___/   | |
+//                     |__|                    |__|
+@media (min-width:768px) {
+  .ads-search-nature{
+    margin-right: 12px;
+  }
+}
