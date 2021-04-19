@@ -13,23 +13,24 @@ export class AdsList extends Component {
     constructor(props) {
         super(props);
 
-        this.filter = React.createRef();
+        this.state = {
+            nature: "Location"
+        }
 
-        this.handleFilter = this.handleFilter.bind(this);
+        this.handleNature = this.handleNature.bind(this);
     }
 
-    handleFilter = (e) => {
-        this.filter.current.handleChange(e, true);
-    }
+    handleNature = (label) => { this.setState({ nature: label }) }
 
     render () {
         const { data } = this.props;
+        const { nature } = this.state;
 
         return <>
             <div>
                 <div className="toolbar">
                     <div className="item ads-search">
-                        <AdsSearch />
+                        <AdsSearch {...this.state} onNature={this.handleNature}/>
                     </div>
                 </div>
 
@@ -50,7 +51,10 @@ export class AdsList extends Component {
                             </div>
                         </div>
                         {data && data.length !== 0 ? data.map(elem => {
-                            return <AdsItem {...this.props} elem={elem} key={elem.id}/>
+                            console.log(elem.typeAd, nature)
+                            if(elem.typeAd === nature){
+                                return <AdsItem {...this.props} elem={elem} key={elem.id}/>
+                            }
                         }) : <Alert>Aucun résultat</Alert>}
                     </div>
                 </div>

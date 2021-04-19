@@ -31,7 +31,6 @@ export class Ads extends Component {
             data: null,
             currentData: null,
             element: null,
-            filters: [],
             perPage: 20
         }
 
@@ -56,7 +55,7 @@ export class Ads extends Component {
     }
 
     render () {
-        const { loadPageError, context, loadData, data, currentData, element, perPage, filters } = this.state;
+        const { loadPageError, context, loadData, data, currentData, element, perPage } = this.state;
 
         let content, havePagination = false;
         switch (context){
