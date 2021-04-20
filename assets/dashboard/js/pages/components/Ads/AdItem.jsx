@@ -10,17 +10,20 @@ export class AdItem extends Component {
         super(props);
 
         this.state = {
-            subContext: "infos"
+            subContext: "infos",
+            switcher: "image"
         }
 
         this.handleChangeSubContext = this.handleChangeSubContext.bind(this);
+        this.handleChangeSwitcher = this.handleChangeSwitcher.bind(this);
     }
 
     handleChangeSubContext = (subContext) => { this.setState({ subContext }) }
+    handleChangeSwitcher = (switcher) => { this.setState({ switcher }) }
 
     render () {
         const { elem, onChangeContext } = this.props
-        const { subContext } = this.state;
+        const { subContext, switcher } = this.state;
 
         let content = null;
         switch (subContext){
@@ -77,11 +80,14 @@ export class AdItem extends Component {
                             </div>}
                         </div>
                     </div>
-
-
                 </div>
                 break;
         }
+
+        let switcherItems = [
+            {id: 0, icon: "image"},
+            {id: 0, icon: "user"},
+        ]
 
         return <div>
             <div className="toolbar">
@@ -112,8 +118,13 @@ export class AdItem extends Component {
                     </div>
                 </div>
                 <div className="details-images-container">
-                    <div>
-                        {/*<img src={`/annonces/images/${elem.agency.dirname}/${elem.images[0].file}`} alt={"Image annonce " + elem.images[0].rank} key={elem.images[0].id}/>*/}
+                    <div className="switcher-images-map">
+                        {switcherItems.map(op => {
+                            let active = op.icon === switcher ? " active" : "";
+                            return <div className={active} onClick={() => this.handleChangeSwitcher(op.icon)}><span className={"icon-" + op.icon} /></div>
+                        })}
+                    </div>
+                    <div className="images">
                         {elem.images && elem.images.map(img => {
                             return <img src={`/annonces/images/${elem.agency.dirname}/${img.file}`} alt={"Image annonce " + img.rank} key={img.id}/>
                         })}

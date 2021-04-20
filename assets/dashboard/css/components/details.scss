@@ -17,7 +17,6 @@
 
 .details-subtitle{
   margin-top: 12px;
-  opacity: 0.8;
 
   .details-subtitle-price{
     margin-top: 8px;
@@ -119,9 +118,45 @@
 }
 
 .details-images-container{
+  position: relative;
   max-height: 800px;
   overflow: auto;
   @include scrollbar();
+
+  .switcher-images-map{
+    @include flex(row, flex-start, flex-start);
+    position: absolute;
+    top: 12px;
+    left: 12px;
+
+    & > div{
+      padding: 8px 12px;
+      width: 60px;
+      background-color: var(--fond);
+      text-align: center;
+      box-shadow: 0 4px 12px var(--greyShadow);
+      cursor: pointer;
+      opacity: 0.9;
+      transition: all 0.2s ease-in-out;
+
+      &:hover{
+        opacity: 1;
+      }
+    }
+
+    & > .active{
+      background-color: var(--primary);
+      opacity: 1;
+    }
+
+    & > div:first-child{
+      border-radius: 4px 0 0 4px;
+    }
+
+    & > div:last-child{
+      border-radius: 0 4px 4px 0;
+    }
+  }
 }
 
 //                      __   _____ __    ___    __
