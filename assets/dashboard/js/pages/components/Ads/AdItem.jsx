@@ -86,7 +86,7 @@ export class AdItem extends Component {
 
         let switcherItems = [
             {id: 0, icon: "image"},
-            {id: 0, icon: "user"},
+            {id: 0, icon: "placeholder"},
         ]
 
         return <div>
