@@ -3,16 +3,30 @@ import Sanitize  from "@dashboardComponents/functions/sanitaze";
 
 export function Diag({ elem }){
     let content = <div>Le diagnostic de performance énergétique et d'indice d'émission de gaz à effet de serre n'ont pas été soumis pour le moment.</div>
+    let dpeNotFound = <div>Le diagnostic de performance énergétique n'a pas été soumis pour le moment.</div>
+    let gesNotFound = <div>L'indice d'émission de gaz à effet de serre n'a pas été soumis pour le moment.</div>
+    let dpeVierge = <div>Le diagnostic de performance énergétique est vierge.</div>
+    let gesVierge = <div>L'indice d'émission de gaz à effet de serre est vierge.</div>
+
     if(elem.diagnostic){
         content = <>
             <div className="details-tab-infos-main">
-                <DiagSimple isDpe={true} elem={elem}/>
-                <DiagDetails isDpe={true} elem={elem}/>
+                {elem.diagnostic.dpeLettre ? <>
+                    {elem.diagnostic.dpeLettre !== "NS" && elem.diagnostic.dpeLettre !== "VI" ? <>
+                        <DiagSimple isDpe={true} elem={elem}/>
+                        <DiagDetails isDpe={true} elem={elem}/>
+                    </> : (elem.diagnostic.dpeLettre !== "NS") ? dpeNotFound : dpeVierge}
+                </> : dpeNotFound}
             </div>
 
             <div className="details-tab-infos-main">
-                <DiagSimple isDpe={false} elem={elem}/>
-                <DiagDetails isDpe={false} elem={elem}/>
+                {elem.diagnostic.gesLettre ? <>
+                    {elem.diagnostic.gesLettre !== "NS" && elem.diagnostic.gesLettre !== "VI" ? <>
+                        <DiagSimple isDpe={false} elem={elem}/>
+                        <DiagDetails isDpe={false} elem={elem}/>
+                    </> : (elem.diagnostic.gesLettre !== "NS") ? gesNotFound : gesVierge}
+                </> : gesNotFound}
+
             </div>
         </>
     }
@@ -27,6 +41,7 @@ function DiagSimple({ isDpe, elem })
     let letters = ["A", "B", "C", "D", "E", "F", "G"];
     let title = isDpe ? "Diagnostic de performance énergétique" : "Indice d'émission de gaz à effet de serre";
     let classDiag = isDpe ? "dpe" : "ges";
+    let value = isDpe ? elem.diagnostic.dpeVal : elem.diagnostic.gesVal;
 
     return (
         <div className="diagnostic">
@@ -34,11 +49,16 @@ function DiagSimple({ isDpe, elem })
                 <div className="diag-title">{title}</div>
                 <div className={"diag-" + classDiag}>
                     {letters.map(le => {
+
+                        let comparator = isDpe ? elem.diagnostic.dpeLettre : elem.diagnostic.gesLettre;
+                        let classActive = isDpe ? " dpe_is-active" : " ges_is-active";
+                        let active = comparator === le ? classActive : "";
+
                         return <div key={le}>
-                            <div className={classDiag + " " + classDiag + "-" + le.toLowerCase()}>
+                            <div className={classDiag + " " + classDiag + "-" + le.toLowerCase() + active}>
                                 <div>{le}</div>
                             </div>
-                            <div className="number">5</div>
+                            <div className="number">{value ? value : "N.C"}</div>
                         </div>
                     })}
                 </div>
@@ -60,6 +80,7 @@ function DiagDetails({ isDpe, elem })
     ]
     let title = isDpe ? "Diagnostic de performance énergétique" : "Indice d'émission de gaz à effet de serre";
     let classDiag = isDpe ? "dpe" : "ges";
+    let value = isDpe ? elem.diagnostic.dpeVal : elem.diagnostic.gesVal;
 
     return (
         <div className="diagnostic-details">
@@ -67,12 +88,17 @@ function DiagDetails({ isDpe, elem })
                 <div className="diag-title">{title} en kWhEP/m2.an</div>
                 <div className={"diag-" + classDiag}>
                     {lettersDetails.map(le => {
+
+                        let comparator = isDpe ? elem.diagnostic.dpeLettre : elem.diagnostic.gesLettre;
+                        let classActive = isDpe ? " dpe_is-active2" : " ges_is-active2";
+                        let active = comparator === le.le ? classActive : "";
+
                         return <div key={le.le}>
-                            <div className={classDiag + " " + classDiag + "-" + le.le.toLowerCase()}>
+                            <div className={classDiag + " " + classDiag + "-" + le.le.toLowerCase() + active}>
                                 <div>{isDpe ? le.valDpe : le.valGes}</div>
                                 <div>{le.le}</div>
                             </div>
-                            <div className="number">5</div>
+                            <div className="number">{value ? value : "N.C"}</div>
                         </div>
                     })}
                 </div>
