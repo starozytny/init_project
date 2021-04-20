@@ -6,6 +6,7 @@ import { Infos }    from "./split/Infos";
 import { Features } from "./split/Features";
 import { Diag }     from "./split/Diag";
 import { Financial } from "./split/Financial";
+import {Map} from "./split/Map";
 
 export class AdItem extends Component {
     constructor(props) {
@@ -83,11 +84,12 @@ export class AdItem extends Component {
                             return <div className={active} onClick={() => this.handleChangeSwitcher(op.icon)} key={op.id}><span className={"icon-" + op.icon} /></div>
                         })}
                     </div>
-                    <div className="images">
+                    {switcher === "image" ? <div className="images">
                         {elem.images && elem.images.map(img => {
                             return <img src={`/annonces/images/${elem.agency.dirname}/${img.file}`} alt={"Image annonce " + img.rank} key={img.id}/>
                         })}
-                    </div>
+                    </div> : <Map elem={elem} />}
+
                 </div>
             </div>
         </div>
