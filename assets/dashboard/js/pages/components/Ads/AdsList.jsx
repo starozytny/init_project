@@ -44,8 +44,6 @@ export class AdsList extends Component {
             {id: 1, icon: 'placeholder', context: 'map'}
         ]
 
-        console.log(context)
-
         return <>
             <div>
                 <div className="toolbar">
