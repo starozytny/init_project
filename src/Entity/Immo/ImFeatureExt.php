@@ -4,6 +4,7 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImFeatureExtRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImFeatureExtRepository::class)
@@ -19,46 +20,55 @@ class ImFeatureExt
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $nbParking;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $nbBox;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $hasElevator;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $hasCellar;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $hasIntercom;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $hasConcierge;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $hasTerrace;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $hasClim;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $hasPiscine;
 

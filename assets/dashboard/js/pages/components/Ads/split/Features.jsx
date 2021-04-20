@@ -1,5 +1,6 @@
 import React     from "react";
 import Sanitize  from "@dashboardComponents/functions/sanitaze";
+import parseHtml from "html-react-parser";
 
 export function Features({ elem }){
     return (<div className="details-tab-infos">
@@ -101,5 +102,54 @@ export function Features({ elem }){
                 <div>{Sanitize.getTrilieanResponse(elem.feature.isWest, false)}</div>
             </div>
         </div>
+
+        {elem.featureExt && <>
+            <div className="details-tab-infos-content">
+                <div className="label">Commodités</div>
+            </div>
+
+            <div className="details-tab-infos-main">
+                <div>
+                    <div className="label">Nombre de parkings</div>
+                    <div>{elem.featureExt.nbParking}</div>
+                </div>
+                <div>
+                    <div className="label">Nombre de box</div>
+                    <div>{elem.featureExt.nbBox}</div>
+                </div>
+            </div>
+
+            <div className="details-tab-infos-main">
+                <div>
+                    <div className="label">Ascenseur</div>
+                    <div>{Sanitize.getTrilieanResponse(elem.featureExt.hasElevator, false)}</div>
+                </div>
+                <div>
+                    <div className="label">Cave</div>
+                    <div>{Sanitize.getTrilieanResponse(elem.featureExt.hasCellar, false)}</div>
+                </div>
+                <div>
+                    <div className="label">Interphone</div>
+                    <div>{Sanitize.getTrilieanResponse(elem.featureExt.hasIntercom, false)}</div>
+                </div>
+                <div>
+                    <div className="label">Gardiennage</div>
+                    <div>{Sanitize.getTrilieanResponse(elem.featureExt.hasConcierge, false)}</div>
+                </div>
+                <div>
+                    <div className="label">Terrasse</div>
+                    <div>{Sanitize.getTrilieanResponse(elem.featureExt.hasTerrace, false)}</div>
+                </div>
+                <div>
+                    <div className="label">Climatisation</div>
+                    <div>{Sanitize.getTrilieanResponse(elem.featureExt.hasClim, false)}</div>
+                </div>
+                <div>
+                    <div className="label">Piscine</div>
+                    <div>{Sanitize.getTrilieanResponse(elem.featureExt.hasPiscine, false)}</div>
+                </div>
+            </div>
+        </>}
+
     </div>)
 }

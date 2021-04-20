@@ -114,7 +114,8 @@ class ImBien
     private $feature;
 
     /**
-     * @ORM\OneToOne(targetEntity=ImFeatureExt::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=ImFeatureExt::class, cascade={"persist", "remove"}, fetch="EAGER")
+     * @Groups("list:read")
      */
     private $featureExt;
 
