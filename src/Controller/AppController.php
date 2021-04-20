@@ -47,4 +47,20 @@ class AppController extends AbstractController
     {
         return $this->render('app/pages/legales/rgpd.html.twig');
     }
+
+    /**
+     * @Route("/gestion-locative", name="app_gestion_locative")
+     */
+    public function gestionLocative(): Response
+    {
+        return $this->render('app/pages/services/gestion.html.twig');
+    }
+
+    /**
+     * @Route("/annonces-immobilieres/{ad}", name="app_ads")
+     */
+    public function ads($ad): Response
+    {
+        return $this->render('app/pages/ads/index.html.twig');
+    }
 }
