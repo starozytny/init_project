@@ -48,9 +48,13 @@ export class AdItem extends Component {
                             <div className="label">Référence agence</div>
                             <div>{elem.realRef}</div>
                         </div>
-                        {elem.typeAd === "Location" && <div>
+                        {elem.typeAd === "Location" && elem.feature.isMeuble !== 3 && <div>
                             <div className="label">Bien meublé</div>
-                            <div>{elem.feature.isMeuble}</div>
+                            <div>{Sanitize.getTrilieanResponse(elem.feature.isMeuble)}</div>
+                        </div>}
+                        {elem.dispoString && <div>
+                            <div className="label">Disponibilité</div>
+                            <div>{elem.dispoString}</div>
                         </div>}
                     </div>
 
@@ -63,12 +67,12 @@ export class AdItem extends Component {
                             <div className="label">Contacts</div>
                             <div className="contact">
                                 <div>{elem.agency.name}</div>
-                                <div>{elem.agency.phone}</div>
+                                <div>{Sanitize.toFormatPhone(elem.agency.phone)}</div>
                                 <div>{elem.agency.email}</div>
                             </div>
                             {elem.responsable && <div className="contact">
                                 <div>{elem.responsable.name}</div>
-                                <div>{elem.responsable.phone}</div>
+                                <div>{Sanitize.toFormatPhone(elem.responsable.phone)}</div>
                                 <div>{elem.responsable.email}</div>
                             </div>}
                         </div>
@@ -102,7 +106,7 @@ export class AdItem extends Component {
                     </div>
                 </div>
                 <Navigation subContext={subContext} onChangeContext={this.handleChangeSubContext} />
-                <div className="details-content">
+                <div className="details-content-container">
                     {content}
                 </div>
             </div>

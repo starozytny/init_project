@@ -197,6 +197,19 @@ class ImBien
         return $this;
     }
 
+    /**
+     * @return false|string|null
+     * @Groups("list:read")
+     */
+    public function getDispoString()
+    {
+        if($this->getDispo()){
+            return date_format($this->dispo, "d/m/Y");
+        }
+
+        return null;
+    }
+
     public function getTypeAd(): ?string
     {
         return $this->typeAd;

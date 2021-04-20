@@ -89,6 +89,16 @@ function getPostalCodes(self){
     ;
 }
 
+function getTrilieanResponse(data){
+    if(data === 0){
+        return "Non";
+    }else if(data === 1){
+        return "Oui";
+    }else{
+        return null;
+    }
+}
+
 module.exports = {
     sanitizeString,
     getPostalCodes,
@@ -96,5 +106,6 @@ module.exports = {
     toFormatDate,
     toFormatDateTime,
     toFormatPhone,
-    toFormatCurrency
+    toFormatCurrency,
+    getTrilieanResponse
 }
