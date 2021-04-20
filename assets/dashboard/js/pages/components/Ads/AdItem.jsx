@@ -48,7 +48,9 @@ export class AdItem extends Component {
                 <div className="details-title">{elem.label}</div>
                 <div className="details-subtitle">
                     <div>{elem.address.zipcode}, {elem.address.city}</div>
-                    <div>{Sanitize.toFormatCurrency(elem.financial.price)}</div>
+                    <div className="details-subtitle-price">
+                        {Sanitize.toFormatCurrency(elem.financial.price)} {elem.typeAd === "Location" && "/ mois"}
+                    </div>
                 </div>
                 <div className="details-general">
                     <div className="details-ad-types">
@@ -78,7 +80,7 @@ function Navigation({ onChangeContext, subContext }){
         <div className="details-nav">
             <div className="details-nav-items">
                 {items.map(el => {
-                    return <div className={subContext === el.context ? "active" : ""} onClick={() => onChangeContext(el.context)}>{el.label}</div>
+                    return <div className={subContext === el.context ? "active" : ""} onClick={() => onChangeContext(el.context)} key={el.context}>{el.label}</div>
                 })}
             </div>
         </div>

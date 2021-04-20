@@ -2,16 +2,23 @@
 
 .details-pretitle{
   font-size: 14px;
+  margin-bottom: 4px;
 }
 
 .details-title{
   @include fontSemibold();
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .details-subtitle{
   margin-top: 12px;
   opacity: 0.8;
+
+  .details-subtitle-price{
+    margin-top: 8px;
+    font-size: 18px;
+    color: var(--primary);
+  }
 }
 
 .details-nav{
@@ -25,16 +32,16 @@
     padding-bottom: 4px;
     margin-bottom: 24px;
 
-    &:after{
-      content: "";
-      width: 50px;
-      height: 100%;
-      display: block;
-      position: absolute;
-      top: 0;
-      right: 0;
-      background: linear-gradient(to left, var(--fondContent), transparent);
-    }
+    //&:after{
+    //  content: "";
+    //  width: 50px;
+    //  height: 100%;
+    //  display: block;
+    //  position: absolute;
+    //  top: 0;
+    //  right: 0;
+    //  background: linear-gradient(to left, var(--fondContent), transparent);
+    //}
 
     & > div{
       margin-right: 12px;

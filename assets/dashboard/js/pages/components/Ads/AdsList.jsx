@@ -51,7 +51,6 @@ export class AdsList extends Component {
                             </div>
                         </div>
                         {data && data.length !== 0 ? data.map(elem => {
-                            console.log(elem.typeAd, nature)
                             if(elem.typeAd === nature){
                                 return <AdsItem {...this.props} elem={elem} key={elem.id}/>
                             }
