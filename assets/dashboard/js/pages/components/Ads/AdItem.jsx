@@ -45,7 +45,7 @@ export class AdItem extends Component {
 
         let switcherItems = [
             {id: 0, icon: "image"},
-            {id: 0, icon: "placeholder"},
+            {id: 1, icon: "placeholder"},
         ]
 
         return <div>
@@ -80,7 +80,7 @@ export class AdItem extends Component {
                     <div className="switcher-images-map">
                         {switcherItems.map(op => {
                             let active = op.icon === switcher ? " active" : "";
-                            return <div className={active} onClick={() => this.handleChangeSwitcher(op.icon)}><span className={"icon-" + op.icon} /></div>
+                            return <div className={active} onClick={() => this.handleChangeSwitcher(op.icon)} key={op.id}><span className={"icon-" + op.icon} /></div>
                         })}
                     </div>
                     <div className="images">

@@ -4,6 +4,7 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImDiagnosticRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImDiagnosticRepository::class)
@@ -19,21 +20,25 @@ class ImDiagnostic
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $dpeVal;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $dpeLettre;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $gesVal;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $gesLettre;
 

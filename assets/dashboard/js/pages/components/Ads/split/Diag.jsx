@@ -2,8 +2,53 @@ import React     from "react";
 import Sanitize  from "@dashboardComponents/functions/sanitaze";
 
 export function Diag({ elem }){
+    let content = <div>Le diagnostic de performance énergétique et d'indice d'émission de gaz à effet de serre n'ont pas été soumis pour le moment.</div>
+    if(elem.diagnostic){
+        content = <>
+            <div className="details-tab-infos-main">
+                <DiagSimple isDpe={true} elem={elem}/>
+                <DiagDetails isDpe={true} elem={elem}/>
+            </div>
 
+            <div className="details-tab-infos-main">
+                <DiagSimple isDpe={false} elem={elem}/>
+                <DiagDetails isDpe={false} elem={elem}/>
+            </div>
+        </>
+    }
+
+    return (<div className="details-tab-infos">
+        {content}
+    </div>)
+}
+
+function DiagSimple({ isDpe, elem })
+{
     let letters = ["A", "B", "C", "D", "E", "F", "G"];
+    let title = isDpe ? "Diagnostic de performance énergétique" : "Indice d'émission de gaz à effet de serre";
+    let classDiag = isDpe ? "dpe" : "ges";
+
+    return (
+        <div className="diagnostic">
+            <div>
+                <div className="diag-title">{title}</div>
+                <div className={"diag-" + classDiag}>
+                    {letters.map(le => {
+                        return <div key={le}>
+                            <div className={classDiag + " " + classDiag + "-" + le.toLowerCase()}>
+                                <div>{le}</div>
+                            </div>
+                            <div className="number">5</div>
+                        </div>
+                    })}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function DiagDetails({ isDpe, elem })
+{
     let lettersDetails = [
         { le :"A", valDpe: "≤ 50", valGes: "≤ 5" },
         { le :"B", valDpe: "51 à 90", valGes: "6 à 10" },
@@ -13,75 +58,25 @@ export function Diag({ elem }){
         { le :"F", valDpe: "331 à 450", valGes: "56 à 80" },
         { le :"G", valDpe: "> 450", valGes: "> 80" }
     ]
+    let title = isDpe ? "Diagnostic de performance énergétique" : "Indice d'émission de gaz à effet de serre";
+    let classDiag = isDpe ? "dpe" : "ges";
 
-    return (<div className="details-tab-infos">
-
-        <div className="details-tab-infos-main">
-            <div className="diagnostic">
-                <div>
-                    <div className="diag-title">Diagnostic de performance énergétique</div>
-                    <div className="diag-dpe">
-                        {letters.map(le => {
-                            return <div key={le}>
-                                <div className={"dpe dpe-" + le.toLowerCase()}>
-                                    <div>{le}</div>
-                                </div>
-                                <div className="number">5</div>
+    return (
+        <div className="diagnostic-details">
+            <div>
+                <div className="diag-title">{title} en kWhEP/m2.an</div>
+                <div className={"diag-" + classDiag}>
+                    {lettersDetails.map(le => {
+                        return <div key={le.le}>
+                            <div className={classDiag + " " + classDiag + "-" + le.le.toLowerCase()}>
+                                <div>{isDpe ? le.valDpe : le.valGes}</div>
+                                <div>{le.le}</div>
                             </div>
-                        })}
-                    </div>
-                </div>
-            </div>
-            <div className="diagnostic-details">
-                <div>
-                    <div className="diag-title">Diagnostic de performance énergétique En kWhEP/m2.an</div>
-                    <div className="diag-dpe">
-                        {lettersDetails.map(le => {
-                            return <div key={le.le}>
-                                <div className={"dpe dpe-" + le.le.toLowerCase()}>
-                                    <div>{le.valDpe}</div>
-                                    <div>{le.le}</div>
-                                </div>
-                                <div className="number">5</div>
-                            </div>
-                        })}
-                    </div>
+                            <div className="number">5</div>
+                        </div>
+                    })}
                 </div>
             </div>
         </div>
-
-        <div className="details-tab-infos-main">
-            <div className="diagnostic">
-                <div>
-                    <div className="diag-title">Indice d'émission de gaz à effet de serre</div>
-                    <div className="diag-ges">
-                        {letters.map(le => {
-                            return <div key={le}>
-                                <div className={"ges ges-" + le.toLowerCase()}>
-                                    <div>{le}</div>
-                                </div>
-                                <div className="number">5</div>
-                            </div>
-                        })}
-                    </div>
-                </div>
-            </div>
-            <div className="diagnostic-details">
-                <div>
-                    <div className="diag-title">Indice d'émission de gaz à effet de serre En kWhEP/m2.an</div>
-                    <div className="diag-ges">
-                        {lettersDetails.map(le => {
-                            return <div key={le.le}>
-                                <div className={"ges ges-" + le.le.toLowerCase()}>
-                                    <div>{le.valGes}</div>
-                                    <div>{le.le}</div>
-                                </div>
-                                <div className="number">5</div>
-                            </div>
-                        })}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>)
+    )
 }

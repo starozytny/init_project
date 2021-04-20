@@ -121,6 +121,7 @@ class ImBien
 
     /**
      * @ORM\OneToOne(targetEntity=ImDiagnostic::class, cascade={"persist", "remove"})
+     * @Groups("list:read")
      */
     private $diagnostic;
 
