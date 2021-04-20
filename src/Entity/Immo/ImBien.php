@@ -136,6 +136,7 @@ class ImBien
 
     /**
      * @ORM\OneToMany(targetEntity=ImImage::class, mappedBy="bien", orphanRemoval=true, fetch="EAGER")
+     * @Groups("list:read")
      */
     private $images;
 

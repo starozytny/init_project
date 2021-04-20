@@ -90,24 +90,34 @@ export class AdItem extends Component {
                 </div>
             </div>
 
-            <div className="details-content">
-                <div className="details-pretitle">{elem.agency.name}</div>
-                <div className="details-title">{elem.label}</div>
-                <div className="details-subtitle">
-                    <div>{elem.address.zipcode}, {elem.address.city}</div>
-                    <div className="details-subtitle-price">
-                        {Sanitize.toFormatCurrency(elem.financial.price)} {elem.typeAd === "Location" && "/ mois"}
-                    </div>
-                </div>
-                <div className="details-general">
-                    <div className="details-ad-types">
-                        <div className={"role type-ad ad-" + elem.codeTypeAd}>{elem.typeAd}</div>
-                        <div className="role type-bien">{elem.typeBien}</div>
-                    </div>
-                </div>
-                <Navigation subContext={subContext} onChangeContext={this.handleChangeSubContext} />
+            <div className="details-container">
                 <div className="details-content-container">
-                    {content}
+                    <div className="details-pretitle">{elem.agency.name}</div>
+                    <div className="details-title">{elem.label}</div>
+                    <div className="details-subtitle">
+                        <div>{elem.address.zipcode}, {elem.address.city}</div>
+                        <div className="details-subtitle-price">
+                            {Sanitize.toFormatCurrency(elem.financial.price)} {elem.typeAd === "Location" && "/ mois"}
+                        </div>
+                    </div>
+                    <div className="details-general">
+                        <div className="details-ad-types">
+                            <div className={"role type-ad ad-" + elem.codeTypeAd}>{elem.typeAd}</div>
+                            <div className="role type-bien">{elem.typeBien}</div>
+                        </div>
+                    </div>
+                    <Navigation subContext={subContext} onChangeContext={this.handleChangeSubContext} />
+                    <div className="details-content">
+                        {content}
+                    </div>
+                </div>
+                <div className="details-images-container">
+                    <div>
+                        {/*<img src={`/annonces/images/${elem.agency.dirname}/${elem.images[0].file}`} alt={"Image annonce " + elem.images[0].rank} key={elem.images[0].id}/>*/}
+                        {elem.images && elem.images.map(img => {
+                            return <img src={`/annonces/images/${elem.agency.dirname}/${img.file}`} alt={"Image annonce " + img.rank} key={img.id}/>
+                        })}
+                    </div>
                 </div>
             </div>
         </div>

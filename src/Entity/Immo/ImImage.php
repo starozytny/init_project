@@ -4,6 +4,7 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImImageRepository::class)
@@ -14,16 +15,19 @@ class ImImage
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("list:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("list:read")
      */
     private $file;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups("list:read")
      */
     private $rank;
 
