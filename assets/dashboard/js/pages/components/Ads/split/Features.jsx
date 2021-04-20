@@ -1,6 +1,5 @@
 import React     from "react";
 import Sanitize  from "@dashboardComponents/functions/sanitaze";
-import parseHtml from "html-react-parser";
 
 export function Features({ elem }){
     return (<div className="details-tab-infos">

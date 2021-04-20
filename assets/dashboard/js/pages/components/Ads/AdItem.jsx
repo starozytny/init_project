@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 
 import Sanitize     from "@dashboardComponents/functions/sanitaze";
 import { Button }   from "@dashboardComponents/Tools/Button";
-import {Infos} from "./split/Infos";
-import {Features} from "./split/Features";
+import { Infos }    from "./split/Infos";
+import { Features } from "./split/Features";
+import { Diag }     from "./split/Diag";
+import { Financial } from "./split/Financial";
 
 export class AdItem extends Component {
     constructor(props) {
@@ -28,10 +30,10 @@ export class AdItem extends Component {
         let content = null;
         switch (subContext){
             case "financial":
-                content = <div>Financial</div>
+                content = <Financial elem={elem} />
                 break;
             case "diag":
-                content = <div>Diag</div>
+                content = <Diag elem={elem} />
                 break;
             case "features":
                 content = <Features elem={elem} />
