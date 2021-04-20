@@ -49,6 +49,14 @@ class AppController extends AbstractController
     }
 
     /**
+     * @Route("/syndic", name="app_syndic")
+     */
+    public function syndic(): Response
+    {
+        return $this->render('app/pages/services/syndic.html.twig');
+    }
+
+    /**
      * @Route("/gestion-locative", name="app_gestion_locative")
      */
     public function gestionLocative(): Response

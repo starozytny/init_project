@@ -51,6 +51,8 @@ Encore
      */
     .addEntry('app', './assets/app/js/app.js')
     .addEntry('security', './assets/app/js/pages/security.js')
+    .addEntry('services', './assets/app/js/pages/services.js')
+    .addEntry('ads', './assets/app/js/pages/ads.js')
 
     .addEntry('dashboard', './assets/dashboard/js/app.js')
     .addEntry('dashboard_homepage', './assets/dashboard/js/pages/homepage.js')
