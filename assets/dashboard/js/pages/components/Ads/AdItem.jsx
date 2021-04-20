@@ -37,6 +37,10 @@ export class AdItem extends Component {
                 content = <div className="details-tab-infos">
                     <div className="details-tab-infos-main">
                         <div>
+                            <div className="label">Identifiant immuable</div>
+                            <div>{elem.identifiant}</div>
+                        </div>
+                        <div>
                             <div className="label">Référence transfert</div>
                             <div>{elem.ref}</div>
                         </div>
@@ -44,6 +48,10 @@ export class AdItem extends Component {
                             <div className="label">Référence agence</div>
                             <div>{elem.realRef}</div>
                         </div>
+                        {elem.typeAd === "Location" && <div>
+                            <div className="label">Bien meublé</div>
+                            <div>{elem.feature.isMeuble}</div>
+                        </div>}
                     </div>
 
                     <div className="details-tab-infos-content">

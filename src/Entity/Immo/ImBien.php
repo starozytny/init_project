@@ -93,22 +93,23 @@ class ImBien
     private $agency;
 
     /**
-     * @ORM\OneToOne(targetEntity=ImAddress::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=ImAddress::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      * @Groups("list:read")
      */
     private $address;
 
     /**
-     * @ORM\OneToOne(targetEntity=ImFinancial::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=ImFinancial::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      * @Groups("list:read")
      */
     private $financial;
 
     /**
-     * @ORM\OneToOne(targetEntity=ImFeature::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=ImFeature::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("list:read")
      */
     private $feature;
 
@@ -128,7 +129,7 @@ class ImBien
     private $copro;
 
     /**
-     * @ORM\OneToOne(targetEntity=ImResponsable::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=ImResponsable::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @Groups("list:read")
      */
     private $responsable;
@@ -140,6 +141,7 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("list:read")
      */
     private $identifiant;
 

@@ -4,6 +4,7 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImFeatureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImFeatureRepository::class)
@@ -19,106 +20,127 @@ class ImFeature
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $area;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $areaLand;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $areaLiving;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $nbSdb;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $nbSle;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $nbWc;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $isWcSeparate;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $floor;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $nbFloor;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $nbPiece;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $nbRoom;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $nbBalcony;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $isMeuble;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $constructionYear;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $isRefaitNeuf;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $heating;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $kitchen;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $isSouth;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $isEast;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $isWest;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $isNorth;
 
