@@ -39,19 +39,17 @@ $colorsGES: (
 }
 
 .diagnostic{
-  .diag-dpe, .diag-ges{
-    margin-top: 15px;
-  }
+  width: 100%;
 
-  .diag-dpe{
-    margin-bottom: 15px;
+  .diag-dpe, .diag-ges{
+    margin-top: 12px;
   }
 }
 .diag-dpe, .diag-ges{
   display: flex;
 
   .dpe, .ges{
-    padding: 5px 8px;
+    padding: 6px 8px;
 
     & > div:first-child{
       opacity: 0;
@@ -93,7 +91,7 @@ $colorsGES: (
   }
   .dpe.dpe_is-active,.ges.ges_is-active{
     transform: scale(1.4);
-    border-radius: 50%;
+    border-radius: 500px;
     font-size: 0.75em;
     border: 2px solid var(--alpha);
     color: var(--txt);
@@ -109,37 +107,12 @@ $colorsGES: (
   }
 }
 
-.diagnostic--seemore {
-  text-align: right;
-  margin-top: 35px;
-  color: var(--primary);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s linear;
+.diagnostic-details{
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-
-  span:last-child{
-    display: inline-block;
-    margin-left: 8px;
-  }
-
-  &:hover{
-    opacity: 0.7;
-  }
-}
-
-.diagnostic--details{
-  display: flex;
-  margin-top: 35px;
-
-  .diag-dpe{
-    margin-bottom: 35px;
-  }
+  width: 100%;
 
   .diag-dpe, .diag-ges{
-    margin-top: 10px;
+    margin-top: 12px;
     flex-direction: column;
 
     $sizes: (
@@ -183,17 +156,18 @@ $colorsGES: (
 
     .dpe, .ges{
       position: relative;
+      @include flex(row, center, space-between);
+      @include fontSemibold();
+
       & > div:first-child{
         opacity: 1;
         display: flex;
         justify-content: space-between;
-        font-weight: 600;
       }
     }
 
     .dpe.dpe_is-active2,.ges.ges_is-active2{
       color: var(--txt);
-      font-weight: 600;
 
       + .number{
         position: absolute;
@@ -204,40 +178,6 @@ $colorsGES: (
         border-radius: 100px;
       }
     }
-  }
-}
-//                      __   _____ __    ___    __
-//                     | _| |___  / /_  ( _ )  |_ |
-//    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
-//   |_____|_____|_____| |    / /| (_) | (_) |  | |_____|_____|_____|
-//                     | |   /_/  \___/ \___/   | |
-//                     |__|                    |__|
-@media (min-width:768px) {
-  .diagnostic{
-    display: flex;
-  }
-
-  .diagnostic--details{
-    & > div{
-      width: 100%;
-    }
-  }
-}
-//                      __   _  ___ ____  _  _     __
-//                     | _| / |/ _ \___ \| || |   |_ |
-//    _____ _____ _____| |  | | | | |__) | || |_   | |_____ _____ _____
-//   |_____|_____|_____| |  | | |_| / __/|__   _|  | |_____|_____|_____|
-//                     | |  |_|\___/_____|  |_|    | |
-//                     |__|                       |__|
-@media (min-width: 1024px) {
-  .diagnostic--details{
-    & > div{
-      display: inline-block;
-      width: 49%;
-    }
-  }
-  .diagnostic{
-    flex-direction: row;
   }
 }
 
