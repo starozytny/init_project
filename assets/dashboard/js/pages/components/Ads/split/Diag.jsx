@@ -39,7 +39,7 @@ export function Diag({ elem }){
 function DiagSimple({ isDpe, elem })
 {
     let letters = ["A", "B", "C", "D", "E", "F", "G"];
-    let title = isDpe ? "Diagnostic de performance énergétique" : "Indice d'émission de gaz à effet de serre";
+    let title = isDpe ? "Diagnostic de performance énergétique en kWhEP/m².an" : "Indice d'émission de gaz à effet de serre en kgeqCO2/m².an";
     let classDiag = isDpe ? "dpe" : "ges";
     let value = isDpe ? elem.diagnostic.dpeVal : elem.diagnostic.gesVal;
 
@@ -78,14 +78,14 @@ function DiagDetails({ isDpe, elem })
         { le :"F", valDpe: "331 à 450", valGes: "56 à 80" },
         { le :"G", valDpe: "> 450", valGes: "> 80" }
     ]
-    let title = isDpe ? "Diagnostic de performance énergétique" : "Indice d'émission de gaz à effet de serre";
+    let title = isDpe ? "Diagnostic de performance énergétique en kWhEP/m².an" : "Indice d'émission de gaz à effet de serre en kgeqCO2/m².an";
     let classDiag = isDpe ? "dpe" : "ges";
     let value = isDpe ? elem.diagnostic.dpeVal : elem.diagnostic.gesVal;
 
     return (
         <div className="diagnostic-details">
             <div>
-                <div className="diag-title">{title} en kWhEP/m2.an</div>
+                <div className="diag-title">{title}</div>
                 <div className={"diag-" + classDiag}>
                     {lettersDetails.map(le => {
 
