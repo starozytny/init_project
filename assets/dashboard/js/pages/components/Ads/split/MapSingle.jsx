@@ -1,10 +1,12 @@
 import "leaflet/dist/leaflet.css";
 
 import React, { Component } from "react";
-import L from "leaflet/dist/leaflet";
-import axios from "axios";
 
-export class Map extends Component {
+import axios from "axios";
+import L     from "leaflet/dist/leaflet";
+import Map   from "@dashboardComponents/functions/map";
+
+export class MapSingle extends Component {
     constructor(props) {
         super(props);
 
@@ -67,23 +69,14 @@ export class Map extends Component {
         this.setState({choices: newChoices, dataLoaded: dataLoad })
     }
 
-
-
     componentDidMount = () => {
         const { elem } = this.props;
         const { mapId, mapUrl } = this.state;
 
-        let mymap = L.map(mapId).setView([43.2953, 5.3691], 15);
-        L.tileLayer(mapUrl, {
-            attribution: '© données par <a href="https://www.openstreetmap.org/copyright">les contributeurs & contributrices d’OpenStreetMap</a> sous licence libre ODbL,' +
-                '<br>Fond de carte par <a href="https://www.hotosm.org/updates/2013-09-29_a_new_window_on_openstreetmap_data">Yohan Boniface & Humanitarian ' +
-                'OpenStreetMap Team</a> sous licence domaine public CC0 hébergé par <a href="https://www.openstreetmap.fr/mentions-legales/">OSM France</a>',
-            minZoom: 13,
-            maxZoom: 18
-        }).addTo(mymap);
+        let mymap = Map.createMap(mapId, mapUrl);
 
         if(elem.address.lat && elem.address.lon){
-            L.marker([elem.address.lat, elem.address.lon], {icon: getLeafletMarkerIcon()}).addTo(mymap);
+            L.marker([elem.address.lat, elem.address.lon], {icon: Map.getLeafletMarkerIcon()}).addTo(mymap);
             mymap.fitBounds([[elem.address.lat, elem.address.lon]]);
         }
 
@@ -109,7 +102,6 @@ export class Map extends Component {
             choicesActive += " maps-choices-" + el.id
         })
 
-
         return <div className={"maps-items" + choicesActive}>
             <div id="mapid" />
             <div className="maps-choices">
@@ -117,28 +109,6 @@ export class Map extends Component {
             </div>
         </div>;
     }
-}
-
-function getLeafletMarkerIcon()
-{
-    return L.divIcon({
-        className: 'map-marker-icon map-marker-icon-display',
-        html: "<div class='marker-pin'></div><span class='icon-vision'></span>",
-        iconSize: [30, 42],
-        iconAnchor: [15, 42],
-        popupAnchor:  [0, -35]
-    })
-}
-
-function getLeafletIcon(el)
-{
-    return L.divIcon({
-        className: 'map-marker-icon map-marker-icon-' + el.id,
-        html: "<div class='marker-pin'></div><span class='icon-"+el.icon+"'></span>",
-        iconSize: [30, 42],
-        iconAnchor: [15, 42],
-        popupAnchor:  [0, -35]
-    })
 }
 
 function filterNoDataFrench(feature, layer) {
@@ -238,7 +208,7 @@ function getData(mymap, el, dataLoad) {
 
                 response = response.data
                 L.geoJSON(response, {onEachFeature: onEachF, filter: onFilter, pointToLayer: function (feature, latlng) {
-                        return L.marker(latlng, {icon: getLeafletIcon(el)});
+                        return L.marker(latlng, {icon: Map.getLeafletIcon(el)});
                     },}).addTo(mymap);
             })
         ;
@@ -281,7 +251,7 @@ function getDataEcoles(mymap, el, dataLoad) {
                     }
 
                     if(go){
-                        let marker = L.marker([elem.latitude, elem.longitude], {icon: getLeafletIcon(el)}).addTo(mymap);
+                        let marker = L.marker([elem.latitude, elem.longitude], {icon: Map.getLeafletIcon(el)}).addTo(mymap);
                         marker.bindPopup("<b>" + elem.patronyme_uai + "</b> <br/>" + elem.denomination_principale);
                     }
                 })

@@ -6,7 +6,7 @@ import { Infos }    from "./split/Infos";
 import { Features } from "./split/Features";
 import { Diag }     from "./split/Diag";
 import { Financial } from "./split/Financial";
-import {Map} from "./split/Map";
+import { MapSingle } from "./split/MapSingle";
 
 export class AdItem extends Component {
     constructor(props) {
@@ -88,7 +88,7 @@ export class AdItem extends Component {
                         {elem.images && elem.images.map(img => {
                             return <img src={`/annonces/images/${elem.agency.dirname}/${img.file}`} alt={"Image annonce " + img.rank} key={img.id}/>
                         })}
-                    </div> : <Map elem={elem} />}
+                    </div> : <MapSingle elem={elem} />}
 
                 </div>
             </div>
