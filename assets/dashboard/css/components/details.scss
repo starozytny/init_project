@@ -78,6 +78,10 @@
   border-radius: 4px;
   padding: 12px;
 
+  & + .details-tab-infos-main{
+    margin-top: 24px;
+  }
+
   & > div{
     margin-bottom: 12px;
   }

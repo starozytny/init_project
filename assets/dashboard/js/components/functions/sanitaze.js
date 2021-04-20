@@ -89,13 +89,13 @@ function getPostalCodes(self){
     ;
 }
 
-function getTrilieanResponse(data){
+function getTrilieanResponse(data, returnNull=true){
     if(data === 0){
         return "Non";
     }else if(data === 1){
         return "Oui";
     }else{
-        return null;
+        return returnNull ? null : "N.C";
     }
 }
 
