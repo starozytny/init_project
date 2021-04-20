@@ -131,12 +131,14 @@
     @include flex(row, flex-start, flex-start);
     position: absolute;
     top: 12px;
-    left: 12px;
+    right: 12px;
+    z-index: 2000;
 
     & > div{
       padding: 8px 12px;
       width: 60px;
-      background-color: var(--fond);
+      background-color: var(--alpha);
+      color: var(--grey2);
       text-align: center;
       box-shadow: 0 4px 12px var(--greyShadow);
       cursor: pointer;
@@ -145,12 +147,18 @@
 
       &:hover{
         opacity: 1;
+        color: var(--txt);
       }
     }
 
     & > .active{
       background-color: var(--primary);
       opacity: 1;
+      color: var(--alpha);
+
+      &:hover{
+        color: var(--alpha);
+      }
     }
 
     & > div:first-child{
