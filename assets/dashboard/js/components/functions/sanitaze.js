@@ -60,9 +60,9 @@ function toFormatCurrency(number)
     let main = num.substr(0, num.length - 5);
     let decimale = num.substr(num.length - 5, 3);
     if(decimale === ",00"){
-        decimale = " €";
+        decimale = "";
     }
-    num = main + decimale;
+    num = main + decimale + " €";
 
     return  num.replaceAll('.', ' ');
 }

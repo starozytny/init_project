@@ -127,6 +127,7 @@ class ImBien
 
     /**
      * @ORM\OneToOne(targetEntity=ImCopro::class, cascade={"persist", "remove"})
+     * @Groups("list:read")
      */
     private $copro;
 

@@ -26,56 +26,67 @@ class ImFinancial
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $commission;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $charges;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $foncier;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $deposit;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $partHonoEdl;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $complementLoyer;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $honoChargesDe;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $horsHonoAcquereur;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $modalitesChargesLocataire;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $bouquet;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $rente;
 

@@ -4,6 +4,7 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImCoproRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImCoproRepository::class)
@@ -19,21 +20,25 @@ class ImCopro
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $nbLot;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("list:read")
      */
     private $chargesAnnuelle;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("list:read")
      */
     private $hasProced;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups("list:read")
      */
     private $detailsProced;
 
