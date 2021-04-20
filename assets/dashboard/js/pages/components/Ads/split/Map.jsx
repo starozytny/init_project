@@ -70,6 +70,7 @@ export class Map extends Component {
 
 
     componentDidMount = () => {
+        const { elem } = this.props;
         const { mapId, mapUrl } = this.state;
 
         let mymap = L.map(mapId).setView([43.2953, 5.3691], 15);
@@ -81,11 +82,15 @@ export class Map extends Component {
             maxZoom: 18
         }).addTo(mymap);
 
+        if(elem.address.lat && elem.address.lon){
+            L.marker([elem.address.lat, elem.address.lon], {icon: getLeafletMarkerIcon()}).addTo(mymap);
+            mymap.fitBounds([[elem.address.lat, elem.address.lon]]);
+        }
+
         this.setState({ mymap })
     }
 
     render () {
-        const { elem } = this.props;
         const { choices, choiceItems } = this.state;
 
         let mapChoices = [];
@@ -112,6 +117,17 @@ export class Map extends Component {
             </div>
         </div>;
     }
+}
+
+function getLeafletMarkerIcon()
+{
+    return L.divIcon({
+        className: 'map-marker-icon map-marker-icon-display',
+        html: "<div class='marker-pin'></div><span class='icon-vision'></span>",
+        iconSize: [30, 42],
+        iconAnchor: [15, 42],
+        popupAnchor:  [0, -35]
+    })
 }
 
 function getLeafletIcon(el)

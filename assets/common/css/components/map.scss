@@ -41,6 +41,7 @@
   display: none !important;
 }
 
+.map-marker-icon-display,
 .maps-choices-0 .map-marker-icon-0,
 .maps-choices-1 .map-marker-icon-1,
 .maps-choices-2 .map-marker-icon-2,
@@ -99,10 +100,12 @@
 .maps-choices .maps-choice.active:before{
   background-color: var(--beta);
 }
-
+.map-marker-icon-display .marker-pin{
+  background-color: var(--primary);
+}
 .maps-choices-0 .map-marker-icon-0 .marker-pin,
 .maps-choices .maps-choice-0.active:before {
-  background-color: var(--primary);
+  background-color: var(--grey2);
 }
 .maps-choices-1 .map-marker-icon-1 .marker-pin,
 .maps-choices-1 .maps-choice-1.active:before {
@@ -131,7 +134,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     flex-wrap: wrap;
-    width: calc(100% + 12px);
+    width: 100%;
   }
   .maps-choices .maps-choice {
     width: calc(50% - 12px);
@@ -145,17 +148,5 @@
   }
   .maps-choices .maps-choice {
     width: calc(33% - 12px);
-  }
-}
-
-@media (min-width:1280px) {
-  .maps-choices .maps-choice {
-    width: calc(25% - 12px);
-  }
-}
-
-@media (min-width:1600px) {
-  .maps-choices .maps-choice {
-    width: calc(20% - 12px);
   }
 }
