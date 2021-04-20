@@ -3,6 +3,12 @@
 @import "split/ad/details";
 @import "split/ad/search";
 
+.toolbar{
+  .display-mode{
+    margin-right: 12px;
+  }
+}
+
 .items-table{
   .selector{
     width: 60px;
