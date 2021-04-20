@@ -129,6 +129,7 @@ class ImBien
 
     /**
      * @ORM\OneToOne(targetEntity=ImResponsable::class, cascade={"persist", "remove"})
+     * @Groups("list:read")
      */
     private $responsable;
 

@@ -4,6 +4,7 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImResponsableRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImResponsableRepository::class)
@@ -19,16 +20,19 @@ class ImResponsable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
+     * @Groups("list:read")
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $email;
 

@@ -1,5 +1,9 @@
 @import "../vars/vars";
 
+.details-content{
+  margin-bottom: 48px;
+}
+
 .details-pretitle{
   font-size: 14px;
   margin-bottom: 4px;
@@ -66,5 +70,43 @@
     & > div:last-child{
       margin-right: 26px;
     }
+  }
+}
+
+.details-tab-infos-main{
+  background-color: var(--greyShadow);
+  border-radius: 4px;
+  padding: 12px;
+
+  & > div{
+    margin-bottom: 12px;
+  }
+
+  .label{
+    text-transform: uppercase;
+    font-size: 14px;
+    color: var(--grey2);
+  }
+}
+
+.details-tab-infos-content{
+  margin-top: 24px;
+
+  .content{
+    margin-bottom: 24px;
+  }
+
+  .label{
+    @include fontSemibold();
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  p{
+    max-width: 768px;
+    background-color: var(--alpha);
+    padding: 12px;
+    border-radius: 4px;
+    line-height: 1.3;
   }
 }

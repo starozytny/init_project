@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 
-import Sanitize from "@dashboardComponents/functions/sanitaze";
-import { Button } from "@dashboardComponents/Tools/Button";
+import parseHtml    from 'html-react-parser';
+
+import Sanitize     from "@dashboardComponents/functions/sanitaze";
+import { Button }   from "@dashboardComponents/Tools/Button";
 
 export class AdItem extends Component {
     constructor(props) {
@@ -32,7 +34,40 @@ export class AdItem extends Component {
                 content = <div>Features</div>
                 break;
             default:
-                content = <div>Infos</div>
+                content = <div className="details-tab-infos">
+                    <div className="details-tab-infos-main">
+                        <div>
+                            <div className="label">Référence transfert</div>
+                            <div>{elem.ref}</div>
+                        </div>
+                        <div>
+                            <div className="label">Référence agence</div>
+                            <div>{elem.realRef}</div>
+                        </div>
+                    </div>
+
+                    <div className="details-tab-infos-content">
+                        <div className="content">
+                            <div className="label">Description du bien immobilier</div>
+                            <p>{parseHtml(elem.content)}</p>
+                        </div>
+                        <div className="contacts">
+                            <div className="label">Contacts</div>
+                            <div className="contact">
+                                <div>{elem.agency.name}</div>
+                                <div>{elem.agency.phone}</div>
+                                <div>{elem.agency.email}</div>
+                            </div>
+                            {elem.responsable && <div className="contact">
+                                <div>{elem.responsable.name}</div>
+                                <div>{elem.responsable.phone}</div>
+                                <div>{elem.responsable.email}</div>
+                            </div>}
+                        </div>
+                    </div>
+
+
+                </div>
                 break;
         }
 
@@ -71,7 +106,7 @@ function Navigation({ onChangeContext, subContext }){
 
     let items = [
         {context: "infos",       label: "Infos"},
-        {context: "features",    label: "Caractéristique"},
+        {context: "features",    label: "Caractéristiques"},
         {context: "diag",        label: "Diagnostic"},
         {context: "financial",   label: "Financier"},
     ]

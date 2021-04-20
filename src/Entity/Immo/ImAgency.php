@@ -44,36 +44,43 @@ class ImAgency
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $emailLocation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $emailVente;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
+     * @Groups("list:read")
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
+     * @Groups("list:read")
      */
     private $phoneLocation;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
+     * @Groups("list:read")
      */
     private $phoneVente;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups("list:read")
      */
     private $logo;
 
