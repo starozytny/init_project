@@ -8,6 +8,7 @@ import { Alert }      from "@dashboardComponents/Tools/Alert";
 
 import { AdsItem }   from "./AdsItem";
 import { AdsSearch } from "./AdsSearch";
+import {MapGroup} from "./split/MapGroup";
 
 export class AdsList extends Component {
     constructor(props) {
@@ -26,6 +27,15 @@ export class AdsList extends Component {
         const { data } = this.props;
         const { nature } = this.state;
 
+        let currentData = [];
+        if(data && data.length !== 0){
+            data.forEach(elem => {
+                if (elem.typeAd === nature) {
+                    currentData.push(elem);
+                }
+            })
+        }
+
         return <>
             <div>
                 <div className="toolbar">
@@ -33,6 +43,8 @@ export class AdsList extends Component {
                         <AdsSearch {...this.state} onNature={this.handleNature}/>
                     </div>
                 </div>
+
+               <MapGroup elems={currentData}/>
 
                 <div className="items-table">
                     <div className="items items-default items-user items-ad">
@@ -50,10 +62,8 @@ export class AdsList extends Component {
                                 </div>
                             </div>
                         </div>
-                        {data && data.length !== 0 ? data.map(elem => {
-                            if(elem.typeAd === nature){
-                                return <AdsItem {...this.props} elem={elem} key={elem.id}/>
-                            }
+                        {currentData && currentData.length !== 0 ? currentData.map(elem => {
+                            return <AdsItem {...this.props} elem={elem} key={elem.id}/>
                         }) : <Alert>Aucun résultat</Alert>}
                     </div>
                 </div>

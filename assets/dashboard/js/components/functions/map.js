@@ -1,7 +1,7 @@
 const L = require("leaflet/dist/leaflet");
 
 function createMap(mapId = "mapid", mapUrl = "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                   initLat = 43.2953, initLon = 5.3691, initZoom = 15, minZoom = 13, maxZoom = 18)
+                  initZoom = 15, minZoom = 13, maxZoom = 18, initLat = 43.2953, initLon = 5.3691)
 {
     let mymap = L.map(mapId).setView([initLat, initLon], initZoom);
     L.tileLayer(mapUrl, {
