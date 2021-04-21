@@ -28,24 +28,24 @@
                 <table>
                     <tbody>
                     <tr>
-                        <td class="financier-1">Provisions pour charges (1)</td>
+                        <td style="font-size: 12px; padding-right: 24px;" class="financier-1">Provisions pour charges (1)</td>
                         <td class="financier-1">{% if ad.financial.charges != null %}{{ ad.financial.charges }} €{% else %}N.C{% endif %}</td>
                     </tr>
                     <tr>
-                        <td>
+                        <td style="font-size: 10px; padding-bottom: 8px;">
                             <span class="infos-financier--help">(1) Soumis à régularisation annuelle</span>
                         </td>
                     </tr>
                     <tr>
-                        <td>Dépôt de garantie</td>
+                        <td style="font-size: 12px; padding-right: 24px; padding-bottom: 8px;">Dépôt de garantie</td>
                         <td>{% if ad.financial.deposit != null %}{{ ad.financial.deposit }} €{% else %}N.C{% endif %}</td>
                     </tr>
                     <tr>
-                        <td>Honoraires à la charge du locataire</td>
+                        <td style="font-size: 12px; padding-right: 24px; padding-bottom: 8px;">Honoraires à la charge du locataire</td>
                         <td>{% if ad.financial.commission != null %}{{ ad.financial.commission }} € TTC{% else %}N.C{% endif %}</td>
                     </tr>
                     <tr>
-                        <td>dont pour l'état des lieux</td>
+                        <td style="font-size: 12px; padding-right: 24px; padding-bottom: 8px;">dont pour l'état des lieux</td>
                         <td>{% if ad.financial.partHonoEdl != null %}{{ ad.financial.partHonoEdl }} € TTC{% else %}N.C{% endif %}</td>
                     </tr>
                     </tbody>
