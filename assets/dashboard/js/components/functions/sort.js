@@ -1,3 +1,7 @@
+function compareAdPrice(a, b){
+    return comparison(a.financial.price, b.financial.price);
+}
+
 function compareLabel(a, b){
     return comparison(a.label, b.label);
 }
@@ -34,5 +38,6 @@ module.exports = {
     compareLastname,
     compareFirstname,
     compareName,
-    compareLabel
+    compareLabel,
+    compareAdPrice
 }
