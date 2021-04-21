@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<table class="table-1 table-custom">
+    <tbody>
+    <tr>
+        <td class="td--img">
+            <img src="{{ image }}" alt="" width="315">
+        </td>
+        <td class="td-1--info">
+            <div class="infos-gene">
+                <h3>{{ ad.label }}</h3>
+                <p>{{ ad.address.zipcode }}, {{ ad.address.city }}</p>
+                <br>
+                <div class="infos-gene--plus">
+                    <div>{{ ad.typeAd == "Location" ? "Loyer charges comprises" : "Prix"}}</div>
+                    <div class="color-1 financier-prix">
+                        {{ ad.financial.price }} € {{ ad.typeAd == "Location" ? "cc / mois " : ""}}
+                    </div>
+                </div>
+            </div>
+            <div class="infos-financier">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td class="financier-1">Provisions pour charges (1)</td>
+                        <td class="financier-1">{% if ad.financial.charges != null %}{{ ad.financial.charges }} €{% else %}N.C{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="infos-financier--help">(1) Soumis à régularisation annuelle</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Dépôt de garantie</td>
+                        <td>{% if ad.financial.deposit != null %}{{ ad.financial.deposit }} €{% else %}N.C{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td>Honoraires à la charge du locataire</td>
+                        <td>{% if ad.financial.commission != null %}{{ ad.financial.commission }} € TTC{% else %}N.C{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td>dont pour l'état des lieux</td>
+                        <td>{% if ad.financial.partHonoEdl != null %}{{ ad.financial.partHonoEdl }} € TTC{% else %}N.C{% endif %}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 class="title-h3">Description</h3>
+<table class="table-custom">
+    <tbody>
+    <tr>
+        <td>
+            <p>{{ ad.content | raw }}</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h3 class="title-h3">Caractéristiques</h3>
+<table class="table-custom">
+    <tbody>
+    <tr>
+        <td>
+            <table class="table-cara">
+                <tbody>
+                <tr>
+                    <td class="table-cara-td--1">
+                        <table>
+                            <tbody>
+                            {% if ad.feature.isMeuble == 1 %}
+                                <tr>
+                                    <td>
+                                        {% if ad.feature.isMeuble == 1 %}Meublé{% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            <tr>
+                                <td>{{ ad.feature.area }} m²</td>
+                                <td>Surface habitable</td>
+                            </tr>
+                            {% if ad.feature.nbPiece > 0 %}
+                                <tr>
+                                    <td>{{ ad.feature.nbPiece }}</td>
+                                    <td>Pièce{% if ad.feature.nbPiece > 1 %}s{% endif %}</td>
+                                </tr>
+                            {% endif %}
+                            {% if ad.feature.nbRoom > 0 %}
+                                <tr>
+                                    <td>{{ ad.feature.nbRoom }}</td>
+                                    <td>Chambre{% if ad.feature.nbRoom > 1 %}s{% endif %}</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="table-cara-td--1">
+                        <table>
+                            <tbody>
+                            {% if ad.feature.floor > 0 %}
+                                <tr>
+                                    <td>{{ ad.feature.floor }}{% if ad.feature.floor == 1 %}er{% else %}ème{% endif %}</td>
+                                    <td>Etages</td>
+                                </tr>
+                            {% endif %}
+                            {% if ad.feature.nbSle > 0 %}
+                                <tr>
+                                    <td>{{ ad.feature.nbSle }}</td>
+                                    <td>Salle d'eau</td>
+                                </tr>
+                            {% endif %}
+                            {% if ad.feature.nbWc > 0 %}
+                                <tr>
+                                    <td>{{ ad.feature.nbWc }}</td>
+                                    <td>Toilette{% if ad.feature.nbWc > 1 %}s{% endif %}</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="cara--others">
+                            <div>
+                                {{ ad.feature.heating }}
+                            </div>
+                            <div>
+                                {{ ad.feature.kitchen }}
+                            </div>
+                            {% if ad.featureExt %}
+                                {% if ad.featureExt.hasElevator %}
+                                    <div>
+                                        <span>Ascenseur</span>
+                                    </div>
+                                {% endif %}
+                                {% if ad.featureExt.hasTerrace %}
+                                    <div>
+                                        <span>Terrasse</span>
+                                    </div>
+                                {% endif %}
+                                {% if ad.featureExt.hasTerrace %}
+                                    <div>
+                                        <span>Gardien</span>
+                                    </div>
+                                {% endif %}
+                                {% if ad.featureExt.hasCellar %}
+                                    <div>
+                                        <span>Cave</span>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 class="title-h3">Bilan énergétique</h3>
+<table class="table-custom">
+    <tbody>
+    <tr>
+        <td>
+            <div class="diagnostic">
+                {% if ad.diagnostic %}
+                    {% if ad.diagnostic.dpeLettre != null and ad.diagnostic.gesLettre != null %}
+
+                        {% if ad.diagnostic.dpeLettre != null %}
+                            <div class="diag-dpe">
+                                <p>
+                                    DPE :
+                                    <span>{{ ad.diagnostic.dpeLettre }}</span>
+                                    <span>{{ ad.diagnostic.dpeVal }}</span>
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if ad.diagnostic.gesLettre != null %}
+                            <div class="diag-ges">
+                                <p>
+                                    GES :
+                                    <span>{{ ad.diagnostic.gesLettre }}</span>
+                                    <span>{{ ad.diagnostic.gesVal }}</span>
+                                </p>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        N.C
+                    {% endif %}
+                {% else %}
+                    N.C
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 class="title-h3">Nous contacter</h3>
+<table class="table-custom">
+    <tbody>
+    {% if ad.responsable %}
+        <tr>
+            <td>{{ ad.responsable.name }}</td>
+            <td>
+                <div class="color-1">{{ ad.responsable.phone }}</div>
+            </td>
+            <td>
+                <div>{{ ad.responsable.email }}</div>
+            </td>
+        </tr>
+    {% endif %}
+    {% if ad.typeAd == "Location" %}
+        {% set phone = ad.agency.phoneLocation ? ad.agency.phoneLocation : ad.agency.phone %}
+        {% set email = ad.agency.emailLocation ? ad.agency.emailLocation : ad.agency.email %}
+    {% else %}
+        {% set phone = ad.agency.phoneVente ? ad.agency.phoneVente : ad.agency.phone %}
+        {% set email = ad.agency.emailVente ? ad.agency.emailVente : ad.agency.email %}
+    {% endif %}
+    <hr>
+    <tr>
+        <td>{{ ad.agency.name }}</td>
+    </tr>
+    <tr>
+        <td>
+            <div>{{ phone }}</div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div>{{ email }}</div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -445,6 +445,11 @@ class ImBien
         return $this->getImages() && $this->getImages()[0] ? $this->getImages()[0]->getThumb() : null;
     }
 
+    public function getFirstImage()
+    {
+        return $this->getImages() && $this->getImages()[0] ? $this->getImages()[0]->getFile() : null;
+    }
+
     public function getIdentifiant(): ?string
     {
         return $this->identifiant;

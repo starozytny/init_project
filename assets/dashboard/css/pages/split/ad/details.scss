@@ -1,7 +1,14 @@
 @import "../../../vars/vars";
 
+.details-general{
+  margin-top: 12px;
+  @include flex(row, flex-start, space-between);
+}
+
 .details-ad-types{
   .type-ad{
+    margin-top: 0;
     margin-right: 12px;
+    margin-bottom: 0;
   }
 }

@@ -46,3 +46,46 @@ b{
 .header td{
     padding: 25px;
 }
+
+.table-custom{
+    margin-bottom: 35px;
+}
+
+.td-1--info, .td--img{
+    padding-top: 10px;
+}
+.td--img{
+    padding-right: 25px;
+}
+.financier-1{
+    padding-top: 25px;
+}
+.color-1{
+    color: #109cf1;
+}
+.financier-prix{
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.title-h3{
+    color: #4d4d4d;
+    display: block;
+    width: 100%;
+    padding-bottom: 5px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #DBD7D7;
+}
+.table-cara{
+    vertical-align: top;
+}
+.table-cara .table-cara-td--1{
+    padding-right: 25px;
+}
+.table-cara .table-cara-td--1 td{
+    padding-right: 10px;
+}
+.color-light{
+    color: #FF989F;
+    font-weight: bold;
+}

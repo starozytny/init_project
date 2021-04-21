@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 
-import Sanitize     from "@dashboardComponents/functions/sanitaze";
-import { Button }   from "@dashboardComponents/Tools/Button";
-import { Infos }    from "./split/Infos";
-import { Features } from "./split/Features";
-import { Diag }     from "./split/Diag";
+import Routing       from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+import Sanitize      from "@dashboardComponents/functions/sanitaze";
+import { Infos }     from "./split/Infos";
+import { Features }  from "./split/Features";
+import { Diag }      from "./split/Diag";
 import { Financial } from "./split/Financial";
 import { MapSingle } from "./split/MapSingle";
+import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
 
 export class AdItem extends Component {
     constructor(props) {
@@ -70,6 +71,9 @@ export class AdItem extends Component {
                         <div className="details-ad-types">
                             <div className={"role type-ad ad-" + elem.codeTypeAd}>{elem.typeAd}</div>
                             <div className="role type-bien">{elem.typeBien}</div>
+                        </div>
+                        <div className="details-ad-actions">
+                            <ButtonIcon element="a" target="_blank" onClick={Routing.generate('api_immo_ads_print', {'identifiant': elem.identifiant})} icon="print">Imprimer</ButtonIcon>
                         </div>
                     </div>
                     <Navigation subContext={subContext} onChangeContext={this.handleChangeSubContext} />
