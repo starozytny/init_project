@@ -83,28 +83,6 @@ export class AdsList extends Component {
                         </div>
                     </div>
                 </>}
-
-                <div className="page-actions">
-                    <div className="common-actions">
-                        <div className="item">
-                            <div className="dropdown">
-                                <div className="dropdown-btn">
-                                    <span className="icon-download" />
-                                    <span>Exporter</span>
-                                </div>
-                                <div className="dropdown-items">
-                                    <a className="item" download="utilisateurs.csv" href={Routing.generate('api_users_export', {'format': 'csv'})}>
-                                        <ButtonIcon icon="file" text="Exporter en CSV" />
-                                    </a>
-                                    <a className="item" download="utilisateurs.xlsx" href={Routing.generate('api_users_export', {'format': 'excel'})}>
-                                        <ButtonIcon icon="file" text="Exporter en Excel" />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </>
     }

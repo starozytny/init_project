@@ -49,6 +49,42 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-phone:before {
+  content: "\e96f";
+}
+.icon-up-chevron:before {
+  content: "\e912";
+}
+.icon-down-chevron:before {
+  content: "\e96c";
+}
+.icon-left-chevron:before {
+  content: "\e96d";
+}
+.icon-right-chevron:before {
+  content: "\e96e";
+}
+.icon-back:before {
+  content: "\e966";
+}
+.icon-credit-card:before {
+  content: "\e967";
+}
+.icon-facebook:before {
+  content: "\e968";
+}
+.icon-instagram:before {
+  content: "\e969";
+}
+.icon-next:before {
+  content: "\e96a";
+}
+.icon-power-button1:before {
+  content: "\e96b";
+}
+.icon-equal:before {
+  content: "\e965";
+}
 .icon-male:before {
   content: "\e910";
 }
@@ -102,9 +138,6 @@
 }
 .icon-cloud:before {
   content: "\e911";
-}
-.icon-credit---card:before {
-  content: "\e912";
 }
 .icon-dashboard:before {
   content: "\e913";
