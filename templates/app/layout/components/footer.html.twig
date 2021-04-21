@@ -5,7 +5,7 @@
                 <a href="{{ path('app_homepage') }}" title="Logilink">
                     <img src="{{ asset('build/dashboard/images/logilink-logo.svg') }}" alt="Logo"/>
                 </a>
-                <span>Espace Cité de la Musique de Marseille </span>
+                <span>Website</span>
             </div>
             <div class="footer-items">
                 <a rel="nofollow" href="{{ path('app_mentions') }}">Mentions légales</a>
@@ -17,6 +17,10 @@
                     </a>
                     <a rel="nofollow" href="{{ path('app_logout') }}">
                         <span>Déconnexion</span>
+                    </a>
+                {% else %}
+                    <a rel="nofollow" href="{{ path('app_login') }}">
+                        <span>Connexion</span>
                     </a>
                 {% endif %}
             </div>
