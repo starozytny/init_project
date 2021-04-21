@@ -48,17 +48,17 @@ b{
 }
 
 .table-custom{
-    margin-bottom: 35px;
+    margin-bottom: 24px;
 }
 
 .td-1--info, .td--img{
     padding-top: 10px;
 }
 .td--img{
-    padding-right: 25px;
+    padding-right: 24px;
 }
 .financier-1{
-    padding-top: 25px;
+    padding-top: 24px;
 }
 .color-1{
     color: #109cf1;
@@ -69,11 +69,12 @@ b{
 }
 
 .title-h3{
+    font-size: 18px;
     color: #4d4d4d;
     display: block;
     width: 100%;
     padding-bottom: 5px;
-    margin-bottom: 25px;
+    margin-bottom: 8px;
     border-bottom: 1px solid #DBD7D7;
 }
 .table-cara{
