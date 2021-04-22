@@ -91,7 +91,7 @@ export class AdItem extends Component {
                     {switcher === "image" ? <div className="images">
                         {elem.images.length !== 0 ? elem.images.map(img => {
                             return <img src={`/annonces/images/${elem.agency.dirname}/${img.file}`} alt={"Image annonce " + img.rank} key={img.id}/>
-                        }) : <img src={`https://robohash.org/${elem.ref}?size=150x112`} alt={`Image de ${elem.ref}`}/>}
+                        }) : <img src={`/immo/logos/${elem.agency.logo}`} alt={`Image de ${elem.agency.name}`}/>}
                     </div> : <MapSingle elem={elem} />}
 
                 </div>

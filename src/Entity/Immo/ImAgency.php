@@ -87,11 +87,13 @@ class ImAgency
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $tarif;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups("list:read")
      */
     private $legal;
 
