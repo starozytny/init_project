@@ -36,7 +36,7 @@ function setMarkers(mymap, elems, urlAd=null)
                     "<div class='popmap-item-infos'>" +
                         "<div class='label'>" + elem.label + "</div>" +
                         "<div class='address'>" + elem.address.zipcode + ", " + elem.address.city + "</div>" +
-                        "<div><span class='price'>"+Sanitize.toFormatCurrency(elem.financial.price) + "</span>" + (elem.typeAd === "Location" && " cc/mois") + "</div>" +
+                        "<div class='grp-price'><span class='price'>"+Sanitize.toFormatCurrency(elem.financial.price) + "</span>" + (elem.typeAd === "Location" ? " cc/mois" : "") + "</div>" +
                     "</div>" +
                 "</a>");
                 latLngs.push(latLon)
