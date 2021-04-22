@@ -46,10 +46,10 @@ export class GalleryThumbs extends Component{
         }
 
         return <div className="gallery">
-            {/*<div className="total-images">*/}
-            {/*    <div>{images.length}</div>*/}
-            {/*    <div><span className="icon-camera" /></div>*/}
-            {/*</div>*/}
+            <div className="total-images">
+                <div>{images.length}</div>
+                <div><span className="icon-camera" /></div>
+            </div>
             <div className="images">
                 {images.length !== 0 ? images : <img src={`https://robohash.org/${elem.ref}?size=150x150`} alt={`Image de ${elem.ref}`} className="image active"/>}
             </div>
