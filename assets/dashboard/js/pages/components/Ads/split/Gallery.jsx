@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export class GalleryThumbs extends Component{
+export class Gallery extends Component{
     constructor(props) {
         super(props);
 
@@ -31,14 +31,20 @@ export class GalleryThumbs extends Component{
     }
 
     render () {
-        const { elem } = this.props;
+        const { elem, isImage } = this.props;
         const { image } = this.state;
 
         let images = [];
         if(elem.images.length !== 0){
             elem.images.map(img => {
-                images.push(<img src={`/annonces/thumbs/${elem.agency.dirname}/${img.thumb}`}
-                                 alt={"Thumbs " + elem.label + " " + elem.address.zipcode + ", " + elem.address.city}
+                let folder = "thumbs";
+                let file = img.thumb;
+                if(isImage){
+                    folder = "images";
+                    file = img.file;
+                }
+                images.push(<img src={`/annonces/${folder}/${elem.agency.dirname}/${file}`}
+                                 alt={folder + " " + elem.label + " " + elem.address.zipcode + ", " + elem.address.city}
                                  className={"image" + (image === img.rank ? " active" : "")}
                                  key={img.rank}
                 />);

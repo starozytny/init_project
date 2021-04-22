@@ -22,8 +22,8 @@
 }
 
 .items-ad{
-  .item:not(.item-header){
-    //cursor: pointer;
+  .selector{
+    cursor: pointer;
   }
   .avatar{
     width: auto;
@@ -34,7 +34,9 @@
     max-height: 112px;
 
     .gallery{
+      position: relative;
       max-height: 112px;
+      z-index: 20;
     }
 
     img{
@@ -47,6 +49,7 @@
 
   .infos{
     width: 100%;
+    cursor: pointer;
   }
 
   .name{

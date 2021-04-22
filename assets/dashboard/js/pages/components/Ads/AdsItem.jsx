@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
 
 import Sanitize from "@dashboardComponents/functions/sanitaze";
-import { GalleryThumbs } from "./split/Gallery";
+import { Gallery } from "./split/Gallery";
 
 export class AdsItem extends Component {
     render () {
         const { elem, onChangeContext } = this.props
 
-        // return <div className="item" onClick={() => onChangeContext("show", elem)}>
         return <div className="item">
-            <div className="selector">
+            <div className="selector" onClick={() => onChangeContext("show", elem)}>
                 <div>#{elem.id}</div>
             </div>
 
             <div className="item-content">
                 <div className="item-body">
                     <div className="avatar">
-                        <GalleryThumbs elem={elem}/>
-                        {/*{elem.thumb ? <img src={`/annonces/thumbs/${elem.agency.dirname}/${elem.thumb}`} alt={`Image de ${elem.ref}`}/>*/}
-                        {/*    : <img src={`https://robohash.org/${elem.ref}?size=150x150`} alt={`Image de ${elem.ref}`}/>}*/}
+                        <Gallery elem={elem} isImage={false}/>
                     </div>
-                    <div className="infos">
+                    <div className="infos" onClick={() => onChangeContext("show", elem)}>
                         <div className="ad-info">
                             <div className="name">
                                 <div>{elem.label}</div>
