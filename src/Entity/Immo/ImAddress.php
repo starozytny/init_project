@@ -4,6 +4,7 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImAddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -56,6 +57,12 @@ class ImAddress
      * @Groups("list:read")
      */
     private $lon;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Gedmo\Slug(fields={"city", "zipcode"})
+     */
+    private $slug;
 
     public function getId(): ?int
     {
@@ -144,5 +151,18 @@ class ImAddress
         $this->lon = $lon;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     * @Groups("list:read")
+     */
+    public function getShortAddress(): ?string
+    {
+        if($this->getZipcode() && $this->getCity()){
+            return $this->getZipcode() . ", " . $this->getCity();
+        }
+
+        return null;
     }
 }

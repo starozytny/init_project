@@ -6,6 +6,7 @@ use App\Repository\Immo\ImBienRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
@@ -153,6 +154,20 @@ class ImBien
      * @ORM\OneToMany(targetEntity=ImDemande::class, mappedBy="bien")
      */
     private $demandes;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Gedmo\Slug(handlers={
+     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
+     *          @Gedmo\SlugHandlerOption(name="relationField", value="address"),
+     *          @Gedmo\SlugHandlerOption(name="relationSlugField", value="slug"),
+     *          @Gedmo\SlugHandlerOption(name="separator", value="-"),
+     *          @Gedmo\SlugHandlerOption(name="urilize", value="true"),
+     *      })
+     * }, fields={"typeAd", "label", "identifiant"})
+     * @Groups("list:read")
+     */
+    private $slug;
 
     public function __construct()
     {
