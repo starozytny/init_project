@@ -1,0 +1,68 @@
+.gallery{
+  position: relative;
+  height: 112px;
+
+  .total-images{
+    @include flex(row, flex-start, flex-start);
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    background-color: rgba(57,57,57,0.5);
+    border-radius: 20px;
+    padding: 2px 6px 0 6px;
+    font-size: 12px;
+    color: var(--alpha);
+
+    div:first-child{
+      margin-right: 4px;
+    }
+  }
+
+  .image{
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: contain;
+    opacity: 0;
+    transition: 0.3s ease-in-out;
+  }
+
+  .image.active{
+    opacity: 1;
+  }
+
+  &:hover{
+    .gallery-prev, .gallery-next{
+      opacity: 1;
+    }
+  }
+
+  .gallery-prev, .gallery-next{
+    position: absolute;
+    top: 0;
+    left: 4px;
+    z-index: 5;
+    height: calc(100% - 4px);
+    @include flex(row, center, center);
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+
+    .prev, .next{
+      background-color: var(--alpha);
+      border-radius: 50px;
+      padding: 4px 4px 2px 4px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: all 0.2s ease-in-out;
+
+      &:hover{
+        opacity: 1;
+      }
+    }
+  }
+  .gallery-next{
+    left: auto;
+    right: 4px;
+  }
+}
