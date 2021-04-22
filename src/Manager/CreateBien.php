@@ -31,7 +31,7 @@ class CreateBien
     public function createFromJson($data, $biens, ImAgency $agency): ImBien
     {
         /** @var ImBien $b */
-        $bien = new ImBien();
+        $bien = null;
         $address = new ImAddress();
         $financial = new ImFinancial();
         $feature = new ImFeature();
@@ -42,7 +42,7 @@ class CreateBien
         $images = [];
         $identifiant = uniqid().bin2hex(random_bytes(8));
         foreach($biens as $b){
-            if($agency->getId() == $b->getAgency()->getId()){
+            if($bien == null && $agency->getId() == $b->getAgency()->getId()){
                 if($b->getRealRef()){
                     if($b->getRealRef() == $data->bien->realRef){
                         $bien = $b;
@@ -52,16 +52,23 @@ class CreateBien
                         $bien = $b;
                     }
                 }
-                $address = $b->getAddress();
-                $financial = $b->getFinancial();
-                $feature = $b->getFeature();
-                $featureExt = $b->getFeatureExt();
-                $diagnostic = $b->getDiagnostic();
-                $copro = $b->getCopro();
-                $responsable = $b->getResponsable();
-                $images = $b->getImages();
-                $identifiant = $b->getIdentifiant();
+
+                if($bien != null){
+                    $address = $b->getAddress();
+                    $financial = $b->getFinancial();
+                    $feature = $b->getFeature();
+                    $featureExt = $b->getFeatureExt();
+                    $diagnostic = $b->getDiagnostic();
+                    $copro = $b->getCopro();
+                    $responsable = $b->getResponsable();
+                    $images = $b->getImages();
+                    $identifiant = $b->getIdentifiant();
+                }
             }
+        }
+
+        if(!$bien){
+            $bien = new ImBien();
         }
 
         $this->deleteImages($images);
@@ -193,9 +200,6 @@ class CreateBien
     {
         if($item){
             $featureExt = $featureExt ?? new ImFeatureExt();
-        }
-
-        if($featureExt){
             if($item->parking != null){
                 $featureExt = ($featureExt)
                     ->setNbParking($item->parking->nbParking)
@@ -213,6 +217,8 @@ class CreateBien
                     ->setHasPiscine($item->plus->hasPiscine)
                 ;
             }
+        }else{
+            return null;
         }
 
         return $featureExt;
@@ -222,15 +228,14 @@ class CreateBien
     {
         if($item){
             $diagnostic = $diagnostic ?? new ImDiagnostic();
-        }
-
-        if($diagnostic){
             $diagnostic = ($diagnostic)
                 ->setDpeVal($item->dpeVal)
                 ->setDpeLettre($item->dpeLettre)
                 ->setGesVal($item->gesVal)
                 ->setGesLettre($item->gesLettre)
             ;
+        }else{
+            return null;
         }
 
         return $diagnostic;
@@ -240,15 +245,14 @@ class CreateBien
     {
         if($item){
             $copro = $copro ?? new ImCopro();
-        }
-
-        if($copro){
             $copro = ($copro)
                 ->setNbLot($item->nbLot)
                 ->setChargesAnnuelle($item->chargesAnnuelle)
                 ->setHasProced($item->hasProced)
                 ->setDetailsProced($item->detailsProced)
             ;
+        }else{
+            return null;
         }
 
         return $copro;
@@ -258,15 +262,14 @@ class CreateBien
     {
         if($item){
             $responsable = $responsable ?? new ImResponsable();
-        }
-
-        if($responsable){
             $responsable = ($responsable)
                 ->setName($item->name)
                 ->setPhone($item->phone)
                 ->setEmail($item->email)
                 ->setCodeNego($item->codeNego)
             ;
+        }else{
+            return null;
         }
 
         return $responsable;
