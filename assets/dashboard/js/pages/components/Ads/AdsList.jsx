@@ -20,7 +20,7 @@ export class AdsList extends Component {
     handleChangeContext = (context) => { this.setState({ context }) }
 
     render () {
-        const { currentData, onChangeNature } = this.props;
+        const { data, currentData, onChangeNature } = this.props;
         const { context } = this.state;
 
         let contexts = [
@@ -44,7 +44,7 @@ export class AdsList extends Component {
                     </div>
                 </div>
 
-                {context === "map" ? <MapGroup elems={currentData} /> : <>
+                {context === "map" ? <MapGroup elems={data} /> : <>
                     <div className="items-table">
                         <div className="items items-default items-user items-ad">
                             <div className="item item-header">

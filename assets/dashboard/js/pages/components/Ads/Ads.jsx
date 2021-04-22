@@ -118,6 +118,7 @@ export class Ads extends Component {
                 content = loadData ? <LoaderElement /> : <AdsList onChangeContext={this.handleChangeContext}
                                                                   onChangeNature={this.handleChangeNature}
                                                                   nature={nature}
+                                                                  data={data}
                                                                   currentData={currentData} />
                 break;
         }

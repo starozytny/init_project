@@ -72,7 +72,7 @@ export class Gallery extends Component{
                         </div>
                     </div>}
 
-                    {image !== images.length - 1 && <div className="gallery-next">
+                    {images.length !== 0 && image !== images.length - 1 && <div className="gallery-next">
                         <div className="next" onClick={() => this.handleNext(elem)}>
                             <span className="icon-right-chevron" />
                         </div>
