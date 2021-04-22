@@ -6,7 +6,7 @@ import L     from "leaflet/dist/leaflet";
 import Map   from "@dashboardComponents/functions/map";
 import Sanitize   from "@dashboardComponents/functions/sanitaze";
 
-function reinitMap(self, mymap, elems, mapId, mapUrl)
+function reinitMap(self, mymap, elems, mapId, mapUrl, urlAd)
 {
     if(mymap){
         mymap.off();
@@ -14,12 +14,12 @@ function reinitMap(self, mymap, elems, mapId, mapUrl)
     }
 
     let newMap = Map.createMap(mapId, mapUrl, 12, 10);
-    setMarkers(newMap, elems)
+    setMarkers(newMap, elems, urlAd)
 
     self.setState({ mymap: newMap, elems: elems })
 }
 
-function setMarkers(mymap, elems)
+function setMarkers(mymap, elems, urlAd=null)
 {
     if(elems){
         let latLngs = [];
@@ -27,7 +27,18 @@ function setMarkers(mymap, elems)
             if(elem.address.lat && elem.address.lon){
                 let latLon = [elem.address.lat, elem.address.lon];
                 let marker = L.marker(latLon, {icon: Map.getLeafletMarkerIcon()}).addTo(mymap);
-                marker.bindPopup("<b>"+elem.label+"</b><br>"+Sanitize.toFormatCurrency(elem.financial.price));
+
+                let image = elem.thumb ? "/annonces/thumbs/" + elem.agency.dirname + "/" + elem.thumb : "/immo/logos/" + elem.agency.logo;
+                let href = urlAd ? "href='"+ urlAd +"'" : "";
+
+                marker.bindPopup("<a "+ href +" target='_blank' class='popmap-item'>" +
+                    "<img src='" + image + "' alt='Annonces thumbs' " + elem.label + ">" +
+                    "<div class='popmap-item-infos'>" +
+                        "<div class='label'>" + elem.label + "</div>" +
+                        "<div class='address'>" + elem.address.zipcode + ", " + elem.address.city + "</div>" +
+                        "<div><span class='price'>"+Sanitize.toFormatCurrency(elem.financial.price) + "</span>" + (elem.typeAd === "Location" && " cc/mois") + "</div>" +
+                    "</div>" +
+                "</a>");
                 latLngs.push(latLon)
             }
         })
@@ -50,17 +61,19 @@ export class MapGroup extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
+        const { urlAd } = this.props
         const { mymap, mapId, mapUrl } = this.state;
 
         if(prevState.elems !== this.props.elems){
-            reinitMap(this, mymap, this.props.elems, mapId, mapUrl);
+            reinitMap(this, mymap, this.props.elems, mapId, mapUrl, urlAd);
         }
     }
 
     componentDidMount = () => {
+        const { urlAd } = this.props
         const { elems, mapId, mapUrl } = this.state;
 
-        reinitMap(this, null, elems, mapId, mapUrl);
+        reinitMap(this, null, elems, mapId, mapUrl, urlAd);
     }
 
     render () {

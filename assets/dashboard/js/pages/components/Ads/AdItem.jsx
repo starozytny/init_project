@@ -64,7 +64,7 @@ export class AdItem extends Component {
                     <div className="details-subtitle">
                         <div>{elem.address.zipcode}, {elem.address.city}</div>
                         <div className="details-subtitle-price">
-                            {Sanitize.toFormatCurrency(elem.financial.price)} {elem.typeAd === "Location" && "/ mois"}
+                            {Sanitize.toFormatCurrency(elem.financial.price)} {elem.typeAd === "Location" && "cc/ mois"}
                         </div>
                     </div>
                     <div className="details-general">

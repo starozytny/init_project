@@ -44,7 +44,7 @@ export class AdsList extends Component {
                     </div>
                 </div>
 
-                {context === "map" ? <MapGroup elems={currentData}/> : <>
+                {context === "map" ? <MapGroup elems={currentData} /> : <>
                     <div className="items-table">
                         <div className="items items-default items-user items-ad">
                             <div className="item item-header">
