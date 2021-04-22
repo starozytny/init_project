@@ -15,7 +15,7 @@ export class AdsItem extends Component {
             <div className="item-content">
                 <div className="item-body">
                     <div className="avatar">
-                        <Gallery elem={elem} isImage={false}/>
+                        <Gallery elem={elem} isImage={true}/>
                     </div>
                     <div className="infos" onClick={() => onChangeContext("show", elem)}>
                         <div className="ad-info">

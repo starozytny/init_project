@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 
+import LightboxOptions from "@dashboardComponents/functions/lightboxOptions";
+import SimpleReactLightbox, { SRLWrapper } from "simple-react-lightbox";
+
 export class Gallery extends Component{
     constructor(props) {
         super(props);
@@ -44,34 +47,38 @@ export class Gallery extends Component{
                     file = img.file;
                 }
                 images.push(<img src={`/annonces/${folder}/${elem.agency.dirname}/${file}`}
-                                 alt={folder + " " + elem.label + " " + elem.address.zipcode + ", " + elem.address.city}
+                                 alt={folder + " " + img.rank + " - " + elem.label + " " + elem.address.zipcode + ", " + elem.address.city}
                                  className={"image" + (image === img.rank ? " active" : "")}
                                  key={img.rank}
                 />);
             })
         }
 
-        return <div className="gallery">
-            <div className="total-images">
-                <div>{images.length}</div>
-                <div><span className="icon-camera" /></div>
-            </div>
-            <div className="images">
-                {images.length !== 0 ? images : <img src={`https://robohash.org/${elem.ref}?size=150x150`} alt={`Image de ${elem.ref}`} className="image active"/>}
-            </div>
+        return <SimpleReactLightbox>
+            <SRLWrapper options={LightboxOptions.options()}>
+                <div className="gallery">
+                    <div className="total-images">
+                        <div>{images.length}</div>
+                        <div><span className="icon-camera" /></div>
+                    </div>
 
-            {image !== 0 && <div className="gallery-prev">
-                <div className="prev" onClick={() => this.handlePrev(elem)}>
-                    <span className="icon-left-chevron" />
+                    <div className="images">
+                        {images.length !== 0 ? images : <img src={`https://robohash.org/${elem.ref}?size=150x150`} alt={`Image de ${elem.ref}`} className="image active"/>}
+                    </div>
+
+                    {image !== 0 && <div className="gallery-prev">
+                        <div className="prev" onClick={() => this.handlePrev(elem)}>
+                            <span className="icon-left-chevron" />
+                        </div>
+                    </div>}
+
+                    {image !== images.length - 1 && <div className="gallery-next">
+                        <div className="next" onClick={() => this.handleNext(elem)}>
+                            <span className="icon-right-chevron" />
+                        </div>
+                    </div>}
                 </div>
-            </div>}
-
-            {image !== images.length - 1 && <div className="gallery-next">
-                <div className="next" onClick={() => this.handleNext(elem)}>
-                    <span className="icon-right-chevron" />
-                </div>
-            </div>}
-
-        </div>
+            </SRLWrapper>
+        </SimpleReactLightbox>
     }
 }
