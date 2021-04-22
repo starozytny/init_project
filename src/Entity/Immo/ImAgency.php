@@ -39,6 +39,7 @@ class ImAgency
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("list:read")
      */
     private $website;
 

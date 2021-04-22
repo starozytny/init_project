@@ -33,11 +33,13 @@ class ImImage
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups("list:read")
      */
     private $isPortrait;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("list:read")
      */
     private $thumb;
 
