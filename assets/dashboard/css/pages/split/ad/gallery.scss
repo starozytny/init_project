@@ -17,19 +17,11 @@
     opacity: 1;
   }
 
-  //.image{
-  //  position: absolute;
-  //  top: 0;
-  //  left: 0;
-  //  opacity: 1;
-  //  z-index: -1;
-  //}
-  //
-  //.image.active{
-  //  position: relative;
-  //  opacity: 1;
-  //  z-index: 1;
-  //}
+  &:hover{
+    .gallery-prev, .gallery-next{
+      opacity: 1;
+    }
+  }
 
   .gallery-prev, .gallery-next{
     position: absolute;
@@ -38,6 +30,8 @@
     z-index: 5;
     height: calc(100% - 4px);
     @include flex(row, center, center);
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
 
     .prev, .next{
       background-color: var(--alpha);
