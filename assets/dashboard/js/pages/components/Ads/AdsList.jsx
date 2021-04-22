@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 
-import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
-
-import { ButtonIcon } from "@dashboardComponents/Tools/Button";
-
 import { Alert }      from "@dashboardComponents/Tools/Alert";
 
 import { AdsItem }   from "./AdsItem";
@@ -16,28 +12,16 @@ export class AdsList extends Component {
 
         this.state = {
             context: "list",
-            nature: "Location"
         }
 
-        this.handleNature = this.handleNature.bind(this);
         this.handleChangeContext = this.handleChangeContext.bind(this);
     }
 
-    handleNature = (label) => { this.setState({ nature: label }) }
     handleChangeContext = (context) => { this.setState({ context }) }
 
     render () {
-        const { data } = this.props;
-        const { context, nature } = this.state;
-
-        let currentData = [];
-        if(data && data.length !== 0){
-            data.forEach(elem => {
-                if (elem.typeAd === nature) {
-                    currentData.push(elem);
-                }
-            })
-        }
+        const { currentData, onChangeNature } = this.props;
+        const { context } = this.state;
 
         let contexts = [
             {id: 0, icon: 'tasks', context: 'list'},
@@ -56,7 +40,7 @@ export class AdsList extends Component {
                         })}
                     </div>
                     <div className="item ads-search">
-                        <AdsSearch {...this.state} onNature={this.handleNature}/>
+                        <AdsSearch {...this.props} onNature={onChangeNature}/>
                     </div>
                 </div>
 

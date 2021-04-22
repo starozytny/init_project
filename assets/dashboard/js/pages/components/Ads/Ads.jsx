@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import axios             from 'axios';
 import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Page }          from "@dashboardComponents/Layout/Page";
@@ -20,6 +21,22 @@ function compareLabelThenZipcode(a, b) {
     return Sort.comparison(a.address.zipcode, b.address.zipcode)
 }
 
+function filterByNature(data, nature)
+{
+    let currentData = [];
+    if(data && data.length !== 0){
+        data.forEach(elem => {
+            if (elem.typeAd === nature) {
+                currentData.push(elem);
+            }else if(nature === "Vente" && elem.typeAd === "Produit d'investissement"){
+                currentData.push(elem);
+            }
+        })
+    }
+
+    return currentData;
+}
+
 export class Ads extends Component {
     constructor(props) {
         super();
@@ -31,7 +48,8 @@ export class Ads extends Component {
             data: null,
             currentData: null,
             element: null,
-            perPage: 20
+            perPage: 20,
+            nature: "Location"
         }
 
         this.page = React.createRef();
@@ -39,13 +57,34 @@ export class Ads extends Component {
         this.handleUpdateData = this.handleUpdateData.bind(this);
         this.handleChangeContext = this.handleChangeContext.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
+        this.handleChangeNature = this.handleChangeNature.bind(this);
     }
 
-    componentDidMount() { Formulaire.axiosGetDataPagination(this, Routing.generate('api_immo_ads_read'), this.state.perPage, Sort.compareAdPrice) }
+    componentDidMount() {
+        const { perPage, nature } = this.state;
+
+        const self = this;
+        axios.get(Routing.generate('api_immo_ads_read'), {})
+            .then(function (response) {
+                let data = response.data;
+                data.sort(Sort.compareAdPrice);
+                let dataImmuable = data;
+                data = filterByNature(data, nature)
+                self.setState({ dataImmuable: dataImmuable, data: data, currentData: data.slice(0, perPage) });
+            })
+            .catch(function () {
+                self.setState({ loadPageError: true });
+            })
+            .then(function () {
+                self.setState({ loadData: false });
+            })
+        ;
+    }
     handleUpdateData = (data) => { this.setState({ currentData: data })  }
     handleUpdateList = (element, newContext=null) => {
-        const { data, context, perPage } = this.state
-        Formulaire.updateDataPagination(this, Sort.compareAdPrice, newContext, context, data, element, perPage);
+        const { data, context, perPage, nature } = this.state
+
+        Formulaire.updateDataPagination(this, Sort.compareAdPrice, newContext, context, filterByNature(data, nature), element, perPage);
     }
     handleChangeContext = (context, element=null) => {
         this.setState({ context, element });
@@ -53,20 +92,33 @@ export class Ads extends Component {
             this.page.current.pagination.current.handleComeback()
         }
     }
+    handleChangeNature = (label) => {
+        const { dataImmuable, perPage } = this.state;
+
+        let newData = filterByNature(dataImmuable, label)
+        this.page.current.pagination.current.handlePageOne()
+        this.setState({
+            nature: label,
+            data: newData,
+            currentData: newData.slice(0,perPage)
+        })
+    }
 
     render () {
-        const { loadPageError, context, loadData, data, currentData, element, perPage } = this.state;
+        const { loadPageError, context, loadData, data, currentData, element, perPage, nature } = this.state;
 
         let content, havePagination = false;
         switch (context){
             case "show":
                 content = loadData ? <LoaderElement /> : <AdItem onChangeContext={this.handleChangeContext}
-                                                                    elem={element}/>
+                                                                 elem={element}/>
                 break;
             default:
                 havePagination = true;
                 content = loadData ? <LoaderElement /> : <AdsList onChangeContext={this.handleChangeContext}
-                                                                   data={currentData} />
+                                                                  onChangeNature={this.handleChangeNature}
+                                                                  nature={nature}
+                                                                  currentData={currentData} />
                 break;
         }
 

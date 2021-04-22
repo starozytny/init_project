@@ -63,7 +63,7 @@ export class Gallery extends Component{
                     </div>
 
                     <div className="images">
-                        {images.length !== 0 ? images : <img src={`https://robohash.org/${elem.ref}?size=150x150`} alt={`Image de ${elem.ref}`} className="image active"/>}
+                        {images.length !== 0 ? images : <img src={`https://robohash.org/${elem.ref}?size=150x112`} alt={`Image de ${elem.ref}`} className="image active"/>}
                     </div>
 
                     {image !== 0 && <div className="gallery-prev">
