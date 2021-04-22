@@ -2,6 +2,7 @@
 
 @import "split/ad/details";
 @import "split/ad/search";
+@import "split/ad/gallery";
 
 .toolbar{
   .display-mode{
@@ -22,7 +23,7 @@
 
 .items-ad{
   .item:not(.item-header){
-    cursor: pointer;
+    //cursor: pointer;
   }
   .avatar{
     width: auto;
@@ -30,6 +31,11 @@
     height: 100%;
     background-color: transparent;
     margin-bottom: 12px;
+    max-height: 112px;
+
+    .gallery{
+      max-height: 112px;
+    }
 
     img{
       width: auto;

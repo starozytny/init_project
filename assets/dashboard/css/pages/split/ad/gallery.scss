@@ -1,0 +1,45 @@
+@import "../../../vars/vars";
+
+.gallery{
+  position: relative;
+
+  .image{
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  .image.active{
+    position: relative;
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .gallery-prev, .gallery-next{
+    position: absolute;
+    top: 0;
+    left: 4px;
+    z-index: 5;
+    height: calc(100% - 4px);
+    @include flex(row, center, center);
+
+    .prev, .next{
+      background-color: var(--alpha);
+      border-radius: 50px;
+      padding: 4px 4px 2px 4px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: all 0.2s ease-in-out;
+
+      &:hover{
+        opacity: 1;
+      }
+    }
+  }
+  .gallery-next{
+    left: auto;
+    right: 4px;
+  }
+}
