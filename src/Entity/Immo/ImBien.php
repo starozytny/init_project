@@ -34,19 +34,19 @@ class ImBien
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $ref;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $realRef;
 
@@ -57,19 +57,19 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $typeAd;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $typeBien;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $codeTypeAd;
 
@@ -85,13 +85,13 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $label;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $content;
 
@@ -103,64 +103,64 @@ class ImBien
     /**
      * @ORM\ManyToOne(targetEntity=ImAgency::class, inversedBy="biens", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $agency;
 
     /**
      * @ORM\OneToOne(targetEntity=ImAddress::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $address;
 
     /**
      * @ORM\OneToOne(targetEntity=ImFinancial::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $financial;
 
     /**
      * @ORM\OneToOne(targetEntity=ImFeature::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $feature;
 
     /**
      * @ORM\OneToOne(targetEntity=ImFeatureExt::class, cascade={"persist", "remove"}, fetch="EAGER")
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $featureExt;
 
     /**
      * @ORM\OneToOne(targetEntity=ImDiagnostic::class, cascade={"persist", "remove"})
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $diagnostic;
 
     /**
      * @ORM\OneToOne(targetEntity=ImCopro::class, cascade={"persist", "remove"})
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $copro;
 
     /**
      * @ORM\OneToOne(targetEntity=ImResponsable::class, cascade={"persist", "remove"}, fetch="EAGER")
-     * @Groups("list:read")
+     * @Groups({"list:read"})
      */
     private $responsable;
 
     /**
      * @ORM\OneToMany(targetEntity=ImImage::class, mappedBy="bien", orphanRemoval=true, fetch="EAGER")
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $images;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $identifiant;
 
@@ -179,7 +179,7 @@ class ImBien
      *          @Gedmo\SlugHandlerOption(name="urilize", value="true"),
      *      })
      * }, fields={"typeAd", "label", "identifiant"})
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $slug;
 
@@ -232,7 +232,7 @@ class ImBien
 
     /**
      * @return false|string|null
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     public function getDispoString()
     {
@@ -466,7 +466,7 @@ class ImBien
     }
 
     /**
-     * @Groups("list:read")
+     * @Groups({"list:read"})
      * @SerializedName("thumb")
      */
     public function getFirstThumb()

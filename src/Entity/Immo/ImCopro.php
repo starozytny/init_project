@@ -20,25 +20,25 @@ class ImCopro
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $nbLot;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $chargesAnnuelle;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $hasProced;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $detailsProced;
 

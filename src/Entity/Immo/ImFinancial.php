@@ -20,73 +20,73 @@ class ImFinancial
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $commission;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $charges;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $foncier;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $deposit;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $partHonoEdl;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $complementLoyer;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $honoChargesDe;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $horsHonoAcquereur;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $modalitesChargesLocataire;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $bouquet;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $rente;
 

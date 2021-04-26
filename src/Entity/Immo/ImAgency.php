@@ -22,13 +22,13 @@ class ImAgency
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $dirname;
 
@@ -39,61 +39,61 @@ class ImAgency
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $website;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read"})
      */
     private $emailLocation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read"})
      */
     private $emailVente;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read"})
      */
     private $phoneLocation;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
-     * @Groups("list:read")
+     * @Groups({"list:read"})
      */
     private $phoneVente;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $logo;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $tarif;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("list:read", "show:read")
+     * @Groups({"list:read", "show:read"})
      */
     private $legal;
 
