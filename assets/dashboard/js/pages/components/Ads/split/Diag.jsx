@@ -1,39 +1,59 @@
-import React     from "react";
+import React, {Component} from "react";
 import Sanitize  from "@dashboardComponents/functions/sanitaze";
 
-export function Diag({ elem }){
-    let content = <div>Le diagnostic de performance énergétique et d'indice d'émission de gaz à effet de serre n'ont pas été soumis pour le moment.</div>
-    let dpeNotFound = <div>Le diagnostic de performance énergétique n'a pas été soumis pour le moment.</div>
-    let gesNotFound = <div>L'indice d'émission de gaz à effet de serre n'a pas été soumis pour le moment.</div>
-    let dpeVierge = <div>Le diagnostic de performance énergétique est vierge.</div>
-    let gesVierge = <div>L'indice d'émission de gaz à effet de serre est vierge.</div>
+export class Diag extends Component{
+    constructor(props) {
+        super(props);
 
-    if(elem.diagnostic){
-        content = <>
-            <div className="details-tab-infos-main">
-                {elem.diagnostic.dpeLettre ? <>
-                    {elem.diagnostic.dpeLettre !== "NS" && elem.diagnostic.dpeLettre !== "VI" ? <>
-                        <DiagSimple isDpe={true} elem={elem}/>
-                        <DiagDetails isDpe={true} elem={elem}/>
-                    </> : (elem.diagnostic.dpeLettre !== "NS") ? dpeNotFound : dpeVierge}
-                </> : dpeNotFound}
-            </div>
+        this.state = {
+            status: false
+        }
 
-            <div className="details-tab-infos-main">
-                {elem.diagnostic.gesLettre ? <>
-                    {elem.diagnostic.gesLettre !== "NS" && elem.diagnostic.gesLettre !== "VI" ? <>
-                        <DiagSimple isDpe={false} elem={elem}/>
-                        <DiagDetails isDpe={false} elem={elem}/>
-                    </> : (elem.diagnostic.gesLettre !== "NS") ? gesNotFound : gesVierge}
-                </> : gesNotFound}
-
-            </div>
-        </>
+        this.handleOpen = this.handleOpen.bind(this);
     }
 
-    return (<div className="details-tab-infos">
-        {content}
-    </div>)
+    handleOpen = (status) => { this.setState({ status: !status }) }
+
+    render () {
+        const { elem } = this.props;
+        const { status } = this.state;
+
+        let content = <div>Le diagnostic de performance énergétique et d'indice d'émission de gaz à effet de serre n'ont pas été soumis pour le moment.</div>
+        let dpeNotFound = <div>Le diagnostic de performance énergétique n'a pas été soumis pour le moment.</div>
+        let gesNotFound = <div>L'indice d'émission de gaz à effet de serre n'a pas été soumis pour le moment.</div>
+        let dpeVierge = <div>Le diagnostic de performance énergétique est vierge.</div>
+        let gesVierge = <div>L'indice d'émission de gaz à effet de serre est vierge.</div>
+
+        if(elem.diagnostic){
+            content = <>
+                <div className="details-tab-infos-main">
+                    {elem.diagnostic.dpeLettre ? <>
+                        {elem.diagnostic.dpeLettre !== "NS" && elem.diagnostic.dpeLettre !== "VI" ? <>
+                            <DiagSimple isDpe={true} elem={elem}/>
+                            {status && <DiagDetails isDpe={true} elem={elem}/>}
+                        </> : (elem.diagnostic.dpeLettre !== "NS") ? dpeNotFound : dpeVierge}
+                    </> : dpeNotFound}
+                </div>
+
+                <div className="details-tab-infos-main">
+                    {elem.diagnostic.gesLettre ? <>
+                        {elem.diagnostic.gesLettre !== "NS" && elem.diagnostic.gesLettre !== "VI" ? <>
+                            <DiagSimple isDpe={false} elem={elem}/>
+                            {status && <DiagDetails isDpe={false} elem={elem}/>}
+                        </> : (elem.diagnostic.gesLettre !== "NS") ? gesNotFound : gesVierge}
+                    </> : gesNotFound}
+                </div>
+
+                {elem.diagnostic.dpeLettre && elem.diagnostic.gesLettre && <div className="diag-plus" onClick={() => this.handleOpen(status)}>
+                    En savoir plus
+                </div>}
+            </>
+        }
+
+        return (<div className="details-tab-infos">
+            {content}
+        </div>)
+    }
 }
 
 function DiagSimple({ isDpe, elem })
@@ -78,30 +98,26 @@ function DiagDetails({ isDpe, elem })
         { le :"F", valDpe: "331 à 450", valGes: "56 à 80" },
         { le :"G", valDpe: "> 450", valGes: "> 80" }
     ]
-    let title = isDpe ? "Diagnostic de performance énergétique en kWhEP/m².an" : "Indice d'émission de gaz à effet de serre en kgeqCO2/m².an";
     let classDiag = isDpe ? "dpe" : "ges";
     let value = isDpe ? elem.diagnostic.dpeVal : elem.diagnostic.gesVal;
 
     return (
         <div className="diagnostic-details">
-            <div>
-                <div className="diag-title">{title}</div>
-                <div className={"diag-" + classDiag}>
-                    {lettersDetails.map(le => {
+            <div className={"diag-" + classDiag}>
+                {lettersDetails.map(le => {
 
-                        let comparator = isDpe ? elem.diagnostic.dpeLettre : elem.diagnostic.gesLettre;
-                        let classActive = isDpe ? " dpe_is-active2" : " ges_is-active2";
-                        let active = comparator === le.le ? classActive : "";
+                    let comparator = isDpe ? elem.diagnostic.dpeLettre : elem.diagnostic.gesLettre;
+                    let classActive = isDpe ? " dpe_is-active2" : " ges_is-active2";
+                    let active = comparator === le.le ? classActive : "";
 
-                        return <div key={le.le}>
-                            <div className={classDiag + " " + classDiag + "-" + le.le.toLowerCase() + active}>
-                                <div>{isDpe ? le.valDpe : le.valGes}</div>
-                                <div>{le.le}</div>
-                            </div>
-                            <div className="number">{value ? value : "N.C"}</div>
+                    return <div key={le.le}>
+                        <div className={classDiag + " " + classDiag + "-" + le.le.toLowerCase() + active}>
+                            <div>{isDpe ? le.valDpe : le.valGes}</div>
+                            <div>{le.le}</div>
                         </div>
-                    })}
-                </div>
+                        <div className="number">{value ? value : "N.C"}</div>
+                    </div>
+                })}
             </div>
         </div>
     )

@@ -107,13 +107,25 @@ $colorsGES: (
   }
 }
 
+.diag-plus{
+  cursor: pointer;
+  color: var(--primary);
+  opacity: 0.8;
+  text-decoration: underline;
+  transition: all 0.2s ease-in-out;
+
+   &:hover{
+     opacity: 1;
+   }
+}
+
 .diagnostic-details{
   display: flex;
   width: 100%;
 
   .diag-dpe, .diag-ges{
-    margin-top: 12px;
     flex-direction: column;
+    width: 100%;
 
     $sizes: (
             '1': 23%,
