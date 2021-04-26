@@ -60,7 +60,7 @@ class ImAddress
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Gedmo\Slug(fields={"city", "zipcode", "show:read"})
+     * @Gedmo\Slug(fields={"city", "zipcode"})
      */
     private $slug;
 
