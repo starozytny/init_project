@@ -26,13 +26,13 @@ class ImAddress
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $zipcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $city;
 
@@ -48,19 +48,19 @@ class ImAddress
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $lat;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $lon;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Gedmo\Slug(fields={"city", "zipcode"})
+     * @Gedmo\Slug(fields={"city", "zipcode", "show:read"})
      */
     private $slug;
 
@@ -155,7 +155,7 @@ class ImAddress
 
     /**
      * @return string|null
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     public function getShortAddress(): ?string
     {

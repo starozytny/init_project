@@ -20,55 +20,55 @@ class ImFeatureExt
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $nbParking;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $nbBox;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $hasElevator;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $hasCellar;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $hasIntercom;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $hasConcierge;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $hasTerrace;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $hasClim;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $hasPiscine;
 

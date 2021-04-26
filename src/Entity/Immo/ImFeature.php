@@ -20,127 +20,127 @@ class ImFeature
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $area;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $areaLand;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $areaLiving;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $nbSdb;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $nbSle;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $nbWc;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $isWcSeparate;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $floor;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $nbFloor;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $nbPiece;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $nbRoom;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $nbBalcony;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $isMeuble;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $constructionYear;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $isRefaitNeuf;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $heating;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $kitchen;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $isSouth;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $isEast;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $isWest;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $isNorth;
 

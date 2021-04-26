@@ -21,25 +21,25 @@ class ImImage
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $file;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $rank;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $isPortrait;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $thumb;
 

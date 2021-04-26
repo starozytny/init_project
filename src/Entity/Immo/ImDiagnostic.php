@@ -20,25 +20,25 @@ class ImDiagnostic
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $dpeVal;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $dpeLettre;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $gesVal;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $gesLettre;
 

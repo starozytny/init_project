@@ -16,23 +16,37 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 class ImBien
 {
     const LIST_READ = ['list:read'];
+    const SHOW_READ = ['show:read'];
+
+    const NATURE_LOCATION = 0;
+    const NATURE_VENTE = 1;
+
+    const TYPE_MAISON = 0;
+    const TYPE_APPARTEMENT = 1;
+    const TYPE_PARKING = 2;
+    const TYPE_BUREAUX = 3;
+    const TYPE_LOCAL = 4;
+    const TYPE_IMMEUBLE = 5;
+    const TYPE_TERRAIN = 6;
+    const TYPE_FOND_COMMERCE = 7;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $ref;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $realRef;
 
@@ -43,19 +57,19 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $typeAd;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $typeBien;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $codeTypeAd;
 
@@ -71,13 +85,13 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $label;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $content;
 
@@ -89,46 +103,46 @@ class ImBien
     /**
      * @ORM\ManyToOne(targetEntity=ImAgency::class, inversedBy="biens", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $agency;
 
     /**
      * @ORM\OneToOne(targetEntity=ImAddress::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $address;
 
     /**
      * @ORM\OneToOne(targetEntity=ImFinancial::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $financial;
 
     /**
      * @ORM\OneToOne(targetEntity=ImFeature::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $feature;
 
     /**
      * @ORM\OneToOne(targetEntity=ImFeatureExt::class, cascade={"persist", "remove"}, fetch="EAGER")
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $featureExt;
 
     /**
      * @ORM\OneToOne(targetEntity=ImDiagnostic::class, cascade={"persist", "remove"})
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $diagnostic;
 
     /**
      * @ORM\OneToOne(targetEntity=ImCopro::class, cascade={"persist", "remove"})
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $copro;
 
@@ -140,13 +154,13 @@ class ImBien
 
     /**
      * @ORM\OneToMany(targetEntity=ImImage::class, mappedBy="bien", orphanRemoval=true, fetch="EAGER")
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $images;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $identifiant;
 
@@ -165,7 +179,7 @@ class ImBien
      *          @Gedmo\SlugHandlerOption(name="urilize", value="true"),
      *      })
      * }, fields={"typeAd", "label", "identifiant"})
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $slug;
 
@@ -218,7 +232,7 @@ class ImBien
 
     /**
      * @return false|string|null
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     public function getDispoString()
     {
@@ -505,5 +519,67 @@ class ImBien
         }
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"show:read"})
+     */
+    public function getContactName(): ?string
+    {
+        $name = $this->getAgency()->getName();
+
+        if($this->getResponsable()){
+            $name = $this->getResponsable()->getName();
+        }
+
+        return $name;
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"show:read"})
+     */
+    public function getContactEmail(): ?string
+    {
+        $agency = $this->getAgency();
+
+        if($this->codeTypeAd === ImBien::NATURE_LOCATION){
+            $email = $agency->getEmailLocation() ?? $agency->getEmail();
+        }else{
+            $email = $agency->getEmailVente() ?? $agency->getEmail();
+        }
+
+        if($this->getResponsable()){
+            $email = $this->getResponsable()->getEmail();
+        }
+
+        return $email;
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"show:read"})
+     */
+    public function getContactPhone(): ?string
+    {
+        $agency = $this->getAgency();
+
+        if($this->codeTypeAd === ImBien::NATURE_LOCATION){
+            $phone = $agency->getPhoneLocation() ?? $agency->getPhone();
+        }else{
+            $phone = $agency->getPhoneVente() ?? $agency->getPhone();
+        }
+
+        if($this->getResponsable()){
+            $phone = $this->getResponsable()->getPhone();
+        }
+
+        return $phone;
     }
 }

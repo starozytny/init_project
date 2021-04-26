@@ -22,13 +22,13 @@ class ImAgency
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $dirname;
 
@@ -39,7 +39,7 @@ class ImAgency
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $website;
 
@@ -81,34 +81,37 @@ class ImAgency
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $logo;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $tarif;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("list:read")
+     * @Groups("list:read", "show:read")
      */
     private $legal;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("show:read")
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
+     * @Groups("show:read")
      */
     private $zipcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("show:read")
      */
     private $city;
 
