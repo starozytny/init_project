@@ -18,6 +18,8 @@ Encore
     .addAliases({
         '@publicFolder': path.resolve(__dirname, './public'),
         '@dashboardComponents': path.resolve(__dirname, './assets/dashboard/js/components'),
+        '@appComponents': path.resolve(__dirname, './assets/app/js/components'),
+        '@nodeModulesFolder': path.resolve(__dirname, './node_modules'),
         '@dashboardFolder': path.resolve(__dirname, './assets/dashboard'),
     })
 
@@ -52,6 +54,7 @@ Encore
      */
     .addEntry('app', './assets/app/js/app.js')
     .addEntry('security', './assets/app/js/pages/security.js')
+    .addEntry('contact', './assets/app/js/pages/contact.js')
     .addEntry('services', './assets/app/js/pages/services.js')
     .addEntry('ads', './assets/app/js/pages/ads.js')
 
@@ -60,6 +63,7 @@ Encore
     .addEntry('dashboard_styleguide', './assets/dashboard/js/pages/styleguide.js')
     .addEntry('dashboard_user', './assets/dashboard/js/pages/user.js')
     .addEntry('dashboard_settings', './assets/dashboard/js/pages/settings.js')
+    .addEntry('dashboard_contact', './assets/dashboard/js/pages/contact.js')
     .addEntry('dashboard_ads', './assets/dashboard/js/pages/ads.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
@@ -111,7 +115,7 @@ Encore
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+    .autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();

@@ -37,7 +37,7 @@ export class User extends Component {
         this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
     }
 
-    componentDidMount() { Formulaire.axiosGetDataPagination(this, Routing.generate('api_users_index'), this.state.perPage) }
+    componentDidMount() { Formulaire.axiosGetDataPagination(this, Routing.generate('api_users_index'), null, this.state.perPage) }
 
     handleUpdateData = (data) => { this.setState({ currentData: data })  }
 
@@ -79,7 +79,7 @@ export class User extends Component {
             })
         }
 
-        localStorage.setItem("user.pagination", "0")
+        sessionStorage.setItem("user.pagination", "0")
         this.page.current.pagination.current.handlePageOne();
         this.setState({ data: newData, currentData: newData.slice(0, perPage), filters: filters });
         return newData;

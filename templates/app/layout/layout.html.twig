@@ -24,8 +24,8 @@
                     <div class="items">
                         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                             <div class="item">
-                                <a rel="nofollow" href="{{ path('admin_homepage') }}">
-                                    <span>Espace</span>
+                                <a rel="nofollow" href="{{ path('app_login') }}">
+                                    <span>Mon espace</span>
                                 </a>
                             </div>
                             <div class="item">
@@ -36,7 +36,7 @@
                         {% else %}
                             <div class="item">
                                 <a rel="nofollow" href="{{ path('app_login') }}">
-                                    <span>Se connecter</span>
+                                    <span>Mon espace</span>
                                 </a>
                             </div>
                         {% endif %}

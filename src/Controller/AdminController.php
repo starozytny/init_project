@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Settings;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,8 +20,20 @@ class AdminController extends AbstractController
      */
     public function index(): Response
     {
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository(User::class)->findAll();
+        $settings = $em->getRepository(Settings::class)->findAll();
+
+        $totalUsers = count($users); $nbConnected = 0;
+        foreach($users as $user){
+            if($user->getLastLogin()){
+                $nbConnected++;
+            }
+        }
         return $this->render('admin/pages/index.html.twig', [
-            'controller_name' => 'AdminController',
+            'settings' => $settings ? $settings[0] : null,
+            'totalUsers' => $totalUsers,
+            'nbConnected' => $nbConnected,
         ]);
     }
 
@@ -30,10 +46,13 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/styleguide/react", name="styleguide_react")
+     * @Route("/styleguide/react", options={"expose"=true}, name="styleguide_react")
      */
-    public function styleguideReact(): Response
+    public function styleguideReact(Request  $request): Response
     {
+        if($request->isMethod("POST")){
+            return new JsonResponse(['code' => true]);
+        }
         return $this->render('admin/pages/styleguide/react.html.twig');
     }
 
@@ -51,6 +70,14 @@ class AdminController extends AbstractController
     public function settings(): Response
     {
         return $this->render('admin/pages/settings/index.html.twig');
+    }
+
+    /**
+     * @Route("/contact", name="contact_index")
+     */
+    public function contact(): Response
+    {
+        return $this->render('admin/pages/contact/index.html.twig');
     }
 
     /**
