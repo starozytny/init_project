@@ -1,0 +1,17 @@
+{% extends 'admin/layout/layout.html.twig' %}
+
+{% set submenu = [
+    { 'label': "Annonces", 'path': path('admin_immo_ads') },
+    { 'label': "Alerts e-mail", 'path': path('admin_immo_alerts') }
+] %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('dashboard_user') }}
+    {{ encore_entry_link_tags('dashboard_ads') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('dashboard_ads') }}
+{% endblock %}

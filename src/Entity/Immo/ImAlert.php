@@ -4,12 +4,12 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImAlertRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ImAlertRepository::class)
- * @UniqueEntity(fields={"username"})
  */
 class ImAlert
 {
@@ -17,27 +17,45 @@ class ImAlert
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Email()
+     * @Groups({"admin:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Groups({"admin:read"})
      */
     private $typeAd;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Groups({"admin:read"})
      */
     private $typeBien;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
+     */
+    private $token;
+
+    /**
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        $this->setToken(bin2hex(random_bytes(32)));
+    }
 
     public function getId(): ?int
     {
@@ -76,6 +94,18 @@ class ImAlert
     public function setTypeBien(string $typeBien): self
     {
         $this->typeBien = $typeBien;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

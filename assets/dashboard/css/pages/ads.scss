@@ -16,6 +16,12 @@
     @include fontSemibold();
   }
 
+  .item-alert{
+    .selector{
+      width: 12px;
+    }
+  }
+
   .item-content{
     width: calc(100% - 60px);
   }
