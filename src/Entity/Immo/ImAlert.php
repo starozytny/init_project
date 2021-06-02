@@ -4,9 +4,12 @@ namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImAlertRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ImAlertRepository::class)
+ * @UniqueEntity(fields={"username"})
  */
 class ImAlert
 {
@@ -18,17 +21,21 @@ class ImAlert
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $typeAd;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $typeBien;
 
