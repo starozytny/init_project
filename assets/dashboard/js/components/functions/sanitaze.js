@@ -72,7 +72,7 @@ function processData(allText){
     let headers = allTextLines[0].split(';');
     let lines = [];
 
-    for (var i=1; i<allTextLines.length; i++) {
+    for (let i=1; i<allTextLines.length; i++) {
         let data = allTextLines[i].split(';');
 
         lines.push({"cp": data[2], "city": data[1]});
@@ -87,9 +87,6 @@ function getPostalCodes(self){
             self.setState({ arrayPostalCode: processData(response.data) })
         })
     ;
-}
-function toCurrency(price){
-    return new Intl.NumberFormat("de-DE", {style: "currency", currency: "EUR"}).format(price);
 }
 
 function getTrilieanResponse(data, returnNull=true){
