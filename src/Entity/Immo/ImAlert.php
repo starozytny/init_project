@@ -3,6 +3,8 @@
 namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImAlertRepository;
+use Carbon\Carbon;
+use Carbon\Factory;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -125,5 +127,32 @@ class ImAlert
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * Return created at time in string format d/m/Y
+     * @Groups({"admin:read"})
+     */
+    public function getCreatedAtString(): ?string
+    {
+        if($this->createdAt == null){
+            return null;
+        }
+        return date_format($this->createdAt, 'd/m/Y');
+    }
+
+    /**
+     * Return created at time in string format ago
+     * @Groups({"admin:read"})
+     */
+    public function getCreatedAtAgo(): ?string
+    {
+        $frenchFactory = new Factory([
+            'locale' => 'fr_FR',
+            'timezone' => 'Europe/Paris'
+        ]);
+        $createdAt = Carbon::instance($this->getCreatedAt());
+
+        return $frenchFactory->make($createdAt)->diffForHumans();
     }
 }

@@ -27,17 +27,17 @@ export class Alerts extends Component {
         this.handleContentList = this.handleContentList.bind(this);
     }
 
-    handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_alerts_index'), Sort.compareCreatedAt, this.state.perPage) }
+    handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_immo_alerts_index'), Sort.compareCreatedAt, this.state.perPage) }
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, Sort.compareCreatedAt); }
 
     handleDelete = (element) => {
-        Formulaire.axiosDeleteElement(this, element, Routing.generate('api_alerts_delete', {'token': element.token}),
+        Formulaire.axiosDeleteElement(this, element, Routing.generate('api_immo_alerts_delete', {'token': element.token}),
             'Supprimer cet alerte ?', 'Cette action est irréversible.');
     }
     handleDeleteGroup = () => {
         let checked = document.querySelectorAll('.i-selector:checked');
-        Formulaire.axiosDeleteGroupElement(this, checked, Routing.generate('api_alerts_delete_group'), 'Aucune alerte sélectionné.')
+        Formulaire.axiosDeleteGroupElement(this, checked, Routing.generate('api_immo_alerts_delete_group'), 'Aucune alerte sélectionné.')
     }
 
     handleContentList = (currentData, changeContext) => {

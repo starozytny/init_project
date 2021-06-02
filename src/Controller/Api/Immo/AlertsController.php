@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 
 /**
- * @Route("/api/immo/alerts", name="api_alerts_")
+ * @Route("/api/immo/alerts", name="api_immo_alerts_")
  */
 class AlertsController extends AbstractController
 {
