@@ -8,12 +8,14 @@ use App\Entity\User;
 use App\Repository\ContactRepository;
 use App\Repository\Immo\ImAlertRepository;
 use App\Service\ApiResponse;
+use App\Service\Export;
 use App\Service\MailerService;
 use App\Service\SanitizeData;
 use App\Service\SettingsService;
 use App\Service\ValidatorService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -165,5 +167,54 @@ class AlertsController extends AbstractController
 
         $em->flush();
         return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
+    }
+
+    /**
+     * Export list alerts
+     *
+     * @Route("/export/{format}", name="export", options={"expose"=true}, methods={"GET"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a new user object",
+     * )
+     *
+     * @OA\Tag(name="Alerts")
+     *
+     * @param Export $export
+     * @param $format
+     * @return BinaryFileResponse
+     */
+    public function export(Export $export, $format): BinaryFileResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $alerts = $em->getRepository(ImAlert::class)->findAll();
+        $data = [];
+
+        foreach ($alerts as $item) {
+            $tmp = array(
+                $item->getEmail(),
+                $item->getTypeAd(),
+                $item->getTypeBien(),
+                date_format($item->getCreatedAt(), 'd/m/Y'),
+            );
+            if(!in_array($tmp, $data)){
+                array_push($data, $tmp);
+            }
+        }
+
+        if($format == 'excel'){
+            $fileName = 'alerts-email.xlsx';
+            $header = array(array('E-mail', 'Nature', 'Type de bien', 'Date de creation'));
+        }else{
+            $fileName = 'alerts-email.csv';
+            $header = array(array('email', 'nature', 'type-bien', 'createAt'));
+
+            header('Content-Type: application/csv');
+            header('Content-Disposition: attachment; filename="'.$fileName.'"');
+        }
+
+        $export->createFile($format, 'Liste des alerts email', $fileName , $header, $data, 4, 'export/');
+        return new BinaryFileResponse($this->getParameter('private_directory'). 'export/' . $fileName);
     }
 }

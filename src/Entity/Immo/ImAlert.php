@@ -50,6 +50,11 @@ class ImAlert
     private $token;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
      * @throws Exception
      */
     public function __construct()
@@ -106,6 +111,18 @@ class ImAlert
     public function setToken(string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
