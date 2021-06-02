@@ -1,5 +1,18 @@
 @import "../vars/vars";
 
+nav.fixed{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--alpha);
+  z-index: 1000;
+
+  & + main{
+    margin-top: 76px;
+  }
+}
+
 .nav-header-logo{
   padding: 12px;
 
@@ -21,7 +34,7 @@
   background: var(--fondMenu);
   padding-top: 24px;
 
-  a{
+  a, .item-dropdown > span{
     @include flex(row, center, flex-start);
     padding: 12px;
     width: calc(100% - 24px);
@@ -45,6 +58,34 @@
   &.true{
     display: block;
   }
+
+  .item-dropdown{
+    flex-direction: column;
+    align-items: flex-start;
+
+    a{
+      padding: 12px;
+      width: calc(100% - 36px);
+      margin-left: 12px;
+
+      &:hover{
+        transform: translateY(0) translateX(5px);
+      }
+    }
+
+    & > span {
+
+      & > [class^="icon-"]{
+        display: inline-block;
+        margin-left: 8px;
+        transform: rotate(90deg);
+      }
+
+      &:hover{
+        transform: translateY(0);
+      }
+    }
+  }
 }
 
 //                      __   _  ___ ____  _  _     __
@@ -54,6 +95,11 @@
 //                     | |  |_|\___/_____|  |_|    | |
 //                     |__|                       |__|
 @media (min-width: 1024px) {
+  nav.fixed{
+    & + main{
+      margin-top: 66px;
+    }
+  }
   nav{
     background: var(--alpha);
   }
@@ -75,10 +121,61 @@
       @include flex(row, center, flex-start);
     }
 
-    a{
+    a, .item-dropdown > span{
       padding: 24px 12px;
       color: var(--txt);
       opacity: 0.8;
+    }
+
+    .item-dropdown{
+      position: relative;
+
+      & > span {
+        & > [class^="icon-"]{
+          transform: rotate(0deg);
+          transition: all 0.2s ease-in-out;
+        }
+      }
+
+      &:hover{
+
+        & > span {
+          & > [class^="icon-"]{
+            transform: rotate(90deg);
+          }
+        }
+
+        .item-dropdown-items{
+          z-index: 2000;
+          opacity: 1;
+        }
+      }
+    }
+
+    .item-dropdown-items{
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: transparent;
+      opacity: 0;
+      z-index: -5;
+      width: 100%;
+      padding-top: 60px;
+
+      .item-dropdown-items-container{
+        background-color: var(--alpha);
+        box-shadow: 0 4px 12px var(--greyShadow);
+      }
+
+      a{
+        padding: 12px;
+        margin-left: 0;
+      }
+
+      &:hover{
+        z-index: 2000;
+        opacity: 1;
+      }
     }
   }
 }

@@ -88,6 +88,9 @@ function getPostalCodes(self){
         })
     ;
 }
+function toCurrency(price){
+    return new Intl.NumberFormat("de-DE", {style: "currency", currency: "EUR"}).format(price);
+}
 
 function getTrilieanResponse(data, returnNull=true){
     if(data === 0){

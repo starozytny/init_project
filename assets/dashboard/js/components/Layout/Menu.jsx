@@ -19,9 +19,18 @@ export class Menu extends Component {
 
         tab.forEach(element => {
             JSON.parse(menu).forEach(el => {
-                if(element === el.name){
-                    this.setState({active: element})
+                if(el.dropdown && el.dropdown === true){
+                    el.items.forEach(elem => {
+                        if(element === elem.name){
+                            this.setState({active: element})
+                        }
+                    })
+                }else{
+                    if(element === el.name){
+                        this.setState({active: element})
+                    }
                 }
+
             })
 
         });
@@ -45,9 +54,9 @@ export class Menu extends Component {
                 <div className="items">
                     { <MenuItem menu={menu} active={active} /> }
                 </div>
-                <div className="items">
+                {menuBottom &&  <div className="items">
                     { <MenuItem menu={menuBottom} active={active}/> }
-                </div>
+                </div>}
             </div>
         </>
     }
@@ -57,13 +66,37 @@ function MenuItem (props){
     const { menu, active } = props
 
     return (
-        JSON.parse(menu).map(el => {
-            return <div key={el.name} className="item">
-                <a href={el.path} className={ active === el.name ? "active" : "" }>
-                    <span className={`icon-${el.icon}`} />
-                    <span>{el.label}</span>
-                </a>
-            </div>
+        JSON.parse(menu).map((el, index) => {
+            if(el.dropdown && el.dropdown === true){
+
+                let items = el.items.map((elem, index) => {
+                    return <Item key={index} active={active} el={elem} />
+                })
+
+                return <div key={index} className="item item-dropdown">
+                    <span>{el.label} <span className="icon-right-chevron" /></span>
+                    <div className="item-dropdown-items">
+                        <div className="item-dropdown-items-container">
+                            {items}
+                        </div>
+                    </div>
+                </div>
+            }else{
+                return <Item key={index} active={active} el={el} />
+            }
+
+
         })
+    )
+}
+
+function Item({ el, active }){
+    return (
+        <div className="item">
+            <a href={el.path} className={ active === el.name ? "active" : "" }>
+                {el.icon && <span className={`icon-${el.icon}`} />}
+                <span>{el.label}</span>
+            </a>
+        </div>
     )
 }
