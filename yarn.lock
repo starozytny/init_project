@@ -6289,6 +6289,15 @@ react-transition-group@1.x:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
+react-trumbowyg@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-trumbowyg/-/react-trumbowyg-1.1.0.tgz#c1e3b20a10d84175cad79dbbdb5e33e0f9744c45"
+  integrity sha1-weOyChDYQXXK1527214z4Pl0TEU=
+  dependencies:
+    react "^15.3.2"
+    react-dom "^15.3.2"
+    trumbowyg "^2.3.0"
+
 react-universal-interface@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/react-universal-interface/-/react-universal-interface-0.6.2.tgz#5e8d438a01729a4dbbcbeeceb0b86be146fe2b3b"
@@ -6318,15 +6327,6 @@ react-zoom-pan-pinch@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/react-zoom-pan-pinch/-/react-zoom-pan-pinch-1.6.1.tgz#da16267c258ab37e8ebcdc7c252794a9633e91ec"
   integrity sha512-J2eM0gZ04XiUWvmKZrOhSAB2zjyoK7kw2POIeN1X0yTTlmp6HPGV0zYfjnlkhgt8nQwpvXAbsF/oAnkuiwk1kA==
-
-react-trumbowyg@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-trumbowyg/-/react-trumbowyg-1.1.0.tgz#c1e3b20a10d84175cad79dbbdb5e33e0f9744c45"
-  integrity sha1-weOyChDYQXXK1527214z4Pl0TEU=
-  dependencies:
-    react "^15.3.2"
-    react-dom "^15.3.2"
-    trumbowyg "^2.3.0"
 
 react@^15.3.2:
   version "15.7.0"
@@ -7626,7 +7626,12 @@ trumbowyg@^2.3.0:
   resolved "https://registry.yarnpkg.com/trumbowyg/-/trumbowyg-2.23.0.tgz#fb1f9038bb2a58672067ecd531154c8118e9d5c2"
   integrity sha512-g9Ac+RKUtYsTX4eGM/MMe+WhjHhafhp5Nz7zHP9zQtaghv84SOoNaGO5Z7brmFVQSJyatB0ee5qFztZYlNJfEg==
 
-tslib@^1.9.0:
+ts-easing@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/ts-easing/-/ts-easing-0.2.0.tgz#c8a8a35025105566588d87dbda05dd7fbfa5a4ec"
+  integrity sha512-Z86EW+fFFh/IFB1fqQ3/+7Zpf9t2ebOAxNI/V6Wo7r5gqiqtxmgTlQ1qbqQcjLKYeSHPTsEmvlJUDg/EuL0uHQ==
+
+tslib@^1.10.0, tslib@^1.9.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==

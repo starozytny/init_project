@@ -73,7 +73,7 @@ export class AdItem extends Component {
                             <div className="role type-bien">{elem.typeBien}</div>
                         </div>
                         <div className="details-ad-actions">
-                            <ButtonIcon element="a" target="_blank" onClick={Routing.generate('api_immo_ads_print', {'identifiant': elem.identifiant})} icon="print">Imprimer</ButtonIcon>
+                            <ButtonIcon element="a" target="_blank" onClick={Routing.generate('api_immo_ad_print', {'slug': elem.slug})} icon="print">Imprimer</ButtonIcon>
                         </div>
                     </div>
                     <Navigation subContext={subContext} onChangeContext={this.handleChangeSubContext} />

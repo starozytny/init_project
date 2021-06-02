@@ -9,7 +9,7 @@ import Formulaire        from "@dashboardComponents/functions/Formulaire";
 import Sort              from "@dashboardComponents/functions/sort";
 
 import { AdsList } from "./AdsList";
-import {AdItem} from "./AdItem";
+import { AdItem } from "./AdItem";
 
 function compareLabelThenZipcode(a, b) {
     if (a.label > b.label) {
