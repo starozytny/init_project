@@ -5,9 +5,11 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min';
 
 import React from "react";
 import { render } from "react-dom";
-import { Ads } from "./components/Ads/Ads";
-import { Alerts } from "./components/Alerts/Alerts";
-import { Estimations } from "./components/Estimations/Estimations";
+
+import { Ads }          from "./components/Ads/Ads";
+import { Alerts }       from "./components/Alerts/Alerts";
+import { Estimations }  from "./components/Estimations/Estimations";
+import { Devis }        from "@dashboardFolder/js/pages/components/Devis/Devis";
 
 Routing.setRoutingData(routes);
 
@@ -24,4 +26,9 @@ if(el){
 el = document.getElementById("estimations");
 if(el){
     render(<Estimations />, el)
+}
+
+el = document.getElementById("devis");
+if(el){
+    render(<Devis />, el)
 }

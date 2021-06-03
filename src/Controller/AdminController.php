@@ -103,4 +103,12 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/pages/immo/estimations.html.twig');
     }
+
+    /**
+     * @Route("/immobilier/devis", name="immo_devis")
+     */
+    public function devis(): Response
+    {
+        return $this->render('admin/pages/immo/devis.html.twig');
+    }
 }

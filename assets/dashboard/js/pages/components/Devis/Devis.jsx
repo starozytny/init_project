@@ -6,17 +6,17 @@ import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@dashboardComponents/functions/sort";
 import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
-import { EstimationsList }      from "./EstimationsList";
-import { EstimationFormulaire } from "@dashboardFolder/js/pages/components/Estimations/EstimationForm";
-import {EstimationRead} from "@dashboardFolder/js/pages/components/Estimations/EstimationRead";
+import { DevisList }        from "./DevisList";
+import { DevisRead }        from "@dashboardFolder/js/pages/components/Devis/DevisRead";
+import { DevisFormulaire }  from "@dashboardFolder/js/pages/components/Devis/DevisForm";
 
-export class Estimations extends Component {
+export class Devis extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             perPage: 10,
-            sessionName: "estimations.pagination"
+            sessionName: "devis.pagination"
         }
 
         this.layout = React.createRef();
@@ -31,32 +31,32 @@ export class Estimations extends Component {
         this.handleContentRead = this.handleContentRead.bind(this);
     }
 
-    handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_immo_estimations_index'), Sort.compareCreatedAtInverse, this.state.perPage) }
+    handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_immo_devis_index'), Sort.compareCreatedAtInverse, this.state.perPage) }
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, Sort.compareCreatedAtInverse); }
 
     handleDelete = (element) => {
-        Formulaire.axiosDeleteElement(this, element, Routing.generate('api_immo_estimations_delete', {'id': element.id}),
-            'Supprimer cette estimation ?', 'Cette action est irréversible.');
+        Formulaire.axiosDeleteElement(this, element, Routing.generate('api_immo_devis_delete', {'id': element.id}),
+            'Supprimer ce devis ?', 'Cette action est irréversible.');
     }
     handleDeleteGroup = () => {
         let checked = document.querySelectorAll('.i-selector:checked');
-        Formulaire.axiosDeleteGroupElement(this, checked, Routing.generate('api_immo_estimations_delete_group'), 'Aucune estimation sélectionné.')
+        Formulaire.axiosDeleteGroupElement(this, checked, Routing.generate('api_immo_devis_delete_group'), 'Aucun devis sélectionné.')
     }
 
     handleContentList = (currentData, changeContext) => {
-        return <EstimationsList onChangeContext={changeContext}
-                                onDelete={this.handleDelete}
-                                onDeleteAll={this.handleDeleteGroup}
-                                data={currentData} />
+        return <DevisList onChangeContext={changeContext}
+                          onDelete={this.handleDelete}
+                          onDeleteAll={this.handleDeleteGroup}
+                          data={currentData} />
     }
 
     handleContentCreate = (changeContext) => {
-        return <EstimationFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        return <DevisFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentRead = (changeContext, element) => {
-        return <EstimationRead elem={element} onChangeContext={changeContext} />
+        return <DevisRead elem={element} onChangeContext={changeContext} />
     }
 
     render () {

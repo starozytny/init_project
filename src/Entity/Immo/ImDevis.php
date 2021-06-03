@@ -38,8 +38,6 @@ class ImDevis
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank()
-     * @Assert\Email()
      * @Groups({"admin:read"})
      */
     private $email;
