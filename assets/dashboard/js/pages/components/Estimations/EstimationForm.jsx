@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import axios                   from "axios";
+import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import {Input, Checkbox, Radiobox, TextArea} from "@dashboardComponents/Tools/Fields";
@@ -65,12 +66,14 @@ export class EstimationForm extends Component {
     }
 
     handleChange = (e) => {
+        const { ext } = this.state;
+
         let name = e.currentTarget.name;
         let value = e.currentTarget.value;
 
-        // if(name === "typeBiens"){
-        //     value = (e.currentTarget.checked) ? [...typeBiens, ...[value]] : typeBiens.filter(v => v !== value)
-        // }
+        if(name === "ext"){
+            value = (e.currentTarget.checked) ? [...ext, ...[value]] : ext.filter(v => v !== value)
+        }
         this.setState({[name]: value})
     }
 
@@ -113,10 +116,28 @@ export class EstimationForm extends Component {
                     self.props.onUpdateList(data);
                     self.setState({ success: messageSuccess, errors: [] });
                     if(context === "create"){
+                        document.body.scrollTop = 0; // For Safari
+                        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+                        toastr.info(messageSuccess);
                         self.setState( {
-                            email: '',
-                            typeAd: '',
-                            typeBien: ''
+                            zipcode: "",
+                            city: "",
+                            lastname: "",
+                            firstname: "",
+                            email: "",
+                            phone: "",
+                            typeAd: "",
+                            typeBien: "",
+                            constructionYear: "",
+                            etat: "",
+                            area: "",
+                            areaLand: "",
+                            nbPiece: "",
+                            nbRoom: "",
+                            nbParking: "",
+                            ext: [],
+                            infos: "",
                         })
                     }
                 })
@@ -144,7 +165,7 @@ export class EstimationForm extends Component {
             { value: 0, label: "Maison", identifiant: "maison" },
             { value: 1, label: "Appartement", identifiant: "appartement" },
             { value: 2, label: "Parking", identifiant: "parking" },
-            { value: 3, label: "Bureaux", identifiant: "bureaux" },
+            { value: 3, label: "Bureau", identifiant: "bureau" },
             { value: 4, label: "Local", identifiant: "local" },
             { value: 5, label: "Immeuble", identifiant: "immeuble" },
             { value: 6, label: "Terrain", identifiant: "terrain" },

@@ -65,10 +65,11 @@ class EstimationsController extends AbstractController
      *
      * @param Request $request
      * @param ValidatorService $validator
+     * @param SanitizeData $sanitizeData
      * @param ApiResponse $apiResponse
      * @return JsonResponse
      */
-    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse): JsonResponse
+    public function create(Request $request, ValidatorService $validator, SanitizeData $sanitizeData, ApiResponse $apiResponse): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent());
@@ -83,12 +84,30 @@ class EstimationsController extends AbstractController
 
         $email = trim($data->email);
         $typeAd = $data->typeAd === "0" ? "Location" : "Vente";
-        $typeBien = $data->typeBien;
+        $typeBiens = ["Maison", "Appartement", "Parking", "Bureau", "Local", "Immeuble", "Terrain", "Commerce"];
+        $etats = ["Neuf", "Rénové", "Moyen", "Bon", "Travaux à prévoir"];
+        $ext = $data->ext;
+        sort($ext);
+        $ext = implode(",", $ext);
 
         $obj = (new ImEstimation())
+            ->setZipcode($data->zipcode)
+            ->setCity($data->city)
+            ->setLastname($sanitizeData->sanitizeString($data->lastname))
+            ->setFirstname($sanitizeData->sanitizeString($data->firstname))
+            ->setPhone($data->phone)
             ->setEmail($email)
             ->setTypeAd($typeAd)
-            ->setTypeBien($typeBien)
+            ->setTypeBien($typeBiens[$data->typeBien])
+            ->setConstructionYear($sanitizeData->sanitizeString($data->constructionYear))
+            ->setEtat($etats[$data->etat])
+            ->setArea($data->area)
+            ->setAreaLand($sanitizeData->sanitizeString($data->areaLand))
+            ->setNbPiece($data->nbPiece)
+            ->setNbRoom($sanitizeData->sanitizeString($data->nbRoom))
+            ->setNbParking($data->nbParking)
+            ->setInfos($sanitizeData->sanitizeString($data->infos))
+            ->setExt($ext)
         ;
 
         $noErrors = $validator->validate($obj);
@@ -99,7 +118,7 @@ class EstimationsController extends AbstractController
         $em->persist($obj);
         $em->flush();
 
-        return $apiResponse->apiJsonResponseSuccessful("Estimation enregistrée.");
+        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }
 
     /**

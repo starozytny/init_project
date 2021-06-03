@@ -104,7 +104,7 @@ class AlertsController extends AbstractController
         $em->persist($obj);
         $em->flush();
 
-        return $apiResponse->apiJsonResponseSuccessful("Alerte enregistrée.");
+        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }
 
     /**
