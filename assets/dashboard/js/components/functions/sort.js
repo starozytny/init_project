@@ -28,6 +28,9 @@ function compareTitle(a, b){
 function compareCreatedAt(a, b){
     return comparison(a.createdAt, b.createdAt);
 }
+function compareCreatedAtInverse(a, b){
+    return comparison(b.createdAt, a.createdAt);
+}
 
 function comparison (objA, objB){
     let comparison = 0;
@@ -48,5 +51,6 @@ module.exports = {
     compareCreatedAt,
     compareName,
     compareLabel,
-    compareAdPrice
+    compareAdPrice,
+    compareCreatedAtInverse
 }

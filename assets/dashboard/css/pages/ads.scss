@@ -33,6 +33,12 @@
     }
   }
 
+   .item-estimation{
+    .name + .sub{
+      margin-bottom: 8px;
+    }
+  }
+
   .item-content{
     width: calc(100% - 60px);
   }

@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
 import { Selector }     from "@dashboardComponents/Layout/Selector";
 
+import Sanitaze         from "@dashboardComponents/functions/sanitaze";
+
 export class EstimationsItem extends Component {
     render () {
         const { elem, onDelete, onSelectors } = this.props
 
-        return <div className="item item-alert">
+        return <div className="item item-alert item-estimation">
             <Selector id={elem.id} onSelectors={onSelectors} />
 
             <div className="item-content">
@@ -15,11 +17,12 @@ export class EstimationsItem extends Component {
                     <div className="infos">
                         <div>
                             <div className="name">
-                                <span>{elem.email}</span>
+                                <span>{elem.lastname.toUpperCase()} {elem.firstname}</span>
                             </div>
+                            <div className="sub">{Sanitaze.toFormatPhone(elem.phone)}</div>
                             <div className="sub role">{elem.typeAd}</div>
                             <div className="sub role">{elem.typeBien}</div>
-                            <div className="sub createAt">{elem.createdAtAgo}</div>
+                            <div className="sub createAt">{elem.createdAtString}, {elem.createdAtAgo}</div>
                         </div>
                         <div className="actions">
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>

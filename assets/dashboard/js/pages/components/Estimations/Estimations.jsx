@@ -29,9 +29,9 @@ export class Estimations extends Component {
         this.handleContentCreate = this.handleContentCreate.bind(this);
     }
 
-    handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_immo_estimations_index'), Sort.compareCreatedAt, this.state.perPage) }
+    handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_immo_estimations_index'), Sort.compareCreatedAtInverse, this.state.perPage) }
 
-    handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, Sort.compareCreatedAt); }
+    handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, Sort.compareCreatedAtInverse); }
 
     handleDelete = (element) => {
         Formulaire.axiosDeleteElement(this, element, Routing.generate('api_immo_estimations_delete', {'token': element.token}),
