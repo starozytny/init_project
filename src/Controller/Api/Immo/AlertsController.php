@@ -139,6 +139,36 @@ class AlertsController extends AbstractController
     }
 
     /**
+     * Delete an alert with email
+     *
+     * @Route("/delete", name="delete", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Return message successful",
+     * )
+     *
+     * @OA\Tag(name="Alerts")
+     *
+     * @param Request $request
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     */
+    public function deleteWithEmail(Request $request, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = json_decode($request->getContent());
+
+        $alerts = $em->getRepository(ImAlert::class)->findBy(['email' => $data->email]);
+        foreach($alerts as $alert){
+            $em->remove($alert);
+        }
+
+        $em->flush();
+        return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+    }
+
+    /**
      * Admin - Delete a group of alert
      *
      * @Security("is_granted('ROLE_ADMIN')")
