@@ -7,7 +7,7 @@ import Sanitaze         from "@dashboardComponents/functions/sanitaze";
 
 export class EstimationsItem extends Component {
     render () {
-        const { elem, onDelete, onSelectors } = this.props
+        const { elem, onChangeContext, onDelete, onSelectors } = this.props
 
         return <div className="item item-alert item-estimation">
             <Selector id={elem.id} onSelectors={onSelectors} />
@@ -15,7 +15,7 @@ export class EstimationsItem extends Component {
             <div className="item-content">
                 <div className="item-body">
                     <div className="infos">
-                        <div>
+                        <div onClick={() => onChangeContext("read", elem)}>
                             <div className="name">
                                 <span>{elem.lastname.toUpperCase()} {elem.firstname}</span>
                             </div>

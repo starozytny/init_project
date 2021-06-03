@@ -8,6 +8,7 @@ import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { EstimationsList }      from "./EstimationsList";
 import { EstimationFormulaire } from "@dashboardFolder/js/pages/components/Estimations/EstimationForm";
+import {EstimationRead} from "@dashboardFolder/js/pages/components/Estimations/EstimationRead";
 
 export class Estimations extends Component {
     constructor(props) {
@@ -27,6 +28,7 @@ export class Estimations extends Component {
 
         this.handleContentList = this.handleContentList.bind(this);
         this.handleContentCreate = this.handleContentCreate.bind(this);
+        this.handleContentRead = this.handleContentRead.bind(this);
     }
 
     handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_immo_estimations_index'), Sort.compareCreatedAtInverse, this.state.perPage) }
@@ -53,10 +55,15 @@ export class Estimations extends Component {
         return <EstimationFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
+    handleContentRead = (changeContext, element) => {
+        return <EstimationRead element={element} onChangeContext={changeContext} />
+    }
+
     render () {
         return <>
             <Layout ref={this.layout} {...this.state} onGetData={this.handleGetData}
                     onContentList={this.handleContentList}
+                    onContentRead={this.handleContentRead}
                     onContentCreate={this.handleContentCreate}/>
         </>
     }
