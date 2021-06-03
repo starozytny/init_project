@@ -1,0 +1,75 @@
+@import "../../../vars/vars";
+
+.time{
+  width: 100%;
+  text-align: right;
+  color: var(--grey2);
+}
+
+.item-estimation-read-line{
+  margin-top: 24px;
+
+  & > div{
+    padding: 12px;
+    background-color: var(--alpha);
+    box-shadow: 0 4px 12px var(--greyShadow);
+    border-radius: 12px;
+  }
+
+  .name{
+    @include fontSemibold();
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+
+  .sub{
+    opacity: 0.8;
+  }
+
+  .infos, .feature{
+    margin-top: 24px;
+
+    .item{
+      @include flex(row, center, flex-start);
+
+      &:not(:last-child){
+        margin-bottom: 4px;
+      }
+    }
+  }
+
+  .label{
+    text-transform: uppercase;
+    color: var(--grey2);
+    margin-right: 4px;
+    font-size: 14px;
+    min-width: 68px;
+  }
+}
+
+//                      __   _____ __    ___    __
+//                     | _| |___  / /_  ( _ )  |_ |
+//    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
+//   |_____|_____|_____| |    / /| (_) | (_) |  | |_____|_____|_____|
+//                     | |   /_/  \___/ \___/   | |
+//                     |__|                    |__|
+@media (min-width:768px) {
+  .item-estimation-read-line{
+    @include flex(row, stretch, flex-start);
+
+    .contact, .feature{
+      width: calc(50% - 12px);
+      margin-right: 12px;
+    }
+
+    .feature{
+      margin-top: 0;
+    }
+
+    .infos{
+      width: calc(50% - 12px);
+      margin-left: 12px;
+      margin-top: 0;
+    }
+  }
+}

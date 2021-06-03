@@ -19,7 +19,8 @@ export class EstimationsItem extends Component {
                             <div className="name">
                                 <span>{elem.lastname.toUpperCase()} {elem.firstname}</span>
                             </div>
-                            <div className="sub">{Sanitaze.toFormatPhone(elem.phone)}</div>
+                            <div className="sub phone">{Sanitaze.toFormatPhone(elem.phone)}</div>
+                            <div className="sub address">{elem.zipcode}, {elem.city}</div>
                             <div className="sub role">{elem.typeAd}</div>
                             <div className="sub role">{elem.typeBien}</div>
                             <div className="sub createAt">{elem.createdAtString}, {elem.createdAtAgo}</div>

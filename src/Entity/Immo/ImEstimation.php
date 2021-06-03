@@ -358,6 +358,21 @@ class ImEstimation
         return $this;
     }
 
+    /**
+     * @Groups({"admin:read"})
+     */
+    public function getExtString(): string
+    {
+        $ext = explode(",", $this->ext);
+        $string = "";
+        $i = 0;
+        foreach ($ext as $ex) {
+            $string .= ($i == 0 ? "" : ", ") . ucfirst($ex);
+            $i++;
+        }
+        return $string;
+    }
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;

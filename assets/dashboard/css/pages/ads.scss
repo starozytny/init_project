@@ -3,6 +3,7 @@
 @import "split/ad/details";
 @import "split/ad/search";
 @import "split/ad/gallery";
+@import "split/estimation/estimation";
 
 .toolbar{
   .display-mode{
@@ -34,9 +35,19 @@
   }
 
    .item-estimation{
-    .name + .sub{
-      margin-bottom: 8px;
+     .infos{
+       & > div:first-child{
+         width: 100%;
+         cursor: pointer;
+       }
+     }
+    .phone{
+      margin-top: 4px;
+      margin-bottom: 4px;
     }
+     .address{
+       margin-bottom: 8px;
+     }
   }
 
   .item-content{

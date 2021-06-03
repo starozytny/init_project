@@ -56,7 +56,7 @@ export class Estimations extends Component {
     }
 
     handleContentRead = (changeContext, element) => {
-        return <EstimationRead element={element} onChangeContext={changeContext} />
+        return <EstimationRead elem={element} onChangeContext={changeContext} />
     }
 
     render () {
