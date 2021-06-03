@@ -2,7 +2,7 @@
 
 namespace App\Entity\Immo;
 
-use App\Repository\Immo\ImEstimationRepository;
+use App\Repository\Immo\ImDevisRepository;
 use Carbon\Carbon;
 use Carbon\Factory;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,9 +10,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=ImEstimationRepository::class)
+ * @ORM\Entity(repositoryClass=ImDevisRepository::class)
  */
-class ImEstimation
+class ImDevis
 {
     /**
      * @ORM\Id
@@ -38,6 +38,8 @@ class ImEstimation
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank()
+     * @Assert\Email()
      * @Groups({"admin:read"})
      */
     private $email;
@@ -109,25 +111,6 @@ class ImEstimation
      * @Groups({"admin:read"})
      */
     private $nbRoom;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"admin:read"})
-     */
-    private $constructionYear;
-
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
-     * @Groups({"admin:read"})
-     */
-    private $nbParking;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"admin:read"})
-     */
-    private $ext;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -310,30 +293,6 @@ class ImEstimation
         return $this;
     }
 
-    public function getConstructionYear(): ?string
-    {
-        return $this->constructionYear;
-    }
-
-    public function setConstructionYear(?string $constructionYear): self
-    {
-        $this->constructionYear = $constructionYear;
-
-        return $this;
-    }
-
-    public function getNbParking(): ?int
-    {
-        return $this->nbParking;
-    }
-
-    public function setNbParking(int $nbParking): self
-    {
-        $this->nbParking = $nbParking;
-
-        return $this;
-    }
-
     public function getInfos(): ?string
     {
         return $this->infos;
@@ -344,33 +303,6 @@ class ImEstimation
         $this->infos = $infos;
 
         return $this;
-    }
-
-    public function getExt(): ?string
-    {
-        return $this->ext;
-    }
-
-    public function setExt(?string $ext): self
-    {
-        $this->ext = $ext;
-
-        return $this;
-    }
-
-    /**
-     * @Groups({"admin:read"})
-     */
-    public function getExtString(): string
-    {
-        $ext = explode(",", $this->ext);
-        $string = "";
-        $i = 0;
-        foreach ($ext as $ex) {
-            $string .= ($i == 0 ? "" : ", ") . ucfirst($ex);
-            $i++;
-        }
-        return $string;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -384,6 +316,7 @@ class ImEstimation
 
         return $this;
     }
+
 
     /**
      * Return created at time in string format d/m/Y
