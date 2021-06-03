@@ -11,6 +11,7 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@dashboardComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
+import Sanitaze                from "@dashboardComponents/functions/sanitaze";
 
 export function EstimationFormulaire ({ type, onChangeContext, onUpdateList })
 {
@@ -52,17 +53,41 @@ export class EstimationForm extends Component {
             ext: [],
             infos: "",
             errors: [],
-            success: false
+            success: false,
+            arrayPostalCode: [],
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeZipcode = this.handleChangeZipcode.bind(this);
     }
 
     componentDidMount() {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        document.getElementById("zipcode").focus()
+        document.getElementById("zipcode").focus();
+
+        Sanitaze.getPostalCodes(this);
+    }
+
+    handleChangeZipcode = (e) => {
+        const { arrayPostalCode } = this.state;
+
+        let name = e.currentTarget.name;
+        let value = e.currentTarget.value;
+
+        if(value.length <= 5){
+            this.setState({ [name]: value })
+
+            let v = ""
+            if(arrayPostalCode.length !== 0){
+                v = arrayPostalCode.filter(el => el.cp === value)
+
+                if(v.length === 1){
+                    this.setState({ city: v[0].city })
+                }
+            }
+        }
     }
 
     handleChange = (e) => {
@@ -194,7 +219,8 @@ export class EstimationForm extends Component {
 
                 <div className="step-1">
                     <div className="line line-2">
-                        <Input valeur={zipcode} identifiant="zipcode" errors={errors} onChange={this.handleChange}>Code postal</Input>
+
+                        <Input valeur={zipcode} identifiant="zipcode" errors={errors} onChange={this.handleChangeZipcode}>Code postal</Input>
                         <Input valeur={city} identifiant="city" errors={errors} onChange={this.handleChange}>Ville</Input>
                     </div>
 
