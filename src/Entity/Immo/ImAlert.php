@@ -41,9 +41,8 @@ class ImAlert
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
-     * @Groups({"admin:read"})
      */
-    private $typeBien;
+    private $typeBiens;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -62,6 +61,9 @@ class ImAlert
     public function __construct()
     {
         $this->setToken(bin2hex(random_bytes(32)));
+        $createdAt = new \DateTime();
+        $createdAt->setTimezone(new \DateTimeZone("Europe/Paris"));
+        $this->createdAt = $createdAt;
     }
 
     public function getId(): ?int
@@ -93,16 +95,31 @@ class ImAlert
         return $this;
     }
 
-    public function getTypeBien(): ?string
+    public function getTypeBiens(): ?string
     {
-        return $this->typeBien;
+        return $this->typeBiens;
     }
 
-    public function setTypeBien(string $typeBien): self
+    public function setTypeBiens(string $typeBiens): self
     {
-        $this->typeBien = $typeBien;
+        $this->typeBiens = $typeBiens;
 
         return $this;
+    }
+
+    /**
+     * @Groups({"admin:read"})
+     */
+    public function getTypeBiensString(): string
+    {
+        $typeBiens = explode(",", $this->typeBiens);
+        $string = "";
+        $i = 0;
+        foreach ($typeBiens as $typeBien) {
+            $string .= ($i == 0 ? "" : ", ") . ucfirst($typeBien);
+            $i++;
+        }
+        return $string;
     }
 
     public function getToken(): ?string

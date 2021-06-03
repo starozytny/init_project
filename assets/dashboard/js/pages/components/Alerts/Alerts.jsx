@@ -7,6 +7,7 @@ import Sort              from "@dashboardComponents/functions/sort";
 import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { AlertsList }    from "./AlertsList";
+import {AlertFormulaire} from "@dashboardFolder/js/pages/components/Alerts/AlertForm";
 
 export class Alerts extends Component {
     constructor(props) {
@@ -25,6 +26,7 @@ export class Alerts extends Component {
         this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
+        this.handleContentCreate = this.handleContentCreate.bind(this);
     }
 
     handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_immo_alerts_index'), Sort.compareCreatedAt, this.state.perPage) }
@@ -47,10 +49,15 @@ export class Alerts extends Component {
                             data={currentData} />
     }
 
+    handleContentCreate = (changeContext) => {
+        return <AlertFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+    }
+
     render () {
         return <>
             <Layout ref={this.layout} {...this.state} onGetData={this.handleGetData}
-                    onContentList={this.handleContentList}/>
+                    onContentList={this.handleContentList}
+                    onContentCreate={this.handleContentCreate}/>
         </>
     }
 }

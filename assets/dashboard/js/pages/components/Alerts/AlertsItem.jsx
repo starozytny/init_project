@@ -18,7 +18,7 @@ export class AlertsItem extends Component {
                                 <span>{elem.email}</span>
                             </div>
                             <div className="sub role">{elem.typeAd}</div>
-                            <div className="sub role">{elem.typeBien}</div>
+                            <div className="sub role">{elem.typeBiensString}</div>
                             <div className="sub createAt">{elem.createdAtAgo}</div>
                         </div>
                         <div className="actions">

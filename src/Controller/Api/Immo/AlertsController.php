@@ -75,21 +75,25 @@ class AlertsController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        if (!isset($data->email)) {
+        if (!isset($data->email) || !isset($data->typeAd) || !isset($data->typeBiens)) {
             return $apiResponse->apiJsonResponseBadRequest('Il manque des données.');
         }
 
         $email = trim($data->email);
+        $typeAd = $data->typeAd === "0" ? "Location" : "Vente";
+        $typeBiens = $data->typeBiens;
+        sort($typeBiens);
+        $typeBiens = implode(",", $typeBiens);
 
-        $existe = $em->getRepository(ImAlert::class)->findOneBy(['email' => $email, 'typeAd' => $data->typeAd, 'typeBien' => $data->typeBien]);
+        $existe = $em->getRepository(ImAlert::class)->findOneBy(['email' => $email, 'typeAd' => $typeAd, 'typeBiens' => $typeBiens]);
         if($existe){
-            return $apiResponse->apiJsonResponseBadRequest('Vous avez déjà créer une alerte pour cette recherche.');
+            return $apiResponse->apiJsonResponseBadRequest('Vous avez déjà créé une alerte pour cette recherche.');
         }
 
         $obj = (new ImAlert())
             ->setEmail($email)
-            ->setTypeAd($data->typeAd)
-            ->setTypeBien($data->typeBien)
+            ->setTypeAd($typeAd)
+            ->setTypeBiens($typeBiens)
         ;
 
         $noErrors = $validator->validate($obj);

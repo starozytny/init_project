@@ -2,17 +2,22 @@ import React, { Component } from 'react';
 
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { ButtonIcon } from "@dashboardComponents/Tools/Button";
-import { Alert }      from "@dashboardComponents/Tools/Alert";
+import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
+import { Alert }        from "@dashboardComponents/Tools/Alert";
 
 import { AlertsItem }   from "./AlertsItem";
 
 export class AlertsList extends Component {
     render () {
-        const { data, onDeleteAll } = this.props;
+        const { data, onChangeContext, onDeleteAll } = this.props;
 
         return <>
             <div>
+                <div className="toolbar">
+                    <div className="item create">
+                        <Button onClick={() => onChangeContext("create")}>Ajouter une alerte</Button>
+                    </div>
+                </div>
                 <div className="items-table">
                     <div className="items items-default items-contact">
                         {data && data.length !== 0 ? data.map(elem => {
