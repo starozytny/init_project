@@ -11,13 +11,13 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 import Validateur              from "@dashboardComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
-export function AlertFormulaire ({ type, onChangeContext, onUpdateList })
+export function EstimationFormulaire ({ type, onChangeContext, onUpdateList })
 {
-    let title = "Ajouter une alerte";
-    let url = Routing.generate('api_immo_alerts_create');
-    let msg = "Félicitation ! Vous avez ajouté une alerte !"
+    let title = "Ajouter une estimation";
+    let url = Routing.generate('api_immo_estimations_create');
+    let msg = "Félicitation ! Vous avez ajouté une estimation !"
 
-    let form = <AlertForm
+    let form = <EstimationForm
         context={type}
         url={url}
         email=""
@@ -29,14 +29,14 @@ export function AlertFormulaire ({ type, onChangeContext, onUpdateList })
     return <FormLayout onChangeContext={onChangeContext} form={form}>{title}</FormLayout>
 }
 
-export class AlertForm extends Component {
+export class EstimationForm extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             email: props.email,
             typeAd: "",
-            typeBiens: [],
+            typeBien: "",
             errors: [],
             success: false
         }
@@ -52,14 +52,12 @@ export class AlertForm extends Component {
     }
 
     handleChange = (e) => {
-        const { typeBiens } = this.state;
-
         let name = e.currentTarget.name;
         let value = e.currentTarget.value;
 
-        if(name === "typeBiens"){
-            value = (e.currentTarget.checked) ? [...typeBiens, ...[value]] : typeBiens.filter(v => v !== value)
-        }
+        // if(name === "typeBiens"){
+        //     value = (e.currentTarget.checked) ? [...typeBiens, ...[value]] : typeBiens.filter(v => v !== value)
+        // }
         this.setState({[name]: value})
     }
 
@@ -67,7 +65,7 @@ export class AlertForm extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { email, typeAd, typeBiens } = this.state;
+        const { email, typeAd, typeBien } = this.state;
 
         this.setState({ success: false})
 
@@ -75,7 +73,7 @@ export class AlertForm extends Component {
         let paramsToValidate = [
             {type: "text", id: 'email', value: email},
             {type: "text", id: 'typeAd', value: typeAd},
-            {type: "array", id: 'typeBiens', value: typeBiens}
+            {type: "text", id: 'typeBien', value: typeBien}
         ];
 
         // validate global
@@ -94,7 +92,7 @@ export class AlertForm extends Component {
                         self.setState( {
                             email: '',
                             typeAd: '',
-                            typeBiens: []
+                            typeBien: ''
                         })
                     }
                 })
@@ -110,7 +108,7 @@ export class AlertForm extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, email, typeAd, typeBiens } = this.state;
+        const { errors, success, email, typeAd, typeBien } = this.state;
 
         let naturesItems = [
             { value: 0, label: 'Location', identifiant: 'location' },
@@ -139,11 +137,11 @@ export class AlertForm extends Component {
 
                 <div className="line line-2">
                     <Radiobox items={naturesItems} identifiant="typeAd" valeur={typeAd} errors={errors} onChange={this.handleChange}>Quel est votre projet ?</Radiobox>
-                    <Checkbox items={biensItems} identifiant="typeBiens" valeur={typeBiens} errors={errors} onChange={this.handleChange}>De quel bien(s) s'agit-il ?</Checkbox>
+                    <Radiobox items={biensItems} identifiant="typeBien" valeur={typeBien} errors={errors} onChange={this.handleChange}>De quel bien s'agit-il ?</Radiobox>
                 </div>
                 <div className="line">
                     <div className="form-button">
-                        <Button isSubmit={true}>{context === "create" ? "Ajouter une alerte" : 'Modifier l\'alerte'}</Button>
+                        <Button isSubmit={true}>{context === "create" ? "Ajouter une estimation" : 'Modifier l\'estimation'}</Button>
                     </div>
                 </div>
             </form>

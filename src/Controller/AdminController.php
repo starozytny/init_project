@@ -95,4 +95,12 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/pages/immo/alerts.html.twig');
     }
+
+    /**
+     * @Route("/immobilier/estimations", name="immo_estimations")
+     */
+    public function estimations(): Response
+    {
+        return $this->render('admin/pages/immo/estimations.html.twig');
+    }
 }

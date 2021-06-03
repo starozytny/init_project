@@ -7,6 +7,7 @@ import React from "react";
 import { render } from "react-dom";
 import { Ads } from "./components/Ads/Ads";
 import { Alerts } from "./components/Alerts/Alerts";
+import { Estimations } from "./components/Estimations/Estimations";
 
 Routing.setRoutingData(routes);
 
@@ -18,4 +19,9 @@ if(el){
 el = document.getElementById("alerts");
 if(el){
     render(<Alerts />, el)
+}
+
+el = document.getElementById("estimations");
+if(el){
+    render(<Estimations />, el)
 }
