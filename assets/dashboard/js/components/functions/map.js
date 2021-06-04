@@ -37,8 +37,22 @@ function getLeafletIcon(el)
     })
 }
 
+function getOriginalLeafletIcon()
+{
+    return L.icon({
+        iconUrl: '../../maps/images/marker-icon.png',
+        shadowUrl: '../../maps/images/marker-shadow.png',
+        iconSize:     [25, 41], // size of the icon
+        shadowSize:   [41, 41], // size of the shadow
+        iconAnchor:   [9, 40], // point of the icon which will correspond to marker's location 38 95
+        shadowAnchor: [9, 40],  // the same for the shadow 50 61
+        popupAnchor:  [4, -35] // point from which the popup should open relative to the iconAnchor
+    })
+}
+
 module.exports = {
     createMap,
     getLeafletMarkerIcon,
-    getLeafletIcon
+    getLeafletIcon,
+    getOriginalLeafletIcon
 }
