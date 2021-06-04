@@ -15,11 +15,12 @@ function createMap(mapId = "mapid", mapUrl = "https://b.tile.openstreetmap.org/{
     return mymap;
 }
 
-function getLeafletMarkerIcon()
+
+function getLeafletMarkerIcon(icon="vision")
 {
     return L.divIcon({
         className: 'map-marker-icon map-marker-icon-display',
-        html: "<div class='marker-pin'></div><span class='icon-vision'></span>",
+        html: "<div class='marker-pin'></div><span class='icon-"+icon+"'></span>",
         iconSize: [30, 42],
         iconAnchor: [15, 42],
         popupAnchor:  [0, -35]
