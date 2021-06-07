@@ -11,8 +11,6 @@ export class MapSingle extends Component {
         super(props);
 
         this.state = {
-            mapId: props.mapId ? props.mapId : 'mapid',
-            mapUrl: props.mapUrl ? props.mapUrl : 'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
             loadData: false,
             mymap: null,
             choiceItems: [
@@ -71,9 +69,8 @@ export class MapSingle extends Component {
 
     componentDidMount = () => {
         const { elem } = this.props;
-        const { mapId, mapUrl } = this.state;
 
-        let mymap = Map.createMap(mapId, mapUrl);
+        let mymap = Map.createMap();
 
         if(elem.address.lat && elem.address.lon){
             L.marker([elem.address.lat, elem.address.lon], {icon: Map.getLeafletMarkerIcon()}).addTo(mymap);
