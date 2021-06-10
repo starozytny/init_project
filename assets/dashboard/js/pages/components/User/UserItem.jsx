@@ -15,6 +15,8 @@ export class UserItem extends Component {
             url = Routing.generate('admin_homepage', {'_switch_user' : elem.username})
         }
 
+        console.log(elem)
+
         return <div className="item">
             <Selector id={elem.id} onSelectors={onSelectors} />
 
@@ -29,9 +31,11 @@ export class UserItem extends Component {
                                 <span>{elem.lastname.toUpperCase()} {elem.firstname}</span>
                                 {elem.highRoleCode !== 0 && <span className="role">{elem.highRole}</span>}
                             </div>
+                            {elem.lastLoginAgo && <div className="sub">Connecté {elem.lastLoginAgo}</div>}
+                        </div>
+                        <div>
                             <div className="sub sub-username">{elem.username}</div>
                             {elem.email !== "undefined@undefined.fr" ? <div className="sub">{elem.email}</div> : <div className="sub txt-danger"><span className="icon-warning" /> {elem.email}</div>}
-
                         </div>
                         <div className="actions">
                             {elem.highRoleCode !== 1 &&

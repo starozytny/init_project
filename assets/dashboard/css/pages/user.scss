@@ -156,5 +156,20 @@
     .role{
       margin: 0 0 0 8px;
     }
+
+    .infos{
+      & > div:first-child{
+        width: calc(50% - 24px);
+        margin-right: 24px;
+      }
+
+      & > div:nth-child(2){
+        width: calc(50% - 90px - 24px);
+        margin-right: 24px;
+      }
+      .actions{
+        width: 90px;
+      }
+    }
   }
 }

@@ -1,0 +1,49 @@
+@import "../vars/vars";
+
+.title-page{
+  padding: 24px 12px 12px 12px;
+}
+
+.custom-shape-divider {
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--greyShadow);
+}
+
+.custom-shape-divider svg {
+  position: relative;
+  display: block;
+  width: calc(274% + 1.3px);
+  height: 180px;
+}
+
+.custom-shape-divider .shape-fill {
+  fill: var(--fondContent);
+}
+
+
+//                      __   _ ____  ___   ___    __
+//                     | _| / |___ \( _ ) / _ \  |_ |
+//    _____ _____ _____| |  | | __) / _ \| | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | |/ __/ (_) | |_| |  | |_____|_____|_____|
+//                     | |  |_|_____\___/ \___/   | |
+//                     |__|                      |__|
+@media (min-width:1280px) {
+  .title-page{
+    padding: 24px 32px;
+  }
+}
+
+//                      __   _  __    ___   ___    __
+//                     | _| / |/ /_  / _ \ / _ \  |_ |
+//    _____ _____ _____| |  | | '_ \| | | | | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | | (_) | |_| | |_| |  | |_____|_____|_____|
+//                     | |  |_|\___/ \___/ \___/   | |
+//                     |__|                       |__|
+@media (min-width: 1600px){
+  .title-page{
+    @include maxscreen();
+    padding: 24px 32px;
+    margin-top: 48px;
+  }
+}

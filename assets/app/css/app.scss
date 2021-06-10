@@ -45,6 +45,8 @@
 @import "components/exception";
 @import "components/legales";
 @import "components/pagination";
+@import "components/cookies";
+@import "components/page";
 
 html, body{
     scroll-behavior: smooth;
@@ -87,25 +89,8 @@ main{
     background-color: var(--fondContent);
 }
 
-.title-page{
-    padding: 24px 12px 12px 12px;
-}
-
-.custom-shape-divider {
-    width: 100%;
-    overflow: hidden;
-    background-color: var(--greyShadow);
-}
-
-.custom-shape-divider svg {
-    position: relative;
-    display: block;
-    width: calc(274% + 1.3px);
-    height: 180px;
-}
-
-.custom-shape-divider .shape-fill {
-    fill: var(--fondContent);
+.matomo-iframe-display.remove{
+    display: none;
 }
 
 //                      __   _ ____  ___   ___    __
@@ -115,7 +100,7 @@ main{
 //                     | |  |_|_____\___/ \___/   | |
 //                     |__|                      |__|
 @media (min-width:1280px) {
-    .main-content, .title-page{
+    .main-content{
         padding: 24px 32px;
     }
 }
@@ -127,12 +112,7 @@ main{
 //                     | |  |_|\___/ \___/ \___/   | |
 //                     |__|                       |__|
 @media (min-width: 1600px){
-    .main-content, .title-page{
+    .main-content{
         @include maxscreen();
-    }
-
-    .title-page{
-        padding: 24px 32px;
-        margin-top: 48px;
     }
 }
