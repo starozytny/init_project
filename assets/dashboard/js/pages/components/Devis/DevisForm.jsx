@@ -13,6 +13,8 @@ import Validateur              from "@dashboardComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 import Sanitaze                from "@dashboardComponents/functions/sanitaze";
 
+import { RgpdInfo }            from "@appComponents/Tools/Rgpd";
+
 export function DevisFormulaire ({ type, onChangeContext, onUpdateList })
 {
     let title = "Ajouter un devis";
@@ -52,6 +54,7 @@ export class DevisForm extends Component {
             errors: [],
             success: false,
             arrayPostalCode: [],
+            critere: ""
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -98,72 +101,80 @@ export class DevisForm extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { zipcode, city, lastname, firstname, phone, typeAd, typeBien, etat, area, nbPiece} = this.state;
+        const { critere, zipcode, city, lastname, firstname, phone, typeAd, typeBien, etat, area, nbPiece} = this.state;
 
-        this.setState({ success: false})
-
-        let method = "POST";
-        let paramsToValidate = [
-            {type: "text", id: 'zipcode', value: zipcode},
-            {type: "text", id: 'city', value: city},
-            {type: "text", id: 'lastname', value: lastname},
-            {type: "text", id: 'firstname', value: firstname},
-            {type: "text", id: 'phone', value: phone},
-            {type: "text", id: 'typeAd', value: typeAd},
-            {type: "text", id: 'typeBien', value: typeBien},
-            {type: "text", id: 'etat', value: etat},
-            {type: "text", id: 'area', value: area},
-            {type: "text", id: 'nbPiece', value: nbPiece},
-        ];
-
-        // validate global
-        let validate = Validateur.validateur(paramsToValidate)
-        if(!validate.code){
-            this.setState({ errors: validate.errors });
+        if(critere !== ""){
+            toastr.error("Veuillez rafraichir la page.");
         }else{
-            Formulaire.loader(true);
-            let self = this;
-            axios({ method: method, url: url, data: self.state })
-                .then(function (response) {
-                    let data = response.data;
-                    self.props.onUpdateList(data);
-                    self.setState({ success: messageSuccess, errors: [] });
-                    if(context === "create"){
-                        document.body.scrollTop = 0; // For Safari
-                        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+            this.setState({ success: false})
 
-                        toastr.info(messageSuccess);
-                        self.setState( {
-                            zipcode: "",
-                            city: "",
-                            lastname: "",
-                            firstname: "",
-                            email: "",
-                            phone: "",
-                            typeAd: "",
-                            typeBien: "",
-                            etat: "",
-                            area: "",
-                            areaLand: "",
-                            nbPiece: "",
-                            nbRoom: "",
-                            infos: "",
-                        })
-                    }
-                })
-                .catch(function (error) {
-                    Formulaire.displayErrors(self, error);
-                })
-                .then(() => {
-                    Formulaire.loader(false);
-                })
-            ;
+            let method = "POST";
+            let paramsToValidate = [
+                {type: "text", id: 'zipcode', value: zipcode},
+                {type: "text", id: 'city', value: city},
+                {type: "text", id: 'lastname', value: lastname},
+                {type: "text", id: 'firstname', value: firstname},
+                {type: "text", id: 'phone', value: phone},
+                {type: "text", id: 'typeAd', value: typeAd},
+                {type: "text", id: 'typeBien', value: typeBien},
+                {type: "text", id: 'etat', value: etat},
+                {type: "text", id: 'area', value: area},
+                {type: "text", id: 'nbPiece', value: nbPiece},
+            ];
+
+            // validate global
+            let validate = Validateur.validateur(paramsToValidate)
+            if(!validate.code){
+                this.setState({ errors: validate.errors });
+            }else{
+                Formulaire.loader(true);
+                let self = this;
+                axios({ method: method, url: url, data: self.state })
+                    .then(function (response) {
+                        let data = response.data;
+
+                        if(self.props.onUpdateList){
+                            self.props.onUpdateList(data);
+                        }
+
+                        self.setState({ success: messageSuccess, errors: [] });
+                        if(context === "create"){
+                            document.body.scrollTop = 0; // For Safari
+                            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+                            toastr.info(messageSuccess);
+                            self.setState( {
+                                zipcode: "",
+                                city: "",
+                                lastname: "",
+                                firstname: "",
+                                email: "",
+                                phone: "",
+                                typeAd: "",
+                                typeBien: "",
+                                etat: "",
+                                area: "",
+                                areaLand: "",
+                                nbPiece: "",
+                                nbRoom: "",
+                                infos: "",
+                            })
+                        }
+                    })
+                    .catch(function (error) {
+                        Formulaire.displayErrors(self, error);
+                    })
+                    .then(() => {
+                        Formulaire.loader(false);
+                    })
+                ;
+            }
         }
     }
 
     render () {
         const { context } = this.props;
-        const { errors, success, zipcode, city, lastname, firstname, email, phone, typeAd, typeBien,
+        const { critere, errors, success, zipcode, city, lastname, firstname, email, phone, typeAd, typeBien,
                 etat, area, areaLand, nbPiece, nbRoom, infos } = this.state;
 
         let naturesItems = [
@@ -239,10 +250,19 @@ export class DevisForm extends Component {
                         <Input valeur={firstname} identifiant="firstname" errors={errors} onChange={this.handleChange}>Prénom</Input>
                     </div>
 
+                    <div className="line line-critere">
+                        <Input identifiant="critere" valeur={critere} errors={errors} onChange={this.handleChange}>Critère</Input>
+                    </div>
+
                     <div className="line line-2">
                         <Input valeur={phone} identifiant="phone" errors={errors} onChange={this.handleChange}>Téléphone</Input>
                         <Input valeur={email} identifiant="email" errors={errors} onChange={this.handleChange} type="email" >Adresse e-mail (facultatif)</Input>
                     </div>
+
+                    <div className="line">
+                        <RgpdInfo utility="la gestion des demandes de devis"/>
+                    </div>
+
                 </div>
 
                 <div className="line">
