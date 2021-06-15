@@ -1,0 +1,16 @@
+{% extends 'app/email/template/template.html.twig' %}
+
+{% block preheader %}Ajout d'une alerte.{% endblock %}
+
+{% block title %}Ajout d'une alerte{% endblock %}
+
+{% block body %}
+    <div>
+        <div>Demande d'alerte réalisé le {{ contact.createdAt | date('d/m/Y \\à H:i', "Europe/Paris") }}</div>
+        <div>Email : {{ contact.email }}</div>
+        <p style="width: 540px;">
+            {{ contact.typeAd }} <br> <br>
+            {{ contact.typeBiens }}
+        </p>
+    </div>
+{% endblock %}

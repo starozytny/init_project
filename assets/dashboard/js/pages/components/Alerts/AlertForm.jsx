@@ -11,6 +11,7 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@dashboardComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
+import {RgpdInfo} from "@appComponents/Tools/Rgpd";
 
 export function AlertFormulaire ({ type, onChangeContext, onUpdateList })
 {
@@ -39,7 +40,8 @@ export class AlertForm extends Component {
             typeAd: "",
             typeBiens: [],
             errors: [],
-            success: false
+            success: false,
+            critere: ""
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -68,54 +70,58 @@ export class AlertForm extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { email, typeAd, typeBiens } = this.state;
+        const { critere, email, typeAd, typeBiens } = this.state;
 
-        this.setState({ success: false})
-
-        let method = "POST";
-        let paramsToValidate = [
-            {type: "text", id: 'email', value: email},
-            {type: "text", id: 'typeAd', value: typeAd},
-            {type: "array", id: 'typeBiens', value: typeBiens}
-        ];
-
-        // validate global
-        let validate = Validateur.validateur(paramsToValidate)
-        if(!validate.code){
-            this.setState({ errors: validate.errors });
+        if(critere !== ""){
+            toastr.error("Veuillez rafraichir la page.");
         }else{
-            Formulaire.loader(true);
-            let self = this;
-            axios({ method: method, url: url, data: self.state })
-                .then(function (response) {
-                    let data = response.data;
-                    self.props.onUpdateList(data);
-                    self.setState({ success: messageSuccess, errors: [] });
-                    if(context === "create"){
-                        document.body.scrollTop = 0; // For Safari
-                        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+            this.setState({ success: false})
 
-                        toastr.info(messageSuccess);
-                        self.setState( {
-                            email: '',
-                            typeAd: '',
-                            typeBiens: []
-                        })
-                    }
-                })
-                .catch(function (error) {
-                    Formulaire.displayErrors(self, error);
-                })
-                .then(() => {
-                    Formulaire.loader(false);
-                })
-            ;
+            let method = "POST";
+            let paramsToValidate = [
+                {type: "text", id: 'email', value: email},
+                {type: "text", id: 'typeAd', value: typeAd},
+                {type: "array", id: 'typeBiens', value: typeBiens}
+            ];
+
+            // validate global
+            let validate = Validateur.validateur(paramsToValidate)
+            if(!validate.code){
+                this.setState({ errors: validate.errors });
+            }else{
+                Formulaire.loader(true);
+                let self = this;
+                axios({ method: method, url: url, data: self.state })
+                    .then(function (response) {
+                        let data = response.data;
+                        self.props.onUpdateList(data);
+                        self.setState({ success: messageSuccess, errors: [] });
+                        if(context === "create"){
+                            document.body.scrollTop = 0; // For Safari
+                            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+                            toastr.info(messageSuccess);
+                            self.setState( {
+                                email: '',
+                                typeAd: '',
+                                typeBiens: []
+                            })
+                        }
+                    })
+                    .catch(function (error) {
+                        Formulaire.displayErrors(self, error);
+                    })
+                    .then(() => {
+                        Formulaire.loader(false);
+                    })
+                ;
+            }
         }
     }
 
     render () {
         const { context } = this.props;
-        const { errors, success, email, typeAd, typeBiens } = this.state;
+        const { critere, errors, success, email, typeAd, typeBiens } = this.state;
 
         let naturesItems = [
             { value: 0, label: 'Location', identifiant: 'location' },
@@ -142,10 +148,19 @@ export class AlertForm extends Component {
                     <Input valeur={email} identifiant="email" errors={errors} onChange={this.handleChange} type="email" >Adresse e-mail</Input>
                 </div>
 
+                <div className="line line-critere">
+                    <Input identifiant="critere" valeur={critere} errors={errors} onChange={this.handleChange}>Critère</Input>
+                </div>
+
                 <div className="line line-2">
                     <Radiobox items={naturesItems} identifiant="typeAd" valeur={typeAd} errors={errors} onChange={this.handleChange}>Quel est votre projet ?</Radiobox>
                     <Checkbox items={biensItems} identifiant="typeBiens" valeur={typeBiens} errors={errors} onChange={this.handleChange}>De quel bien(s) s'agit-il ?</Checkbox>
                 </div>
+
+                <div className="line">
+                    <RgpdInfo utility="la gestion des demandes d'alertes"/>
+                </div>
+
                 <div className="line">
                     <div className="form-button">
                         <Button isSubmit={true}>{context === "create" ? "Ajouter une alerte" : 'Modifier l\'alerte'}</Button>

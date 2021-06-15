@@ -66,7 +66,8 @@ class AlertsController extends AbstractController
      * @param ApiResponse $apiResponse
      * @return JsonResponse
      */
-    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse): JsonResponse
+    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, MailerService $mailerService,
+                           SettingsService $settingsService): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent());
@@ -99,6 +100,20 @@ class AlertsController extends AbstractController
         $noErrors = $validator->validate($obj);
         if ($noErrors !== true) {
             return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+        }
+
+        if($mailerService->sendMail(
+                $settingsService->getEmailContact(),
+                "[" . $settingsService->getWebsiteName() ."] Ajout d'une alerte",
+                "Demande d'alerte réalisé à partir de " . $settingsService->getWebsiteName(),
+                'app/email/immo/alerte.html.twig',
+                ['contact' => $obj, 'settings' => $settingsService->getSettings()]
+            ) != true)
+        {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'message',
+                'message' => "Le message n\'a pas pu être délivré. Veuillez revenir ultérieurement."
+            ]]);
         }
 
         $em->persist($obj);
