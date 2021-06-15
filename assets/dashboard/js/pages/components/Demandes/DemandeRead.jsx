@@ -28,7 +28,13 @@ export class DemandeRead extends Component {
                         <div>{element.bien.address.address}</div>
                         <div>{element.bien.address.shortAddress}</div>
                         <div className="sub">{element.bien.realRef}</div>
-                    </div> : <div>Bien supprimé</div>}
+                    </div> : <div>
+                        <div className="name">Bien supprimé</div>
+                        <div>{element.label}</div>
+                        <div>{element.address}</div>
+                        <div>{element.shortAddress}</div>
+                        <div className="sub">{element.realRef}</div>
+                    </div>}
                 </div>
             </div>
         </>

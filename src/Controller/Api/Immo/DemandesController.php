@@ -88,6 +88,7 @@ class DemandesController extends AbstractController
         $obj = (new ImDemande())
             ->setName($sanitizeData->sanitizeString($data->name))
             ->setPhone($data->phone)
+            ->setEmail($data->email)
             ->setMessage($sanitizeData->sanitizeString($data->message))
             ->setBien($bien)
             ->setLabel($bien->getLabel())
@@ -102,19 +103,19 @@ class DemandesController extends AbstractController
             return $apiResponse->apiJsonResponseValidationFailed($noErrors);
         }
 
-//        if($mailerService->sendMail(
-//                $settingsService->getEmailContact(),
-//                "[" . $settingsService->getWebsiteName() ."] Demande d'informations",
-//                "Demande d'informations réalisé à partir de " . $settingsService->getWebsiteName(),
-//                'app/email/contact/contact.html.twig',
-//                ['contact' => $contact, 'settings' => $settingsService->getSettings()]
-//            ) != true)
-//        {
-//            return $apiResponse->apiJsonResponseValidationFailed([[
-//                'name' => 'message',
-//                'message' => "Le message n\'a pas pu être délivré. Veuillez contacter le support."
-//            ]]);
-//        }
+        if($mailerService->sendMail(
+                $settingsService->getEmailContact(),
+                "[" . $settingsService->getWebsiteName() ."] Demande d'informations",
+                "Demande d'informations réalisé à partir de " . $settingsService->getWebsiteName(),
+                'app/email/immo/demande.html.twig',
+                ['contact' => $obj, 'settings' => $settingsService->getSettings()]
+            ) != true)
+        {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'message',
+                'message' => "Le message n\'a pas pu être délivré. Veuillez contacter le support."
+            ]]);
+        }
 
         $em->persist($obj);
         $em->flush();
