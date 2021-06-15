@@ -1,17 +1,16 @@
 {% extends 'app/email/template/template.html.twig' %}
 
-{% block preheader %}Demande d'estimation pour {{ contact.lastname }} {{ contact.firstname }}.{% endblock %}
+{% block preheader %}Demande de devis pour {{ contact.lastname }} {{ contact.firstname }}.{% endblock %}
 
-{% block title %}Demande d'estimation  {{ contact.lastname }} {{ contact.firstname }}{% endblock %}
+{% block title %}Demande de devis  {{ contact.lastname }} {{ contact.firstname }}{% endblock %}
 
 {% block body %}
     <div>
-        <div>Demande d'estimation réalisé par :  {{ contact.lastname }} {{ contact.firstname }}, le {{ contact.createdAt | date('d/m/Y \\à H:i', "Europe/Paris") }}</div>
+        <div>Demande de devis réalisé par :  {{ contact.lastname }} {{ contact.firstname }}, le {{ contact.createdAt | date('d/m/Y \\à H:i', "Europe/Paris") }}</div>
         <div>Email de contact : {{ contact.email }}</div>
         <div>Téléphone de contact : {{ contact.phone }}</div>
         <p style="width: 540px;">
             Adresse : {{ contact.zipcode }}, {{ contact.city }} <br><br>
-            Pour {{ contact.typeAd == "Vente" ? "Vendre" : "Louer" }} <br>
             Type de bien : {{ contact.typeBien }} <br>
             Etat : {{ contact.etat }} <br>
             Surface : {{ contact.area }} m²<br>
@@ -23,9 +22,7 @@
             {% if contact.nbRoom %}
                 Nombre de chambres : {{ contact.nbRoom }} <br>
             {% endif %}
-            Année de construction : {{ contact.constructionYear }} <br>
-            Nombre de parkings : {{ contact.nbParking }} <br>
-            Extérieurs : {{ contact.ext }} <br><br>
+            <br>
             Informations supplémentaires : <br>
             {{ contact.infos }}
         </p>

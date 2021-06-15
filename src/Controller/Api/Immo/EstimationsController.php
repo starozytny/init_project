@@ -128,7 +128,7 @@ class EstimationsController extends AbstractController
         {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'message',
-                'message' => "Le message n\'a pas pu être délivré. Veuillez revenir ultérieurement."
+                'message' => "La demande n\'a pas pu être délivré. Veuillez revenir ultérieurement."
             ]]);
         }
 

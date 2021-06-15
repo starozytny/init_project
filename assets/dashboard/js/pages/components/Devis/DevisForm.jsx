@@ -4,7 +4,7 @@ import axios                   from "axios";
 import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Input, Checkbox, Radiobox, TextArea } from "@dashboardComponents/Tools/Fields";
+import { Input, Radiobox, TextArea } from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
@@ -115,7 +115,7 @@ export class DevisForm extends Component {
                 {type: "text", id: 'lastname', value: lastname},
                 {type: "text", id: 'firstname', value: firstname},
                 {type: "text", id: 'phone', value: phone},
-                {type: "text", id: 'typeAd', value: typeAd},
+                // {type: "text", id: 'typeAd', value: typeAd},
                 {type: "text", id: 'typeBien', value: typeBien},
                 {type: "text", id: 'etat', value: etat},
                 {type: "text", id: 'area', value: area},
@@ -212,17 +212,17 @@ export class DevisForm extends Component {
                         <Input valeur={city} identifiant="city" errors={errors} onChange={this.handleChange}>Ville</Input>
                     </div>
 
+                    {/*<div className="line">*/}
+                    {/*    <Radiobox items={naturesItems} identifiant="typeAd" valeur={typeAd} errors={errors} onChange={this.handleChange}>Quel est votre projet ?</Radiobox>*/}
+                    {/*</div>*/}
                     <div className="line">
-                        <Radiobox items={naturesItems} identifiant="typeAd" valeur={typeAd} errors={errors} onChange={this.handleChange}>Quel est votre projet ?</Radiobox>
-                    </div>
-                    <div className="line">
-                        <Radiobox items={biensItems} identifiant="typeBien" valeur={typeBien} errors={errors} onChange={this.handleChange}>A quel état se trouve le bien ?</Radiobox>
+                        <Radiobox items={biensItems} identifiant="typeBien" valeur={typeBien} errors={errors} onChange={this.handleChange}>De quel type de bien s'agit-il ?</Radiobox>
                     </div>
                 </div>
 
                 <div className="step-2">
                     <div className="line">
-                        <Radiobox items={etatItems} identifiant="etat" valeur={etat} errors={errors} onChange={this.handleChange}>De quel bien s'agit-il ?</Radiobox>
+                        <Radiobox items={etatItems} identifiant="etat" valeur={etat} errors={errors} onChange={this.handleChange}>Dans quel état se trouve le bien ?</Radiobox>
                     </div>
 
                     <div className="line line-2">

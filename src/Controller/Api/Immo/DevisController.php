@@ -69,9 +69,12 @@ class DevisController extends AbstractController
      * @param ValidatorService $validator
      * @param SanitizeData $sanitizeData
      * @param ApiResponse $apiResponse
+     * @param MailerService $mailerService
+     * @param SettingsService $settingsService
      * @return JsonResponse
      */
-    public function create(Request $request, ValidatorService $validator, SanitizeData $sanitizeData, ApiResponse $apiResponse): JsonResponse
+    public function create(Request $request, ValidatorService $validator, SanitizeData $sanitizeData, ApiResponse $apiResponse,
+                           MailerService $mailerService, SettingsService $settingsService): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent());
@@ -96,7 +99,7 @@ class DevisController extends AbstractController
             ->setFirstname($sanitizeData->sanitizeString($data->firstname))
             ->setPhone($data->phone)
             ->setEmail($email)
-            ->setTypeAd($typeAd)
+            ->setTypeAd("Location")
             ->setTypeBien($typeBiens[$data->typeBien])
             ->setEtat($etats[$data->etat])
             ->setArea($data->area)
@@ -109,6 +112,20 @@ class DevisController extends AbstractController
         $noErrors = $validator->validate($obj);
         if ($noErrors !== true) {
             return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+        }
+
+        if($mailerService->sendMail(
+                $settingsService->getEmailContact(),
+                "[" . $settingsService->getWebsiteName() ."] Demande de devis",
+                "Demande de devis réalisé à partir de " . $settingsService->getWebsiteName(),
+                'app/email/immo/devis.html.twig',
+                ['contact' => $obj, 'settings' => $settingsService->getSettings()]
+            ) != true)
+        {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'message',
+                'message' => "La demande n\'a pas pu être délivré. Veuillez revenir ultérieurement."
+            ]]);
         }
 
         $em->persist($obj);
