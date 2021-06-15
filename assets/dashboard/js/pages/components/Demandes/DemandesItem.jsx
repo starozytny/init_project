@@ -7,7 +7,11 @@ export class DemandesItem extends Component {
     render () {
         const { elem, onChangeContext, onDelete, onSelectors } = this.props
 
-        return <div className="item item-alert">
+        //
+        // have elem.bien.slug
+        //
+
+        return <div className="item item-alert item-demande">
             <Selector id={elem.id} onSelectors={onSelectors} />
 
             <div className="item-content">
@@ -26,6 +30,13 @@ export class DemandesItem extends Component {
                                 <span>{elem.isSeen ? "Lu" : "Non lu"}</span>
                             </div>
                         </div>
+                        {elem.bien ? <div>
+                            <div className="name">{elem.bien.label}</div>
+                            <div>{elem.bien.address.address}</div>
+                            <div>{elem.bien.address.shortAddress}</div>
+                            <div className="sub">{elem.bien.realRef}</div>
+                        </div> : <div>Bien supprimé</div>}
+
                         <div className="actions">
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
                         </div>

@@ -153,9 +153,30 @@
       width: 125px;
     }
   }
+
+  .item-demande{
+    .item-content{
+
+      .infos{
+        & > div:first-child{
+          width: calc(40% - 12px);
+          margin-right: 12px;
+          cursor: pointer;
+        }
+
+        & > div:nth-child(2){
+          width: calc(100% - 40% - 12px - 30px);
+          margin-right: 12px;
+        }
+
+        .actions{
+          width: 30px;
+        }
+      }
+
+    }
+  }
 }
-
-
 //                      __   _ ____  ___   ___    __
 //                     | _| / |___ \( _ ) / _ \  |_ |
 //    _____ _____ _____| |  | | __) / _ \| | | |  | |_____ _____ _____

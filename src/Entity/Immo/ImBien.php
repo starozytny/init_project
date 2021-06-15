@@ -46,7 +46,7 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"list:read", "show:read", "admin:read"})
      */
     private $realRef;
 
@@ -85,7 +85,7 @@ class ImBien
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"list:read", "show:read", "admin:read"})
      */
     private $label;
 
@@ -110,7 +110,7 @@ class ImBien
     /**
      * @ORM\OneToOne(targetEntity=ImAddress::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"list:read", "show:read", "admin:read"})
      */
     private $address;
 

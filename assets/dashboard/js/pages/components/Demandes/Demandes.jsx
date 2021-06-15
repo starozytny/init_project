@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 
+import axios             from "axios";
 import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@dashboardComponents/functions/sort";
 import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
-import { DemandesList }    from "./DemandesList";
+import { DemandesList }      from "./DemandesList";
+import { DemandeRead }       from "@dashboardFolder/js/pages/components/Demandes/DemandeRead";
 import { DemandeFormulaire } from "@dashboardFolder/js/pages/components/Demandes/DemandeForm";
 
 export class Demandes extends Component {
@@ -27,6 +29,8 @@ export class Demandes extends Component {
 
         this.handleContentList = this.handleContentList.bind(this);
         this.handleContentCreate = this.handleContentCreate.bind(this);
+        this.handleContentRead = this.handleContentRead.bind(this);
+        this.handleChangeContextRead = this.handleChangeContextRead.bind(this);
     }
 
     handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_immo_demandes_index'), Sort.compareCreatedAt, this.state.perPage) }
@@ -50,6 +54,25 @@ export class Demandes extends Component {
                              data={currentData} />
     }
 
+    handleContentRead = (changeContext, element) => {
+        return <DemandeRead element={element} onChangeContext={changeContext}/>
+    }
+
+    handleChangeContextRead = (element) => {
+        if(!element.isSeen){
+            const self = this;
+            axios.post(Routing.generate('api_immo_demandes_isSeen', {'id': element.id}), {})
+                .then(function (response) {
+                    let data = response.data;
+                    self.handleUpdateList(data, 'update');
+                })
+                .catch(function (error) {
+                    Formulaire.displayErrors(self, error)
+                })
+            ;
+        }
+    }
+
     handleContentCreate = (changeContext) => {
         return <DemandeFormulaire type="create" bien={this.props.bien} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
@@ -58,7 +81,8 @@ export class Demandes extends Component {
         return <>
             <Layout ref={this.layout} {...this.state} onGetData={this.handleGetData}
                     onContentList={this.handleContentList}
-                    onContentCreate={this.handleContentCreate}/>
+                    onContentCreate={this.handleContentCreate}
+                    onContentRead={this.handleContentRead} onChangeContextRead={this.handleChangeContextRead}/>
         </>
     }
 }

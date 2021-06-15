@@ -115,7 +115,7 @@ class DemandesController extends AbstractController
         $em->persist($obj);
         $em->flush();
 
-        return $apiResponse->apiJsonResponseSuccessful("Message envoyé.");
+        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }
 
     /**
@@ -167,10 +167,6 @@ class DemandesController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$obj->getIsSeen()) {
-            return $apiResponse->apiJsonResponseBadRequest('Vous n\'avez pas lu cette demande.');
-        }
-
         $em->remove($obj);
         $em->flush();
 
@@ -204,10 +200,6 @@ class DemandesController extends AbstractController
 
         if ($objs) {
             foreach ($objs as $obj) {
-                if (!$obj->getIsSeen()) {
-                    return $apiResponse->apiJsonResponseBadRequest('Vous n\'avez pas lu cette demande.');
-                }
-
                 $em->remove($obj);
             }
         }

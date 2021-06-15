@@ -33,6 +33,34 @@
   }
 }
 
+.item-data-read{
+  background-color: var(--alpha);
+  border-radius: 8px;
+  padding: 12px;
+  max-width: 768px;
+  margin-bottom: 24px;
+
+  .name{
+    @include fontSemibold();
+    font-size: 18px;
+  }
+
+  .sub{
+    opacity: 0.7;
+  }
+
+  .sub-time{
+    font-size: 14px;
+    max-width: 768px;
+    text-align: right;
+  }
+
+  .sub-message{
+    margin-top: 12px;
+    max-width: 768px;
+  }
+}
+
 //                      __   _____ __    ___    __
 //                     | _| |___  / /_  ( _ )  |_ |
 //    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
@@ -50,6 +78,18 @@
         }
       }
     }
+  }
+}
+
+//                      __   _  ___ ____  _  _     __
+//                     | _| / |/ _ \___ \| || |   |_ |
+//    _____ _____ _____| |  | | | | |__) | || |_   | |_____ _____ _____
+//   |_____|_____|_____| |  | | |_| / __/|__   _|  | |_____|_____|_____|
+//                     | |  |_|\___/_____|  |_|    | |
+//                     |__|                       |__|
+@media (min-width: 1024px) {
+  .item-data-read {
+    padding: 24px;
   }
 }
 

@@ -21,18 +21,19 @@ class ImAddress
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *  @Groups({"list:read", "show:read", "admin:read"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"list:read", "show:read", "admin:read"})
      */
     private $zipcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"list:read", "show:read", "admin:read"})
      */
     private $city;
 
@@ -155,7 +156,7 @@ class ImAddress
 
     /**
      * @return string|null
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"list:read", "show:read", "admin:read"})
      */
     public function getShortAddress(): ?string
     {

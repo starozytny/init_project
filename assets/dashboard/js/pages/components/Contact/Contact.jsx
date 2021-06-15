@@ -27,6 +27,7 @@ export class Contact extends Component {
         this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
+        this.handleContentRead = this.handleContentRead.bind(this);
         this.handleChangeContextRead = this.handleChangeContextRead.bind(this);
     }
 
