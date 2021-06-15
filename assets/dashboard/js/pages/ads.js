@@ -10,6 +10,7 @@ import { Ads }          from "./components/Ads/Ads";
 import { Alerts }       from "./components/Alerts/Alerts";
 import { Estimations }  from "./components/Estimations/Estimations";
 import { Devis }        from "@dashboardFolder/js/pages/components/Devis/Devis";
+import { Demandes }     from "@dashboardFolder/js/pages/components/Demandes/Demandes";
 
 Routing.setRoutingData(routes);
 
@@ -31,4 +32,9 @@ if(el){
 el = document.getElementById("devis");
 if(el){
     render(<Devis />, el)
+}
+
+el = document.getElementById("demandes");
+if(el){
+    render(<Demandes {...el.dataset} />, el)
 }

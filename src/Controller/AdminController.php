@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Immo\ImBien;
 use App\Entity\Settings;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -110,5 +111,23 @@ class AdminController extends AbstractController
     public function devis(): Response
     {
         return $this->render('admin/pages/immo/devis.html.twig');
+    }
+
+    /**
+     * @Route("/immobilier/demandes", name="immo_demandes")
+     */
+    public function demandes(): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $biens = $em->getRepository(ImBien::class)->findAll();
+
+        $bien = null;
+        if(count($biens) != 0){
+            $bien = $biens[0];
+        }
+
+        return $this->render('admin/pages/immo/demandes.html.twig', [
+            'bien' => $bien
+        ]);
     }
 }

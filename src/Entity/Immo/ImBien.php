@@ -179,7 +179,7 @@ class ImBien
      *          @Gedmo\SlugHandlerOption(name="urilize", value="true"),
      *      })
      * }, fields={"typeAd", "label", "identifiant"})
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"list:read", "show:read", "admin:read"})
      */
     private $slug;
 

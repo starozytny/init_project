@@ -1,0 +1,14 @@
+{% extends 'admin/pages/immo/template.html.twig' %}
+
+{% set page_title %}Liste des demandes{% endset %}
+{% set submenuActive = "Demandes" %}
+
+{% block main_content %}
+    {% if bien %}
+        <div id="demandes" data-bien="{{ bien.id }}"></div>
+    {% else %}
+        <div id="demandes"></div>
+    {% endif %}
+
+{% endblock %}
+

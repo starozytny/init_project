@@ -3,8 +3,11 @@
 namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImDemandeRepository;
+use Carbon\Carbon;
+use Carbon\Factory;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImDemandeRepository::class)
@@ -15,36 +18,42 @@ class ImDemande
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"admin:read"})
      */
     private $message;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createAt;
+    private $createdAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"admin:read"})
      */
     private $isSeen;
 
@@ -55,14 +64,15 @@ class ImDemande
 
     /**
      * @ORM\ManyToOne(targetEntity=ImBien::class, inversedBy="demandes")
+     * @Groups({"admin:read"})
      */
     private $bien;
 
     public function __construct()
     {
-        $createAt = new DateTime();
-        $createAt->setTimezone(new \DateTimeZone('Europe/Paris'));
-        $this->createAt = $createAt;
+        $createdAt = new DateTime();
+        $createdAt->setTimezone(new \DateTimeZone('Europe/Paris'));
+        $this->createdAt = $createdAt;
         $this->isSeen = false;
     }
 
@@ -119,16 +129,31 @@ class ImDemande
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
-    public function setCreateAt(\DateTimeInterface $createAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->createAt = $createAt;
+        $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * Return created at time in string format ago
+     * @Groups({"admin:read"})
+     */
+    public function getCreatedAtAgo(): ?string
+    {
+        $frenchFactory = new Factory([
+            'locale' => 'fr_FR',
+            'timezone' => 'Europe/Paris'
+        ]);
+        $createdAt = Carbon::instance($this->getCreatedAt());
+
+        return $frenchFactory->make($createdAt)->diffForHumans();
     }
 
     public function getIsSeen(): ?bool

@@ -4,7 +4,7 @@ import axios                   from "axios";
 import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import {Input, Checkbox, Radiobox} from "@dashboardComponents/Tools/Fields";
+import { Input, TextArea }     from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
@@ -13,16 +13,16 @@ import { RgpdInfo }            from "@appComponents/Tools/Rgpd";
 import Validateur              from "@dashboardComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
-export function AlertFormulaire ({ type, onChangeContext, onUpdateList })
+export function DemandeFormulaire ({ type, onChangeContext, onUpdateList, bien })
 {
-    let title = "Ajouter une alerte";
-    let url = Routing.generate('api_immo_alerts_create');
-    let msg = "Félicitation ! Vous avez ajouté une alerte !"
+    let title = "Ajouter une demande";
+    let url = Routing.generate('api_immo_demandes_create');
+    let msg = "Félicitation ! Vous avez ajouté une demande !"
 
-    let form = <AlertForm
+    let form = <DemandeForm
         context={type}
         url={url}
-        email=""
+        bien={bien} // to change
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
         messageSuccess={msg}
@@ -31,14 +31,20 @@ export function AlertFormulaire ({ type, onChangeContext, onUpdateList })
     return <FormLayout onChangeContext={onChangeContext} form={form}>{title}</FormLayout>
 }
 
-export class AlertForm extends Component {
+export class DemandeForm extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            email: props.email,
-            typeAd: "",
-            typeBiens: [],
+            name: "",
+            email: "",
+            phone: "",
+            message: "Bonjour,\n" +
+                "                    \n" +
+                "je souhaiterais être recontacté.\n" +
+                "\n" +
+                "Cordialement,",
+            bien: props.bien,
             errors: [],
             success: false,
             critere: ""
@@ -51,26 +57,16 @@ export class AlertForm extends Component {
     componentDidMount() {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        document.getElementById("email").focus()
+        document.getElementById("name").focus()
     }
 
-    handleChange = (e) => {
-        const { typeBiens } = this.state;
-
-        let name = e.currentTarget.name;
-        let value = e.currentTarget.value;
-
-        if(name === "typeBiens"){
-            value = (e.currentTarget.checked) ? [...typeBiens, ...[value]] : typeBiens.filter(v => v !== value)
-        }
-        this.setState({[name]: value})
-    }
+    handleChange = (e) => { this.setState({[e.currentTarget.name]: e.currentTarget.value}) }
 
     handleSubmit = (e) => {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { critere, email, typeAd, typeBiens } = this.state;
+        const { critere, name, email, message } = this.state;
 
         if(critere !== ""){
             toastr.error("Veuillez rafraichir la page.");
@@ -79,9 +75,9 @@ export class AlertForm extends Component {
 
             let method = "POST";
             let paramsToValidate = [
+                {type: "text", id: 'name', value: name},
                 {type: "text", id: 'email', value: email},
-                {type: "text", id: 'typeAd', value: typeAd},
-                {type: "array", id: 'typeBiens', value: typeBiens}
+                {type: "text", id: 'message', value: message}
             ];
 
             // validate global
@@ -102,9 +98,10 @@ export class AlertForm extends Component {
 
                             toastr.info(messageSuccess);
                             self.setState( {
+                                name: '',
                                 email: '',
-                                typeAd: '',
-                                typeBiens: []
+                                phone: '',
+                                message: '',
                             })
                         }
                     })
@@ -121,28 +118,16 @@ export class AlertForm extends Component {
 
     render () {
         const { context } = this.props;
-        const { critere, errors, success, email, typeAd, typeBiens } = this.state;
-
-        let naturesItems = [
-            { value: 0, label: 'Location', identifiant: 'location' },
-            { value: 1, label: 'Vente', identifiant: 'vente' },
-        ]
-
-        let biensItems = [
-            { value: "maison", label: "Maison", identifiant: "maison" },
-            { value: "appartement", label: "Appartement", identifiant: "appartement" },
-            { value: "parking", label: "Parking", identifiant: "parking" },
-            { value: "bureaux", label: "Bureaux", identifiant: "bureaux" },
-            { value: "local", label: "Local", identifiant: "local" },
-            { value: "immeuble", label: "Immeuble", identifiant: "immeuble" },
-            { value: "terrain", label: "Terrain", identifiant: "terrain" },
-            { value: "commerce", label: "Commerce", identifiant: "commerce" },
-        ]
+        const { critere, errors, success, name, email, phone, message } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
 
                 {success !== false && <Alert type="info">{success}</Alert>}
+
+                <div className="line">
+                    <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange}>Nom / raison sociale</Input>
+                </div>
 
                 <div className="line">
                     <Input valeur={email} identifiant="email" errors={errors} onChange={this.handleChange} type="email" >Adresse e-mail</Input>
@@ -152,18 +137,21 @@ export class AlertForm extends Component {
                     <Input identifiant="critere" valeur={critere} errors={errors} onChange={this.handleChange}>Critère</Input>
                 </div>
 
-                <div className="line line-2">
-                    <Radiobox items={naturesItems} identifiant="typeAd" valeur={typeAd} errors={errors} onChange={this.handleChange}>Quel est votre projet ?</Radiobox>
-                    <Checkbox items={biensItems} identifiant="typeBiens" valeur={typeBiens} errors={errors} onChange={this.handleChange}>De quel bien(s) s'agit-il ?</Checkbox>
+                <div className="line">
+                    <Input valeur={phone} identifiant="phone" errors={errors} onChange={this.handleChange}>Téléphone (facultatif)</Input>
                 </div>
 
                 <div className="line">
-                    <RgpdInfo utility="la gestion des demandes d'alertes"/>
+                    <TextArea valeur={message} identifiant="message" errors={errors} onChange={this.handleChange}>Message</TextArea>
+                </div>
+
+                <div className="line">
+                    <RgpdInfo utility="la gestion des demandes d'informations"/>
                 </div>
 
                 <div className="line">
                     <div className="form-button">
-                        <Button isSubmit={true}>{context === "create" ? "Ajouter une alerte" : 'Modifier l\'alerte'}</Button>
+                        <Button isSubmit={true}>{context === "create" ? "Ajouter une demande" : 'Modifier la demande'}</Button>
                     </div>
                 </div>
             </form>
