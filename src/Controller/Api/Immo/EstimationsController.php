@@ -67,9 +67,12 @@ class EstimationsController extends AbstractController
      * @param ValidatorService $validator
      * @param SanitizeData $sanitizeData
      * @param ApiResponse $apiResponse
+     * @param MailerService $mailerService
+     * @param SettingsService $settingsService
      * @return JsonResponse
      */
-    public function create(Request $request, ValidatorService $validator, SanitizeData $sanitizeData, ApiResponse $apiResponse): JsonResponse
+    public function create(Request $request, ValidatorService $validator, SanitizeData $sanitizeData, ApiResponse $apiResponse,
+                           MailerService $mailerService, SettingsService $settingsService): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent());
@@ -113,6 +116,20 @@ class EstimationsController extends AbstractController
         $noErrors = $validator->validate($obj);
         if ($noErrors !== true) {
             return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+        }
+
+        if($mailerService->sendMail(
+                $settingsService->getEmailContact(),
+                "[" . $settingsService->getWebsiteName() ."] Demande d'estimation",
+                "Demande d'estimation réalisé à partir de " . $settingsService->getWebsiteName(),
+                'app/email/immo/estimation.html.twig',
+                ['contact' => $obj, 'settings' => $settingsService->getSettings()]
+            ) != true)
+        {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'message',
+                'message' => "Le message n\'a pas pu être délivré. Veuillez revenir ultérieurement."
+            ]]);
         }
 
         $em->persist($obj);

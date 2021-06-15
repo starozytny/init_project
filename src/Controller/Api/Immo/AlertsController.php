@@ -64,6 +64,8 @@ class AlertsController extends AbstractController
      * @param Request $request
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
+     * @param MailerService $mailerService
+     * @param SettingsService $settingsService
      * @return JsonResponse
      */
     public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, MailerService $mailerService,
