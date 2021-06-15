@@ -35,7 +35,13 @@ export class DemandesItem extends Component {
                             <div>{elem.bien.address.address}</div>
                             <div>{elem.bien.address.shortAddress}</div>
                             <div className="sub">{elem.bien.realRef}</div>
-                        </div> : <div>Bien supprimé</div>}
+                        </div> : <div>
+                            <div className="name">Bien supprimé</div>
+                            <div>{elem.label}</div>
+                            <div>{elem.address}</div>
+                            <div>{elem.shortAddress}</div>
+                            <div className="sub">{elem.realRef}</div>
+                        </div>}
 
                         <div className="actions">
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>

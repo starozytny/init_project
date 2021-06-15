@@ -90,6 +90,10 @@ class DemandesController extends AbstractController
             ->setPhone($data->phone)
             ->setMessage($sanitizeData->sanitizeString($data->message))
             ->setBien($bien)
+            ->setLabel($bien->getLabel())
+            ->setAddress($bien->getAddress() ? $bien->getAddress()->getAddress() : "Inconnue")
+            ->setShortAddress($bien->getAddress()->getShortAddress() ? $bien->getAddress()->getShortAddress() : "Inconnue")
+            ->setRealRef($bien->getRealRef())
             ->setBienIdentifiant($bien->getIdentifiant())
         ;
 

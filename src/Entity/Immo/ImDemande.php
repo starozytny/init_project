@@ -68,6 +68,30 @@ class ImDemande
      */
     private $bien;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
+     */
+    private $label;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $address;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $shortAddress;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $realRef;
+
     public function __construct()
     {
         $createdAt = new DateTime();
@@ -188,6 +212,54 @@ class ImDemande
     public function setBien(?ImBien $bien): self
     {
         $this->bien = $bien;
+
+        return $this;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getShortAddress(): ?string
+    {
+        return $this->shortAddress;
+    }
+
+    public function setShortAddress(?string $shortAddress): self
+    {
+        $this->shortAddress = $shortAddress;
+
+        return $this;
+    }
+
+    public function getRealRef(): ?string
+    {
+        return $this->realRef;
+    }
+
+    public function setRealRef(?string $realRef): self
+    {
+        $this->realRef = $realRef;
 
         return $this;
     }
