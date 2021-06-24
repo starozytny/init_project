@@ -5,7 +5,9 @@ namespace App\Controller\Api;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\ApiResponse;
+use App\Service\Data\UserService;
 use App\Service\Export;
+use App\Service\FileUploader;
 use App\Service\MailerService;
 use App\Service\SanitizeData;
 use App\Service\SettingsService;
@@ -27,6 +29,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserController extends AbstractController
 {
+    const FOLDER_AVATARS = "avatars";
+
     /**
      * Admin - Get array of users
      *
@@ -42,15 +46,14 @@ class UserController extends AbstractController
      * @OA\Tag(name="Users")
      *
      * @param Request $request
-     * @param UserRepository $userRepository
      * @param ApiResponse $apiResponse
+     * @param UserService $userService
      * @return JsonResponse
      */
-    public function index(Request $request, UserRepository $userRepository, ApiResponse $apiResponse): JsonResponse
+    public function index(Request $request, ApiResponse $apiResponse, UserService $userService): JsonResponse
     {
-        $order = $request->query->get('order') ?: 'ASC';
-        $users = $userRepository->findBy([], ['lastname' => $order]);
-        return $apiResponse->apiJsonResponse($users, User::ADMIN_READ);
+        $objs = $userService->getList($request->query->get('order') ?: 'ASC');
+        return $apiResponse->apiJsonResponse($objs, User::ADMIN_READ);
     }
 
     /**
@@ -83,13 +86,14 @@ class UserController extends AbstractController
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param ApiResponse $apiResponse
      * @param SanitizeData $sanitizeData
+     * @param FileUploader $fileUploader
      * @return JsonResponse
      */
     public function create(Request $request, ValidatorService $validator, UserPasswordEncoderInterface $passwordEncoder,
-                           ApiResponse $apiResponse, SanitizeData $sanitizeData): JsonResponse
+                           ApiResponse $apiResponse, SanitizeData $sanitizeData, FileUploader $fileUploader): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
-        $data = json_decode($request->getContent());
+        $data = json_decode($request->get('data'));
 
         if ($data === null) {
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
@@ -111,6 +115,12 @@ class UserController extends AbstractController
             $user->setRoles($data->roles);
         }
 
+        $file = $request->files->get('avatar');
+        if ($file) {
+            $fileName = $fileUploader->upload($file, self::FOLDER_AVATARS);
+            $user->setAvatar($fileName);
+        }
+
         $noErrors = $validator->validate($user);
 
         if ($noErrors !== true) {
@@ -126,7 +136,7 @@ class UserController extends AbstractController
     /**
      * Update an user
      *
-     * @Route("/{id}", name="update", options={"expose"=true}, methods={"PUT"})
+     * @Route("/{id}", name="update", options={"expose"=true}, methods={"POST"})
      *
      * @OA\Response(
      *     response=200,
@@ -155,17 +165,18 @@ class UserController extends AbstractController
      * @param ApiResponse $apiResponse
      * @param SanitizeData $sanitizeData
      * @param User $user
+     * @param FileUploader $fileUploader
      * @return JsonResponse
      */
     public function update(Request $request, ValidatorService $validator,
-                           ApiResponse $apiResponse, SanitizeData $sanitizeData, User $user): JsonResponse
+                           ApiResponse $apiResponse, SanitizeData $sanitizeData, User $user, FileUploader $fileUploader): JsonResponse
     {
         if ($this->getUser() != $user && !$this->isGranted("ROLE_ADMIN")) {
             return $apiResponse->apiJsonResponseForbidden();
         }
 
         $em = $this->getDoctrine()->getManager();
-        $data = json_decode($request->getContent());
+        $data = json_decode($request->get('data'));
 
         if (isset($data->username)) {
             $user->setUsername($sanitizeData->fullSanitize($data->username));
@@ -181,6 +192,12 @@ class UserController extends AbstractController
 
         if (isset($data->lastname)) {
             $user->setLastname(mb_strtoupper($sanitizeData->sanitizeString($data->lastname)));
+        }
+
+        $file = $request->files->get('avatar');
+        if ($file) {
+            $fileName = $fileUploader->replaceFile($file, $user->getAvatar(),self::FOLDER_AVATARS);
+            $user->setAvatar($fileName);
         }
 
         $groups = User::USER_READ;
@@ -227,9 +244,10 @@ class UserController extends AbstractController
      *
      * @param ApiResponse $apiResponse
      * @param User $user
+     * @param FileUploader $fileUploader
      * @return JsonResponse
      */
-    public function delete(ApiResponse $apiResponse, User $user): JsonResponse
+    public function delete(ApiResponse $apiResponse, User $user, FileUploader $fileUploader): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -244,6 +262,7 @@ class UserController extends AbstractController
         $em->remove($user);
         $em->flush();
 
+        $fileUploader->deleteFile($user->getAvatar(), self::FOLDER_AVATARS);
         return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
     }
 
@@ -272,15 +291,17 @@ class UserController extends AbstractController
      *
      * @param Request $request
      * @param ApiResponse $apiResponse
+     * @param FileUploader $fileUploader
      * @return JsonResponse
      */
-    public function deleteGroup(Request $request, ApiResponse $apiResponse): JsonResponse
+    public function deleteGroup(Request $request, ApiResponse $apiResponse, FileUploader $fileUploader): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent());
 
         $users = $em->getRepository(User::class)->findBy(['id' => $data]);
 
+        $avatars = [];
         if ($users) {
             foreach ($users as $user) {
                 if ($user->getHighRoleCode() === User::CODE_ROLE_DEVELOPER) {
@@ -291,11 +312,18 @@ class UserController extends AbstractController
                     return $apiResponse->apiJsonResponseBadRequest('Vous ne pouvez pas vous supprimer.');
                 }
 
+                array_push($avatars, $user->getAvatar());
+
                 $em->remove($user);
             }
         }
 
         $em->flush();
+
+        foreach($avatars as $avatar){
+            $fileUploader->deleteFile($avatar, self::FOLDER_AVATARS);
+        }
+
         return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
     }
 

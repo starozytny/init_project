@@ -15,7 +15,10 @@ export class UserItem extends Component {
             url = Routing.generate('admin_homepage', {'_switch_user' : elem.username})
         }
 
-        console.log(elem)
+        let avatar = `https://robohash.org/${elem.username}?size=64x64`;
+        if(elem.avatar){
+            avatar = "/avatars/" + elem.avatar;
+        }
 
         return <div className="item">
             <Selector id={elem.id} onSelectors={onSelectors} />
@@ -23,7 +26,7 @@ export class UserItem extends Component {
             <div className="item-content">
                 <div className="item-body">
                     <div className="avatar">
-                        <img src={`https://robohash.org/${elem.username}?size=64x64`} alt={`Avatar de ${elem.username}`}/>
+                        <img src={avatar} alt={`Avatar de ${elem.username}`}/>
                     </div>
                     <div className="infos">
                         <div>

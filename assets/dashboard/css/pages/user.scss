@@ -79,6 +79,12 @@
   }
 }
 
+.preview-form-oldFile{
+  img{
+    width: 42px; height: 42px;
+  }
+}
+
 .items-user{
   .infos{
     width: calc(100% - 42px - 12px);
@@ -141,6 +147,12 @@
   .items-table {
     & > .items > .item {
       padding-bottom: 24px;
+    }
+  }
+
+  .preview-form-oldFile{
+    img{
+      width: 64px; height: 64px;
     }
   }
 
