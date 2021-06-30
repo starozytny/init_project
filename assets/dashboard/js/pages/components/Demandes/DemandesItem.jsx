@@ -19,24 +19,20 @@ export class DemandesItem extends Component {
                     <div className="infos">
                         <div onClick={() => onChangeContext('read', elem)}>
                             <div className="name">
+                                {!elem.isSeen && <span className="toSee" />}
                                 <span>{elem.name}</span>
                             </div>
-                            <div className="sub">{elem.email}</div>
+                            {elem.email && <div className="sub">{elem.email}</div>}
                             <div className="sub">{elem.phone}</div>
                             <div className="sub createAt">{elem.createdAtAgo}</div>
-
-                            <div className="sub sub-seen">
-                                <span className={elem.isSeen ? "icon-check" : "icon-vision-not"} />
-                                <span>{elem.isSeen ? "Lu" : "Non lu"}</span>
-                            </div>
                         </div>
                         {elem.bien ? <div>
-                            <div className="name">{elem.bien.label}</div>
+                            <div className="name name-opened">{elem.bien.label}</div>
                             <div>{elem.bien.address.address}</div>
                             <div>{elem.bien.address.shortAddress}</div>
                             <div className="sub">{elem.bien.realRef}</div>
                         </div> : <div>
-                            <div className="name">Bien supprimé</div>
+                            <div className="name name-deleted">Bien supprimé</div>
                             <div>{elem.label}</div>
                             <div>{elem.address}</div>
                             <div>{elem.shortAddress}</div>
