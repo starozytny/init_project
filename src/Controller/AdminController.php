@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Contact;
+use App\Entity\Immo\ImAlert;
+use App\Entity\Immo\ImDemande;
+use App\Entity\Immo\ImDevis;
+use App\Entity\Immo\ImEstimation;
 use App\Entity\Notification;
 use App\Entity\Immo\ImBien;
 use App\Entity\Settings;
@@ -19,12 +23,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class AdminController extends AbstractController
 {
-    private function getAllData($classe, SerializerInterface $serializer): string
+    private function getAllData($classe, SerializerInterface $serializer, $groups = User::ADMIN_READ): string
     {
         $em = $this->getDoctrine()->getManager();
         $objs = $em->getRepository($classe)->findAll();
 
-        return $serializer->serialize($objs, 'json', ['groups' => User::ADMIN_READ]);
+        return $serializer->serialize($objs, 'json', ['groups' => $groups]);
     }
 
     /**
@@ -115,50 +119,69 @@ class AdminController extends AbstractController
     /**
      * @Route("/immobilier/annonces", name="immo_ads")
      */
-    public function ads(): Response
+    public function ads(SerializerInterface $serializer): Response
     {
-        return $this->render('admin/pages/immo/index.html.twig');
+        $objs = $this->getAllData(ImBien::class, $serializer, ImBien::LIST_READ);
+
+        return $this->render('admin/pages/immo/index.html.twig', [
+            'donnees' => $objs
+        ]);
     }
 
     /**
      * @Route("/immobilier/alertes", name="immo_alerts")
      */
-    public function alerts(): Response
+    public function alerts(SerializerInterface $serializer): Response
     {
-        return $this->render('admin/pages/immo/alerts.html.twig');
+        $objs = $this->getAllData(ImAlert::class, $serializer);
+
+        return $this->render('admin/pages/immo/alerts.html.twig', [
+            'donnees' => $objs
+        ]);
     }
 
     /**
      * @Route("/immobilier/estimations", name="immo_estimations")
      */
-    public function estimations(): Response
+    public function estimations(SerializerInterface $serializer): Response
     {
-        return $this->render('admin/pages/immo/estimations.html.twig');
+        $objs = $this->getAllData(ImEstimation::class, $serializer);
+
+        return $this->render('admin/pages/immo/estimations.html.twig', [
+            'donnees' => $objs
+        ]);
     }
 
     /**
      * @Route("/immobilier/devis", name="immo_devis")
      */
-    public function devis(): Response
+    public function devis(SerializerInterface $serializer): Response
     {
-        return $this->render('admin/pages/immo/devis.html.twig');
+        $objs = $this->getAllData(ImDevis::class, $serializer);
+
+        return $this->render('admin/pages/immo/devis.html.twig', [
+            'donnees' => $objs
+        ]);
     }
 
     /**
      * @Route("/immobilier/demandes", name="immo_demandes")
      */
-    public function demandes(): Response
+    public function demandes(SerializerInterface $serializer): Response
     {
         $em = $this->getDoctrine()->getManager();
         $biens = $em->getRepository(ImBien::class)->findAll();
 
         $bien = null;
         if(count($biens) != 0){
-            $bien = $biens[0];
+            $bien = $biens[0]; // usefull to test add demande with admin panel
         }
 
+        $objs = $this->getAllData(ImDemande::class, $serializer);
+
         return $this->render('admin/pages/immo/demandes.html.twig', [
-            'bien' => $bien
+            'bien' => $bien,
+            'donnees' => $objs
         ]);
     }
 }

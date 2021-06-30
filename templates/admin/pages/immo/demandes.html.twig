@@ -5,9 +5,9 @@
 
 {% block main_content %}
     {% if bien %}
-        <div id="demandes" data-bien="{{ bien.id }}"></div>
+        <div id="demandes" data-bien="{{ bien.id }}" data-donnees="{{ donnees }}"></div>
     {% else %}
-        <div id="demandes"></div>
+        <div id="demandes" data-donnees="{{ donnees }}"></div>
     {% endif %}
 
 {% endblock %}

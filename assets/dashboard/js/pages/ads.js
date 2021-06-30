@@ -16,22 +16,22 @@ Routing.setRoutingData(routes);
 
 let el = document.getElementById("ads");
 if(el){
-    render(<Ads />, el)
+    render(<Ads {...el.dataset} />, el)
 }
 
 el = document.getElementById("alerts");
 if(el){
-    render(<Alerts />, el)
+    render(<Alerts {...el.dataset} />, el)
 }
 
 el = document.getElementById("estimations");
 if(el){
-    render(<Estimations />, el)
+    render(<Estimations {...el.dataset} />, el)
 }
 
 el = document.getElementById("devis");
 if(el){
-    render(<Devis />, el)
+    render(<Devis {...el.dataset} />, el)
 }
 
 el = document.getElementById("demandes");

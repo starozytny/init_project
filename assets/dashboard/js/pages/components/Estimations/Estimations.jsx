@@ -4,11 +4,16 @@ import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.
 
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@dashboardComponents/functions/sort";
-import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { EstimationsList }      from "./EstimationsList";
 import { EstimationFormulaire } from "@dashboardFolder/js/pages/components/Estimations/EstimationForm";
-import {EstimationRead} from "@dashboardFolder/js/pages/components/Estimations/EstimationRead";
+import { EstimationRead }       from "@dashboardFolder/js/pages/components/Estimations/EstimationRead";
+
+const URL_DELETE_ELEMENT = 'api_immo_estimations_delete';
+const URL_DELETE_GROUP = 'api_immo_estimations_delete_group';
+const MSG_DELETE_ELEMENT = 'Supprimer cette estimation ?';
+const MSG_DELETE_GROUP = 'Aucune estimation sélectionné.';
+const SORTER = Sort.compareCreatedAtInverse;
 
 export class Estimations extends Component {
     constructor(props) {
@@ -31,17 +36,16 @@ export class Estimations extends Component {
         this.handleContentRead = this.handleContentRead.bind(this);
     }
 
-    handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_immo_estimations_index'), Sort.compareCreatedAtInverse, this.state.perPage) }
+    handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees, SORTER); }
 
-    handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, Sort.compareCreatedAtInverse); }
+    handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, SORTER); }
 
     handleDelete = (element) => {
-        Formulaire.axiosDeleteElement(this, element, Routing.generate('api_immo_estimations_delete', {'id': element.id}),
-            'Supprimer cette estimation ?', 'Cette action est irréversible.');
+        this.layout.current.handleDelete(this, element, Routing.generate(URL_DELETE_ELEMENT, {'id': element.id}), MSG_DELETE_ELEMENT);
     }
+
     handleDeleteGroup = () => {
-        let checked = document.querySelectorAll('.i-selector:checked');
-        Formulaire.axiosDeleteGroupElement(this, checked, Routing.generate('api_immo_estimations_delete_group'), 'Aucune estimation sélectionné.')
+        this.layout.current.handleDeleteGroup(this, Routing.generate(URL_DELETE_GROUP), MSG_DELETE_GROUP);
     }
 
     handleContentList = (currentData, changeContext) => {

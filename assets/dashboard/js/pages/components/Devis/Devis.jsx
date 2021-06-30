@@ -4,11 +4,16 @@ import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.
 
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@dashboardComponents/functions/sort";
-import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { DevisList }        from "./DevisList";
 import { DevisRead }        from "@dashboardFolder/js/pages/components/Devis/DevisRead";
 import { DevisFormulaire }  from "@dashboardFolder/js/pages/components/Devis/DevisForm";
+
+const URL_DELETE_ELEMENT = 'api_immo_devis_delete';
+const URL_DELETE_GROUP = 'api_immo_devis_delete_group';
+const MSG_DELETE_ELEMENT = 'Supprimer ce devis ?';
+const MSG_DELETE_GROUP = 'Aucun devis sélectionné.';
+const SORTER = Sort.compareCreatedAtInverse;
 
 export class Devis extends Component {
     constructor(props) {
@@ -31,17 +36,16 @@ export class Devis extends Component {
         this.handleContentRead = this.handleContentRead.bind(this);
     }
 
-    handleGetData = (self) => { Formulaire.axiosGetDataPagination(self, Routing.generate('api_immo_devis_index'), Sort.compareCreatedAtInverse, this.state.perPage) }
+    handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees, SORTER); }
 
-    handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, Sort.compareCreatedAtInverse); }
+    handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, SORTER); }
 
     handleDelete = (element) => {
-        Formulaire.axiosDeleteElement(this, element, Routing.generate('api_immo_devis_delete', {'id': element.id}),
-            'Supprimer ce devis ?', 'Cette action est irréversible.');
+        this.layout.current.handleDelete(this, element, Routing.generate(URL_DELETE_ELEMENT, {'id': element.id}), MSG_DELETE_ELEMENT);
     }
+
     handleDeleteGroup = () => {
-        let checked = document.querySelectorAll('.i-selector:checked');
-        Formulaire.axiosDeleteGroupElement(this, checked, Routing.generate('api_immo_devis_delete_group'), 'Aucun devis sélectionné.')
+        this.layout.current.handleDeleteGroup(this, Routing.generate(URL_DELETE_GROUP), MSG_DELETE_GROUP);
     }
 
     handleContentList = (currentData, changeContext) => {

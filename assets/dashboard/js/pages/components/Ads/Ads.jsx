@@ -49,7 +49,8 @@ export class Ads extends Component {
             currentData: null,
             element: null,
             perPage: 20,
-            nature: "Location"
+            nature: "Location",
+            sessionName: "biens.pagination"
         }
 
         this.page = React.createRef();
@@ -61,24 +62,16 @@ export class Ads extends Component {
     }
 
     componentDidMount() {
+        const { donnees } = this.props;
         const { perPage, nature } = this.state;
 
-        const self = this;
-        axios.get(Routing.generate('api_immo_ads_read'), {})
-            .then(function (response) {
-                let data = response.data;
-                data.sort(Sort.compareAdPrice);
-                let dataImmuable = data;
-                data = filterByNature(data, nature)
-                self.setState({ dataImmuable: dataImmuable, data: data, currentData: data.slice(0, perPage) });
-            })
-            .catch(function () {
-                self.setState({ loadPageError: true });
-            })
-            .then(function () {
-                self.setState({ loadData: false });
-            })
-        ;
+        let data = JSON.parse(donnees);
+        data.sort(Sort.compareAdPrice);
+
+        let dataImmuable = data;
+        data = filterByNature(data, nature)
+
+        this.setState({ dataImmuable: dataImmuable, data: data, currentData: data.slice(0, perPage), loadPageError: false, loadData: false });
     }
     handleUpdateData = (data) => { this.setState({ currentData: data })  }
     handleUpdateList = (element, newContext=null) => {
@@ -105,7 +98,7 @@ export class Ads extends Component {
     }
 
     render () {
-        const { loadPageError, context, loadData, data, currentData, element, perPage, nature } = this.state;
+        const { loadPageError, context, loadData, data, currentData, element, perPage, nature, sessionName } = this.state;
 
         let content, havePagination = false;
         switch (context){
@@ -124,7 +117,7 @@ export class Ads extends Component {
         }
 
         return <>
-            <Page ref={this.page} haveLoadPageError={loadPageError} perPage={perPage}
+            <Page ref={this.page} haveLoadPageError={loadPageError} perPage={perPage} sessionName={sessionName}
                   havePagination={havePagination} taille={data && data.length} data={data} onUpdate={this.handleUpdateData}
             >
                 {content}
