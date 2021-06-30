@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Contact;
+use App\Entity\Notification;
 use App\Entity\Immo\ImBien;
 use App\Entity\Settings;
 use App\Entity\User;
-use App\Service\Data\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,14 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class AdminController extends AbstractController
 {
+    private function getAllData($classe, SerializerInterface $serializer): string
+    {
+        $em = $this->getDoctrine()->getManager();
+        $objs = $em->getRepository($classe)->findAll();
+
+        return $serializer->serialize($objs, 'json', ['groups' => User::ADMIN_READ]);
+    }
+
     /**
      * @Route("/", options={"expose"=true}, name="homepage")
      */
@@ -62,12 +71,12 @@ class AdminController extends AbstractController
     /**
      * @Route("/utilisateurs", name="users_index")
      */
-    public function users(UserService $userService, SerializerInterface $serializer): Response
+    public function users(SerializerInterface $serializer): Response
     {
-        $objs = $userService->getList('ASC');
-        $objs = $serializer->serialize($objs, 'json', ['groups' => User::ADMIN_READ]);
+        $objs = $this->getAllData(User::class, $serializer);
+
         return $this->render('admin/pages/user/index.html.twig', [
-            'users' => $objs
+            'donnees' => $objs
         ]);
     }
 
@@ -82,9 +91,25 @@ class AdminController extends AbstractController
     /**
      * @Route("/contact", name="contact_index")
      */
-    public function contact(): Response
+    public function contact(SerializerInterface $serializer): Response
     {
-        return $this->render('admin/pages/contact/index.html.twig');
+        $objs = $this->getAllData(Contact::class, $serializer);
+
+        return $this->render('admin/pages/contact/index.html.twig', [
+            'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/notifications", options={"expose"=true}, name="notifications_index")
+     */
+    public function notifications(SerializerInterface $serializer): Response
+    {
+        $objs = $this->getAllData(Notification::class, $serializer);
+
+        return $this->render('admin/pages/notifications/index.html.twig', [
+            'donnees' => $objs
+        ]);
     }
 
     /**

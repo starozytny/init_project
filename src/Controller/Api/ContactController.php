@@ -8,6 +8,7 @@ use App\Repository\ContactRepository;
 use App\Service\ApiResponse;
 use App\Service\Data\DataService;
 use App\Service\MailerService;
+use App\Service\NotificationService;
 use App\Service\SanitizeData;
 use App\Service\SettingsService;
 use App\Service\ValidatorService;
@@ -23,6 +24,8 @@ use OpenApi\Annotations as OA;
  */
 class ContactController extends AbstractController
 {
+    const ICON = "chat-2";
+
     /**
      * Admin - Get array of contacts
      *
@@ -63,12 +66,13 @@ class ContactController extends AbstractController
      * @param Request $request
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
+     * @param NotificationService $notificationService
      * @param MailerService $mailerService
      * @param SettingsService $settingsService
      * @param SanitizeData $sanitizeData
      * @return JsonResponse
      */
-    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
+    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, NotificationService $notificationService,
                            MailerService $mailerService, SettingsService $settingsService, SanitizeData $sanitizeData): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
@@ -109,6 +113,8 @@ class ContactController extends AbstractController
 
         $em->persist($obj);
         $em->flush();
+
+        $notificationService->createNotification("Demande de contact", self::ICON, $this->getUser());
 
         return $apiResponse->apiJsonResponseSuccessful("Message envoyé.");
     }

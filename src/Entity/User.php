@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Carbon\Carbon;
 use Carbon\Factory;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,7 +21,7 @@ use OpenApi\Annotations as OA;
  * @UniqueEntity(fields={"username"})
  * @UniqueEntity(fields={"email"})
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     const ADMIN_READ = ['admin:read'];
     const USER_READ = ['user:read'];
@@ -39,7 +42,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank()
-     * @Groups({"admin:read", "admin:write", "update", "user:read"})
+     * @Groups({"admin:read", "user:read"})
      */
     private $username;
 
@@ -47,26 +50,26 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Email()
-     * @Groups({"admin:read", "admin:write", "update", "user:read"})
+     * @Groups({"admin:read", "user:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"admin:read", "admin:write", "update"})
+     * @Groups({"admin:read"})
      * @OA\Property(type="array", @OA\Items(type="string"))
      */
     private $roles = ['ROLE_USER'];
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"admin:read", "admin:write", "update", "user:read"})
+     * @Groups({"admin:read", "user:read"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"admin:read", "admin:write", "update", "user:read"})
+     * @Groups({"admin:read", "user:read"})
      */
     private $firstname;
 
@@ -104,9 +107,14 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"admin:read", "admin:write", "update", "user:read"})
+     * @Groups({"admin:read", "user:read"})
      */
     private $avatar;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="user")
+     */
+    private $notifications;
 
     public function __construct()
     {
@@ -118,6 +126,7 @@ class User implements UserInterface
         } catch (Exception $e) {
             throw new Exception($e);
         }
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -203,11 +212,11 @@ class User implements UserInterface
     }
 
     /**
-     * @see UserInterface
+     * @see PasswordAuthenticatedUserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -252,13 +261,39 @@ class User implements UserInterface
     }
 
     /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getCreatedAtString(): ?string
+    {
+        if($this->createdAt){
+            $frenchFactory = new Factory([
+                'locale' => 'fr_FR',
+                'timezone' => 'Europe/Paris'
+            ]);
+            $time = Carbon::instance($this->createdAt);
+
+            return $frenchFactory->make($time)->isoFormat('ll');
+        }
+
+        return null;
+    }
+
+    /**
      * How long ago an user was added.
      *
      * @return string
+     * @Groups({"admin:read"})
      */
     public function getCreatedAtAgo(): string
     {
-        return Carbon::instance($this->getCreatedAt())->diffForHumans();
+        $frenchFactory = new Factory([
+            'locale' => 'fr_FR',
+            'timezone' => 'Europe/Paris'
+        ]);
+        $time = Carbon::instance($this->getCreatedAt());
+
+        return $frenchFactory->make($time)->diffForHumans();
     }
 
     public function getLastLogin(): ?\DateTimeInterface
@@ -376,5 +411,45 @@ class User implements UserInterface
         $this->avatar = $avatar;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->username;
     }
 }

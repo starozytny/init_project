@@ -48,10 +48,7 @@
         "symfony/var-dumper": "5.3.*",
         "symfony/web-profiler-bundle": "5.3.*",
         "symfony/webpack-encore-bundle": "^1.8",
-        "symfony/yaml": "5.3.*",
-        "ext-simplexml": "*",
-        "ext-libxml": "*",
-        "ext-curl": "*"
+        "symfony/yaml": "5.3.*"
     },
     "config": {
         "optimize-autoloader": true,
