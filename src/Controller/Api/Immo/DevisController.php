@@ -2,24 +2,17 @@
 
 namespace App\Controller\Api\Immo;
 
-use App\Entity\Contact;
-use App\Entity\Immo\ImAlert;
 use App\Entity\Immo\ImDevis;
-use App\Entity\Immo\ImEstimation;
 use App\Entity\User;
-use App\Repository\ContactRepository;
-use App\Repository\Immo\ImAlertRepository;
 use App\Repository\Immo\ImDevisRepository;
-use App\Repository\Immo\ImEstimationRepository;
 use App\Service\ApiResponse;
-use App\Service\Export;
+use App\Service\Data\DataService;
 use App\Service\MailerService;
 use App\Service\SanitizeData;
 use App\Service\SettingsService;
 use App\Service\ValidatorService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -146,18 +139,13 @@ class DevisController extends AbstractController
      *
      * @OA\Tag(name="Devis")
      *
-     * @param ApiResponse $apiResponse
+     * @param DataService $dataService
      * @param ImDevis $obj
      * @return JsonResponse
      */
-    public function delete(ApiResponse $apiResponse, ImDevis $obj): JsonResponse
+    public function delete(DataService $dataService, ImDevis $obj): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $em->remove($obj);
-        $em->flush();
-
-        return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+        return $dataService->delete($obj);
     }
 
     /**
@@ -175,23 +163,11 @@ class DevisController extends AbstractController
      * @OA\Tag(name="Devis")
      *
      * @param Request $request
-     * @param ApiResponse $apiResponse
+     * @param DataService $dataService
      * @return JsonResponse
      */
-    public function deleteGroup(Request $request, ApiResponse $apiResponse): JsonResponse
+    public function deleteGroup(Request $request, DataService $dataService): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-        $data = json_decode($request->getContent());
-
-        $objs = $em->getRepository(ImDevis::class)->findBy(['id' => $data]);
-
-        if ($objs) {
-            foreach ($objs as $item) {
-                $em->remove($item);
-            }
-        }
-
-        $em->flush();
-        return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
+        return $dataService->deleteSelected(ImDevis::class, json_decode($request->getContent()));
     }
 }

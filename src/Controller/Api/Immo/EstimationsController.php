@@ -2,22 +2,17 @@
 
 namespace App\Controller\Api\Immo;
 
-use App\Entity\Contact;
-use App\Entity\Immo\ImAlert;
 use App\Entity\Immo\ImEstimation;
 use App\Entity\User;
-use App\Repository\ContactRepository;
-use App\Repository\Immo\ImAlertRepository;
 use App\Repository\Immo\ImEstimationRepository;
 use App\Service\ApiResponse;
-use App\Service\Export;
+use App\Service\Data\DataService;
 use App\Service\MailerService;
 use App\Service\SanitizeData;
 use App\Service\SettingsService;
 use App\Service\ValidatorService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -150,18 +145,13 @@ class EstimationsController extends AbstractController
      *
      * @OA\Tag(name="Estimations")
      *
-     * @param ApiResponse $apiResponse
-     * @param ImEstimation $estimation
+     * @param DataService $dataService
+     * @param ImEstimation $obj
      * @return JsonResponse
      */
-    public function delete(ApiResponse $apiResponse, ImEstimation $estimation): JsonResponse
+    public function delete(DataService $dataService, ImEstimation $obj): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $em->remove($estimation);
-        $em->flush();
-
-        return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+        return $dataService->delete($obj);
     }
 
     /**
@@ -179,23 +169,11 @@ class EstimationsController extends AbstractController
      * @OA\Tag(name="Estimations")
      *
      * @param Request $request
-     * @param ApiResponse $apiResponse
+     * @param DataService $dataService
      * @return JsonResponse
      */
-    public function deleteGroup(Request $request, ApiResponse $apiResponse): JsonResponse
+    public function deleteGroup(Request $request, DataService $dataService): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-        $data = json_decode($request->getContent());
-
-        $objs = $em->getRepository(ImEstimation::class)->findBy(['id' => $data]);
-
-        if ($objs) {
-            foreach ($objs as $item) {
-                $em->remove($item);
-            }
-        }
-
-        $em->flush();
-        return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
+        return $dataService->deleteSelected(ImEstimation::class, json_decode($request->getContent()));
     }
 }

@@ -2,15 +2,13 @@
 
 namespace App\Controller\Api\Immo;
 
-use App\Entity\Contact;
 use App\Entity\Immo\ImAlert;
 use App\Entity\User;
-use App\Repository\ContactRepository;
 use App\Repository\Immo\ImAlertRepository;
 use App\Service\ApiResponse;
+use App\Service\Data\DataService;
 use App\Service\Export;
 use App\Service\MailerService;
-use App\Service\SanitizeData;
 use App\Service\SettingsService;
 use App\Service\ValidatorService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -200,24 +198,12 @@ class AlertsController extends AbstractController
      * @OA\Tag(name="Contact")
      *
      * @param Request $request
-     * @param ApiResponse $apiResponse
+     * @param DataService $dataService
      * @return JsonResponse
      */
-    public function deleteGroup(Request $request, ApiResponse $apiResponse): JsonResponse
+    public function deleteGroup(Request $request, DataService $dataService): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-        $data = json_decode($request->getContent());
-
-        $alerts = $em->getRepository(ImAlert::class)->findBy(['id' => $data]);
-
-        if ($alerts) {
-            foreach ($alerts as $alert) {
-                $em->remove($alert);
-            }
-        }
-
-        $em->flush();
-        return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
+        return $dataService->deleteSelected(ImAlert::class, json_decode($request->getContent()));
     }
 
     /**

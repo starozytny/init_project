@@ -7,6 +7,7 @@ use App\Entity\Immo\ImDemande;
 use App\Entity\User;
 use App\Repository\Immo\ImDemandeRepository;
 use App\Service\ApiResponse;
+use App\Service\Data\DataService;
 use App\Service\MailerService;
 use App\Service\SanitizeData;
 use App\Service\SettingsService;
@@ -138,16 +139,12 @@ class DemandesController extends AbstractController
      * @OA\Tag(name="Demandes")
      *
      * @param ImDemande $obj
-     * @param ApiResponse $apiResponse
+     * @param DataService $dataService
      * @return JsonResponse
      */
-    public function isSeen(ImDemande $obj, ApiResponse $apiResponse): JsonResponse
+    public function isSeen(ImDemande $obj, DataService $dataService): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-        $obj->setIsSeen(true);
-
-        $em->flush();
-        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+        return $dataService->isSeenToTrue($obj);
     }
 
     /**
@@ -164,18 +161,13 @@ class DemandesController extends AbstractController
      *
      * @OA\Tag(name="Demandes")
      *
-     * @param ApiResponse $apiResponse
+     * @param DataService $dataService
      * @param ImDemande $obj
      * @return JsonResponse
      */
-    public function delete(ApiResponse $apiResponse, ImDemande $obj): JsonResponse
+    public function delete(DataService $dataService, ImDemande $obj): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $em->remove($obj);
-        $em->flush();
-
-        return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+        return $dataService->delete($obj);
     }
 
     /**
@@ -193,23 +185,11 @@ class DemandesController extends AbstractController
      * @OA\Tag(name="Demandes")
      *
      * @param Request $request
-     * @param ApiResponse $apiResponse
+     * @param DataService $dataService
      * @return JsonResponse
      */
-    public function deleteGroup(Request $request, ApiResponse $apiResponse): JsonResponse
+    public function deleteGroup(Request $request, DataService $dataService): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-        $data = json_decode($request->getContent());
-
-        $objs = $em->getRepository(ImDemande::class)->findBy(['id' => $data]);
-
-        if ($objs) {
-            foreach ($objs as $obj) {
-                $em->remove($obj);
-            }
-        }
-
-        $em->flush();
-        return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
+        return $dataService->deleteSelected(ImDemande::class, json_decode($request->getContent()));
     }
 }
