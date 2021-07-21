@@ -146,7 +146,7 @@ export class Layout extends Component {
     }
 
     render () {
-        const { onContentList, onContentCreate, onContentUpdate, onContentRead } = this.props;
+        const { onContentList, onContentCreate, onContentUpdate, onContentRead, onContentCustomOne, onContentCustomTwo } = this.props;
         const { loadPageError, context, loadData, data, currentData, element, sessionName, filters } = this.state;
 
         let content, havePagination = false;
@@ -159,6 +159,12 @@ export class Layout extends Component {
                 break;
             case "read":
                 content = onContentRead(this.handleChangeContext, element)
+                break;
+            case "customOne":
+                content = onContentCustomOne(this.handleChangeContext, element)
+                break;
+            case "customTwo":
+                content = onContentCustomTwo(this.handleChangeContext, element)
                 break;
             default:
                 havePagination = true;

@@ -5,12 +5,11 @@ namespace App\Controller\Api;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\ApiResponse;
-use App\Service\Data\UserService;
+use App\Service\Data\DataUser;
 use App\Service\Export;
 use App\Service\FileUploader;
 use App\Service\MailerService;
 use App\Service\NotificationService;
-use App\Service\SanitizeData;
 use App\Service\SettingsService;
 use App\Service\ValidatorService;
 use DateTime;
@@ -21,10 +20,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/api/users", name="api_users_")
@@ -47,15 +44,13 @@ class UserController extends AbstractController
      * )
      * @OA\Tag(name="Users")
      *
-     * @param Request $request
      * @param ApiResponse $apiResponse
-     * @param UserService $userService
+     * @param UserRepository $repository
      * @return JsonResponse
      */
-    public function index(Request $request, ApiResponse $apiResponse, UserService $userService): JsonResponse
+    public function index(ApiResponse $apiResponse, UserRepository $repository): JsonResponse
     {
-        $objs = $userService->getList($request->query->get('order') ?: 'ASC');
-        return $apiResponse->apiJsonResponse($objs, User::ADMIN_READ);
+        return $apiResponse->apiJsonResponse($repository->findAll(), User::ADMIN_READ);
     }
 
     /**
@@ -79,16 +74,14 @@ class UserController extends AbstractController
      *
      * @param Request $request
      * @param ValidatorService $validator
-     * @param UserPasswordHasherInterface $passwordHasher
      * @param ApiResponse $apiResponse
-     * @param SanitizeData $sanitizeData
      * @param FileUploader $fileUploader
      * @param NotificationService $notificationService
+     * @param DataUser $dataEntity
      * @return JsonResponse
      */
-    public function create(Request $request, ValidatorService $validator, UserPasswordHasherInterface $passwordHasher,
-                           ApiResponse $apiResponse, SanitizeData $sanitizeData, FileUploader $fileUploader,
-                           NotificationService $notificationService): JsonResponse
+    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
+                           FileUploader $fileUploader, NotificationService $notificationService, DataUser $dataEntity): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->get('data'));
@@ -101,36 +94,25 @@ class UserController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Il manque des données.');
         }
 
-        $user = new User();
-        $user->setUsername($sanitizeData->fullSanitize($data->username));
-        $user->setFirstname(ucfirst($sanitizeData->sanitizeString($data->firstname)));
-        $user->setLastname(mb_strtoupper($sanitizeData->sanitizeString($data->lastname)));
-        $user->setEmail($data->email);
-        $pass = (isset($data->password) && $data->password != "") ? $data->password : uniqid();
-        $user->setPassword($passwordHasher->hashPassword($user, $pass));
-
-        if (isset($data->roles)) {
-            $user->setRoles($data->roles);
-        }
+        $obj = $dataEntity->setData(new User(), $data);
 
         $file = $request->files->get('avatar');
         if ($file) {
             $fileName = $fileUploader->upload($file, self::FOLDER_AVATARS);
-            $user->setAvatar($fileName);
+            $obj->setAvatar($fileName);
         }
 
-        $noErrors = $validator->validate($user);
-
+        $noErrors = $validator->validate($obj);
         if ($noErrors !== true) {
             return $apiResponse->apiJsonResponseValidationFailed($noErrors);
         }
 
-        $em->persist($user);
+        $em->persist($obj);
         $em->flush();
 
         $notificationService->createNotification("Création d'un utilisateur", self::ICON, $this->getUser());
 
-        return $apiResponse->apiJsonResponse($user, User::ADMIN_READ);
+        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }
 
     /**
@@ -157,62 +139,46 @@ class UserController extends AbstractController
      * @param ValidatorService $validator
      * @param NotificationService $notificationService
      * @param ApiResponse $apiResponse
-     * @param SanitizeData $sanitizeData
-     * @param User $user
+     * @param User $obj
      * @param FileUploader $fileUploader
+     * @param DataUser $dataEntity
      * @return JsonResponse
      */
     public function update(Request $request, ValidatorService $validator, NotificationService $notificationService,
-                           ApiResponse $apiResponse, SanitizeData $sanitizeData, User $user, FileUploader $fileUploader): JsonResponse
+                           ApiResponse $apiResponse, User $obj, FileUploader $fileUploader, DataUser $dataEntity): JsonResponse
     {
-        if ($this->getUser() != $user && !$this->isGranted("ROLE_ADMIN")) {
+        if ($this->getUser() != $obj && !$this->isGranted("ROLE_ADMIN")) {
             return $apiResponse->apiJsonResponseForbidden();
         }
 
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->get('data'));
 
-        if (isset($data->username)) {
-            $user->setUsername($sanitizeData->fullSanitize($data->username));
+        if($data === null){
+            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        if (isset($data->email)) {
-            $user->setEmail($data->email);
-        }
-
-        if (isset($data->firstname)) {
-            $user->setFirstname(ucfirst($sanitizeData->sanitizeString($data->firstname)));
-        }
-
-        if (isset($data->lastname)) {
-            $user->setLastname(mb_strtoupper($sanitizeData->sanitizeString($data->lastname)));
-        }
+        $obj = $dataEntity->setData($obj, $data);
 
         $file = $request->files->get('avatar');
         if ($file) {
-            $fileName = $fileUploader->replaceFile($file, $user->getAvatar(),self::FOLDER_AVATARS);
-            $user->setAvatar($fileName);
+            $fileName = $fileUploader->replaceFile($file, $obj->getAvatar(),self::FOLDER_AVATARS);
+            $obj->setAvatar($fileName);
         }
 
-        $groups = User::USER_READ;
-        if ($this->isGranted("ROLE_ADMIN")) {
-            if (isset($data->roles)) {
-                $user->setRoles($data->roles);
-            }
-            $groups = User::ADMIN_READ;
-        }
+        $groups = $this->isGranted("ROLE_ADMIN") ?  User::ADMIN_READ : User::USER_READ;
 
-        $noErrors = $validator->validate($user);
+        $noErrors = $validator->validate($obj);
         if ($noErrors !== true) {
             return $apiResponse->apiJsonResponseValidationFailed($noErrors);
         }
 
-        $em->persist($user);
+        $em->persist($obj);
         $em->flush();
 
         $notificationService->createNotification("Mise à jour d'un utilisateur", self::ICON, $this->getUser());
 
-        return $apiResponse->apiJsonResponse($user, $groups);
+        return $apiResponse->apiJsonResponse($obj, $groups);
     }
 
     /**
@@ -239,26 +205,26 @@ class UserController extends AbstractController
      * @OA\Tag(name="Users")
      *
      * @param ApiResponse $apiResponse
-     * @param User $user
+     * @param User $obj
      * @param FileUploader $fileUploader
      * @return JsonResponse
      */
-    public function delete(ApiResponse $apiResponse, User $user, FileUploader $fileUploader): JsonResponse
+    public function delete(ApiResponse $apiResponse, User $obj, FileUploader $fileUploader): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($user->getHighRoleCode() === User::CODE_ROLE_DEVELOPER) {
+        if ($obj->getHighRoleCode() === User::CODE_ROLE_DEVELOPER) {
             return $apiResponse->apiJsonResponseForbidden();
         }
 
-        if ($user === $this->getUser()) {
+        if ($obj === $this->getUser()) {
             return $apiResponse->apiJsonResponseBadRequest('Vous ne pouvez pas vous supprimer.');
         }
 
-        $em->remove($user);
+        $em->remove($obj);
         $em->flush();
 
-        $fileUploader->deleteFile($user->getAvatar(), self::FOLDER_AVATARS);
+        $fileUploader->deleteFile($obj->getAvatar(), self::FOLDER_AVATARS);
         return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
     }
 
@@ -295,22 +261,22 @@ class UserController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent());
 
-        $users = $em->getRepository(User::class)->findBy(['id' => $data]);
+        $objs = $em->getRepository(User::class)->findBy(['id' => $data]);
 
         $avatars = [];
-        if ($users) {
-            foreach ($users as $user) {
-                if ($user->getHighRoleCode() === User::CODE_ROLE_DEVELOPER) {
+        if ($objs) {
+            foreach ($objs as $obj) {
+                if ($obj->getHighRoleCode() === User::CODE_ROLE_DEVELOPER) {
                     return $apiResponse->apiJsonResponseForbidden();
                 }
 
-                if ($user === $this->getUser()) {
+                if ($obj === $this->getUser()) {
                     return $apiResponse->apiJsonResponseBadRequest('Vous ne pouvez pas vous supprimer.');
                 }
 
-                array_push($avatars, $user->getAvatar());
+                array_push($avatars, $obj->getAvatar());
 
-                $em->remove($user);
+                $em->remove($obj);
             }
         }
 
@@ -416,7 +382,7 @@ class UserController extends AbstractController
      * @return JsonResponse
      */
     public function passwordUpdate(Request $request, $token, ValidatorService $validator, UserPasswordHasherInterface $passwordHasher,
-                           ApiResponse $apiResponse): JsonResponse
+                                   ApiResponse $apiResponse): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent());
@@ -458,34 +424,37 @@ class UserController extends AbstractController
     public function export(Export $export, $format): BinaryFileResponse
     {
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository(User::class)->findBy(array(), array('username' => 'ASC'));
-        $data = array();
+        $users = $em->getRepository(User::class)->findBy([], ['username' => 'ASC']);
+        $data = [];
+
+        $nameFile = 'utilisateurs';
+        $nameFolder = 'export/';
 
         foreach ($users as $user) {
-            $tmp = array(
+            $tmp = [
                 $user->getId(),
                 $user->getUsername(),
                 $user->getHighRole(),
                 $user->getEmail(),
                 date_format($user->getCreatedAt(), 'd/m/Y'),
-            );
+            ];
             if(!in_array($tmp, $data)){
                 array_push($data, $tmp);
             }
         }
 
         if($format == 'excel'){
-            $fileName = 'utilisateurs.xlsx';
+            $fileName = $nameFile . '.xlsx';
             $header = array(array('ID', 'Nom utilisateur', 'Role', 'Email', 'Date de creation'));
         }else{
-            $fileName = 'utilisateurs.csv';
+            $fileName = $nameFile . '.csv';
             $header = array(array('id', 'username', 'role', 'email', 'createAt'));
 
             header('Content-Type: application/csv');
             header('Content-Disposition: attachment; filename="'.$fileName.'"');
         }
 
-        $export->createFile($format, 'Liste des utilisateurs', $fileName , $header, $data, 5, 'export/');
-        return new BinaryFileResponse($this->getParameter('private_directory'). 'export/' . $fileName);
+        $export->createFile($format, 'Liste des ' . $nameFile, $fileName , $header, $data, 5, $nameFolder);
+        return new BinaryFileResponse($this->getParameter('private_directory'). $nameFolder . $fileName);
     }
 }

@@ -7,11 +7,11 @@ import Routing                 from '@publicFolder/bundles/fosjsrouting/js/route
 import { Input, Checkbox }     from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
+import { Drop }                from "@dashboardComponents/Tools/Drop";
 
 import Validateur              from "@dashboardComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
-import {Drop} from "@dashboardComponents/Tools/Drop";
 
 export function UserFormulaire ({ type, onChangeContext, onUpdateList, element })
 {

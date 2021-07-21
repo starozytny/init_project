@@ -34,7 +34,7 @@ export class UserItem extends Component {
                                 <span>{elem.lastname.toUpperCase()} {elem.firstname}</span>
                                 {elem.highRoleCode !== 0 && <span className="role">{elem.highRole}</span>}
                             </div>
-                            {elem.lastLoginAgo && <div className="sub">Connecté {elem.lastLoginAgo}</div>}
+                            {elem.highRoleCode !== 1 && elem.lastLoginAgo && <div className="sub">Connecté {elem.lastLoginAgo}</div>}
                         </div>
                         <div className="col-2">
                             <div className="sub sub-username">{elem.username}</div>
