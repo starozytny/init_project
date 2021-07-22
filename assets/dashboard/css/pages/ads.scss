@@ -59,8 +59,14 @@
   .selector{
     cursor: pointer;
   }
+
+  .gallery {
+    .image {
+      object-fit: cover;
+    }
+  }
   .avatar{
-    width: auto;
+    width: 100%;
     max-width: 150px;
     height: 100%;
     background-color: transparent;
@@ -132,6 +138,8 @@
   .items-ad{
     .avatar{
       width: 150px;
+      margin-bottom: 0;
+      margin-right: 12px;
 
       img{
         width: 150px;
