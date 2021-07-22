@@ -13,6 +13,7 @@ use App\Entity\Immo\ImFeature;
 use App\Entity\Immo\ImFeatureExt;
 use App\Entity\Immo\ImFinancial;
 use App\Entity\Immo\ImResponsable;
+use App\Service\SanitizeData;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -20,10 +21,12 @@ use Exception;
 class CreateBien
 {
     private $em;
+    private $sanitizeData;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, SanitizeData $sanitizeData)
     {
         $this->em = $entityManager;
+        $this->sanitizeData = $sanitizeData;
     }
     /**
      * @throws Exception
@@ -237,6 +240,11 @@ class CreateBien
                 ->setDpeLettre($item->dpeLettre)
                 ->setGesVal($item->gesVal)
                 ->setGesLettre($item->gesLettre)
+                ->setDateRelease($item->dateRelease ? $this->sanitizeData->createDateFromString($item->dateRelease) : null)
+                ->setVersionDpe($item->versionDpe)
+                ->setDpeMinConso($item->dpeMinConso)
+                ->setDpeMaxConso($item->dpeMaxConso)
+                ->setDpeRefConso($item->dpeRefConso)
             ;
         }else{
             return null;
