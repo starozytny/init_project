@@ -128,6 +128,10 @@ class CreateBien
             ->setCopro($copro)
             ->setIsSync(true)
             ->setIdentifiant($identifiant)
+            ->setVirtuel($item->virtual)
+            ->setPanoramique($item->panoramique)
+            ->setLibelle($item->libelle)
+            ->setIdentifiantTech($item->identifiantTech)
         ;
     }
 

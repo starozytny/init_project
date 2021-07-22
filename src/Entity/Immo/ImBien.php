@@ -20,6 +20,12 @@ class ImBien
 
     const NATURE_LOCATION = 0;
     const NATURE_VENTE = 1;
+    const NATURE_VIAGER = 2;
+    const NATURE_INVEST = 3;
+    const NATURE_BAIL = 4;
+    const NATURE_VACANCE = 5;
+    const NATURE_PRESTIGE = 6;
+    const NATURE_COMMERCE = 7;
 
     const TYPE_MAISON = 0;
     const TYPE_APPARTEMENT = 1;
@@ -182,6 +188,30 @@ class ImBien
      * @Groups({"list:read", "show:read", "admin:read"})
      */
     private $slug;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"list:read", "show:read"})
+     */
+    private $virtuel;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"list:read", "show:read"})
+     */
+    private $panoramique;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"list:read", "show:read"})
+     */
+    private $libelle;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"list:read", "show:read"})
+     */
+    private $identifiantTech;
 
     public function __construct()
     {
@@ -581,5 +611,53 @@ class ImBien
         }
 
         return $phone;
+    }
+
+    public function getVirtuel(): ?string
+    {
+        return $this->virtuel;
+    }
+
+    public function setVirtuel(?string $virtuel): self
+    {
+        $this->virtuel = $virtuel;
+
+        return $this;
+    }
+
+    public function getPanoramique(): ?string
+    {
+        return $this->panoramique;
+    }
+
+    public function setPanoramique(?string $panoramique): self
+    {
+        $this->panoramique = $panoramique;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(?string $libelle): self
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function getIdentifiantTech(): ?string
+    {
+        return $this->identifiantTech;
+    }
+
+    public function setIdentifiantTech(?string $identifiantTech): self
+    {
+        $this->identifiantTech = $identifiantTech;
+
+        return $this;
     }
 }
