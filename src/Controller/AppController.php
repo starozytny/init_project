@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Immo\ImBien;
+use App\Service\Immo\ImmoService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -73,10 +75,19 @@ class AppController extends AbstractController
     }
 
     /**
-     * @Route("/annonces-immobilieres/{ad}", name="app_ads")
+     * @Route("/annonces-immobilieres/{ad}", name="app_ads", defaults={"ad": ""})
      */
-    public function ads($ad): Response
+    public function ads($ad, ImmoService $immoService): Response
     {
-        return $this->render('app/pages/ads/index.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        if($ad !== ""){
+            $objs = $em->getRepository(ImBien::class)->findBy(['codeTypeAd' => $immoService->getTypeAdFormParamString($ad)]);
+        }else{
+            $objs = $em->getRepository(ImBien::class)->findAll();
+        }
+
+        return $this->render('app/pages/ads/index.html.twig', [
+            'donnees' => $objs
+        ]);
     }
 }
