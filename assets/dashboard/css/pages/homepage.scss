@@ -12,7 +12,7 @@
     overflow: hidden;
 
     img{
-      width: 126px; height: 126px;
+      object-fit: cover;
     }
   }
 
@@ -70,19 +70,19 @@
   }
 }
 
-.dash-card-chart{
+.dash-card-chart {
   padding: 0;
 
-  .icon{
+  .icon {
     padding-top: 24px;
     padding-left: 24px;
   }
 
-  .title{
+  .title {
     padding-left: 24px;
   }
 
-  .chart{
+  .chart {
     transform: scale(1.125) translateX(-6px);
   }
 }

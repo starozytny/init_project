@@ -112,7 +112,7 @@ export class User extends Component {
 
     render () {
         return <>
-            <Layout ref={this.layout} {...this.state} onGetData={this.handleGetData}
+            <Layout ref={this.layout} {...this.state} search={this.props.search} onGetData={this.handleGetData}
                     onContentList={this.handleContentList} onContentRead={this.handleContentRead}
                     onContentCreate={this.handleContentCreate} onContentUpdate={this.handleContentUpdate}/>
         </>

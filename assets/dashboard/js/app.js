@@ -32,9 +32,11 @@ toastr.options = {
 Routing.setRoutingData(routes);
 
 const menu = document.getElementById("menu");
-render(
-    <Menu {...menu.dataset} />, menu
-)
+if(menu) {
+    render(
+        <Menu {...menu.dataset} />, menu
+    )
+}
 
 const notifications = document.getElementById("notifications");
 if(notifications){

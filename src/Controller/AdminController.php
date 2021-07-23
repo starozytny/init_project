@@ -81,9 +81,16 @@ class AdminController extends AbstractController
     /**
      * @Route("/utilisateurs", name="users_index")
      */
-    public function users(SerializerInterface $serializer): Response
+    public function users(Request $request, SerializerInterface $serializer): Response
     {
         $objs = $this->getAllData(User::class, $serializer);
+        $search = $request->query->get('search');
+        if($search){
+            return $this->render('admin/pages/user/index.html.twig', [
+                'donnees' => $objs,
+                'search' => $search
+            ]);
+        }
 
         return $this->render('admin/pages/user/index.html.twig', [
             'donnees' => $objs

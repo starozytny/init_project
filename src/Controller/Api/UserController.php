@@ -176,7 +176,12 @@ class UserController extends AbstractController
         $em->persist($obj);
         $em->flush();
 
-        $notificationService->createNotification("Mise à jour d'un utilisateur", self::ICON, $this->getUser());
+        $notificationService->createNotification(
+            "Mise à jour d'un utilisateur",
+            self::ICON,
+            $this->getUser(),
+            $this->generateUrl('admin_users_index', ['search' => 'test234'])
+        );
 
         return $apiResponse->apiJsonResponse($obj, $groups);
     }

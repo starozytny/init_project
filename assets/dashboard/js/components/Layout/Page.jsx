@@ -42,6 +42,33 @@ function initData(donnees, sorter)
     return data;
 }
 
+function initPageWithSearch(data, search, context, nContext)
+{
+    let newContext = context;
+    let elem = null;
+    if(search){
+        data.forEach(el => {
+            if(el.username === search){
+                elem = el;
+                newContext = nContext;
+            }
+        })
+    }
+
+    return [elem, newContext];
+}
+
+function getData(donnees, sorter, search, context, nContext)
+{
+    let data = initData(donnees, sorter);
+
+    let element = initPageWithSearch(data, search, context, nContext);
+    let elem = element[0];
+    let newContext = element[1];
+
+    return [data, elem, newContext];
+}
+
 export class Layout extends Component {
     constructor(props) {
         super(props);
@@ -55,7 +82,8 @@ export class Layout extends Component {
             element: null,
             filters: [],
             perPage: props.perPage,
-            sessionName: props.sessionName
+            sessionName: props.sessionName,
+            search: props.search ? props.search : null
         }
 
         this.page = React.createRef();
@@ -93,15 +121,28 @@ export class Layout extends Component {
         Formulaire.updateDataPagination(this, sorter, newContext, context, data, element, perPage);
     }
 
-    handleSetDataPagination = (donnees, sorter = null) => {
-        const { perPage } = this.state;
+    handleSetDataPagination = (donnees, sorter = null, nContext = "read") => {
+        const { context, perPage, search } = this.state;
 
-        let data = initData(donnees, sorter);
-        this.setState({ dataImmuable: data, data: data, currentData: data.slice(0, perPage), loadPageError: false, loadData: false })
+        let elements = getData(donnees, sorter, search, context, nContext);
+
+        let data = elements[0];
+        let elem = elements[1];
+        let newContext = elements[2];
+
+        this.setState({ context: newContext, dataImmuable: data, data: data, currentData: data.slice(0, perPage), loadPageError: false, loadData: false, element: elem })
     }
 
-    handleSetData = (donnees, sorter = null) => {
-        this.setState({ data: initData(donnees, sorter), loadPageError: false, loadData: false })
+    handleSetData = (donnees, sorter = null, nContext = "read") => {
+        const { context, search } = this.state;
+
+        let elements = getData(donnees, sorter, search, context, nContext);
+
+        let data = elements[0];
+        let elem = elements[1];
+        let newContext = elements[2];
+
+        this.setState({ context: newContext, data: data, loadPageError: false, loadData: false, element: elem })
     }
 
     handleSearch = (search, searchFunction, haveFilter = false, filterFunction) => {

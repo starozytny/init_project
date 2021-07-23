@@ -16,12 +16,13 @@ class NotificationService
         $this->em = $em;
     }
 
-    public function createNotification($name, $icon, $user)
+    public function createNotification($name, $icon, $user, $url = null)
     {
         $obj = (new Notification())
             ->setName($name)
             ->setIcon($icon)
             ->setUser($user)
+            ->setUrl($url)
         ;
 
         $this->em->persist($obj);

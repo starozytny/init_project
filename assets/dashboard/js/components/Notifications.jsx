@@ -71,7 +71,7 @@ export class Notifications extends Component{
                             <span className={"icon-" + el.icon} />
                         </div>
                         <div className="item-infos">
-                            <div className="title">{!el.isSeen && <span className="toSee" />} {el.name}</div>
+                            <a className="title" href={el.url}>{!el.isSeen && <span className="toSee" />} {el.name}</a>
                             <div className="createdAt">{el.createdAtAgo}</div>
                         </div>
                     </div>
