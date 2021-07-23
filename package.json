@@ -21,8 +21,8 @@
     },
     "dependencies": {
         "@types/react-transition-group": "^4.4.0",
+        "apexcharts": "^3.27.3",
         "axios": "^0.21.0",
-        "chart.js": "^3.4.1",
         "date-fns": "^2.16.1",
         "html-react-parser": "^1.2.6",
         "leaflet": "^1.7.1",
