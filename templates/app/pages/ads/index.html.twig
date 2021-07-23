@@ -1,9 +1,16 @@
 {% extends 'app/pages/ads/template.html.twig' %}
 
-{% block title %}Annonces immobilières{% endblock %}
+{% block title %}Annonces {{ ad != "" ? "de " ~ ad : ""}} immobilières{% endblock %}
 
 {% block main_content %}
 <div class="main-content">
-    <h1>Annonces immobilières</h1>
+    <h1>Annonces {{ ad != "" ? "de " ~ ad : ""}} immobilières</h1>
+
+    <div class="ads-list">
+        {{ donnees | length }} résultat{{ donnees | length > 1 ? "s" : "" }}
+        {% for elem in donnees %}
+            <div>{{ elem.id }}</div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

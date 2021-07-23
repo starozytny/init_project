@@ -91,6 +91,7 @@ class AppController extends AbstractController
         }
 
         return $this->render('app/pages/ads/index.html.twig', [
+            'ad' => $ad,
             'donnees' => $objs
         ]);
     }
