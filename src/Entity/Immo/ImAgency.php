@@ -135,9 +135,15 @@ class ImAgency
      */
     private $biens;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ImStat::class, mappedBy="agency", orphanRemoval=true)
+     */
+    private $stats;
+
     public function __construct()
     {
         $this->biens = new ArrayCollection();
+        $this->stats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -397,6 +403,36 @@ class ImAgency
             // set the owning side to null (unless already changed)
             if ($bien->getAgency() === $this) {
                 $bien->setAgency(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ImStat[]
+     */
+    public function getStats(): Collection
+    {
+        return $this->stats;
+    }
+
+    public function addStat(ImStat $stat): self
+    {
+        if (!$this->stats->contains($stat)) {
+            $this->stats[] = $stat;
+            $stat->setAgency($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStat(ImStat $stat): self
+    {
+        if ($this->stats->removeElement($stat)) {
+            // set the owning side to null (unless already changed)
+            if ($stat->getAgency() === $this) {
+                $stat->setAgency(null);
             }
         }
 
