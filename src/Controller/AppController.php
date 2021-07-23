@@ -6,6 +6,7 @@ use App\Entity\Immo\ImBien;
 use App\Service\Immo\ImmoService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AppController extends AbstractController
@@ -79,6 +80,9 @@ class AppController extends AbstractController
      */
     public function ads($ad, ImmoService $immoService): Response
     {
+        if($ad !== "" && $ad !== "locations" && $ad !== "ventes"){
+            throw new NotFoundHttpException("Cette page n'existe pas.");
+        }
         $em = $this->getDoctrine()->getManager();
         if($ad !== ""){
             $objs = $em->getRepository(ImBien::class)->findBy(['codeTypeAd' => $immoService->getTypeAdFormParamString($ad)]);
