@@ -1,0 +1,8 @@
+{% extends 'admin/pages/immo/template.html.twig' %}
+
+{% set page_title %}Liste des agences{% endset %}
+{% set submenuActive = "Agences" %}
+
+{% block main_content %}
+    <div id="agencies" data-donnees="{{ donnees }}"></div>
+{% endblock %}

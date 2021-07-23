@@ -7,10 +7,6 @@ export class DemandesItem extends Component {
     render () {
         const { elem, onChangeContext, onDelete, onSelectors } = this.props
 
-        //
-        // have elem.bien.slug
-        //
-
         return <div className="item item-alert item-demande">
             <Selector id={elem.id} onSelectors={onSelectors} />
 

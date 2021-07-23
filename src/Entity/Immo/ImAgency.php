@@ -17,116 +17,121 @@ class ImAgency
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"admin:read", "list:read", "show:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"admin:read", "list:read", "show:read"})
      */
     private $dirname;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"admin:read", "list:read", "show:read"})
      */
     private $website;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"list:read"})
+     * @Groups({"admin:read", "list:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"list:read"})
+     * @Groups({"admin:read", "list:read"})
      */
     private $emailLocation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"list:read"})
+     * @Groups({"admin:read", "list:read"})
      */
     private $emailVente;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
-     * @Groups({"list:read"})
+     * @Groups({"admin:read", "list:read"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
-     * @Groups({"list:read"})
+     * @Groups({"admin:read", "list:read"})
      */
     private $phoneLocation;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
-     * @Groups({"list:read"})
+     * @Groups({"admin:read", "list:read"})
      */
     private $phoneVente;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"admin:read", "list:read", "show:read"})
      */
     private $logo;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"admin:read", "list:read", "show:read"})
      */
     private $tarif;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"list:read", "show:read"})
+     * @Groups({"admin:read", "list:read", "show:read"})
      */
     private $legal;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("show:read")
+     * @Groups("admin:read", "show:read")
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
-     * @Groups("show:read")
+     * @Groups("admin:read", "show:read")
      */
     private $zipcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("show:read")
+     * @Groups("admin:read", "show:read")
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
      */
     private $lat;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
      */
     private $lon;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $identifiant;
 

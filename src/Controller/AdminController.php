@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Contact;
+use App\Entity\Immo\ImAgency;
 use App\Entity\Immo\ImAlert;
 use App\Entity\Immo\ImDemande;
 use App\Entity\Immo\ImDevis;
@@ -137,6 +138,18 @@ class AdminController extends AbstractController
         $objs = $this->getAllData(ImBien::class, $serializer, ImBien::LIST_READ);
 
         return $this->render('admin/pages/immo/index.html.twig', [
+            'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/immobilier/agences", name="immo_agencies")
+     */
+    public function agencies(SerializerInterface $serializer): Response
+    {
+        $objs = $this->getAllData(ImAgency::class, $serializer);
+
+        return $this->render('admin/pages/immo/agencies.html.twig', [
             'donnees' => $objs
         ]);
     }

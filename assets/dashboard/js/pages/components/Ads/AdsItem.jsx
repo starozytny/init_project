@@ -23,7 +23,7 @@ export class AdsItem extends Component {
                                 <div>{elem.label}</div>
                             </div>
                             <div className="sub sub-username">{elem.address.zipcode}, {elem.address.city}</div>
-                            <div className="sub sub-username">{elem.agency.name}</div>
+                            {/*<div className="sub sub-username">{elem.agency.name}</div>*/}
                             <div className="sub">{elem.ref} - {elem.realRef}</div>
                         </div>
                         <div className="ad-price">
