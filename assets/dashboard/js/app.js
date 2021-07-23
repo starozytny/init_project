@@ -8,7 +8,7 @@ import toastr from 'toastr';
 import { render } from 'react-dom';
 import { Menu } from './components/Layout/Menu';
 import { Notifications } from "@dashboardComponents/Notifications";
-import { ChartAds } from "@dashboardFolder/js/pages/components/Stats/Charts";
+import { ChartAds, ChartBiens } from "@dashboardFolder/js/pages/components/Stats/Charts";
 
 toastr.options = {
     "closeButton": true,
@@ -47,5 +47,12 @@ let chartAds = document.getElementById('chart-ads');
 if(chartAds){
     render(
         <ChartAds {...chartAds.dataset} />, chartAds
+    )
+}
+
+let chartBiens = document.getElementById('chart-biens');
+if(chartBiens){
+    render(
+        <ChartBiens {...chartBiens.dataset} />, chartBiens
     )
 }
