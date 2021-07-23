@@ -73,9 +73,13 @@
 .dash-card-chart{
   padding: 0;
 
+  .icon{
+    padding-top: 24px;
+    padding-left: 24px;
+  }
+
   .title{
-    padding: 24px;
-    margin-bottom: 0;
+    padding-left: 24px;
   }
 
   .chart{
@@ -135,7 +139,7 @@
       max-width: initial;
 
       .chart-2{
-        transform: scale(1.05) translate(9px, -8px);
+        transform: scale(1.05) translate(9px, -6px);
       }
     }
   }
@@ -170,7 +174,7 @@
   .dash-line-2{
     .dash-card-1:last-child{
       .chart-2{
-        transform: scale(1.03) translate(9px, -8px);
+        transform: scale(1.03) translate(9px, -6px);
       }
     }
   }
@@ -186,7 +190,7 @@
   .dash-line-2{
     .dash-card-1:last-child{
       .chart-2{
-        transform: scale(1.02) translate(9px, -8px);
+        transform: scale(1.02) translate(9px, -6px);
       }
     }
   }
