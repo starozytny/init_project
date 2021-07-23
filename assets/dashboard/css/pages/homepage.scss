@@ -98,6 +98,18 @@
     }
   }
 
+  .dash-line-2{
+    flex-direction: row;
+
+    .dash-card-1:first-child{
+      width: 320px;
+    }
+    .dash-card-1:last-child{
+      width: calc(100% - 320px);
+      max-width: initial;
+    }
+  }
+
   .dash-line-1-col-2{
     @include flex(row, stretch, flex-start);
     flex-wrap: wrap;
