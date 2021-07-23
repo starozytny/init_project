@@ -8,6 +8,7 @@ import toastr from 'toastr';
 import { render } from 'react-dom';
 import { Menu } from './components/Layout/Menu';
 import { Notifications } from "@dashboardComponents/Notifications";
+import { ChartAds } from "@dashboardFolder/js/pages/components/Stats/Charts";
 
 toastr.options = {
     "closeButton": true,
@@ -39,5 +40,12 @@ const notifications = document.getElementById("notifications");
 if(notifications){
     render(
         <Notifications {...notifications.dataset} />, notifications
+    )
+}
+
+let chartAds = document.getElementById('chart-ads');
+if(chartAds){
+    render(
+        <ChartAds />, chartAds
     )
 }
