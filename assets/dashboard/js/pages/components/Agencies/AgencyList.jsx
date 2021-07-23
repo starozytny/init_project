@@ -24,7 +24,7 @@ export class AgencyList extends Component {
                                 <div className="item-body item-body-image">
                                     <div className="infos infos-col-3">
                                         <div className="col-1">Agence</div>
-                                        <div className="col-2">Email</div>
+                                        <div className="col-2">Adresse</div>
                                         <div className="col-3 actions">Actions</div>
                                     </div>
                                 </div>
