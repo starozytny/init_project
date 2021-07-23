@@ -6,37 +6,73 @@ export class ChartAds extends Component {
         super(props);
 
         this.state = {
+            series: [],
+            options: {}
+        }
+    }
+
+    componentDidMount = () => {
+        const { donnees } = this.props;
+
+        let data = JSON.parse(donnees);
+
+        let locationsData = [], ventesData = [], biensData = [], legends = [];
+        data.map(el => {
+            biensData.push(el.totBiens);
+            locationsData.push(el.totLocations);
+            ventesData.push(el.totVentes);
+            legends.push(el.createdAtString);
+        })
+
+        this.setState({
+            series: [{
+                name: 'Biens',
+                data: biensData
+            }, {
+                name: 'Locations',
+                data: locationsData
+            }, {
+                name: 'Ventes',
+                data: ventesData
+            }],
             options: {
+                colors: ['#109cf1', '#fdad2d', '#f7685b'],
                 chart: {
-                    id: "basic-bar"
+                    height: 200,
+                    type: 'area',
+                    toolbar: { show: false },
+                },
+                legend: { show: false },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth'
                 },
                 xaxis: {
-                    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-                }
+                    type: 'datetime',
+                    categories: legends,
+                    labels: { show: false }
+                },
+                yaxis: {
+                    labels: { show: false }
+                },
             },
-            series: [
-                {
-                    name: "series-1",
-                    data: [30, 40, 45, 50, 49, 60, 70, 91]
-                }
-            ]
-        };
+        })
     }
 
     render() {
+        const { options } = this.state;
+
         return (
-            <div className="app">
-                <div className="row">
-                    <div className="mixed-chart">
-                        <Chart
-                            options={this.state.options}
-                            series={this.state.series}
-                            type="bar"
-                            width="500"
-                        />
-                    </div>
-                </div>
-            </div>
+            <>
+                {options && <Chart
+                    options={this.state.options}
+                    series={this.state.series}
+                    type="area"
+                    height={200}
+                />}
+            </>
         );
     }
 }

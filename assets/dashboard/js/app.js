@@ -46,6 +46,6 @@ if(notifications){
 let chartAds = document.getElementById('chart-ads');
 if(chartAds){
     render(
-        <ChartAds />, chartAds
+        <ChartAds {...chartAds.dataset} />, chartAds
     )
 }

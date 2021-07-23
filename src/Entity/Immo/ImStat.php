@@ -3,7 +3,10 @@
 namespace App\Entity\Immo;
 
 use App\Repository\Immo\ImStatRepository;
+use Carbon\Carbon;
+use Carbon\Factory;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImStatRepository::class)
@@ -14,6 +17,7 @@ class ImStat
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $id;
 
@@ -24,61 +28,73 @@ class ImStat
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $totBiens;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $totLocations;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $totVentes;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $nbMaisons;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $nbAppartements;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $nbParkings;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $nbBureaux;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $nbLocaux;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $nbImmeubles;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $nbTerrains;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $nbCommerces;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $nbAutres;
 
@@ -110,6 +126,25 @@ class ImStat
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getCreatedAtString(): ?string
+    {
+        if($this->createdAt){
+            $frenchFactory = new Factory([
+                'locale' => 'fr_FR',
+                'timezone' => 'Europe/Paris'
+            ]);
+            $time = Carbon::instance($this->createdAt);
+
+            return $frenchFactory->make($time)->isoFormat('ll');
+        }
+
+        return null;
     }
 
     public function getTotBiens(): ?int

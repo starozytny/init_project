@@ -7,6 +7,7 @@ use App\Entity\Immo\ImAlert;
 use App\Entity\Immo\ImDemande;
 use App\Entity\Immo\ImDevis;
 use App\Entity\Immo\ImEstimation;
+use App\Entity\Immo\ImStat;
 use App\Entity\Notification;
 use App\Entity\Immo\ImBien;
 use App\Entity\Settings;
@@ -34,11 +35,12 @@ class AdminController extends AbstractController
     /**
      * @Route("/", options={"expose"=true}, name="homepage")
      */
-    public function index(): Response
+    public function index(SerializerInterface $serializer): Response
     {
         $em = $this->getDoctrine()->getManager();
         $users = $em->getRepository(User::class)->findAll();
         $settings = $em->getRepository(Settings::class)->findAll();
+        $stats = $em->getRepository(ImStat::class)->findAll();
 
         $totalUsers = count($users); $nbConnected = 0;
         foreach($users as $user){
@@ -46,10 +48,14 @@ class AdminController extends AbstractController
                 $nbConnected++;
             }
         }
+
+        $stats = $serializer->serialize($stats, 'json', ['groups' => User::ADMIN_READ]);
+
         return $this->render('admin/pages/index.html.twig', [
             'settings' => $settings ? $settings[0] : null,
             'totalUsers' => $totalUsers,
             'nbConnected' => $nbConnected,
+            'stats' => $stats
         ]);
     }
 

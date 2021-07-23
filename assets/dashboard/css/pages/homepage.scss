@@ -31,6 +31,16 @@
   }
 }
 
+.dash-line-2{
+  margin-top: 24px;
+  @include flex(column, flex-start, flex-start);
+
+  & > div{
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
 .dash-card-1{
   background-color: var(--alpha);
   box-shadow: 0 4px 12px var(--greyShadow);
@@ -57,6 +67,19 @@
   .number{
     font-size: 18px;
     @include fontSemibold();
+  }
+}
+
+.dash-card-chart{
+  padding: 0;
+
+  .title{
+    padding: 24px;
+    margin-bottom: 0;
+  }
+
+  .chart{
+    transform: scale(1.125) translateX(-6px);
   }
 }
 
@@ -90,6 +113,14 @@
 
     &:nth-child(odd){
       margin-right: 24px;
+    }
+  }
+
+  .dash-card-chart{
+    padding: 0;
+
+    .chart{
+      transform: scale(1.107) translateX(-6px);
     }
   }
 }
