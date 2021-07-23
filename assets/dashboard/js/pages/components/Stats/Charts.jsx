@@ -91,18 +91,20 @@ export class ChartBiens extends Component {
         const { donnees } = this.props;
 
         let data = JSON.parse(donnees);
+        let last = data.length;
 
-        if(data.length > 0){
+        if(last > 0){
+            last = last - 1;
             let biensData = [
-                { x: 'Maisons',         y: data[0].nbMaisons },
-                { x: 'Appartements',    y: data[0].nbAppartements },
-                { x: 'Parkings',        y: data[0].nbParkings },
-                { x: 'Bureaux',         y: data[0].nbBureaux },
-                { x: 'Locaux',          y: data[0].nbLocaux },
-                { x: 'Immeubles',       y: data[0].nbImmeubles },
-                { x: 'Terrains',        y: data[0].nbTerrains },
-                { x: 'Commerces',       y: data[0].nbCommerces },
-                { x: 'Autres',          y: data[0].nbAutres },
+                { x: 'Maisons',         y: data[last].nbMaisons },
+                { x: 'Appartements',    y: data[last].nbAppartements },
+                { x: 'Parkings',        y: data[last].nbParkings },
+                { x: 'Bureaux',         y: data[last].nbBureaux },
+                { x: 'Locaux',          y: data[last].nbLocaux },
+                { x: 'Immeubles',       y: data[last].nbImmeubles },
+                { x: 'Terrains',        y: data[last].nbTerrains },
+                { x: 'Commerces',       y: data[last].nbCommerces },
+                { x: 'Autres',          y: data[last].nbAutres },
             ];
 
             this.setState({

@@ -98,18 +98,6 @@
     }
   }
 
-  .dash-line-2{
-    flex-direction: row;
-
-    .dash-card-1:first-child{
-      width: 320px;
-    }
-    .dash-card-1:last-child{
-      width: calc(100% - 320px);
-      max-width: initial;
-    }
-  }
-
   .dash-line-1-col-2{
     @include flex(row, stretch, flex-start);
     flex-wrap: wrap;
@@ -133,6 +121,22 @@
 
     .chart{
       transform: scale(1.107) translateX(-6px);
+    }
+  }
+
+  .dash-line-2{
+    flex-direction: row;
+
+    .dash-card-1:first-child{
+      width: 320px;
+    }
+    .dash-card-1:last-child{
+      width: calc(100% - 320px);
+      max-width: initial;
+
+      .chart-2{
+        transform: scale(1.05) translate(9px, -8px);
+      }
     }
   }
 }
@@ -160,6 +164,30 @@
     }
     &:last-child{
       margin-right: 0;
+    }
+  }
+
+  .dash-line-2{
+    .dash-card-1:last-child{
+      .chart-2{
+        transform: scale(1.03) translate(9px, -8px);
+      }
+    }
+  }
+}
+
+//                      __   _ _  _   _  _    ___    __
+//                     | _| / | || | | || |  / _ \  |_ |
+//    _____ _____ _____| |  | | || |_| || |_| | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | |__   _|__   _| |_| |  | |_____|_____|_____|
+//                     | |  |_|  |_|    |_|  \___/   | |
+//                     |__|                         |__|
+@media (min-width: 1440px){
+  .dash-line-2{
+    .dash-card-1:last-child{
+      .chart-2{
+        transform: scale(1.02) translate(9px, -8px);
+      }
     }
   }
 }

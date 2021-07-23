@@ -210,7 +210,7 @@ class ImmoDataCreateCommand extends Command
                 }
 
                 //nb des types de biens
-                switch ($bien->getTypeBien()){
+                switch ($bien->getCodeTypeBien()){
                     case ImBien::TYPE_MAISON:
                         $nbMaisons++;
                         break;
@@ -542,7 +542,13 @@ class ImmoDataCreateCommand extends Command
                             unlink($thumb);
                         }
                     }
+
                     $this->em->remove($bien);
+                }
+
+                //remove stats
+                foreach($agency->getStats() as $stat){
+                    $this->em->remove($stat);
                 }
             }
         }
