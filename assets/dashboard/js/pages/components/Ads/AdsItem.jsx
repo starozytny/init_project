@@ -30,7 +30,7 @@ export class AdsItem extends Component {
                             <div>{Sanitize.toFormatCurrency(elem.financial.price)} {elem.typeAd === "Location" && "cc/mois"}</div>
                         </div>
                         <div className="ad-ad">
-                            <div className={"role type-ad ad-" + elem.codeTypeAd}>{elem.codeTypeAd} {elem.typeAd}</div>
+                            <div className={"role type-ad ad-" + elem.codeTypeAd}>{elem.typeAd}</div>
                         </div>
                         <div className="ad-bien">
                             <div className="role type-bien">{elem.typeBien}</div>
