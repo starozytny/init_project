@@ -48,7 +48,7 @@ export class Agency extends Component {
 
     handleContentList = (currentData, changeContext) => {
         return <AgencyList onChangeContext={changeContext}
-                           bien={this.props.bien}
+                           total={this.props.total}
                            onDelete={this.handleDelete}
                            onDeleteAll={this.handleDeleteGroup}
                            data={currentData} />

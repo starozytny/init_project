@@ -147,10 +147,13 @@ class AdminController extends AbstractController
      */
     public function agencies(SerializerInterface $serializer): Response
     {
+        $em = $this->getDoctrine()->getManager();
         $objs = $this->getAllData(ImAgency::class, $serializer);
+        $biens = $em->getRepository(ImBien::class)->findAll();
 
         return $this->render('admin/pages/immo/agencies.html.twig', [
-            'donnees' => $objs
+            'donnees' => $objs,
+            'total' => count($biens)
         ]);
     }
 

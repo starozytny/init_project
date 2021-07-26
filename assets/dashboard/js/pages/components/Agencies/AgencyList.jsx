@@ -8,24 +8,20 @@ import { AgencyItem }   from "./AgencyItem";
 
 export class AgencyList extends Component {
     render () {
-        const { data, onChangeContext, onDeleteAll, bien } = this.props;
+        const { data, onChangeContext, onDeleteAll } = this.props;
 
         return <>
             <div>
-                {bien && <div className="toolbar">
-                    <div className="item create">
-                        <Button onClick={() => onChangeContext("create")}>Ajouter une demande</Button>
-                    </div>
-                </div>}
                 <div className="items-table">
                     <div className="items items-default">
                         <div className="item item-header">
                             <div className="item-content">
                                 <div className="item-body item-body-image">
-                                    <div className="infos infos-col-3">
+                                    <div className="infos infos-col-4">
                                         <div className="col-1">Agence</div>
                                         <div className="col-2">Adresse</div>
-                                        <div className="col-3 actions">Actions</div>
+                                        <div className="col-3">Nombre de biens</div>
+                                        <div className="col-4 actions">Actions</div>
                                     </div>
                                 </div>
                             </div>

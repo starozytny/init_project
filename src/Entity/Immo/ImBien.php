@@ -141,7 +141,7 @@ class ImBien
     private $featureExt;
 
     /**
-     * @ORM\OneToOne(targetEntity=ImDiagnostic::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=ImDiagnostic::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @Groups({"list:read", "show:read"})
      */
     private $diagnostic;
