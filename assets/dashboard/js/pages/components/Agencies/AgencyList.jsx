@@ -8,7 +8,7 @@ import { AgencyItem }   from "./AgencyItem";
 
 export class AgencyList extends Component {
     render () {
-        const { data, onChangeContext, onDeleteAll } = this.props;
+        const { data, onDeleteAll } = this.props;
 
         return <>
             <div>

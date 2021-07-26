@@ -68,7 +68,10 @@ export class AgencyRead extends Component {
                     </div>
 
                     <div className="agency-stats">
-                        {statsAds}
+                        <div className="title">Annonces immobilières</div>
+                        <div className="chart">
+                            {statsAds}
+                        </div>
                     </div>
 
                 </div>
