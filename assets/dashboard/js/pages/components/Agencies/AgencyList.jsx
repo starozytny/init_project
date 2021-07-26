@@ -13,7 +13,7 @@ export class AgencyList extends Component {
         return <>
             <div>
                 <div className="items-table">
-                    <div className="items items-default">
+                    <div className="items items-default items-agency">
                         <div className="item item-header">
                             <div className="item-content">
                                 <div className="item-body item-body-image">

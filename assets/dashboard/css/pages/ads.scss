@@ -51,7 +51,7 @@
   }
 
   .item-content{
-    width: calc(100% - 60px);
+    width: 100%;
   }
 }
 
@@ -160,6 +160,22 @@
   border-radius: 12px;
   box-shadow: 0 0 12px var(--greyShadow);
   margin-top: 24px;
+}
+
+.items-agency{
+
+  .col-1{
+    cursor: pointer;
+  }
+
+  .name{
+    flex-direction: row;
+
+    a{
+      margin-left: 8px;
+      font-size: 14px;
+    }
+  }
 }
 
 //                      __   _____ __    ___    __
