@@ -3,11 +3,21 @@ import React, { Component } from 'react';
 import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
 import Sanitize               from "@dashboardComponents/functions/sanitaze";
 import parse                  from "html-react-parser";
+import {ChartAds, ChartBiens} from "@dashboardFolder/js/pages/components/Stats/Charts";
 
 export class AgencyRead extends Component {
     render () {
         const { element, onChangeContext } = this.props;
-console.log(element)
+
+        let stats = null;
+        let last = element.stats.length;
+        if(last > 0){
+            stats = <>
+                <ChartAds donnees={JSON.stringify(element.stats)} />
+                <ChartBiens donnees={JSON.stringify([element.stats[last - 1]])} />
+            </>
+        }
+
         return <>
             <div>
                 <div className="toolbar">
@@ -32,7 +42,7 @@ console.log(element)
                                     <div>#{element.id}</div>
                                     <span>{element.name}</span>
                                 </div>
-                                <div className="sub">{parse(element.description)}</div>
+                                <div className="sub">{element.description ? parse(element.description) : "Description vide."}</div>
                                 <div className="sub sub-contact">
                                     {element.email && <div><u>Email</u> : {element.email}</div>}
                                     {element.emailLocation && <div><u>Email location</u> : {element.emailLocation}</div>}
@@ -46,7 +56,7 @@ console.log(element)
                                 <div className="sub sub-contact">
                                     <div><u>Adresse</u> : {element.address}, {element.zipcode} {element.city}</div>
                                 </div>
-                                <div className="sub sub-contact"><div>{parse(element.legal)}</div></div>
+                                <div className="sub sub-contact"><div>{element.legal ? parse(element.legal) : "Texte légal vide."}</div></div>
                             </div>
 
                             <div className="footer-infos">
@@ -57,6 +67,10 @@ console.log(element)
                                 <div className="role">{element.dirname}</div>
                             </div>
                         </div>
+                    </div>
+
+                    <div>
+                        {stats}
                     </div>
 
                 </div>

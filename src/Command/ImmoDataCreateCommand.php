@@ -550,6 +550,8 @@ class ImmoDataCreateCommand extends Command
                 foreach($agency->getStats() as $stat){
                     $this->em->remove($stat);
                 }
+
+                $this->em->remove($agency);
             }
         }
         $this->em->flush();

@@ -141,7 +141,8 @@ class ImAgency
     private $biens;
 
     /**
-     * @ORM\OneToMany(targetEntity=ImStat::class, mappedBy="agency", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ImStat::class, mappedBy="agency", fetch="EAGER", orphanRemoval=true)
+     * @Groups({"admin:read"})
      */
     private $stats;
 
