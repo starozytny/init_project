@@ -240,7 +240,7 @@ class CreateBien
                 ->setDpeLettre($item->dpeLettre)
                 ->setGesVal($item->gesVal)
                 ->setGesLettre($item->gesLettre)
-                ->setDateRelease($item->dateRelease ? $this->sanitizeData->createDateFromString($item->dateRelease) : null)
+                ->setDateRelease(($item->dateRelease && $item->dateRelease !== "00/00/0000") ? $this->sanitizeData->createDateFromString($item->dateRelease) : null)
                 ->setVersionDpe($item->versionDpe)
                 ->setDpeMinConso($item->dpeMinConso)
                 ->setDpeMaxConso($item->dpeMaxConso)
