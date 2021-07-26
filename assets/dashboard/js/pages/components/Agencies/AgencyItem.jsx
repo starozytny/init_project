@@ -28,7 +28,7 @@ export class AgencyItem extends Component {
                         <img src={`/immo/logos/${elem.logo}`} alt={`Image de ${elem.name}`}/>
                     </div>
                     <div className="infos infos-col-4">
-                        <div className="col-1">
+                        <div className="col-1" onClick={() => onChangeContext("read", elem)}>
                             <div className="name">
                                 <span>{elem.name}</span>
                                 <a target="_blank" href={elem.website}><span className="icon-link-2" /></a>
