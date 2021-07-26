@@ -9,13 +9,11 @@ export class AgencyRead extends Component {
     render () {
         const { element, onChangeContext } = this.props;
 
-        let stats = null;
+        let statsAds = null, statsBiens = null;
         let last = element.stats.length;
         if(last > 0){
-            stats = <>
-                <ChartAds donnees={JSON.stringify(element.stats)} />
-                <ChartBiens donnees={JSON.stringify([element.stats[last - 1]])} />
-            </>
+            statsAds = <ChartAds donnees={JSON.stringify(element.stats)} />;
+            statsBiens = <ChartBiens donnees={JSON.stringify([element.stats[last - 1]])} />
         }
 
         return <>
@@ -69,10 +67,14 @@ export class AgencyRead extends Component {
                         </div>
                     </div>
 
-                    <div>
-                        {stats}
+                    <div className="agency-stats">
+                        {statsAds}
                     </div>
 
+                </div>
+
+                <div>
+                    {statsBiens}
                 </div>
             </div>
         </>

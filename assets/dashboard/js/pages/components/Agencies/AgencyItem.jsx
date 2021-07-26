@@ -7,7 +7,7 @@ export class AgencyItem extends Component {
     render () {
         const { elem, total, onChangeContext, onDelete } = this.props
 
-        let progress = 0;
+        let progress;
         let nb = (elem.totalBiens / total) * 100; // sub le total global des agences
         if(nb === 0){
             progress = 0;

@@ -56,10 +56,6 @@
 }
 
 .items-ad{
-  .selector{
-    cursor: pointer;
-  }
-
   .gallery {
     .image {
       object-fit: cover;
@@ -129,6 +125,7 @@
 }
 
 .item-agency-read{
+  //@include flex(row, flex-start, flex-start);
 
   .user-read-infos{
     max-width: 768px;
@@ -155,6 +152,14 @@
     text-align: left;
     margin-top: 12px;
   }
+}
+
+.agency-stats{
+  max-width: 360px;
+  background-color: var(--alpha);
+  border-radius: 12px;
+  box-shadow: 0 0 12px var(--greyShadow);
+  margin-top: 24px;
 }
 
 //                      __   _____ __    ___    __

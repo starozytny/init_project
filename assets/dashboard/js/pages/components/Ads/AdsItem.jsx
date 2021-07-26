@@ -8,11 +8,11 @@ export class AdsItem extends Component {
         const { elem, onChangeContext } = this.props
 
         return <div className="item">
-            <div className="selector" onClick={() => onChangeContext("show", elem)}>
+            <div className="selector">
                 <div>#{elem.id}</div>
             </div>
 
-            <div className="item-content">
+            <div className="item-content" onClick={() => onChangeContext("show", elem)}>
                 <div className="item-body">
                     <div className="avatar">
                         <Gallery elem={elem} isImage={true}/>
@@ -30,7 +30,7 @@ export class AdsItem extends Component {
                             <div>{Sanitize.toFormatCurrency(elem.financial.price)} {elem.typeAd === "Location" && "cc/mois"}</div>
                         </div>
                         <div className="ad-ad">
-                            <div className={"role type-ad ad-" + elem.codeTypeAd}>{elem.typeAd}</div>
+                            <div className={"role type-ad ad-" + elem.codeTypeAd}>{elem.codeTypeAd} {elem.typeAd}</div>
                         </div>
                         <div className="ad-bien">
                             <div className="role type-bien">{elem.typeBien}</div>
