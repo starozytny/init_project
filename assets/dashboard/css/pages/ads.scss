@@ -128,6 +128,35 @@
   color: var(--primary);
 }
 
+.item-agency-read{
+
+  .user-read-infos{
+    max-width: 768px;
+  }
+
+  .name{
+    margin-bottom: 12px;
+  }
+
+  .role{
+    font-size: 14px;
+
+    & > a{
+      color: var(--txt);
+      padding: 0;
+    }
+
+    & > *:not(:last-child){
+      margin-right: 8px;
+    }
+  }
+
+  .sub-contact{
+    text-align: left;
+    margin-top: 12px;
+  }
+}
+
 //                      __   _____ __    ___    __
 //                     | _| |___  / /_  ( _ )  |_ |
 //    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
