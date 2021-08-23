@@ -9,7 +9,7 @@ nav.fixed{
   z-index: 1000;
 
   & + main{
-    margin-top: 76px;
+    margin-top: 52px;
   }
 }
 
@@ -148,19 +148,21 @@ nav.fixed{
         .item-dropdown-items{
           z-index: 2000;
           opacity: 1;
+          top: 0;
         }
       }
     }
 
     .item-dropdown-items{
       position: absolute;
-      top: 0;
+      top: -600px;
       left: 0;
       background-color: transparent;
       opacity: 0;
       z-index: -5;
       width: 100%;
       padding-top: 60px;
+      transition: opacity 0.2s ease-in-out;
 
       .item-dropdown-items-container{
         background-color: var(--alpha);
@@ -175,6 +177,7 @@ nav.fixed{
       &:hover{
         z-index: 2000;
         opacity: 1;
+        top: 0;
       }
     }
   }

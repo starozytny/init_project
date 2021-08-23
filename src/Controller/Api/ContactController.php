@@ -52,7 +52,7 @@ class ContactController extends AbstractController
     }
 
     /**
-     * Create an message contact
+     * Create a message contact
      *
      * @Route("/", name="create", options={"expose"=true}, methods={"POST"})
      *

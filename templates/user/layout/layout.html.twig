@@ -36,3 +36,7 @@
     ]%}
     {% set menuBottom = menuAdd | merge(menuBottom) %}
 {% endif %}
+
+{% block footer %}
+    {% include "app/layout/components/footer.html.twig" %}
+{% endblock %}

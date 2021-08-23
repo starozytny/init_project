@@ -21,7 +21,7 @@ use OpenApi\Annotations as OA;
  * @UniqueEntity(fields={"username"})
  * @UniqueEntity(fields={"email"})
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User extends DataEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
     const ADMIN_READ = ['admin:read'];
     const USER_READ = ['user:read'];
@@ -117,16 +117,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $notifications;
 
+    /**
+     * @throws Exception
+     */
     public function __construct()
     {
-        $createdAt = new \DateTime();
-        $createdAt->setTimezone(new \DateTimeZone("Europe/Paris"));
-        $this->createdAt = $createdAt;
-        try {
-            $this->setToken(bin2hex(random_bytes(32)));
-        } catch (Exception $e) {
-            throw new Exception($e);
-        }
+        $this->createdAt = $this->initNewDate();
+        $this->token = $this->initToken();
         $this->notifications = new ArrayCollection();
     }
 
@@ -262,39 +259,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * return ll -> 5 janv. 2017
+     * return LL -> 5 janvier 2017
+     *
      * @return string|null
      * @Groups({"admin:read"})
      */
     public function getCreatedAtString(): ?string
     {
-        if($this->createdAt){
-            $frenchFactory = new Factory([
-                'locale' => 'fr_FR',
-                'timezone' => 'Europe/Paris'
-            ]);
-            $time = Carbon::instance($this->createdAt);
-
-            return $frenchFactory->make($time)->isoFormat('ll');
-        }
-
-        return null;
+        return $this->getFullDateString($this->createdAt);
     }
 
     /**
-     * How long ago an user was added.
+     * How long ago a user was added.
      *
      * @return string
      * @Groups({"admin:read"})
      */
     public function getCreatedAtAgo(): string
     {
-        $frenchFactory = new Factory([
-            'locale' => 'fr_FR',
-            'timezone' => 'Europe/Paris'
-        ]);
-        $time = Carbon::instance($this->getCreatedAt());
-
-        return $frenchFactory->make($time)->diffForHumans();
+        return $this->getHowLongAgo($this->getCreatedAt());
     }
 
     public function getLastLogin(): ?\DateTimeInterface
@@ -310,23 +294,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * How long ago an user was logged for the last time.
+     * How long ago a user was logged for the last time.
      *
      * @Groups({"admin:read"})
      */
     public function getLastLoginAgo(): ?string
     {
-        if($this->getLastLogin()){
-            $frenchFactory = new Factory([
-                'locale' => 'fr_FR',
-                'timezone' => 'Europe/Paris'
-            ]);
-            $time = Carbon::instance($this->getLastLogin());
-
-            return $frenchFactory->make($time)->diffForHumans();
-        }
-
-        return null;
+        return $this->getHowLongAgo($this->getLastLogin());
     }
 
     public function getForgetCode(): ?string

@@ -191,12 +191,13 @@ select{
 
   &.checked > label{
     border: 1px solid var(--primary);
-    background-color: var(--primaryShadow);
-    color: var(--beta);
+    background-color: var(--apha);
+    color: var(--primary);
     opacity: 1;
 
     &:hover{
       background-color: var(--fond);
+      border-style: dashed;
     }
   }
 
@@ -210,7 +211,6 @@ select{
 
     &:hover{
       opacity: 1;
-      color: var(--txt);
       border-color: var(--txt);
     }
   }
@@ -223,8 +223,9 @@ select{
 .radiobox-item{
   &.checked > label{
     &:hover{
-      background-color: var(--primaryShadow);
+      background-color: var(--alpha);
       border-color: var(--primary);
+      border-style: solid;
     }
   }
 }

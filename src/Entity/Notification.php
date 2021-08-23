@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=NotificationRepository::class)
  */
-class Notification
+class Notification extends DataEntity
 {
     /**
      * @ORM\Id
@@ -61,9 +61,7 @@ class Notification
 
     public function __construct()
     {
-        $createdAt = new \DateTime();
-        $createdAt->setTimezone(new \DateTimeZone("Europe/Paris"));
-        $this->createdAt = $createdAt;
+        $this->createdAt = $this->initNewDate();
         $this->isSeen = false;
     }
 
@@ -109,23 +107,13 @@ class Notification
     }
 
     /**
-     * How long ago an user was logged for the last time.
+     * How long ago a user was logged for the last time.
      *
      * @Groups({"admin:read"})
      */
     public function getCreatedAtAgo(): ?string
     {
-        if($this->getCreatedAt()){
-            $frenchFactory = new Factory([
-                'locale' => 'fr_FR',
-                'timezone' => 'Europe/Paris'
-            ]);
-            $time = Carbon::instance($this->getCreatedAt());
-
-            return $frenchFactory->make($time)->diffForHumans();
-        }
-
-        return null;
+        return $this->getHowLongAgo($this->createdAt);
     }
 
     public function getIsSeen(): ?bool

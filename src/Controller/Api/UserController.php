@@ -343,10 +343,7 @@ class UserController extends AbstractController
 
         $code = uniqid($user->getId());
 
-        $forgetAt = new \DateTime();
-        $forgetAt->setTimezone(new \DateTimeZone("Europe/Paris"));
-
-        $user->setForgetAt($forgetAt);
+        $user->setForgetAt(new \DateTime()); // no set timezone to compare expired
         $user->setForgetCode($code);
 
         $url = $this->generateUrl('app_password_reinit', ['token' => $user->getToken(), 'code' => $code], UrlGeneratorInterface::ABSOLUTE_URL);

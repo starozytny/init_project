@@ -27,7 +27,7 @@ export class StyleguideForm extends Component {
             roles: [], // default : ["ROLE_USER"]
             sexe: "",  // default : 0
             pays: "",  // default : "France"
-            birthday: "",
+            birthday: "", // from entity : new Date(getCreatedAtJavascript)
             createAt: "",
             arrived: "",
             postalCode: "",
@@ -37,6 +37,14 @@ export class StyleguideForm extends Component {
             faq: "",
             question: []
         }
+
+        // In ENTITY
+        //
+        // public function getCreatedAtJavascript(): ?string
+        // {
+        //     date_default_timezone_set('Europe/Paris');
+        //     return $this->getCreatedAt() != null ? date_format($this->getCreatedAt(), 'F d, Y H:i:s') : null;
+        // }
 
         this.inputAvatar = React.createRef();
         this.inputFiles = React.createRef();

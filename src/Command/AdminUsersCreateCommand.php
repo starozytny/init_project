@@ -39,7 +39,7 @@ class AdminUsersCreateCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Reset des tables');
-        $this->databaseService->resetTable($io, ['user']);
+        $this->databaseService->resetTable($io, [User::class]);
 
         $users = array(
             [

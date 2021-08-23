@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=ContactRepository::class)
  */
-class Contact
+class Contact extends DataEntity
 {
     /**
      * @ORM\Id
@@ -58,9 +58,7 @@ class Contact
 
     public function __construct()
     {
-        $createdAt = new \DateTime();
-        $createdAt->setTimezone(new \DateTimeZone("Europe/Paris"));
-        $this->createdAt = $createdAt;
+        $this->createdAt = $this->initNewDate();
         $this->isSeen = false;
     }
 
@@ -118,20 +116,14 @@ class Contact
     }
 
     /**
-     * How long ago an user was added.
+     * How long ago a user was added.
      *
      * @return string
      * @Groups({"admin:read"})
      */
     public function getCreatedAtAgo(): string
     {
-        $frenchFactory = new Factory([
-            'locale' => 'fr_FR',
-            'timezone' => 'Europe/Paris'
-        ]);
-        $createdAt = Carbon::instance($this->getCreatedAt());
-
-        return $frenchFactory->make($createdAt)->diffForHumans();
+        return $this->getHowLongAgo($this->createdAt);
     }
 
     public function getIsSeen(): ?bool
