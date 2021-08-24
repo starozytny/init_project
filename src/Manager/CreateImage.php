@@ -40,6 +40,7 @@ class CreateImage
                 if($isUrl == "http" || $isUrl == "https"){
                     $filename = $this->downloadImgURL($item, $sourceImages, $sourceThumbs);
 
+                    $file = $sourceImages.$filename;
                     if ($filename != null){
                         $filenameThumbs = $this->createThumb($sourceImages, $sourceThumbs, $filename, self::TAILLE_W, self::TAILLE_H);
                     }
