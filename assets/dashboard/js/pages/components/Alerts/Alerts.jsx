@@ -39,7 +39,7 @@ export class Alerts extends Component {
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, SORTER); }
 
     handleDelete = (element) => {
-        this.layout.current.handleDelete(this, element, Routing.generate(URL_DELETE_ELEMENT, {'id': element.id}), MSG_DELETE_ELEMENT);
+        this.layout.current.handleDelete(this, element, Routing.generate(URL_DELETE_ELEMENT, {'token': element.token}), MSG_DELETE_ELEMENT);
     }
 
     handleDeleteGroup = () => {

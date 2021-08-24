@@ -156,7 +156,7 @@ class AlertsController extends AbstractController
     /**
      * Delete an alert with email
      *
-     * @Route("/delete", name="delete", options={"expose"=true}, methods={"POST"})
+     * @Route("/delete", name="delete_with_email", options={"expose"=true}, methods={"DELETE"})
      *
      * @OA\Response(
      *     response=200,
