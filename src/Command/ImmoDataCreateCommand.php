@@ -101,7 +101,6 @@ class ImmoDataCreateCommand extends Command
         $call = $input->getArgument('call');
         $haveApimmo = $input->getArgument('haveApimmo');
         $this->process($io, $output, $call, $haveApimmo);
-        $this->removeAgencyNoSynchronized($io);
 
         return Command::SUCCESS;
     }
@@ -120,6 +119,9 @@ class ImmoDataCreateCommand extends Command
         $folders = $this->extractZIP($io, $archives); // exit auto if no folder
 
         if($folders == 0){
+
+            $this->removeAgencyNoSynchronized($io);
+
             if($call != 1){
                 $this->createStats();
                 $io->comment('Stats créées.');
@@ -192,81 +194,83 @@ class ImmoDataCreateCommand extends Command
         /** @var ImAgency $agency */
         foreach($agencies as $agency){
 
-            $totBiens = 0; $totLocations = 0; $totVentes = 0;
-            $nbMaisons = 0; $nbAppartements = 0; $nbParkings = 0;
-            $nbBureaux = 0; $nbLocaux = 0; $nbImmeubles = 0;
-            $nbTerrains = 0; $nbCommerces = 0; $nbAutres = 0;
+            if(count($agency->getBiens()) != 0){
+                $totBiens = 0; $totLocations = 0; $totVentes = 0;
+                $nbMaisons = 0; $nbAppartements = 0; $nbParkings = 0;
+                $nbBureaux = 0; $nbLocaux = 0; $nbImmeubles = 0;
+                $nbTerrains = 0; $nbCommerces = 0; $nbAutres = 0;
 
-            foreach($agency->getBiens() as $bien){
+                foreach($agency->getBiens() as $bien){
 
-                //nbBiens
-                $totBiens++;
+                    //nbBiens
+                    $totBiens++;
 
-                //nbLocations et nbVentes
-                if($bien->getCodeTypeAd() == ImBien::NATURE_LOCATION){
-                    $totLocations++;
-                }else{
-                    $totVentes++;
+                    //nbLocations et nbVentes
+                    if($bien->getCodeTypeAd() == ImBien::NATURE_LOCATION){
+                        $totLocations++;
+                    }else{
+                        $totVentes++;
+                    }
+
+                    //nb des types de biens
+                    switch ($bien->getCodeTypeBien()){
+                        case ImBien::TYPE_MAISON:
+                            $nbMaisons++;
+                            break;
+                        case ImBien::TYPE_APPARTEMENT:
+                            $nbAppartements++;
+                            break;
+                        case ImBien::TYPE_PARKING:
+                            $nbParkings++;
+                            break;
+                        case ImBien::TYPE_BUREAUX:
+                            $nbBureaux++;
+                            break;
+                        case ImBien::TYPE_LOCAL:
+                            $nbLocaux++;
+                            break;
+                        case ImBien::TYPE_IMMEUBLE:
+                            $nbImmeubles++;
+                            break;
+                        case ImBien::TYPE_TERRAIN:
+                            $nbTerrains++;
+                            break;
+                        case ImBien::TYPE_FOND_COMMERCE:
+                            $nbCommerces++;
+                            break;
+                        default:
+                            $nbAutres++;
+                            break;
+                    }
                 }
 
-                //nb des types de biens
-                switch ($bien->getCodeTypeBien()){
-                    case ImBien::TYPE_MAISON:
-                        $nbMaisons++;
-                        break;
-                    case ImBien::TYPE_APPARTEMENT:
-                        $nbAppartements++;
-                        break;
-                    case ImBien::TYPE_PARKING:
-                        $nbParkings++;
-                        break;
-                    case ImBien::TYPE_BUREAUX:
-                        $nbBureaux++;
-                        break;
-                    case ImBien::TYPE_LOCAL:
-                        $nbLocaux++;
-                        break;
-                    case ImBien::TYPE_IMMEUBLE:
-                        $nbImmeubles++;
-                        break;
-                    case ImBien::TYPE_TERRAIN:
-                        $nbTerrains++;
-                        break;
-                    case ImBien::TYPE_FOND_COMMERCE:
-                        $nbCommerces++;
-                        break;
-                    default:
-                        $nbAutres++;
-                        break;
+                if($totBiens != 0){
+                    // ant stats
+                    $anteriorsStats = $this->em->getRepository(ImStat::class)->findBy(['agency' => $agency]);
+
+                    if(count($anteriorsStats) >= 5){
+                        $this->em->remove($anteriorsStats[0]);
+                    }
+
+                    $stat = (new ImStat())
+                        ->setTotBiens($totBiens)
+                        ->setTotLocations($totLocations)
+                        ->setTotVentes($totVentes)
+                        ->setNbMaisons($nbMaisons)
+                        ->setNbAppartements($nbAppartements)
+                        ->setNbParkings($nbParkings)
+                        ->setNbBureaux($nbBureaux)
+                        ->setNbLocaux($nbLocaux)
+                        ->setNbImmeubles($nbImmeubles)
+                        ->setNbTerrains($nbTerrains)
+                        ->setNbCommerces($nbCommerces)
+                        ->setNbAutres($nbAutres)
+                        ->setAgency($agency)
+                    ;
+
+                    $this->em->persist($stat);
+                    $this->em->flush();
                 }
-            }
-
-            if($totBiens != 0){
-                // ant stats
-                $anteriorsStats = $this->em->getRepository(ImStat::class)->findBy(['agency' => $agency]);
-
-                if(count($anteriorsStats) >= 5){
-                    $this->em->remove($anteriorsStats[0]);
-                }
-
-                $stat = (new ImStat())
-                    ->setTotBiens($totBiens)
-                    ->setTotLocations($totLocations)
-                    ->setTotVentes($totVentes)
-                    ->setNbMaisons($nbMaisons)
-                    ->setNbAppartements($nbAppartements)
-                    ->setNbParkings($nbParkings)
-                    ->setNbBureaux($nbBureaux)
-                    ->setNbLocaux($nbLocaux)
-                    ->setNbImmeubles($nbImmeubles)
-                    ->setNbTerrains($nbTerrains)
-                    ->setNbCommerces($nbCommerces)
-                    ->setNbAutres($nbAutres)
-                    ->setAgency($agency)
-                ;
-
-                $this->em->persist($stat);
-                $this->em->flush();
             }
         }
     }
@@ -543,6 +547,7 @@ class ImmoDataCreateCommand extends Command
                         }
                     }
 
+                    //remove bien
                     $this->em->remove($bien);
                 }
 
@@ -550,7 +555,13 @@ class ImmoDataCreateCommand extends Command
                 foreach($agency->getStats() as $stat){
                     $this->em->remove($stat);
                 }
+            }
+        }
 
+        $this->em->flush();
+
+        foreach($agencies as $agency){
+            if(!in_array($agency->getDirname(), $this->synchroAgencies)){
                 $this->em->remove($agency);
             }
         }

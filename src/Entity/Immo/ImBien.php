@@ -147,7 +147,7 @@ class ImBien
     private $diagnostic;
 
     /**
-     * @ORM\OneToOne(targetEntity=ImCopro::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=ImCopro::class, cascade={"persist", "remove"}, fetch="EAGER")
      * @Groups({"list:read", "show:read"})
      */
     private $copro;

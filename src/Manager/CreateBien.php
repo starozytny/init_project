@@ -98,7 +98,7 @@ class CreateBien
         $this->em->persist($address);
 
         $bien = $this->createBienFromJson($bien, $data->bien, $identifiant, $agency, $address, $financial, $feature,
-                                          $featureExt, $diagnostic, $copro);
+                                          $featureExt, $diagnostic, $copro, $responsable);
         $this->em->persist($bien);
 
        return $bien;
@@ -109,7 +109,7 @@ class CreateBien
      */
     private function createBienFromJson(ImBien $bien, $item, $identifiant, ImAgency $agency, ImAddress $address,
                                         ImFinancial $financial, ImFeature $feature, ?ImFeatureExt $featureExt,
-                                        ?ImDiagnostic $diagnostic, ?ImCopro $copro): ImBien
+                                        ?ImDiagnostic $diagnostic, ?ImCopro $copro, ?ImResponsable  $responsable): ImBien
     {
         return ($bien)
             ->setRef($item->ref)
@@ -135,6 +135,7 @@ class CreateBien
             ->setPanoramique($item->panoramique)
             ->setLibelle($item->libelle)
             ->setIdentifiantTech($item->identifiantTech)
+            ->setResponsable($responsable)
         ;
     }
 
