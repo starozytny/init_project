@@ -8,10 +8,8 @@ import Sort              from "@dashboardComponents/functions/sort";
 import { AgencyList }      from "./AgencyList";
 import { AgencyRead }       from "@dashboardFolder/js/pages/components/Agencies/AgencyRead";
 
-const URL_DELETE_ELEMENT = 'api_immo_demandes_delete';
-const URL_DELETE_GROUP = 'api_immo_demandes_delete_group';
-const MSG_DELETE_ELEMENT = 'Supprimer cette demande ?';
-const MSG_DELETE_GROUP = 'Aucune demande sélectionnée.';
+const URL_DELETE_ELEMENT = 'api_immo_agency_delete';
+const MSG_DELETE_ELEMENT = 'Supprimer cette agence ?';
 const SORTER = Sort.compareName;
 
 export class Agency extends Component {
@@ -28,7 +26,6 @@ export class Agency extends Component {
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
-        this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
         this.handleContentRead = this.handleContentRead.bind(this);
@@ -42,15 +39,10 @@ export class Agency extends Component {
         this.layout.current.handleDelete(this, element, Routing.generate(URL_DELETE_ELEMENT, {'id': element.id}), MSG_DELETE_ELEMENT);
     }
 
-    handleDeleteGroup = () => {
-        this.layout.current.handleDeleteGroup(this, Routing.generate(URL_DELETE_GROUP), MSG_DELETE_GROUP);
-    }
-
     handleContentList = (currentData, changeContext) => {
         return <AgencyList onChangeContext={changeContext}
                            total={this.props.total}
                            onDelete={this.handleDelete}
-                           onDeleteAll={this.handleDeleteGroup}
                            data={currentData} />
     }
 

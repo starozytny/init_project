@@ -47,7 +47,7 @@ export class AgencyItem extends Component {
                         </div>
                         <div className="col-4 actions">
                             <ButtonIcon icon="pencil">Modifier</ButtonIcon>
-                            <ButtonIcon icon="trash">Supprimer</ButtonIcon>
+                            <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
                         </div>
                     </div>
                 </div>
