@@ -43,7 +43,7 @@ class ImDiagnostic
     private $gesLettre;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="date", nullable=true)
      * @Groups({"list:read", "show:read"})
      */
     private $dateRelease;

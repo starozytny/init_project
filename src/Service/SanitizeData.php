@@ -37,7 +37,7 @@ class SanitizeData
     public function createDateFromString($date, $timezone="Europe/Paris"): \DateTime
     {
         try {
-            $date = new \DateTime($date);
+            $date = new \DateTime(str_replace('/', '-', $date));
         } catch (\Exception $e) {
             throw new BadRequestException("Erreur dans la création de la date.");
         }
