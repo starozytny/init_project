@@ -6,11 +6,13 @@ use App\Entity\Immo\ImAgency;
 use App\Entity\User;
 use App\Manager\CreateAgency;
 use App\Service\ApiResponse;
+use App\Service\Export;
 use App\Service\FileUploader;
 use App\Service\Immo\ImmoService;
 use App\Service\ValidatorService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -179,5 +181,69 @@ class AgencyController extends AbstractController
 
         $em->flush();
         return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+    }
+
+    /**
+     * Export list agencies
+     *
+     * @Route("/export/{format}", name="export", options={"expose"=true}, methods={"GET"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a new agency object",
+     * )
+     *
+     * @OA\Tag(name="Agency")
+     *
+     * @param Export $export
+     * @param $format
+     * @return BinaryFileResponse
+     */
+    public function export(Export $export, $format): BinaryFileResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $objs = $em->getRepository(ImAgency::class)->findAll();
+        $data = [];
+
+        $nameFile = 'agences';
+        $nameFolder = 'export/';
+
+        foreach ($objs as $obj) {
+            $tmp = [
+                $obj->getName(),
+                $obj->getDirname(),
+                $obj->getPhoneLocation(),
+                $obj->getPhoneVente(),
+                $obj->getEmail(),
+                $obj->getWebsite(),
+                $obj->getLogo(),
+                $obj->getAddress(),
+                $obj->getZipcode(),
+                $obj->getCity(),
+                "",
+                $obj->getLat(),
+                $obj->getLon(),
+                "", "", "", "",
+                $obj->getTarif(),
+                $obj->getDescription(),
+                $obj->getPhone(),
+                $obj->getLegal(),
+                $obj->getEmailLocation(),
+                $obj->getEmailVente()
+            ];
+            if(!in_array($tmp, $data)){
+                array_push($data, $tmp);
+            }
+        }
+
+        $fileName = $nameFile . '.xlsx';
+        $header = [['Nom', 'Dirname', 'Téléphone Location', 'Téléphone Vente', 'Adresse e-mail standard', 'Adresse URL',
+            'Logo', 'Adresse', 'Code postal', 'Ville', 'Arrondissement', 'Latitude', 'Longitude',
+            'Catégorie - locative', 'Catégorie - vente', 'Catégorie - syndic', 'Catégorie - gérance',
+            'Tarif', 'Description', 'Téléphone standard', 'Legal', 'Adresse e-mail location', 'Adresse e-mail vente'
+        ]];
+
+        $export->createFile($format, 'Liste des ' . $nameFile, $fileName , $header, $data, 23, $nameFolder);
+        return new BinaryFileResponse($this->getParameter('private_directory'). $nameFolder . $fileName);
     }
 }
