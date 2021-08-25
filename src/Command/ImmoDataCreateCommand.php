@@ -9,6 +9,7 @@ use App\Manager\CreateAgency;
 use App\Manager\CreateBien;
 use App\Manager\CreateImage;
 use App\Service\ApiConnect;
+use App\Service\Immo\ImmoService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Command\Command;
@@ -42,6 +43,7 @@ class ImmoDataCreateCommand extends Command
     private $url;
     private $params;
     private $api_immo;
+    private $immoService;
     private $PATH_DEPOT;
     private $PATH_EXTRACT;
     private $PATH_ARCHIVE;
@@ -54,7 +56,7 @@ class ImmoDataCreateCommand extends Command
     private $createBien;
     private $createImage;
 
-    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params,
+    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params, ImmoService $immoService,
                                 HttpClientInterface $api_immo, ApiConnect $apiConnect,
                                 CreateAgency $createAgency, CreateBien $createBien, CreateImage $createImage)
     {
@@ -76,6 +78,7 @@ class ImmoDataCreateCommand extends Command
         $this->createAgency = $createAgency;
         $this->createBien = $createBien;
         $this->createImage = $createImage;
+        $this->immoService = $immoService;
     }
 
     protected function configure()
@@ -529,42 +532,10 @@ class ImmoDataCreateCommand extends Command
         foreach($agencies as $agency){
             if(!in_array($agency->getDirname(), $this->synchroAgencies)){
                 $io->comment($agency->getName());
-                foreach($agency->getBiens() as $bien){
-                    // remove bien of demandes
-                    foreach($bien->getDemandes() as $demande){
-                        $demande->setBien(null);
-                    }
-
-                    // remove pictures
-                    foreach($bien->getImages() as $image){
-                        $img = $this->PATH_IMAGES . $agency->getDirname() . '/' . $image->getFile();
-                        $thumb = $this->PATH_THUMBS . $agency->getDirname() . '/' . $image->getThumb();
-                        if(file_exists($img)){
-                            unlink($img);
-                        }
-                        if(file_exists($thumb)){
-                            unlink($thumb);
-                        }
-                    }
-
-                    //remove bien
-                    $this->em->remove($bien);
-                }
-
-                //remove stats
-                foreach($agency->getStats() as $stat){
-                    $this->em->remove($stat);
-                }
+                $this->immoService->deleteAgency($agency);
             }
         }
 
-        $this->em->flush();
-
-        foreach($agencies as $agency){
-            if(!in_array($agency->getDirname(), $this->synchroAgencies)){
-                $this->em->remove($agency);
-            }
-        }
         $this->em->flush();
     }
 }
