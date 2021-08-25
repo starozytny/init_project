@@ -65,8 +65,8 @@ export class Drop extends Component {
         const { file, folder, children, accept, maxFiles, labelError, label, labelFiles="Ajouter" } = this.props;
 
         let content = <div className="form-files">
-            {file && folder && <div className="preview-form-oldFile">
-                <img src={"/" + folder + "/" + file} alt="preview file"/>
+            {(file && folder) && <div className="preview-form-oldFile"> {accept === "image/*" ?
+                <img src={"/" + folder + "/" + file} alt="preview file"/> : <a href={location.origin + "/" + folder + "/" + file} target="_blank">{file}</a>}
             </div>}
             <Dropzone
                 ref={this.drop}

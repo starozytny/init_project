@@ -4,14 +4,15 @@ import axios                   from "axios";
 import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Input, TextArea }     from "@dashboardComponents/Tools/Fields";
+import { Input }               from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
-import { RgpdInfo }            from "@appComponents/Tools/Rgpd";
+import { Trumb }               from "@dashboardComponents/Tools/Trumb";
 
 import Validateur              from "@dashboardComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
+import {Drop} from "@dashboardComponents/Tools/Drop";
 
 export function AgencyFormulaire ({ type, onChangeContext, onUpdateList, element })
 {
@@ -42,6 +43,10 @@ export function AgencyFormulaire ({ type, onChangeContext, onUpdateList, element
         city={element ? element.city : ""}
         lat={element ? element.lat : ""}
         lon={element ? element.lon : ""}
+        description={element ? element.description : ""}
+        legal={element ? element.legal : ""}
+        logo={element ? element.logo : ""}
+        tarif={element ? element.tarif : ""}
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
         messageSuccess={msg}
@@ -69,12 +74,20 @@ export class AgencyForm extends Component {
             city: props.city,
             lat: props.lat,
             lon: props.lon,
+            description: { value: props.description ? props.description : "", html: props.description ? props.description : "" },
+            legal: { value: props.legal ? props.legal : "", html: props.legal ? props.legal : "" },
+            logo: props.logo,
+            tarif: props.tarif,
             errors: [],
             success: false,
             critere: ""
         }
 
+        this.inputLogo = React.createRef();
+        this.inputTarif = React.createRef();
+
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeTrumb = this.handleChangeTrumb.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -86,12 +99,28 @@ export class AgencyForm extends Component {
 
     handleChange = (e) => { this.setState({[e.currentTarget.name]: e.currentTarget.value}) }
 
+    handleChangeTrumb = (e) => {
+        const { description, legal } = this.state
+
+        let name = e.currentTarget.id;
+        let text = e.currentTarget.innerHTML;
+        let value = "";
+        if(name === "description"){
+            value = description.value;
+        }else if(name === "legal"){
+            value = legal.value;
+        }
+
+        this.setState({[name]: {value: value, html: text}})
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
         const { critere, name, dirname, website, email, emailLocation, emailVente,
-            phone, phoneLocation, phoneVente, address, zipcode, city, lat, lon
+            phone, phoneLocation, phoneVente, address, zipcode, city, lat, lon,
+            description, legal
         } = this.state;
 
         if(critere !== ""){
@@ -115,7 +144,12 @@ export class AgencyForm extends Component {
                 {type: "text", id: 'city', value: city},
                 {type: "text", id: 'lat', value: lat},
                 {type: "text", id: 'lon', value: lon},
+                {type: "text", id: 'description', value: description.html},
+                {type: "text", id: 'legal', value: legal.html},
             ];
+
+            let logo = this.inputLogo.current.drop.current.files;
+            let tarif = this.inputTarif.current.drop.current.files;
 
             // validate global
             let validate = Validateur.validateur(paramsToValidate)
@@ -124,7 +158,18 @@ export class AgencyForm extends Component {
             }else{
                 Formulaire.loader(true);
                 let self = this;
-                axios({ method: method, url: url, data: self.state })
+
+                let formData = new FormData();
+                if(logo[0]){
+                    formData.append('logo', logo[0].file);
+                }
+                if(tarif[0]){
+                    formData.append('tarif', tarif[0].file);
+                }
+
+                formData.append("data", JSON.stringify(this.state));
+
+                axios({ method: "POST", url: url, data: formData, headers: {'Content-Type': 'multipart/form-data'} })
                     .then(function (response) {
                         let data = response.data;
                         self.props.onUpdateList(data);
@@ -149,6 +194,10 @@ export class AgencyForm extends Component {
                                 city: "",
                                 lat: "",
                                 lon: "",
+                                description: { value: "", html: "" },
+                                legal: { value: "", html: "" },
+                                logo: "",
+                                tarif: ""
                             })
                         }
                     })
@@ -166,7 +215,7 @@ export class AgencyForm extends Component {
     render () {
         const { context } = this.props;
         const { critere, errors, success, name, dirname, website, email, emailLocation, emailVente,
-                phone, phoneLocation, phoneVente, address, zipcode, city, lat, lon } = this.state;
+                phone, phoneLocation, phoneVente, address, zipcode, city, lat, lon, description, legal, logo, tarif } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -193,6 +242,18 @@ export class AgencyForm extends Component {
 
                 <div className="line line-critere">
                     <Input identifiant="critere" valeur={critere} errors={errors} onChange={this.handleChange}>Critère</Input>
+                </div>
+
+                <div className="line line-2">
+                    <Drop ref={this.inputLogo} identifiant="logo" file={logo} folder="immo/logos" errors={errors} accept={"image/*"} maxFiles={1}
+                          label="Téléverser un logo" labelError="Seules les images sont acceptées.">Logo</Drop>
+                    <Drop ref={this.inputTarif} identifiant="tarif" file={tarif} folder="immo/tarifs" errors={errors} accept={"application/pdf"} maxFiles={1}
+                          label="Téléverser un PDF Tarif" labelError="Seules les PDFs sont acceptées.">Tarif</Drop>
+                </div>
+
+                <div className="line line-2">
+                    <Trumb identifiant="description" valeur={description.value} errors={errors} onChange={this.handleChangeTrumb}>Description</Trumb>
+                    <Trumb identifiant="legal" valeur={legal.value} errors={errors} onChange={this.handleChangeTrumb}>Légal</Trumb>
                 </div>
 
                 <div className="line line-3">

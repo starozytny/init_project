@@ -266,10 +266,25 @@ select{
   width: 100%;
 
   .preview-form-oldFile{
-    margin-bottom: 12px;
+    margin-bottom: 4px;
 
     img{
       border-radius: 4px;
+    }
+
+    a{
+      display: inline-block;
+    }
+
+    & > *{
+      max-width: 64px;
+      overflow: auto;
+      @include scrollbar();
+      padding-bottom: 8px;
+
+      &::-webkit-scrollbar {
+        height: 4px;
+      }
     }
   }
 

@@ -34,7 +34,7 @@ export class StyleguideForm extends Component {
             arrayPostalCode: [],
             city: "",
             fruit: "",
-            faq: "",
+            faq: "", // faq: { value: props.faq ? props.faq : "", html: props.faq ? props.faq : "" },
             question: []
         }
 
@@ -105,8 +105,15 @@ export class StyleguideForm extends Component {
 
     handleChangeTrumb = (e) => {
         const { faq } = this.state
-        // this.setState({faq: {value: (faq != null ? faq.content : ''), error: '', html: e.currentTarget.innerHTML}})
-        this.setState({ faq: (faq != null ? faq : '') })
+
+        let name = e.currentTarget.id;
+        let text = e.currentTarget.innerHTML;
+        let value = "";
+        if(name === "faq"){
+            value = faq.value;
+        }
+
+        this.setState({[name]: {value: value, html: text}})
     }
 
     handleSubmit = (e) => {
@@ -133,7 +140,7 @@ export class StyleguideForm extends Component {
             {type: "array", id: 'avatar', value: avatar},
             {type: "array", id: 'files', value: files},
             {type: "text", id: 'fruit', value: fruit},
-            {type: "text", id: 'faq', value: faq},
+            {type: "text", id: 'faq', value: faq.html},
             {type: "text", id: 'question', value: question},
         ])
 
