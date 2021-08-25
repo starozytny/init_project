@@ -8,9 +8,7 @@ function createMap(initLat = 43.2953, initLon = 5.3691, mapId = "mapid", mapUrl 
     L.tileLayer(mapUrl, {
         attribution: '© données par <a href="https://www.openstreetmap.org/copyright">les contributeurs & contributrices d’OpenStreetMap</a> sous licence libre ODbL,' +
             '<br>Fond de carte par <a href="https://www.hotosm.org/updates/2013-09-29_a_new_window_on_openstreetmap_data">Yohan Boniface & Humanitarian ' +
-            'OpenStreetMap Team</a> sous licence domaine public CC0 hébergé par <a href="https://www.openstreetmap.fr/mentions-legales/">OSM France</a>',
-        minZoom: minZoom,
-        maxZoom: maxZoom
+            'OpenStreetMap Team</a> sous licence domaine public CC0 hébergé par <a href="https://www.openstreetmap.fr/mentions-legales/">OSM France</a>'
     }).addTo(mymap);
 
     return mymap;
