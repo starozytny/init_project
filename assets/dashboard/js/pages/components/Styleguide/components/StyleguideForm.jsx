@@ -34,7 +34,7 @@ export class StyleguideForm extends Component {
             arrayPostalCode: [],
             city: "",
             fruit: "",
-            faq: "", // faq: { value: props.faq ? props.faq : "", html: props.faq ? props.faq : "" },
+            faq: { value: "", html: "" }, // faq: { value: props.faq ? props.faq : "", html: props.faq ? props.faq : "" },
             question: []
         }
 
@@ -224,7 +224,7 @@ export class StyleguideForm extends Component {
                         </div>
 
                         <div className="line">
-                            <Trumb identifiant="faq" valeur={faq} errors={errors} onChange={this.handleChangeTrumb}>F.A.Q</Trumb>
+                            <Trumb identifiant="faq" valeur={faq.value} errors={errors} onChange={this.handleChangeTrumb}>F.A.Q</Trumb>
                         </div>
 
                         <div className="line line-2">

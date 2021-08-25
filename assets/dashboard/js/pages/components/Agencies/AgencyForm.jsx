@@ -120,13 +120,13 @@ export class AgencyForm extends Component {
         const { context, url, messageSuccess } = this.props;
         const { critere, name, dirname, website, email, emailLocation, emailVente,
             phone, phoneLocation, phoneVente, address, zipcode, city, lat, lon,
-            description, legal
+            description, legal, logo, tarif
         } = this.state;
 
         if(critere !== ""){
             toastr.error("Veuillez rafraichir la page.");
         }else{
-            this.setState({ success: false})
+            this.setState({ success: false});
 
             let paramsToValidate = [
                 {type: "text", id: 'name', value: name},
@@ -147,8 +147,13 @@ export class AgencyForm extends Component {
                 {type: "text", id: 'legal', value: legal.html},
             ];
 
-            let logo = this.inputLogo.current.drop.current.files;
-            let tarif = this.inputTarif.current.drop.current.files;
+            let dropLogo = this.inputLogo.current.drop.current.files;
+            let dropTarif = this.inputTarif.current.drop.current.files;
+
+            if(context === "create"){
+                paramsToValidate = [...paramsToValidate, ...[{type: "array", id: 'logo', value: dropLogo}]];
+                paramsToValidate = [...paramsToValidate, ...[{type: "array", id: 'tarif', value: dropTarif}]];
+            }
 
             // validate global
             let validate = Validateur.validateur(paramsToValidate)
@@ -159,11 +164,11 @@ export class AgencyForm extends Component {
                 let self = this;
 
                 let formData = new FormData();
-                if(logo[0]){
-                    formData.append('logo', logo[0].file);
+                if(dropLogo[0]){
+                    formData.append('logo', dropLogo[0].file);
                 }
-                if(tarif[0]){
-                    formData.append('tarif', tarif[0].file);
+                if(dropTarif[0]){
+                    formData.append('tarif', dropTarif[0].file);
                 }
 
                 formData.append("data", JSON.stringify(this.state));
@@ -256,7 +261,7 @@ export class AgencyForm extends Component {
                 </div>
 
                 <div className="line line-3">
-                    <Input valeur={address} identifiant="adr" errors={errors} onChange={this.handleChange}>Adresse</Input>
+                    <Input valeur={address} identifiant="address" errors={errors} onChange={this.handleChange}>Adresse</Input>
                     <Input valeur={zipcode} identifiant="zipcode" errors={errors} onChange={this.handleChange}>Code postal</Input>
                     <Input valeur={city} identifiant="city" errors={errors} onChange={this.handleChange}>Ville</Input>
                 </div>
