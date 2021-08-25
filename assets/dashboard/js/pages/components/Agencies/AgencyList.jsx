@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 
-import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
+import { Button }       from "@dashboardComponents/Tools/Button";
 import { Alert }        from "@dashboardComponents/Tools/Alert";
 
 import { AgencyItem }   from "./AgencyItem";
 
 export class AgencyList extends Component {
     render () {
-        const { data, onDeleteAll } = this.props;
+        const { data, onChangeContext } = this.props;
 
         return <>
             <div>
+                <div className="toolbar">
+                    <div className="item create">
+                        <Button onClick={() => onChangeContext("create")}>Ajouter une agence</Button>
+                    </div>
+                </div>
                 <div className="items-table">
                     <div className="items items-default items-agency">
                         <div className="item item-header">
@@ -30,15 +35,6 @@ export class AgencyList extends Component {
                         }) : <Alert>Aucun résultat</Alert>}
                     </div>
                 </div>
-
-                <div className="page-actions">
-                    <div className="selectors-actions">
-                        <div className="item" onClick={onDeleteAll}>
-                            <ButtonIcon icon="trash" text="Supprimer la sélection" />
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </>
     }

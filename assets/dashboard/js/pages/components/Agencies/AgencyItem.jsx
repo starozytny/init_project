@@ -46,7 +46,7 @@ export class AgencyItem extends Component {
                             <div className={"sub progress progress-" + progress} />
                         </div>
                         <div className="col-4 actions">
-                            <ButtonIcon icon="pencil">Modifier</ButtonIcon>
+                            <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
                         </div>
                     </div>

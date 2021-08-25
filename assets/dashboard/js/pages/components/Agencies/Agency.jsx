@@ -5,8 +5,9 @@ import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@dashboardComponents/functions/sort";
 
-import { AgencyList }      from "./AgencyList";
+import { AgencyList }       from "./AgencyList";
 import { AgencyRead }       from "@dashboardFolder/js/pages/components/Agencies/AgencyRead";
+import { AgencyFormulaire } from "@dashboardFolder/js/pages/components/Agencies/AgencyForm";
 
 const URL_DELETE_ELEMENT = 'api_immo_agency_delete';
 const MSG_DELETE_ELEMENT = 'Supprimer cette agence ?';
@@ -26,6 +27,8 @@ export class Agency extends Component {
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleContentCreate = this.handleContentCreate.bind(this);
+        this.handleContentUpdate = this.handleContentUpdate.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
         this.handleContentRead = this.handleContentRead.bind(this);
@@ -46,6 +49,14 @@ export class Agency extends Component {
                            data={currentData} />
     }
 
+    handleContentCreate = (changeContext) => {
+        return <AgencyFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+    }
+
+    handleContentUpdate = (changeContext, element) => {
+        return <AgencyFormulaire type="update" element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+    }
+
     handleContentRead = (changeContext, element) => {
         return <AgencyRead element={element} onChangeContext={changeContext}/>
     }
@@ -54,6 +65,7 @@ export class Agency extends Component {
         return <>
             <Layout ref={this.layout} {...this.state} onGetData={this.handleGetData}
                     onContentList={this.handleContentList}
+                    onContentCreate={this.handleContentCreate} onContentUpdate={this.handleContentUpdate}
                     onContentRead={this.handleContentRead} />
         </>
     }
