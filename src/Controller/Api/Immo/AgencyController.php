@@ -3,12 +3,16 @@
 namespace App\Controller\Api\Immo;
 
 use App\Entity\Immo\ImAgency;
+use App\Entity\User;
+use App\Manager\CreateAgency;
 use App\Service\ApiResponse;
-use App\Service\Data\DataService;
+use App\Service\FileUploader;
 use App\Service\Immo\ImmoService;
+use App\Service\ValidatorService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 
@@ -17,6 +21,137 @@ use OpenApi\Annotations as OA;
  */
 class AgencyController extends AbstractController
 {
+    const FOLDER_LOGO = "immo/logos";
+    const FOLDER_TARIF = "immo/tarifs";
+
+    /**
+     * Admin - Create an agency
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
+     * @Route("/", name="create", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a new user object"
+     * )
+     *
+     * @OA\Response(
+     *     response=400,
+     *     description="JSON empty or missing data or validation failed",
+     * )
+     *
+     * @OA\Tag(name="Agency")
+     *
+     * @param Request $request
+     * @param ValidatorService $validator
+     * @param ApiResponse $apiResponse
+     * @param FileUploader $fileUploader
+     * @param CreateAgency $dataEntity
+     * @return JsonResponse
+     */
+    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
+                           FileUploader $fileUploader, CreateAgency $dataEntity): JsonResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = json_decode($request->get('data'));
+
+        if ($data === null) {
+            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
+        }
+
+        $obj = $dataEntity->setData(new ImAgency(), $data);
+
+        $file = $request->files->get('logo');
+        if ($file) {
+            $fileName = $fileUploader->upload($file, self::FOLDER_LOGO);
+            $obj->setLogo($fileName);
+        }
+
+        $file = $request->files->get('tarif');
+        if ($file) {
+            $fileName = $fileUploader->upload($file, self::FOLDER_TARIF);
+            $obj->setTarif($fileName);
+        }
+
+        $noErrors = $validator->validate($obj);
+        if ($noErrors !== true) {
+            return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+        }
+
+        $em->persist($obj);
+        $em->flush();
+
+        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+    }
+
+    /**
+     * Update an agency
+     *
+     * @Route("/{id}", name="update", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns an user object"
+     * )
+     * @OA\Response(
+     *     response=403,
+     *     description="Forbidden for not good role or user",
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Validation failed",
+     * )
+     *
+     * @OA\Tag(name="Agency")
+     *
+     * @param Request $request
+     * @param ValidatorService $validator
+     * @param ApiResponse $apiResponse
+     * @param ImAgency $obj
+     * @param FileUploader $fileUploader
+     * @param CreateAgency $dataEntity
+     * @return JsonResponse
+     */
+    public function update(Request $request, ValidatorService $validator, ApiResponse $apiResponse, ImAgency $obj,
+                           FileUploader $fileUploader, CreateAgency $dataEntity): JsonResponse
+    {
+        if ($this->getUser() != $obj && !$this->isGranted("ROLE_ADMIN")) {
+            return $apiResponse->apiJsonResponseForbidden();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $data = json_decode($request->get('data'));
+
+        if($data === null){
+            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
+        }
+
+        $obj = $dataEntity->setData($obj, $data);
+
+        $file = $request->files->get('logo');
+        if ($file) {
+            $fileName = $fileUploader->replaceFile($file, $obj->getLogo(),self::FOLDER_LOGO);
+            $obj->setLogo($fileName);
+        }
+
+        $file = $request->files->get('tarif');
+        if ($file) {
+            $fileName = $fileUploader->replaceFile($file, $obj->getTarif(),self::FOLDER_TARIF);
+            $obj->setTarif($fileName);
+        }
+
+        $noErrors = $validator->validate($obj);
+        if ($noErrors !== true) {
+            return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+        }
+
+        $em->persist($obj);
+        $em->flush();
+
+        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+    }
+
     /**
      * Admin - Delete an agency
      *

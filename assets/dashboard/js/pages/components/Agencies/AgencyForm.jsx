@@ -7,22 +7,22 @@ import Routing                 from '@publicFolder/bundles/fosjsrouting/js/route
 import { Input }               from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
-import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 import { Trumb }               from "@dashboardComponents/Tools/Trumb";
+import { Drop }                from "@dashboardComponents/Tools/Drop";
+import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@dashboardComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
-import {Drop} from "@dashboardComponents/Tools/Drop";
 
 export function AgencyFormulaire ({ type, onChangeContext, onUpdateList, element })
 {
     let title = "Ajouter une demande";
-    let url = Routing.generate('api_immo_demandes_create');
+    let url = Routing.generate('api_immo_agency_create');
     let msg = "Félicitation ! Vous avez ajouté une agence !"
 
     if(type === "update"){
         title = "Modifier " + element.name;
-        url = Routing.generate('api_users_update', {'id': element.id});
+        url = Routing.generate('api_immo_agency_update', {'id': element.id});
         msg = "Félicitation ! La mise à jour s'est réalisé avec succès !";
     }
 
@@ -128,7 +128,6 @@ export class AgencyForm extends Component {
         }else{
             this.setState({ success: false})
 
-            let method = "POST";
             let paramsToValidate = [
                 {type: "text", id: 'name', value: name},
                 {type: "text", id: 'dirname', value: dirname},
