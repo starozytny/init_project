@@ -18,6 +18,7 @@ export class FormationsItem extends Component {
                             <div className="name">
                                 <span>{elem.name}</span>
                             </div>
+                            {elem.rating && <div className="rating">{elem.rating} <span className="icon-star-2" /></div> }
                         </div>
                         <div className="col-2">
                             <div className="sub">{Sanitaze.toFormatCurrency(elem.price)}</div>
