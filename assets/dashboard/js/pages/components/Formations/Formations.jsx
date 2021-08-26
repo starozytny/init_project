@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 
-import axios             from "axios";
-import toastr            from "toastr";
 import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@dashboardComponents/functions/sort";
-import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { FormationsList }       from "./FormationsList";
-import { FormationsRead }       from "./FormationsRead";
 import { FormationsFormulaire } from "./FormationsForm";
 
 const URL_DELETE_ELEMENT = 'api_formations_delete';
@@ -40,7 +36,6 @@ export class Formations extends Component {
         this.handleContentList = this.handleContentList.bind(this);
         this.handleContentCreate = this.handleContentCreate.bind(this);
         this.handleContentUpdate = this.handleContentUpdate.bind(this);
-        this.handleContentRead = this.handleContentRead.bind(this);
     }
 
     handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees, SORTER); }
@@ -75,14 +70,10 @@ export class Formations extends Component {
         return <FormationsFormulaire type="update" element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
-    handleContentRead = (changeContext, element) => {
-        return <FormationsRead element={element} onChangeContext={changeContext}/>
-    }
-
     render () {
         return <>
             <Layout ref={this.layout} {...this.state} onGetData={this.handleGetData}
-                    onContentList={this.handleContentList} onContentRead={this.handleContentRead}
+                    onContentList={this.handleContentList}
                     onContentCreate={this.handleContentCreate} onContentUpdate={this.handleContentUpdate} />
         </>
     }

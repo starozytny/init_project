@@ -14,7 +14,7 @@ export class FormationsItem extends Component {
             <div className="item-content">
                 <div className="item-body">
                     <div className="infos infos-col-3">
-                        <div className="col-1" onClick={() => onChangeContext('read', elem)}>
+                        <div className="col-1">
                             <div className="name">
                                 <span>{elem.name}</span>
                             </div>
