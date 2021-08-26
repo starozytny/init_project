@@ -63,55 +63,6 @@ class FormationController extends AbstractController
         return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }
 
-    /**
-     * Update a formation
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
-     * @Route("/{id}", name="update", options={"expose"=true}, methods={"POST"})
-     *
-     * @OA\Response(
-     *     response=200,
-     *     description="Returns an user object"
-     * )
-     *
-     * @OA\Response(
-     *     response=400,
-     *     description="Validation failed",
-     * )
-     *
-     * @OA\Tag(name="Formations")
-     *
-     * @param Request $request
-     * @param ValidatorService $validator
-     * @param ApiResponse $apiResponse
-     * @param FoFormation $obj
-     * @param DataFormation $dataEntity
-     * @return JsonResponse
-     */
-    public function update(Request $request, ValidatorService $validator,
-                           ApiResponse $apiResponse, FoFormation $obj, DataFormation $dataEntity): JsonResponse
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = json_decode($request->get('data'));
-
-        if($data === null){
-            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
-        }
-
-        $obj = $dataEntity->setData($obj, $data);
-
-        $noErrors = $validator->validate($obj);
-        if ($noErrors !== true) {
-            return $apiResponse->apiJsonResponseValidationFailed($noErrors);
-        }
-
-        $em->persist($obj);
-        $em->flush();
-
-        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
-    }
 
     /**
      * Switch is published
@@ -127,18 +78,13 @@ class FormationController extends AbstractController
      *
      * @OA\Tag(name="Formations")
      *
-     * @param ApiResponse $apiResponse
+     * @param DataService $dataService
      * @param FoFormation $obj
      * @return JsonResponse
      */
-    public function switchIsPublished(ApiResponse $apiResponse, FoFormation $obj): JsonResponse
+    public function switchIsPublished(DataService $dataService, FoFormation $obj): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $obj->setIsPublished(!$obj->getIsPublished());
-        $em->flush();
-
-        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+        return $dataService->switchIsPublished($obj);
     }
 
     /**

@@ -6,7 +6,7 @@ import Sanitaze         from "@dashboardComponents/functions/sanitaze";
 
 export class FormationsItem extends Component {
     render () {
-        const { elem, onChangeContext, onDelete, onSelectors, onChangePublished } = this.props
+        const { elem, onChangeContext, onDelete, onSelectors, onSwitchPublished } = this.props
 
         return <div className="item">
             <Selector id={elem.id} onSelectors={onSelectors} />
@@ -24,7 +24,7 @@ export class FormationsItem extends Component {
                             <div className="sub">{Sanitaze.toFormatCurrency(elem.price)}</div>
                         </div>
                         <div className="col-3 actions">
-                            <ButtonIcon icon={elem.isPublished ? "vision" : "vision-not"} onClick={() => onChangePublished(elem)}>
+                            <ButtonIcon icon={elem.isPublished ? "vision" : "vision-not"} onClick={() => onSwitchPublished(elem)}>
                                 {elem.isPublished ? "En ligne" : "Hors ligne"}
                             </ButtonIcon>
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>

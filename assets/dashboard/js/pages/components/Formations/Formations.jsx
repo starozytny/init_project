@@ -16,6 +16,8 @@ const URL_DELETE_ELEMENT = 'api_formations_delete';
 const URL_DELETE_GROUP = 'api_formations_delete_group';
 const MSG_DELETE_ELEMENT = 'Supprimer cette formation ?';
 const MSG_DELETE_GROUP = 'Aucune formation sélectionnée.';
+const URL_SWITCH_PUBLISHED = 'api_formations_formation_published';
+const MSG_SWITCH_PUBLISHED = 'Formation';
 const SORTER = Sort.compareCreatedAt;
 
 export class Formations extends Component {
@@ -33,7 +35,7 @@ export class Formations extends Component {
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
-        this.handleChangePublished = this.handleChangePublished.bind(this);
+        this.handleSwitchPublished = this.handleSwitchPublished.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
         this.handleContentCreate = this.handleContentCreate.bind(this);
@@ -53,11 +55,15 @@ export class Formations extends Component {
         this.layout.current.handleDeleteGroup(this, Routing.generate(URL_DELETE_GROUP), MSG_DELETE_GROUP);
     }
 
+    handleSwitchPublished = (element) => {
+        this.layout.current.handleSwitchPublished(this, element, Routing.generate(URL_SWITCH_PUBLISHED, {'id': element.id}), MSG_SWITCH_PUBLISHED);
+    }
+
     handleContentList = (currentData, changeContext) => {
         return <FormationsList onChangeContext={changeContext}
                                onDelete={this.handleDelete}
                                onDeleteAll={this.handleDeleteGroup}
-                               onChangePublished={this.handleChangePublished}
+                               onSwitchPublished={this.handleSwitchPublished}
                                data={currentData} />
     }
 
@@ -71,24 +77,6 @@ export class Formations extends Component {
 
     handleContentRead = (changeContext, element) => {
         return <FormationsRead element={element} onChangeContext={changeContext}/>
-    }
-
-    handleChangePublished = (element) => {
-        Formulaire.loader(true);
-        let self = this;
-        axios({ method: "POST", url: Routing.generate('api_formations_formation_published', {'id': element.id}) })
-            .then(function (response) {
-                let data = response.data;
-                self.handleUpdateList(data, "update");
-                toastr.info(element.isPublished ? "Formation hors ligne" : "Formation en ligne");
-            })
-            .catch(function (error) {
-                Formulaire.displayErrors(self, error);
-            })
-            .then(() => {
-                Formulaire.loader(false);
-            })
-        ;
     }
 
     render () {
