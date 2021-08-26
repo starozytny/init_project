@@ -4,10 +4,10 @@ import axios                   from "axios";
 import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Input, Checkbox }     from "@dashboardComponents/Tools/Fields";
+import { Input }               from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
-import { Drop }                from "@dashboardComponents/Tools/Drop";
+import { Trumb }               from "@dashboardComponents/Tools/Trumb";
 
 import Validateur              from "@dashboardComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
@@ -45,14 +45,15 @@ export class FormationsForm extends Component {
 
         this.state = {
             name: props.name,
-            content: props.content,
             price: props.price,
+            content: { value: props.content ? props.content : "", html: props.content ? props.content : "" },
             errors: [],
             success: false
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeTrumb = this.handleChangeTrumb.bind(this);
     }
 
     componentDidMount() {
@@ -68,6 +69,19 @@ export class FormationsForm extends Component {
         this.setState({[name]: value})
     }
 
+    handleChangeTrumb = (e) => {
+        const { content  } = this.state
+
+        let name = e.currentTarget.id;
+        let text = e.currentTarget.innerHTML;
+        let value = "";
+        if(name === "content"){
+            value = content.value;
+        }
+
+        this.setState({[name]: {value: value, html: text}})
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
 
@@ -78,7 +92,7 @@ export class FormationsForm extends Component {
 
         let paramsToValidate = [
             {type: "text", id: 'username', value: name},
-            {type: "text", id: 'firstname', value: content},
+            {type: "text", id: 'firstname', value: content.html},
             {type: "text", id: 'lastname', value: price},
         ];
 
@@ -102,7 +116,7 @@ export class FormationsForm extends Component {
                     if(context === "create"){
                         self.setState( {
                             name: '',
-                            content: '',
+                            content: { value: "", html: "" },
                             price: '',
                         })
                     }
@@ -129,6 +143,10 @@ export class FormationsForm extends Component {
                 <div className="line line-2">
                     <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange} >Intitulé</Input>
                     <Input valeur={price} identifiant="price" errors={errors} onChange={this.handleChange} type="number" >Prix</Input>
+                </div>
+
+                <div className="line">
+                    <Trumb identifiant="content" valeur={content.value} errors={errors} onChange={this.handleChangeTrumb}>Objectifs</Trumb>
                 </div>
 
                 <div className="line">

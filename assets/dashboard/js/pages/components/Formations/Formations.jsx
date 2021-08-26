@@ -5,8 +5,9 @@ import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@dashboardComponents/functions/sort";
 
-import { FormationsList }      from "./FormationsList";
-import { FormationsRead }      from "./FormationsRead";
+import { FormationsList }       from "./FormationsList";
+import { FormationsRead }       from "./FormationsRead";
+import { FormationsFormulaire } from "./FormationsForm";
 
 const URL_DELETE_ELEMENT = 'api_contact_delete';
 const URL_DELETE_GROUP = 'api_contact_delete_group';
@@ -31,6 +32,8 @@ export class Formations extends Component {
         this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
+        this.handleContentCreate = this.handleContentCreate.bind(this);
+        this.handleContentUpdate = this.handleContentUpdate.bind(this);
         this.handleContentRead = this.handleContentRead.bind(this);
     }
 
@@ -53,6 +56,14 @@ export class Formations extends Component {
                                data={currentData} />
     }
 
+    handleContentCreate = (changeContext) => {
+        return <FormationsFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+    }
+
+    handleContentUpdate = (changeContext, element) => {
+        return <FormationsFormulaire type="update" element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+    }
+
     handleContentRead = (changeContext, element) => {
         return <FormationsRead element={element} onChangeContext={changeContext}/>
     }
@@ -60,8 +71,8 @@ export class Formations extends Component {
     render () {
         return <>
             <Layout ref={this.layout} {...this.state} onGetData={this.handleGetData}
-                    onContentList={this.handleContentList}
-                    onContentRead={this.handleContentRead} />
+                    onContentList={this.handleContentList} onContentRead={this.handleContentRead}
+                    onContentCreate={this.handleContentCreate} onContentUpdate={this.handleContentUpdate} />
         </>
     }
 }
