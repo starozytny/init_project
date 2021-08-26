@@ -2,53 +2,63 @@
 
 namespace App\Entity\Formation;
 
+use App\Entity\DataEntity;
 use App\Repository\Formation\FoFormationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=FoFormationRepository::class)
  */
-class FoFormation
+class FoFormation extends DataEntity
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Groups({"admin:read"})
      */
     private $slug;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"admin:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"admin:read"})
      */
     private $isPublished;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"admin:read"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"admin:read"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $rating;
 
@@ -91,6 +101,17 @@ class FoFormation
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * How long ago a user was added.
+     *
+     * @return string
+     * @Groups({"admin:read"})
+     */
+    public function getCreatedAtAgo(): string
+    {
+        return $this->getHowLongAgo($this->createdAt);
     }
 
     public function getIsPublished(): ?bool
