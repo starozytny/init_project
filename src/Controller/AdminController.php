@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Contact;
+use App\Entity\Formation\FoFormation;
 use App\Entity\Notification;
 use App\Entity\Settings;
 use App\Entity\User;
@@ -114,6 +115,18 @@ class AdminController extends AbstractController
         $objs = $this->getAllData(Notification::class, $serializer);
 
         return $this->render('admin/pages/notifications/index.html.twig', [
+            'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/formations", name="formations_index")
+     */
+    public function formations(SerializerInterface $serializer): Response
+    {
+        $objs = $this->getAllData(FoFormation::class, $serializer);
+
+        return $this->render('admin/pages/formations/index.html.twig', [
             'donnees' => $objs
         ]);
     }

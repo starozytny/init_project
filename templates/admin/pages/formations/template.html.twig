@@ -1,0 +1,15 @@
+{% extends 'admin/layout/layout.html.twig' %}
+
+{% set submenu = [
+    { 'label': "Formations", 'path': path('admin_formations_index') },
+] %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('dashboard_formations') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('dashboard_formations') }}
+{% endblock %}
