@@ -174,7 +174,6 @@ function isSeen (self, element, url){
 }
 
 function switchPublished (self, element, url, nameEntity=""){
-    console.log(element, nameEntity)
     axios({ method: "POST", url: url })
         .then(function (response) {
             let data = response.data;

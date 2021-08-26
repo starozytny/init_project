@@ -16,7 +16,6 @@ export class FormationsItem extends Component {
                     <div className="infos infos-col-3">
                         <div className="col-1" onClick={() => onChangeContext('read', elem)}>
                             <div className="name">
-                                {!elem.isSeen && <span className="toSee" />}
                                 <span>{elem.name}</span>
                             </div>
                         </div>
