@@ -179,7 +179,7 @@ function switchPublished (self, element, url, nameEntity=""){
         .then(function (response) {
             let data = response.data;
             self.handleUpdateList(data, "update");
-            toastr.info(nameEntity + element.isPublished ? " hors ligne" : " en ligne");
+            toastr.info(nameEntity + (element.isPublished ? " hors ligne" : " en ligne"));
         })
         .catch(function (error) {
             displayErrors(self, error);
