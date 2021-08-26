@@ -97,6 +97,7 @@ export class Layout extends Component {
         this.handleSetData = this.handleSetData.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
+        this.handleSwitchPublished = this.handleSwitchPublished.bind(this);
     }
 
     componentDidMount() { this.props.onGetData(this); }
@@ -184,6 +185,10 @@ export class Layout extends Component {
     handleDeleteGroup = (self, url, msg) => {
         let checked = document.querySelectorAll('.i-selector:checked');
         Formulaire.axiosDeleteGroupElement(self, checked, url, msg)
+    }
+
+    handleSwitchPublished = (self, element, url, nameEntity) => {
+        Formulaire.switchPublished(self, element, url, nameEntity);
     }
 
     render () {

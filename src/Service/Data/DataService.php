@@ -28,6 +28,14 @@ class DataService
         return $this->apiResponse->apiJsonResponse($obj, $groups);
     }
 
+    public function switchIsPublished($obj, $groups = User::ADMIN_READ): JsonResponse
+    {
+        $obj->setIsPublished(!$obj->getIsPublished());
+
+        $this->em->flush();
+        return $this->apiResponse->apiJsonResponse($obj, $groups);
+    }
+
     public function delete($obj, $isSeen = false, $messageError = "Vous n'avez pas lu ce message."): JsonResponse
     {
         if($isSeen){
