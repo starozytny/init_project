@@ -54,7 +54,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * Admin - Create an user
+     * Admin - Create a user
      *
      * @Security("is_granted('ROLE_ADMIN')")
      *
@@ -116,7 +116,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * Update an user
+     * Update a user
      *
      * @Route("/{id}", name="update", options={"expose"=true}, methods={"POST"})
      *
@@ -426,19 +426,19 @@ class UserController extends AbstractController
     public function export(Export $export, $format): BinaryFileResponse
     {
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository(User::class)->findBy([], ['username' => 'ASC']);
+        $objs = $em->getRepository(User::class)->findBy([], ['username' => 'ASC']);
         $data = [];
 
         $nameFile = 'utilisateurs';
         $nameFolder = 'export/';
 
-        foreach ($users as $user) {
+        foreach ($objs as $obj) {
             $tmp = [
-                $user->getId(),
-                $user->getUsername(),
-                $user->getHighRole(),
-                $user->getEmail(),
-                date_format($user->getCreatedAt(), 'd/m/Y'),
+                $obj->getId(),
+                $obj->getUsername(),
+                $obj->getHighRole(),
+                $obj->getEmail(),
+                date_format($obj->getCreatedAt(), 'd/m/Y'),
             ];
             if(!in_array($tmp, $data)){
                 array_push($data, $tmp);
