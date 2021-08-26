@@ -100,12 +100,35 @@ class ImmoDataCreateCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        $this->initDir();
+
         // --------------  PROCESSUS  -----------------------
         $call = $input->getArgument('call');
         $haveApimmo = $input->getArgument('haveApimmo');
         $this->process($io, $output, $call, $haveApimmo);
 
         return Command::SUCCESS;
+    }
+
+    protected function initDir()
+    {
+        $racine = $this->params->get('kernel.project_dir');
+
+        $this->createDir($racine . '/documents');
+        $this->createDir($racine . '/public/annonces');
+        $this->createDir($racine . '/documents/immo');
+        $this->createDir($racine . '/documents/immo/data');
+        $this->createDir($this->PATH_DEPOT);
+        $this->createDir($this->PATH_EXTRACT);
+        $this->createDir($this->PATH_ARCHIVE);
+        $this->createDir($this->PATH_IMAGES);
+        $this->createDir($this->PATH_THUMBS);
+    }
+
+    protected function createDir($dir){
+        if(!is_dir($dir)){
+            mkdir($dir);
+        }
     }
 
     /**
