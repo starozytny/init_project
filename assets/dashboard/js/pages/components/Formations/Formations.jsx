@@ -9,8 +9,8 @@ import { FormationsList }       from "./FormationsList";
 import { FormationsRead }       from "./FormationsRead";
 import { FormationsFormulaire } from "./FormationsForm";
 
-const URL_DELETE_ELEMENT = 'api_contact_delete';
-const URL_DELETE_GROUP = 'api_contact_delete_group';
+const URL_DELETE_ELEMENT = 'api_formations_delete';
+const URL_DELETE_GROUP = 'api_formations_delete_group';
 const MSG_DELETE_ELEMENT = 'Supprimer cette formation ?';
 const MSG_DELETE_GROUP = 'Aucune formation sélectionnée.';
 const SORTER = Sort.compareCreatedAt;
