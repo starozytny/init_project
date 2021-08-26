@@ -5,7 +5,7 @@ import toastr      from "toastr";
 import Routing     from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Checkbox, Input, Radiobox, Select, TextArea,
-         SelectReactSelectize }                        from "@dashboardComponents/Tools/Fields";
+    SelectReactSelectize }                        from "@dashboardComponents/Tools/Fields";
 import { DatePick, DateTimePick, TimePick }            from "@dashboardComponents/Tools/DatePicker";
 import { Drop }                                        from "@dashboardComponents/Tools/Drop"
 import { Button }                                      from "@dashboardComponents/Tools/Button";
@@ -34,7 +34,7 @@ export class StyleguideForm extends Component {
             arrayPostalCode: [],
             city: "",
             fruit: "",
-            faq: "",
+            faq: { value: "", html: "" }, // faq: { value: props.faq ? props.faq : "", html: props.faq ? props.faq : "" },
             question: []
         }
 
@@ -105,15 +105,22 @@ export class StyleguideForm extends Component {
 
     handleChangeTrumb = (e) => {
         const { faq } = this.state
-        // this.setState({faq: {value: (faq != null ? faq.content : ''), error: '', html: e.currentTarget.innerHTML}})
-        this.setState({ faq: (faq != null ? faq : '') })
+
+        let name = e.currentTarget.id;
+        let text = e.currentTarget.innerHTML;
+        let value = "";
+        if(name === "faq"){
+            value = faq.value;
+        }
+
+        this.setState({[name]: {value: value, html: text}})
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
 
         const { username, email, message, roles, sexe, pays, birthday,
-                createAt, arrived, postalCode, city, fruit, faq, question } = this.state;
+            createAt, arrived, postalCode, city, fruit, faq, question } = this.state;
 
         let avatar = this.inputAvatar.current.drop.current.files;
         let files = this.inputFiles.current.drop.current.files;
@@ -133,7 +140,7 @@ export class StyleguideForm extends Component {
             {type: "array", id: 'avatar', value: avatar},
             {type: "array", id: 'files', value: files},
             {type: "text", id: 'fruit', value: fruit},
-            {type: "text", id: 'faq', value: faq},
+            {type: "text", id: 'faq', value: faq.html},
             {type: "text", id: 'question', value: question},
         ])
 
@@ -175,7 +182,7 @@ export class StyleguideForm extends Component {
 
     render () {
         const { errors, username, email, message, roles, sexe, pays, birthday,
-                createAt, arrived, postalCode, city, fruit, faq, question } = this.state;
+            createAt, arrived, postalCode, city, fruit, faq, question } = this.state;
 
         let checkboxItems = [
             { value: 'ROLE_USER', label: 'Utilisateur', identifiant: 'utilisateur' },
@@ -217,7 +224,7 @@ export class StyleguideForm extends Component {
                         </div>
 
                         <div className="line">
-                            <Trumb identifiant="faq" valeur={faq} errors={errors} onChange={this.handleChangeTrumb}>F.A.Q</Trumb>
+                            <Trumb identifiant="faq" valeur={faq.value} errors={errors} onChange={this.handleChangeTrumb}>F.A.Q</Trumb>
                         </div>
 
                         <div className="line line-2">
