@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 
+import axios             from "axios";
+import toastr            from "toastr";
 import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@dashboardComponents/functions/sort";
+import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { FormationsList }       from "./FormationsList";
 import { FormationsRead }       from "./FormationsRead";
@@ -30,6 +33,7 @@ export class Formations extends Component {
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
+        this.handleChangePublished = this.handleChangePublished.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
         this.handleContentCreate = this.handleContentCreate.bind(this);
@@ -53,6 +57,7 @@ export class Formations extends Component {
         return <FormationsList onChangeContext={changeContext}
                                onDelete={this.handleDelete}
                                onDeleteAll={this.handleDeleteGroup}
+                               onChangePublished={this.handleChangePublished}
                                data={currentData} />
     }
 
@@ -66,6 +71,24 @@ export class Formations extends Component {
 
     handleContentRead = (changeContext, element) => {
         return <FormationsRead element={element} onChangeContext={changeContext}/>
+    }
+
+    handleChangePublished = (element) => {
+        Formulaire.loader(true);
+        let self = this;
+        axios({ method: "POST", url: Routing.generate('api_formations_formation_published', {'id': element.id}) })
+            .then(function (response) {
+                let data = response.data;
+                self.handleUpdateList(data, "update");
+                toastr.info(element.isPublished ? "Formation hors ligne" : "Formation en ligne");
+            })
+            .catch(function (error) {
+                Formulaire.displayErrors(self, error);
+            })
+            .then(() => {
+                Formulaire.loader(false);
+            })
+        ;
     }
 
     render () {

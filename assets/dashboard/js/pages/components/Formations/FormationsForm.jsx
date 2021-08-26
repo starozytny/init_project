@@ -16,12 +16,12 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 export function FormationsFormulaire ({ type, onChangeContext, onUpdateList, element })
 {
     let title = "Ajouter une formations";
-    let url = Routing.generate('api_users_create');
+    let url = Routing.generate('api_formations_create');
     let msg = "Félicitation ! Vous avez ajouté une nouvelle formation !"
 
     if(type === "update"){
         title = "Modifier " + element.name;
-        url = Routing.generate('api_users_update', {'id': element.id});
+        url = Routing.generate('api_formations_update', {'id': element.id});
         msg = "Félicitation ! La mise à jour s'est réalisé avec succès !";
     }
 
@@ -146,7 +146,7 @@ export class FormationsForm extends Component {
                 </div>
 
                 <div className="line">
-                    <Trumb identifiant="content" valeur={content.value} errors={errors} onChange={this.handleChangeTrumb}>Objectifs</Trumb>
+                    <Trumb identifiant="content" valeur={content.value} errors={errors} onChange={this.handleChangeTrumb}>Description</Trumb>
                 </div>
 
                 <div className="line">

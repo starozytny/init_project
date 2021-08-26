@@ -33,7 +33,7 @@ class FoFormation extends DataEntity
     private $slug;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @Groups({"admin:read"})
      */
     private $createdAt;
@@ -61,6 +61,12 @@ class FoFormation extends DataEntity
      * @Groups({"admin:read"})
      */
     private $rating;
+
+    public function __construct()
+    {
+        $this->createdAt = $this->initNewDate();
+        $this->isPublished = false;
+    }
 
     public function getId(): ?int
     {

@@ -17,8 +17,14 @@ class DataFormation
     }
     public function setData(FoFormation $obj, $data): FoFormation
     {
+        $name = $this->sanitizeData->sanitizeString($data->name);
+        $slug = $obj->getName() === $name ? $obj->getSlug() : $this->sanitizeData->fullSanitize($data->name);
+
         return ($obj)
-            ->setName($this->sanitizeData->sanitizeString($data->name))
+            ->setName($name)
+            ->setSlug($slug)
+            ->setContent($data->content->value)
+            ->setPrice($data->price)
         ;
     }
 }
