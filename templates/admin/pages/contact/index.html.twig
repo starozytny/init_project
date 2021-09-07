@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block main_content %}
-    <div id="contact" data-donnees="{{ donnees }}"></div>
+    <div id="contact" data-donnees="{{ donnees }}" {% if search is defined %}data-search="{{ search }}"{% endif %}></div>
 {% endblock %}
 
 {% block javascripts %}

@@ -1,19 +1,21 @@
 import React from "react";
 
 export function ButtonIcon(props){
-    const { icon, children, text, onClick, element="button", target="_self" } = props;
+    const { icon, children, text, onClick, element="button", target="_self", tooltipWidth=null } = props;
+
+    let divStyle = tooltipWidth ? { width: tooltipWidth + "px" } : null;
 
     if(element === "button"){
         return <button className="btn-icon" onClick={onClick}>
             <span className={`icon-${icon}`} />
             {text && <span>{text}</span>}
-            {children && <span className="tooltip">{children}</span>}
+            {children && <span className="tooltip" style={divStyle}>{children}</span>}
         </button>
     }else{
         return <a className="btn-icon" target={target} href={onClick}>
             <span className={`icon-${icon}`} />
             {text && <span>{text}</span>}
-            {children && <span className="tooltip">{children}</span>}
+            {children && <span className="tooltip" style={divStyle}>{children}</span>}
         </a>
     }
 }

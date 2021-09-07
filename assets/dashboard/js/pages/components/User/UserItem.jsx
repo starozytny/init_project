@@ -7,7 +7,7 @@ import { Selector }     from "@dashboardComponents/Layout/Selector";
 
 export class UserItem extends Component {
     render () {
-        const { elem, onChangeContext, onDelete, onSelectors } = this.props
+        const { developer, elem, onChangeContext, onDelete, onSelectors } = this.props
 
         let url = Routing.generate('user_homepage', {'_switch_user' : elem.username})
 
@@ -46,7 +46,7 @@ export class UserItem extends Component {
                                 <ButtonIcon icon="vision" onClick={() => onChangeContext("read", elem)}>Profil</ButtonIcon>
                                 <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
                                 <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
-                                <ButtonIcon icon="share" element="a" target="_blank" onClick={url}>Imiter</ButtonIcon>
+                                {developer === 1 && <ButtonIcon icon="share" element="a" target="_blank" onClick={url}>Imiter</ButtonIcon>}
                             </>
                             }
                         </div>

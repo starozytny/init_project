@@ -5,7 +5,7 @@ import toastr      from "toastr";
 import Routing     from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Checkbox, Input, Radiobox, Select, TextArea,
-         SelectReactSelectize }                        from "@dashboardComponents/Tools/Fields";
+    SelectReactSelectize }                        from "@dashboardComponents/Tools/Fields";
 import { DatePick, DateTimePick, TimePick }            from "@dashboardComponents/Tools/DatePicker";
 import { Drop }                                        from "@dashboardComponents/Tools/Drop"
 import { Button }                                      from "@dashboardComponents/Tools/Button";
@@ -120,7 +120,7 @@ export class StyleguideForm extends Component {
         e.preventDefault();
 
         const { username, email, message, roles, sexe, pays, birthday,
-                createAt, arrived, postalCode, city, fruit, faq, question } = this.state;
+            createAt, arrived, postalCode, city, fruit, faq, question } = this.state;
 
         let avatar = this.inputAvatar.current.drop.current.files;
         let files = this.inputFiles.current.drop.current.files;
@@ -182,7 +182,7 @@ export class StyleguideForm extends Component {
 
     render () {
         const { errors, username, email, message, roles, sexe, pays, birthday,
-                createAt, arrived, postalCode, city, fruit, faq, question } = this.state;
+            createAt, arrived, postalCode, city, fruit, faq, question } = this.state;
 
         let checkboxItems = [
             { value: 'ROLE_USER', label: 'Utilisateur', identifiant: 'utilisateur' },

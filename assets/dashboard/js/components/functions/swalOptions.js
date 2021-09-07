@@ -1,7 +1,7 @@
 function options(title, text, icon='warning', confirmButton="Confirmer", showCancel=true, cancelButton="Annuler"){
     return {
         title: title,
-        text: text,
+        html: text,
         icon: icon,
         showCancelButton: showCancel,
         confirmButtonText: confirmButton,

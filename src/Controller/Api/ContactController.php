@@ -114,7 +114,12 @@ class ContactController extends AbstractController
         $em->persist($obj);
         $em->flush();
 
-        $notificationService->createNotification("Demande de contact", self::ICON, $this->getUser());
+        $notificationService->createNotification(
+            "Demande de contact",
+            self::ICON,
+            $this->getUser(),
+            $this->generateUrl('admin_contact_index', ['search' => $obj->getId()])
+        );
 
         return $apiResponse->apiJsonResponseSuccessful("Message envoyé.");
     }
@@ -185,6 +190,6 @@ class ContactController extends AbstractController
      */
     public function deleteSelected(Request $request, DataService $dataService): JsonResponse
     {
-        return $dataService->deleteSelected(Contact::class, json_decode($request->getContent()), true);
+        return $dataService->deleteSelected(Contact::class, json_decode($request->getContent()));
     }
 }

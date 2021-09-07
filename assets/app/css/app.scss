@@ -1,36 +1,12 @@
 @import "~normalize.css";
 @import "~toastr";
+@import "~react-selectize/dist/index.min.css";
+
+@import "../../common/css/color";
 
 :root{
     --color0: #a9aac9;
-    --primary: #00a8e8;
-    --danger: #ff5444;
-    --error: #ff5444;
-    --warning: #e7d087;
-
     --color0Shadow: rgba(169, 170, 201, 0.4);
-    --primaryShadow: rgba(0,168,232, 0.4);
-    --primaryShadow2: rgba(0,168,232, 0.1);
-    --dangerShadow: rgba(213,125,125, 0.4);
-    --dangerShadow2: rgba(213,125,125, 0.1);
-    --dangerFondError: rgba(247, 104, 91, 0.05);
-    --warningShadow: rgba(231,208,135, 0.4);
-    --warningShadow2: rgba(231,208,135, 0.1);
-
-    --grey: #c7c7c7;
-    --grey2: #929292;
-
-    --greyShadow: rgba(199,199,199, 0.2);
-
-    --overlay: rgba(14, 14, 14, 0.5);
-
-    --alpha: #fff;
-    --beta: #000;
-
-    --txt: #101010;
-    --fond: #e8e8e8;
-    --fondContent: #f6f6f6;
-    --fondMenu: #212121;
 }
 
 @import "vars/fonts";

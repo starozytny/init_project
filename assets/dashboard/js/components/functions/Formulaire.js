@@ -90,7 +90,6 @@ function deleteElement(self, element, url, showLoader = true, showFire = true)
             self.handleUpdateList(element, "delete");
         })
         .catch(function (error) {
-            console.log(error)
             displayErrors(self, error, "Une erreur est survenue, veuillez contacter le support.")
         })
         .then(() => {
@@ -173,6 +172,19 @@ function isSeen (self, element, url){
     }
 }
 
+function switchPublished (self, element, url, nameEntity=""){
+    axios({ method: "POST", url: url })
+        .then(function (response) {
+            let data = response.data;
+            self.handleUpdateList(data, "update");
+            toastr.info(nameEntity + (element.isPublished ? " hors ligne" : " en ligne"));
+        })
+        .catch(function (error) {
+            displayErrors(self, error);
+        })
+    ;
+}
+
 module.exports = {
     loader,
     displayErrors,
@@ -183,5 +195,6 @@ module.exports = {
     updateData,
     updateDataPagination,
     deleteElement,
-    isSeen
+    isSeen,
+    switchPublished
 }

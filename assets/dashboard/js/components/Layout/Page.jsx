@@ -42,13 +42,24 @@ function initData(donnees, sorter)
     return data;
 }
 
-function initPageWithSearch(data, search, context, nContext)
+function initPageWithSearch(data, search, type, context, nContext)
 {
     let newContext = context;
     let elem = null;
     if(search){
         data.forEach(el => {
-            if(el.username === search){
+            let find = false;
+            if(type === "username"){
+                if(el.username === search){
+                    find = true;
+                }
+            }else if(type === "id"){
+                if(el.id === parseInt(search)){
+                    find = true;
+                }
+            }
+
+            if(find){
                 elem = el;
                 newContext = nContext;
             }
@@ -58,11 +69,11 @@ function initPageWithSearch(data, search, context, nContext)
     return [elem, newContext];
 }
 
-function getData(donnees, sorter, search, context, nContext)
+function getData(donnees, sorter, search, type, context, nContext)
 {
     let data = initData(donnees, sorter);
 
-    let element = initPageWithSearch(data, search, context, nContext);
+    let element = initPageWithSearch(data, search, type, context, nContext);
     let elem = element[0];
     let newContext = element[1];
 
@@ -97,6 +108,7 @@ export class Layout extends Component {
         this.handleSetData = this.handleSetData.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
+        this.handleSwitchPublished = this.handleSwitchPublished.bind(this);
     }
 
     componentDidMount() { this.props.onGetData(this); }
@@ -121,10 +133,10 @@ export class Layout extends Component {
         Formulaire.updateDataPagination(this, sorter, newContext, context, data, element, perPage);
     }
 
-    handleSetDataPagination = (donnees, sorter = null, nContext = "read") => {
+    handleSetDataPagination = (donnees, sorter = null, nContext = "read", type = "id") => {
         const { context, perPage, search } = this.state;
 
-        let elements = getData(donnees, sorter, search, context, nContext);
+        let elements = getData(donnees, sorter, search, type, context, nContext);
 
         let data = elements[0];
         let elem = elements[1];
@@ -133,10 +145,10 @@ export class Layout extends Component {
         this.setState({ context: newContext, dataImmuable: data, data: data, currentData: data.slice(0, perPage), loadPageError: false, loadData: false, element: elem })
     }
 
-    handleSetData = (donnees, sorter = null, nContext = "read") => {
+    handleSetData = (donnees, sorter = null, nContext = "read", type = "id") => {
         const { context, search } = this.state;
 
-        let elements = getData(donnees, sorter, search, context, nContext);
+        let elements = getData(donnees, sorter, search, type, context, nContext);
 
         let data = elements[0];
         let elem = elements[1];
@@ -184,6 +196,10 @@ export class Layout extends Component {
     handleDeleteGroup = (self, url, msg) => {
         let checked = document.querySelectorAll('.i-selector:checked');
         Formulaire.axiosDeleteGroupElement(self, checked, url, msg)
+    }
+
+    handleSwitchPublished = (self, element, url, nameEntity) => {
+        Formulaire.switchPublished(self, element, url, nameEntity);
     }
 
     render () {

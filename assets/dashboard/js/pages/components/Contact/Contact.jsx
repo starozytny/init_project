@@ -66,7 +66,7 @@ export class Contact extends Component {
 
     render () {
         return <>
-            <Layout ref={this.layout} {...this.state} onGetData={this.handleGetData}
+            <Layout ref={this.layout} {...this.state} search={this.props.search} onGetData={this.handleGetData}
                     onContentList={this.handleContentList}
                     onContentRead={this.handleContentRead} onChangeContextRead={this.handleChangeContextRead}/>
         </>
