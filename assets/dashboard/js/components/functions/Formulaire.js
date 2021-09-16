@@ -185,6 +185,10 @@ function switchPublished (self, element, url, nameEntity=""){
     ;
 }
 
+function updateValueCheckbox(e, items, value){
+    return (e.currentTarget.checked) ? [...items, ...[value]] : items.filter(v => v !== value)
+}
+
 module.exports = {
     loader,
     displayErrors,
@@ -196,5 +200,6 @@ module.exports = {
     updateDataPagination,
     deleteElement,
     isSeen,
-    switchPublished
+    switchPublished,
+    updateValueCheckbox
 }

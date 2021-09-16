@@ -5,7 +5,7 @@ import toastr      from "toastr";
 import Routing     from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Checkbox, Input, Radiobox, Select, TextArea,
-    SelectReactSelectize }                        from "@dashboardComponents/Tools/Fields";
+    SelectReactSelectize }                             from "@dashboardComponents/Tools/Fields";
 import { DatePick, DateTimePick, TimePick }            from "@dashboardComponents/Tools/DatePicker";
 import { Drop }                                        from "@dashboardComponents/Tools/Drop"
 import { Button }                                      from "@dashboardComponents/Tools/Button";
@@ -67,7 +67,7 @@ export class StyleguideForm extends Component {
         let value = e.currentTarget.value;
 
         if(name === "roles"){
-            value = (e.currentTarget.checked) ? [...roles, ...[value]] : roles.filter(v => v !== value)
+            value = Formulaire.updateValueCheckbox(e, roles, value);
         }
 
         if(name === "question"){
@@ -82,21 +82,7 @@ export class StyleguideForm extends Component {
     handleChangePostalCodeCity = (e) => {
         const { arrayPostalCode } = this.state;
 
-        let name = e.currentTarget.name;
-        let value = e.currentTarget.value;
-
-        if(value.length <= 5){
-            this.setState({ [name]: value })
-
-            let v = ""
-            if(arrayPostalCode.length !== 0){
-                v = arrayPostalCode.filter(el => el.cp === value)
-
-                if(v.length === 1){
-                    this.setState({ city: v[0].city })
-                }
-            }
-        }
+        Sanitaze.setCityFromZipcode(this, e, arrayPostalCode)
     }
 
     handleChangeDateBirthday = (e) => { this.setState({ birthday: e }) }

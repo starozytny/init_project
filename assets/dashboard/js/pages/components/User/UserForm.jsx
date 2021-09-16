@@ -77,7 +77,7 @@ export class UserForm extends Component {
 
         const {roles} = this.state
         if(name === "roles"){
-            value = (e.currentTarget.checked) ? [...roles, ...[value]] :  roles.filter(v => v !== value)
+            value = Formulaire.updateValueCheckbox(e, roles, value);
         }
 
         this.setState({[name]: value})

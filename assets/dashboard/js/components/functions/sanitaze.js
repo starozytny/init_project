@@ -89,12 +89,30 @@ function getPostalCodes(self){
     ;
 }
 
-function getTrilieanResponse(data, returnNull=true){
-    if(data === 0){
+function setCityFromZipcode(self, e, arrayPostalCode){
+    let name = e.currentTarget.name;
+    let value = e.currentTarget.value;
+
+    if(value.length <= 5){
+        self.setState({ [name]: value })
+
+        let v = ""
+        if(arrayPostalCode.length !== 0){
+            v = arrayPostalCode.filter(el => el.cp === value)
+
+            if(v.length === 1){
+                self.setState({ city: v[0].city })
+            }
+        }
+    }
+}
+
+function getTrilieanResponse(data, returnNull=true) {
+    if (data === 0) {
         return "Non";
-    }else if(data === 1){
+    } else if (data === 1) {
         return "Oui";
-    }else{
+    } else {
         return returnNull ? null : "N.C";
     }
 }
@@ -107,5 +125,6 @@ module.exports = {
     toFormatDateTime,
     toFormatPhone,
     toFormatCurrency,
-    getTrilieanResponse
+    getTrilieanResponse,
+    setCityFromZipcode
 }
