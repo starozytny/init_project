@@ -1,11 +1,11 @@
 {% extends 'app/layout/layout.html.twig' %}
 
-{#{% block stylesheets %}#}
-{#    {{ parent() }}#}
-{#    {{ encore_entry_link_tags('default_legales') }}#}
-{#{% endblock %}#}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('services') }}
+{% endblock %}
 
-{#{% block javascripts %}#}
-{#    {{ parent() }}#}
-{#    {{ encore_entry_script_tags('default_legales') }}#}
-{#{% endblock %}#}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('services') }}
+{% endblock %}

@@ -53,6 +53,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app/js/app.js')
+    .addEntry('homepage', './assets/app/js/homepage.js')
     .addEntry('security', './assets/app/js/pages/security.js')
     .addEntry('contact', './assets/app/js/pages/contact.js')
     .addEntry('services', './assets/app/js/pages/services.js')

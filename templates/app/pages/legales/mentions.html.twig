@@ -3,7 +3,7 @@
 {% block title %}Mentions légales{% endblock %}
 
 {% block main_content %}
-    <div class="main-content">
+    <div class="main-content main-content-legal">
         <h1>Mentions légales</h1>
 
         <section class="legales">
@@ -13,7 +13,19 @@
                     Ce site est édité par la société {{ societyName }}. <br>
                     Numéro de SIRET : {{ websiteSiret }} <br>
                     Adresse de la société : {{ addressPostale }}. <br>
-                    Téléphone : {{ websitePhone }}
+                    Téléphone : {{ websitePhone }} <br>
+                    {% if cartePro %}
+                        Carte professionnelle : {{ cartePro }} <br>
+                    {% endif %}
+                    {% if garantie %}
+                        Garantie financière : {{ garantie }} <br>
+                    {% endif %}
+                    {% if affiliation %}
+                        Affiliation à un organisme : {{ affiliation }} <br>
+                    {% endif %}
+                    {% if mediation %}
+                        Service de médiation : {{ mediation }} <br>
+                    {% endif %}
                 </p>
             </div>
             <div>

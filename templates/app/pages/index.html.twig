@@ -2,6 +2,11 @@
 
 {% block title %}Hello !{% endblock %}
 
+{#{% block stylesheets %}#}
+{#    {{ parent() }}#}
+{#    {{ encore_entry_link_tags('homepage') }}#}
+{#{% endblock %}#}
+
 {% block main_content %}
 <div class="custom-shape-divider">
     <div class="title-page">
@@ -15,3 +20,8 @@
     Hello world
 </div>
 {% endblock %}
+
+{#{% block javascripts %}#}
+{#    {{ parent() }}#}
+{#    {{ encore_entry_script_tags('homepage') }}#}
+{#{% endblock %}#}
