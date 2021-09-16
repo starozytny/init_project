@@ -70,21 +70,7 @@ export class EstimationForm extends Component {
     handleChangeZipcode = (e) => {
         const { arrayPostalCode } = this.state;
 
-        let name = e.currentTarget.name;
-        let value = e.currentTarget.value;
-
-        if(value.length <= 5){
-            this.setState({ [name]: value })
-
-            let v = ""
-            if(arrayPostalCode.length !== 0){
-                v = arrayPostalCode.filter(el => el.cp === value)
-
-                if(v.length === 1){
-                    this.setState({ city: v[0].city })
-                }
-            }
-        }
+        Sanitaze.setCityFromZipcode(this, e, arrayPostalCode);
     }
 
     handleChange = (e) => {
@@ -94,7 +80,7 @@ export class EstimationForm extends Component {
         let value = e.currentTarget.value;
 
         if(name === "ext"){
-            value = (e.currentTarget.checked) ? [...ext, ...[value]] : ext.filter(v => v !== value)
+            value = Formulaire.updateValueCheckbox(e, ext, value);
         }
         this.setState({[name]: value})
     }
