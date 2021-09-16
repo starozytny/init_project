@@ -41,7 +41,7 @@ export class DemandeForm extends Component {
             phone: "",
             message: "Bonjour,\n" +
                 "                    \n" +
-                "je souhaiterais être recontacté.\n" +
+                "Je souhaiterais être recontacté.\n" +
                 "\n" +
                 "Cordialement,",
             bien: props.bien,
@@ -52,12 +52,6 @@ export class DemandeForm extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    componentDidMount() {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        document.getElementById("name").focus()
     }
 
     handleChange = (e) => { this.setState({[e.currentTarget.name]: e.currentTarget.value}) }
@@ -90,12 +84,11 @@ export class DemandeForm extends Component {
                 axios({ method: method, url: url, data: self.state })
                     .then(function (response) {
                         let data = response.data;
-                        self.props.onUpdateList(data);
+                        if(self.props.page === undefined){
+                            self.props.onUpdateList(data);
+                        }
                         self.setState({ success: messageSuccess, errors: [] });
                         if(context === "create"){
-                            document.body.scrollTop = 0; // For Safari
-                            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-
                             toastr.info(messageSuccess);
                             self.setState( {
                                 name: '',
@@ -137,9 +130,9 @@ export class DemandeForm extends Component {
                     <Input identifiant="critere" valeur={critere} errors={errors} onChange={this.handleChange}>Critère</Input>
                 </div>
 
-                <div className="line">
-                    <Input valeur={phone} identifiant="phone" errors={errors} onChange={this.handleChange}>Téléphone (facultatif)</Input>
-                </div>
+                {/*<div className="line">*/}
+                {/*    <Input valeur={phone} identifiant="phone" errors={errors} onChange={this.handleChange}>Téléphone (facultatif)</Input>*/}
+                {/*</div>*/}
 
                 <div className="line">
                     <TextArea valeur={message} identifiant="message" errors={errors} onChange={this.handleChange}>Message</TextArea>
@@ -151,7 +144,7 @@ export class DemandeForm extends Component {
 
                 <div className="line">
                     <div className="form-button">
-                        <Button isSubmit={true}>{context === "create" ? "Ajouter une demande" : 'Modifier la demande'}</Button>
+                        <Button isSubmit={true}>{context === "create" ? "Contacter l'agence" : 'Modifier la demande'}</Button>
                     </div>
                 </div>
             </form>

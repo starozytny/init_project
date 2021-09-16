@@ -62,13 +62,7 @@ export class DevisForm extends Component {
         this.handleChangeZipcode = this.handleChangeZipcode.bind(this);
     }
 
-    componentDidMount() {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        document.getElementById("zipcode").focus();
-
-        Sanitaze.getPostalCodes(this);
-    }
+    componentDidMount() { Sanitaze.getPostalCodes(this); }
 
     handleChangeZipcode = (e) => {
         const { arrayPostalCode } = this.state;
@@ -139,8 +133,6 @@ export class DevisForm extends Component {
 
                         self.setState({ success: messageSuccess, errors: [] });
                         if(context === "create"){
-                            document.body.scrollTop = 0; // For Safari
-                            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 
                             toastr.info(messageSuccess);
                             self.setState( {
@@ -267,7 +259,7 @@ export class DevisForm extends Component {
 
                 <div className="line">
                     <div className="form-button">
-                        <Button isSubmit={true}>{context === "create" ? "Ajouter un devis" : 'Modifier le devis'}</Button>
+                        <Button isSubmit={true}>{context === "create" ? "Envoyer" : 'Modifier le devis'}</Button>
                     </div>
                 </div>
             </form>

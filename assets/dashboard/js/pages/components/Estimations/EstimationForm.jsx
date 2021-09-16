@@ -65,13 +65,7 @@ export class EstimationForm extends Component {
         this.handleChangeZipcode = this.handleChangeZipcode.bind(this);
     }
 
-    componentDidMount() {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        document.getElementById("zipcode").focus();
-
-        Sanitaze.getPostalCodes(this);
-    }
+    componentDidMount() { Sanitaze.getPostalCodes(this); }
 
     handleChangeZipcode = (e) => {
         const { arrayPostalCode } = this.state;
@@ -151,8 +145,6 @@ export class EstimationForm extends Component {
 
                         self.setState({ success: messageSuccess, errors: [] });
                         if(context === "create"){
-                            document.body.scrollTop = 0; // For Safari
-                            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 
                             toastr.info(messageSuccess);
                             self.setState( {
@@ -239,14 +231,14 @@ export class EstimationForm extends Component {
                         <Radiobox items={naturesItems} identifiant="typeAd" valeur={typeAd} errors={errors} onChange={this.handleChange}>Quel est votre projet ?</Radiobox>
                     </div>
                     <div className="line">
-                        <Radiobox items={biensItems} identifiant="typeBien" valeur={typeBien} errors={errors} onChange={this.handleChange}>A quel état se trouve le bien ?</Radiobox>
+                        <Radiobox items={biensItems} identifiant="typeBien" valeur={typeBien} errors={errors} onChange={this.handleChange}>De quel type de bien s'agit-il ?</Radiobox>
                     </div>
                 </div>
 
                 <div className="step-2">
                     <div className="line line-2">
                         <Input valeur={constructionYear} identifiant="constructionYear" errors={errors} onChange={this.handleChange} placeholder={"Année ou fourchette d'année"}>Année de construction</Input>
-                        <Radiobox items={etatItems} identifiant="etat" valeur={etat} errors={errors} onChange={this.handleChange}>De quel bien s'agit-il ?</Radiobox>
+                        <Radiobox items={etatItems} identifiant="etat" valeur={etat} errors={errors} onChange={this.handleChange}>Dans quel état se trouve le bien ?</Radiobox>
                     </div>
 
                     <div className="line line-2">
@@ -295,7 +287,7 @@ export class EstimationForm extends Component {
 
                 <div className="line">
                     <div className="form-button">
-                        <Button isSubmit={true}>{context === "create" ? "Ajouter une estimation" : 'Modifier l\'estimation'}</Button>
+                        <Button isSubmit={true}>{context === "create" ? "Envoyer" : 'Modifier l\'estimation'}</Button>
                     </div>
                 </div>
             </form>
