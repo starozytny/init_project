@@ -2,6 +2,10 @@ function compareAdPrice(a, b){
     return comparison(a.financial.price, b.financial.price);
 }
 
+function compareAdPriceReverse(a, b){
+    return comparison(b.financial.price, a.financial.price);
+}
+
 function compareLabel(a, b){
     return comparison(a.label, b.label);
 }
@@ -52,5 +56,6 @@ module.exports = {
     compareName,
     compareLabel,
     compareAdPrice,
-    compareCreatedAtInverse
+    compareCreatedAtInverse,
+    compareAdPriceReverse
 }
