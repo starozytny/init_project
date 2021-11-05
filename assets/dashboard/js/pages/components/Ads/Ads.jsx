@@ -25,7 +25,7 @@ function filterByNature(data, nature)
         data.forEach(elem => {
             if (elem.typeAd === nature) {
                 currentData.push(elem);
-            }else if(nature === "Vente" && elem.typeAd === "Produit d'investissement"){
+            }else if(nature === "Vente" && (elem.typeAd === "Produit d'investissement" || elem.typeAd === "Vente de prestige")){
                 currentData.push(elem);
             }
         })
