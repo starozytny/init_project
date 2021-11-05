@@ -2,6 +2,7 @@
 
 namespace App\Entity\Immo;
 
+use App\Entity\DataEntity;
 use App\Repository\Immo\ImDiagnosticRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -9,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=ImDiagnosticRepository::class)
  */
-class ImDiagnostic
+class ImDiagnostic extends DataEntity
 {
     /**
      * @ORM\Id
@@ -123,6 +124,14 @@ class ImDiagnostic
         $this->gesLettre = $gesLettre;
 
         return $this;
+    }
+
+    /**
+     * @Groups({"list:read", "show:read"})
+     */
+    public function getDateReleaseString(): ?string
+    {
+        return $this->getFullDateString($this->dateRelease);
     }
 
     public function getDateRelease(): ?\DateTimeInterface

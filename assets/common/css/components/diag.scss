@@ -128,13 +128,13 @@ $colorsGES: (
     width: 100%;
 
     $sizes: (
-            '1': 23%,
-            '2': 30%,
-            '3': 40%,
-            '4': 50%,
-            '5': 60%,
-            '6': 70%,
-            '7': 80%,
+            '1': 6%,
+            '2': 10%,
+            '3': 14%,
+            '4': 18%,
+            '5': 22%,
+            '6': 26%,
+            '7': 30%,
     );
 
     .dpe-a, .ges-a, .dpe-g, .ges-g{
@@ -185,7 +185,7 @@ $colorsGES: (
         position: absolute;
         display: block;
         top: -10px;
-        right: -60px;
+        right: -150px;
         padding: 5px 15px;
         border-radius: 100px;
         transform: scale(0.85);

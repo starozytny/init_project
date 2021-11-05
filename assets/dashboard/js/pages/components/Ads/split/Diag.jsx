@@ -1,5 +1,4 @@
-import React, {Component} from "react";
-import Sanitize  from "@dashboardComponents/functions/sanitaze";
+import React, { Component } from "react";
 
 export class Diag extends Component{
     constructor(props) {
@@ -25,28 +24,58 @@ export class Diag extends Component{
         let gesVierge = <div>L'indice d'émission de gaz à effet de serre est vierge.</div>
 
         if(elem.diagnostic){
+            console.log(elem.diagnostic.dateRelease)
+            console.log(elem.diagnostic.dpeRefConso)
+            let diagnostic = elem.diagnostic;
+
+            let savoirPlus = "";
+            if(diagnostic.gesLettre && diagnostic.gesLettre !== "NS" && diagnostic.gesLettre !== "VI" &&
+                diagnostic.dpeLettre && diagnostic.dpeLettre !== "NS" && diagnostic.dpeLettre !== "VI")
+            {
+                savoirPlus = <div className="diag-plus" onClick={() => this.handleOpen(status)}>
+                    En savoir plus
+                </div>
+            }
+
+            let dateDiag = "";
+            if(diagnostic.gesLettre && diagnostic.gesLettre !== "NS" && diagnostic.gesLettre !== "VI" &&
+                diagnostic.dpeLettre && diagnostic.dpeLettre !== "NS" && diagnostic.dpeLettre !== "VI")
+            {
+                if(diagnostic.versionDpe && !diagnostic.dateRelease){
+                    if(diagnostic.versionDpe === "DPE_v01-2011"){
+                        dateDiag = "Diagnostic réalisé avant le 1er Juillet 2021"
+                    }else{
+                        dateDiag = "Diagnostic réalisé après le 1er Juillet 2021"
+                    }
+                }
+                if(diagnostic.dateRelease){
+                    dateDiag = <div className="date-release">
+                        Diagnostic réalisé le {diagnostic.dateReleaseString}
+                    </div>
+                }
+            }
+
             content = <>
                 <div className="details-tab-infos-main">
-                    {elem.diagnostic.dpeLettre ? <>
-                        {elem.diagnostic.dpeLettre !== "NS" && elem.diagnostic.dpeLettre !== "VI" ? <>
+                    {diagnostic.dpeLettre ? <>
+                        {diagnostic.dpeLettre !== "NS" && diagnostic.dpeLettre !== "VI" ? <>
                             <DiagSimple isDpe={true} elem={elem}/>
                             {status && <DiagDetails isDpe={true} elem={elem}/>}
-                        </> : (elem.diagnostic.dpeLettre !== "NS") ? dpeNotFound : dpeVierge}
+                        </> : (diagnostic.dpeLettre !== "NS") ? dpeNotFound : dpeVierge}
                     </> : dpeNotFound}
+                    {dateDiag}
                 </div>
 
                 <div className="details-tab-infos-main">
-                    {elem.diagnostic.gesLettre ? <>
-                        {elem.diagnostic.gesLettre !== "NS" && elem.diagnostic.gesLettre !== "VI" ? <>
+                    {diagnostic.gesLettre ? <>
+                        {diagnostic.gesLettre !== "NS" && diagnostic.gesLettre !== "VI" ? <>
                             <DiagSimple isDpe={false} elem={elem}/>
                             {status && <DiagDetails isDpe={false} elem={elem}/>}
-                        </> : (elem.diagnostic.gesLettre !== "NS") ? gesNotFound : gesVierge}
+                        </> : (diagnostic.gesLettre !== "NS") ? gesNotFound : gesVierge}
                     </> : gesNotFound}
                 </div>
 
-                {elem.diagnostic.dpeLettre && elem.diagnostic.gesLettre && <div className="diag-plus" onClick={() => this.handleOpen(status)}>
-                    En savoir plus
-                </div>}
+                {savoirPlus}
             </>
         }
 
@@ -99,6 +128,7 @@ function DiagDetails({ isDpe, elem })
         { le :"G", valDpe: "> 450", valGes: "> 80" }
     ]
     let classDiag = isDpe ? "dpe" : "ges";
+    let unity = isDpe ? "kWhEP/m².an" : "kgeqCO2/m².an";
     let value = isDpe ? elem.diagnostic.dpeVal : elem.diagnostic.gesVal;
 
     return (
@@ -112,10 +142,9 @@ function DiagDetails({ isDpe, elem })
 
                     return <div key={le.le}>
                         <div className={classDiag + " " + classDiag + "-" + le.le.toLowerCase() + active}>
-                            <div>{isDpe ? le.valDpe : le.valGes}</div>
                             <div>{le.le}</div>
                         </div>
-                        <div className="number">{value ? value : "N.C"}</div>
+                        <div className="number">{value ? value + " " + unity : "N.C"}</div>
                     </div>
                 })}
             </div>
