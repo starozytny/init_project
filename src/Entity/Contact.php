@@ -54,12 +54,11 @@ class Contact extends DataEntity
      * @ORM\Column(type="boolean")
      * @Groups({"admin:read"})
      */
-    private $isSeen;
+    private $isSeen = false;
 
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
-        $this->isSeen = false;
     }
 
     public function getId(): ?int

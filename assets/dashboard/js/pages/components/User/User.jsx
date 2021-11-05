@@ -8,25 +8,26 @@ import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.
 
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@dashboardComponents/functions/sort";
-import Formulaire              from "@dashboardComponents/functions/Formulaire";
+import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { UserList }       from "./UserList";
 import { UserRead }       from "./UserRead";
 import { UserFormulaire } from "./UserForm";
 
-const URL_DELETE_ELEMENT = 'api_users_delete';
-const URL_DELETE_GROUP = 'api_users_delete_group';
-const MSG_DELETE_ELEMENT = 'Supprimer cet utilisateur ?';
-const MSG_DELETE_GROUP = 'Aucun utilisateur sélectionné.';
+const URL_DELETE_ELEMENT    = 'api_users_delete';
+const URL_DELETE_GROUP      = 'api_users_delete_group';
+const MSG_DELETE_ELEMENT    = 'Supprimer cet utilisateur ?';
+const MSG_DELETE_GROUP      = 'Aucun utilisateur sélectionné.';
 const SORTER = Sort.compareLastname;
 
 function searchFunction(dataImmuable, search){
     let newData = [];
+    search = search.toLowerCase();
     newData = dataImmuable.filter(function(v) {
-        if(v.username.toLowerCase().includes(search)
-            || v.email.toLowerCase().includes(search)
-            || v.firstname.toLowerCase().includes(search)
-            || v.lastname.toLowerCase().includes(search)
+        if(v.username.toLowerCase().startsWith(search)
+            || v.email.toLowerCase().startsWith(search)
+            || v.firstname.toLowerCase().startsWith(search)
+            || v.lastname.toLowerCase().startsWith(search)
         ){
             return v;
         }

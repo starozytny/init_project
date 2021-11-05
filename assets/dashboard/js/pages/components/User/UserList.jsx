@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
-
-import { Filter, FilterSelected } from "@dashboardComponents/Layout/Filter";
-import { Search }     from "@dashboardComponents/Layout/Search";
-import { Alert }      from "@dashboardComponents/Tools/Alert";
+import { Button, ButtonIcon }       from "@dashboardComponents/Tools/Button";
+import { Filter, FilterSelected }   from "@dashboardComponents/Layout/Filter";
+import { Search }                   from "@dashboardComponents/Layout/Search";
+import { Alert }                    from "@dashboardComponents/Tools/Alert";
 
 import { UserItem }   from "./UserItem";
 

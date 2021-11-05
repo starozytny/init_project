@@ -9,11 +9,11 @@ import Formulaire        from "@dashboardComponents/functions/Formulaire";
 import { ContactList }      from "./ContactList";
 import { ContactRead }      from "./ContactRead";
 
-const URL_DELETE_ELEMENT = 'api_contact_delete';
-const URL_DELETE_GROUP = 'api_contact_delete_group';
-const URL_IS_SEEN = 'api_contact_isSeen';
-const MSG_DELETE_ELEMENT = 'Supprimer ce message ?';
-const MSG_DELETE_GROUP = 'Aucun message sélectionné.';
+const URL_DELETE_ELEMENT    = 'api_contact_delete';
+const URL_DELETE_GROUP      = 'api_contact_delete_group';
+const MSG_DELETE_ELEMENT    = 'Supprimer ce message ?';
+const MSG_DELETE_GROUP      = 'Aucun message sélectionné.';
+const URL_IS_SEEN           = 'api_contact_isSeen';
 const SORTER = Sort.compareCreatedAt;
 
 export class Contact extends Component {

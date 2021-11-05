@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import { Alert } from "@dashboardComponents/Tools/Alert";
-
 export class Search extends Component {
     constructor() {
         super();

@@ -8,11 +8,11 @@ import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { NotificationsList }      from "./NotificationsList";
 
-const URL_DELETE_ELEMENT = 'api_notifications_delete';
-const URL_DELETE_GROUP = 'api_notifications_delete_group';
-const URL_IS_SEEN = 'api_notifications_isSeen';
-const MSG_DELETE_ELEMENT = 'Supprimer cette notification ?';
-const MSG_DELETE_GROUP = 'Aucune notification sélectionnée.';
+const URL_DELETE_ELEMENT    = 'api_notifications_delete';
+const URL_DELETE_GROUP      = 'api_notifications_delete_group';
+const MSG_DELETE_ELEMENT    = 'Supprimer cette notification ?';
+const MSG_DELETE_GROUP      = 'Aucune notification sélectionnée.';
+const URL_IS_SEEN           = 'api_notifications_isSeen';
 const SORTER = Sort.compareCreatedAt;
 
 export class Notifications extends Component {

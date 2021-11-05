@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import lozad from "lozad";
 
 export class StyleguideLozad extends Component {

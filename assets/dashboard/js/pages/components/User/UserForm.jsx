@@ -8,10 +8,10 @@ import { Input, Checkbox }     from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { Drop }                from "@dashboardComponents/Tools/Drop";
+import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@dashboardComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
-import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 export function UserFormulaire ({ type, onChangeContext, onUpdateList, element })
 {

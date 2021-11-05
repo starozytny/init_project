@@ -105,6 +105,10 @@ select{
   width: 100%;
 }
 
+.trumbowyg-box, .trumbowyg-editor{
+  margin-bottom: 0 !important;
+}
+
 // **************************************
 // SWITCHER
 // **************************************
@@ -419,7 +423,7 @@ select{
 .form{
   .password-rules{
     font-size: 14px;
-    opacity: 0.7;
+    opacity: 0.8;
   }
 }
 
@@ -487,5 +491,18 @@ select{
 @media (min-width:1280px) {
   .form {
     padding: 24px;
+  }
+}
+
+//                      __   _  __    ___   ___    __
+//                     | _| / |/ /_  / _ \ / _ \  |_ |
+//    _____ _____ _____| |  | | '_ \| | | | | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | | (_) | |_| | |_| |  | |_____|_____|_____|
+//                     | |  |_|\___/ \___/ \___/   | |
+//                     |__|                       |__|
+@media (min-width: 1600px){
+  .form .password-rules,
+  .form-group-error .error{
+    font-size: 15px;
   }
 }
