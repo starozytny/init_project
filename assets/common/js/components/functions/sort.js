@@ -36,6 +36,10 @@ function compareCreatedAtInverse(a, b){
     return comparison(b.createdAt, a.createdAt);
 }
 
+function compareEmail(a, b){
+    return comparison(a.email, b.email);
+}
+
 function comparison (objA, objB){
     let comparison = 0;
     if (objA > objB) {
@@ -58,4 +62,5 @@ module.exports = {
     compareAdPrice,
     compareCreatedAtInverse,
     compareAdPriceReverse
+    compareEmail
 }

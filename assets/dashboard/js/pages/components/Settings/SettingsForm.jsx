@@ -9,7 +9,7 @@ import { Input }        from "@dashboardComponents/Tools/Fields";
 import { Drop }         from "@dashboardComponents/Tools/Drop";
 
 import Formulaire       from "@dashboardComponents/functions/Formulaire";
-import Validateur       from "@dashboardComponents/functions/validateur";
+import Validateur       from "@commonComponents/functions/validateur";
 
 function getBase64(file, self) {
     let reader = new FileReader();

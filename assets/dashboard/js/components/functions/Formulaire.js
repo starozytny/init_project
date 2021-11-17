@@ -1,7 +1,7 @@
 const axios       = require("axios");
 const toastr      = require("toastr");
 const Swal        = require("sweetalert2");
-const SwalOptions = require("@dashboardComponents/functions/swalOptions");
+const SwalOptions = require("@commonComponents/functions/swalOptions");
 const UpdateList  = require("@dashboardComponents/functions/updateList");
 
 function axiosGetData(self, url, sorter = null){
@@ -61,6 +61,16 @@ function updateDataPagination(self, sorter, newContext, context, data, element, 
         data: newData,
         currentData: newData.slice(0,perPage),
         element: element
+    })
+}
+
+function updatePerPage(self, sorter, data, perPage){
+    data.sort(sorter)
+
+    self.setState({
+        data: data,
+        currentData: data.slice(0, perPage),
+        perPage: perPage
     })
 }
 
@@ -201,5 +211,6 @@ module.exports = {
     deleteElement,
     isSeen,
     switchPublished,
-    updateValueCheckbox
+    updateValueCheckbox,
+    updatePerPage
 }

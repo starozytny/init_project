@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import axios             from "axios";
 import toastr            from "toastr";
 import Swal              from "sweetalert2";
-import SwalOptions       from "@dashboardComponents/functions/swalOptions";
+import SwalOptions       from "@commonComponents/functions/swalOptions";
 import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Layout }        from "@dashboardComponents/Layout/Page";
-import Sort              from "@dashboardComponents/functions/sort";
+import Sort              from "@commonComponents/functions/sort";
 import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { UserList }       from "./UserList";
@@ -18,7 +18,15 @@ const URL_DELETE_ELEMENT    = 'api_users_delete';
 const URL_DELETE_GROUP      = 'api_users_delete_group';
 const MSG_DELETE_ELEMENT    = 'Supprimer cet utilisateur ?';
 const MSG_DELETE_GROUP      = 'Aucun utilisateur sélectionné.';
-const SORTER = Sort.compareLastname;
+let SORTER = Sort.compareLastname;
+
+let sorters = [
+    { value: 0, label: 'Nom', identifiant: 'sorter-nom' },
+    { value: 1, label: 'Identifiant', identifiant: 'sorter-identifiant' },
+    { value: 2, label: 'Email', identifiant: 'sorter-email' },
+]
+
+let sortersFunction = [Sort.compareLastname, Sort.compareUsername, Sort.compareEmail];
 
 function searchFunction(dataImmuable, search){
     let newData = [];
@@ -60,6 +68,7 @@ export class User extends Component {
 
         this.state = {
             perPage: 10,
+            currentPage: 0,
             sessionName: "user.pagination"
         }
 
@@ -72,6 +81,8 @@ export class User extends Component {
         this.handleSearch = this.handleSearch.bind(this);
         this.handleGetFilters = this.handleGetFilters.bind(this);
         this.handleRegenPassword = this.handleRegenPassword.bind(this);
+        this.handlePerPage = this.handlePerPage.bind(this);
+        this.handleChangeCurrentPage = this.handleChangeCurrentPage.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
         this.handleContentCreate = this.handleContentCreate.bind(this);
@@ -113,14 +124,42 @@ export class User extends Component {
         ;
     }
 
-    handleContentList = (currentData, changeContext, getFilters, filters) => {
+    handlePerPage = (perPage) => {
+        this.layout.current.handleUpdatePerPage(SORTER, perPage);
+        this.setState({ perPage: perPage });
+    }
+
+    handleChangeCurrentPage = (currentPage) => { this.setState({ currentPage }); }
+
+    handleSorter = (nb) => {
+        const { perPage } = this.state;
+
+        SORTER = sortersFunction[nb];
+        this.layout.current.handleUpdatePerPage(SORTER, perPage);
+    }
+
+    handleContentList = (currentData, changeContext, getFilters, filters, data) => {
+        const { perPage, currentPage } = this.state;
+
         return <UserList onChangeContext={changeContext}
                          onDelete={this.handleDelete}
-                         onGetFilters={this.handleGetFilters}
-                         onSearch={this.handleSearch}
                          onDeleteAll={this.handleDeleteGroup}
-                         filters={filters}
                          developer={parseInt(this.props.developer)}
+                         //filter-search
+                         onSearch={this.handleSearch}
+                         filters={filters}
+                         onGetFilters={this.handleGetFilters}
+                         //changeNumberPerPage
+                         perPage={perPage}
+                         onPerPage={this.handlePerPage}
+                         //twice pagination
+                         currentPage={currentPage}
+                         onPaginationClick={this.layout.current.handleGetPaginationClick(this)}
+                         taille={data.length}
+                         //sorter
+                         sorters={sorters}
+                         onSorter={this.handleSorter}
+                         //data
                          data={currentData} />
     }
 
@@ -140,7 +179,8 @@ export class User extends Component {
         return <>
             <Layout ref={this.layout} {...this.state} search={this.props.search} onGetData={this.handleGetData}
                     onContentList={this.handleContentList} onContentRead={this.handleContentRead}
-                    onContentCreate={this.handleContentCreate} onContentUpdate={this.handleContentUpdate}/>
+                    onContentCreate={this.handleContentCreate} onContentUpdate={this.handleContentUpdate}
+                    onChangeCurrentPage={this.handleChangeCurrentPage}/>
         </>
     }
 }

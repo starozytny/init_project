@@ -36,3 +36,36 @@ export function Button(props){
     }
 }
 
+export function ButtonDropdown(props){
+    const { items, children } = props;
+
+    return <div className="btn-dropdown">
+        <Button {...props}>{children}</Button>
+        <div className="items">
+            <div className="items-container">
+                {items.map((item, index) => {
+                    return <div className="item" key={index}>
+                        {item.data}
+                    </div>
+                })}
+            </div>
+        </div>
+    </div>
+}
+
+export function ButtonIconDropdown(props){
+    const { items, children } = props;
+
+    return <div className="btn-dropdown">
+        <ButtonIcon {...props}>{children}</ButtonIcon>
+        <div className="items">
+            <div className="items-container">
+                {items && items.map((item, index) => {
+                    return <div className="item" key={index}>
+                        {item.data}
+                    </div>
+                })}
+            </div>
+        </div>
+    </div>
+}

@@ -11,8 +11,8 @@ import { Trumb }                                       from "@dashboardComponent
 import { Checkbox, Input, Radiobox, Select, TextArea,
     SelectReactSelectize }                             from "@dashboardComponents/Tools/Fields";
 
-import Validator    from "@dashboardComponents/functions/validateur";
-import Sanitaze     from "@dashboardComponents/functions/sanitaze";
+import Validator    from "@commonComponents/functions/validateur";
+import Sanitaze     from "@commonComponents/functions/sanitaze";
 import Formulaire   from "@dashboardComponents/functions/Formulaire";
 
 export class StyleguideForm extends Component {

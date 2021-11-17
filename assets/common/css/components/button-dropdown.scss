@@ -1,0 +1,50 @@
+.btn-dropdown{
+  display: inline-block;
+  position: relative;
+
+  &:hover{
+    & > .items{
+      transition: all 0.2s ease-in-out;
+      top: 0;
+      opacity: 1;
+      z-index: 1;
+    }
+
+    & > .btn-icon + .items{
+      padding-top: 42px;
+    }
+  }
+
+  & > .items{
+    position: absolute;
+    top: -20px;
+    right: 0;
+    width: 100%;
+    min-width: 160px;
+    padding-top: 32%;
+    opacity: 0;
+    z-index: -1;
+
+
+    .items-container{
+      @include flex(column, flex-end, flex-end);
+      background-color: var(--alpha);
+      box-shadow: 0 4px 12px var(--greyShadow);
+
+      & > .item{
+        width: calc(100% - 24px);
+        word-break: break-word;
+        text-align: right;
+        padding: 6px 12px;
+      }
+    }
+  }
+
+  a{
+    color: var(--grey2);
+
+    &:hover{
+      color: var(--txt);
+    }
+  }
+}

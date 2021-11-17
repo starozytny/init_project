@@ -13,15 +13,15 @@ import { StyleguideAccordion } from "./components/StyleguideAccordion";
 export class Styleguide extends Component {
     render () {
         return <div className="main-content">
+            <StyleguideButton />
             <StyleguideAccordion />
             <StyleguidePlanning />
             <StyleguideForm />
             <StyleguideTable />
-            <StyleguideMaps />
+            {/*<StyleguideMaps />*/}
             <StyleguideAside />
-            <StyleguideButton />
             <StyleguideAlert />
-            <StyleguideLozad />
+            {/*<StyleguideLozad />*/}
         </div>
     }
 }

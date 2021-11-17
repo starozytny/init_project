@@ -11,12 +11,15 @@ export class Page extends Component {
         super(props);
 
         this.pagination = React.createRef();
+
+        this.handlePerPage = this.handlePerPage.bind(this);
     }
 
+    handlePerPage = (perPage) => { this.pagination.current.handlePerPage(perPage); }
+
     render () {
-        const { haveLoadPageError, children, sessionName,
-            havePagination, perPage = "10", taille, data,
-        } = this.props;
+        const { haveLoadPageError, children, sessionName, havePagination,
+            perPage = "10", taille, data, onChangeCurrentPage } = this.props;
 
         let hPagination = (havePagination && data && data.length !== 0);
 
@@ -25,59 +28,12 @@ export class Page extends Component {
             <div className="main-content">
                 {children}
                 <Pagination ref={this.pagination} havePagination={hPagination} perPage={perPage} taille={taille} items={data}
-                            onUpdate={(items) => this.props.onUpdate(items)} sessionName={sessionName}/>
+                            onUpdate={(items) => this.props.onUpdate(items)} sessionName={sessionName}
+                            onChangeCurrentPage={onChangeCurrentPage}/>
             </div>
 
         </>
     }
-}
-
-function initData(donnees, sorter)
-{
-    let data = JSON.parse(donnees);
-    if(sorter){
-        data.sort(sorter);
-    }
-
-    return data;
-}
-
-function initPageWithSearch(data, search, type, context, nContext)
-{
-    let newContext = context;
-    let elem = null;
-    if(search){
-        data.forEach(el => {
-            let find = false;
-            if(type === "username"){
-                if(el.username === search){
-                    find = true;
-                }
-            }else if(type === "id"){
-                if(el.id === parseInt(search)){
-                    find = true;
-                }
-            }
-
-            if(find){
-                elem = el;
-                newContext = nContext;
-            }
-        })
-    }
-
-    return [elem, newContext];
-}
-
-function getData(donnees, sorter, search, type, context, nContext)
-{
-    let data = initData(donnees, sorter);
-
-    let element = initPageWithSearch(data, search, type, context, nContext);
-    let elem = element[0];
-    let newContext = element[1];
-
-    return [data, elem, newContext];
 }
 
 export class Layout extends Component {
@@ -109,6 +65,8 @@ export class Layout extends Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
         this.handleSwitchPublished = this.handleSwitchPublished.bind(this);
+        this.handleUpdatePerPage = this.handleUpdatePerPage.bind(this);
+        this.handleGetPaginationClick = this.handleGetPaginationClick.bind(this);
     }
 
     componentDidMount() { this.props.onGetData(this); }
@@ -131,6 +89,14 @@ export class Layout extends Component {
     handleUpdateList = (element, newContext = null, sorter = null) => {
         const { data, context, perPage } = this.state
         Formulaire.updateDataPagination(this, sorter, newContext, context, data, element, perPage);
+    }
+
+    handleUpdatePerPage = (sorter = null, perPage) => {
+        const { data } = this.state
+
+        this.page.current.handlePerPage(perPage);
+        Formulaire.updatePerPage(this, sorter, data, perPage);
+        this.page.current.pagination.current.handlePageOne();
     }
 
     handleSetDataPagination = (donnees, sorter = null, nContext = "read", type = "id") => {
@@ -202,9 +168,12 @@ export class Layout extends Component {
         Formulaire.switchPublished(self, element, url, nameEntity);
     }
 
+    handleGetPaginationClick = (self) => { return self.layout.current.page.current.pagination.current.handleClick; }
+
     render () {
-        const { onContentList, onContentCreate, onContentUpdate, onContentRead, onContentCustomOne, onContentCustomTwo } = this.props;
-        const { loadPageError, context, loadData, data, currentData, element, sessionName, filters } = this.state;
+        const { onContentList, onContentCreate, onContentUpdate, onContentRead, onContentCustomOne, onContentCustomTwo,
+            onChangeCurrentPage} = this.props;
+        const { perPage, loadPageError, context, loadData, data, currentData, element, sessionName, filters } = this.state;
 
         let content, havePagination = false;
         switch (context){
@@ -225,7 +194,7 @@ export class Layout extends Component {
                 break;
             default:
                 havePagination = true;
-                content = loadData ? <LoaderElement /> : onContentList(currentData, this.handleChangeContext, this.handleGetFilters, filters)
+                content = loadData ? <LoaderElement /> : onContentList(currentData, this.handleChangeContext, this.handleGetFilters, filters, data)
                 break;
         }
 
@@ -234,11 +203,61 @@ export class Layout extends Component {
         }
 
         return <>
-            <Page ref={this.page} haveLoadPageError={loadPageError} sessionName={sessionName}
+            <Page ref={this.page} haveLoadPageError={loadPageError} sessionName={sessionName} perPage={perPage}
                   havePagination={havePagination} taille={data && data.length} data={data} onUpdate={this.handleUpdateData}
+                  onChangeCurrentPage={onChangeCurrentPage}
             >
                 {content}
             </Page>
         </>
     }
+}
+
+
+function initData(donnees, sorter)
+{
+    let data = JSON.parse(donnees);
+    if(sorter){
+        data.sort(sorter);
+    }
+
+    return data;
+}
+
+function initPageWithSearch(data, search, type, context, nContext)
+{
+    let newContext = context;
+    let elem = null;
+    if(search){
+        data.forEach(el => {
+            let find = false;
+            if(type === "username"){
+                if(el.username === search){
+                    find = true;
+                }
+            }else if(type === "id"){
+                if(el.id === parseInt(search)){
+                    find = true;
+                }
+            }
+
+            if(find){
+                elem = el;
+                newContext = nContext;
+            }
+        })
+    }
+
+    return [elem, newContext];
+}
+
+function getData(donnees, sorter, search, type, context, nContext)
+{
+    let data = initData(donnees, sorter);
+
+    let element = initPageWithSearch(data, search, type, context, nContext);
+    let elem = element[0];
+    let newContext = element[1];
+
+    return [data, elem, newContext];
 }

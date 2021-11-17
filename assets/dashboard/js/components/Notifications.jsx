@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Routing    from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Formulaire from "@dashboardComponents/functions/Formulaire";
-import Sort       from "@dashboardComponents/functions/sort";
+import Sort       from "@commonComponents/functions/sort";
 
 export class Notifications extends Component{
     constructor(props) {

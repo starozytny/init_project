@@ -4,6 +4,7 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Button, ButtonIcon }       from "@dashboardComponents/Tools/Button";
 import { Filter, FilterSelected }   from "@dashboardComponents/Layout/Filter";
+import { TopSorterPagination }      from "@dashboardComponents/Layout/Pagination";
 import { Search }                   from "@dashboardComponents/Layout/Search";
 import { Alert }                    from "@dashboardComponents/Tools/Alert";
 
@@ -23,7 +24,8 @@ export class UserList extends Component {
     }
 
     render () {
-        const { data, onChangeContext, onGetFilters, filters, onSearch, onDeleteAll } = this.props;
+        const { taille, data, perPage, onChangeContext, onGetFilters, filters, onSearch, onDeleteAll, onPerPage,
+            onPaginationClick, currentPage, sorters, onSorter } = this.props;
 
         let itemsFiltersLabelArray = ["Utilisateur", "Développeur", "Administrateur"];
         let itemsFiltersIdArray = ["f-user", "f-dev", "f-admin"];
@@ -42,10 +44,13 @@ export class UserList extends Component {
                     </div>
                     <div className="item filter-search">
                         <Filter ref={this.filter} items={itemsFilter} onGetFilters={onGetFilters} />
-                        <Search onSearch={onSearch} />
+                        <Search onSearch={onSearch} placeholder="Recherche par identifiant, nom, prénom ou email.."/>
                         <FilterSelected filters={filters} itemsFiltersLabel={itemsFiltersLabelArray} itemsFiltersId={itemsFiltersIdArray} onChange={this.handleFilter}/>
                     </div>
                 </div>
+
+                <TopSorterPagination sorters={sorters} onSorter={onSorter}
+                                     currentPage={currentPage} perPage={perPage} onPerPage={onPerPage} taille={taille} onClick={onPaginationClick}/>
 
                 <div className="items-table">
                     <div className="items items-default items-user">
