@@ -61,6 +61,6 @@ module.exports = {
     compareLabel,
     compareAdPrice,
     compareCreatedAtInverse,
-    compareAdPriceReverse
+    compareAdPriceReverse,
     compareEmail
 }
