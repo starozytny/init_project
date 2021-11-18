@@ -10,7 +10,7 @@ import { Button }              from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 import { RgpdInfo }            from "@appComponents/Tools/Rgpd";
 
-import Validateur              from "@dashboardComponents/functions/validateur";
+import Validateur              from "@commonComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
 export function AlertFormulaire ({ type, onChangeContext, onUpdateList })

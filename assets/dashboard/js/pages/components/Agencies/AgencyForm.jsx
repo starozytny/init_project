@@ -11,7 +11,7 @@ import { Trumb }               from "@dashboardComponents/Tools/Trumb";
 import { Drop }                from "@dashboardComponents/Tools/Drop";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
-import Validateur              from "@dashboardComponents/functions/validateur";
+import Validateur              from "@commonComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
 export function AgencyFormulaire ({ type, onChangeContext, onUpdateList, element })

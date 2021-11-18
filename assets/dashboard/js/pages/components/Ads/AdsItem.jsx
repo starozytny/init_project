@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import Sanitize from "@dashboardComponents/functions/sanitaze";
+import Sanitize from "@commonComponents/functions/sanitaze";
+
 import { Gallery } from "./split/Gallery";
 
 export class AdsItem extends Component {

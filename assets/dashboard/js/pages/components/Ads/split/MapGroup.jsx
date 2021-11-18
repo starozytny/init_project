@@ -3,8 +3,8 @@ import "leaflet/dist/leaflet.css";
 import React, { Component } from "react";
 
 import L     from "leaflet/dist/leaflet";
-import Map   from "@dashboardComponents/functions/map";
-import Sanitize   from "@dashboardComponents/functions/sanitaze";
+import Map   from "@commonComponents/functions/map";
+import Sanitize   from "@commonComponents/functions/sanitaze";
 
 function reinitMap(self, mymap, elems, mapId, mapUrl, urlAd)
 {

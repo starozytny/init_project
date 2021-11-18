@@ -1,5 +1,5 @@
 import React     from "react";
-import Sanitize  from "@dashboardComponents/functions/sanitaze";
+import Sanitize  from "@commonComponents/functions/sanitaze";
 import parseHtml from "html-react-parser";
 
 export function Infos({ elem }){

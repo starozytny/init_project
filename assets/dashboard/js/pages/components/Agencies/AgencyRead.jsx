@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
-import Sanitize               from "@dashboardComponents/functions/sanitaze";
+import Sanitize               from "@commonComponents/functions/sanitaze";
 import parse                  from "html-react-parser";
-import {ChartAds, ChartBiens} from "@dashboardFolder/js/pages/components/Stats/Charts";
+import { ChartAds, ChartBiens } from "@dashboardFolder/js/pages/components/Stats/Charts";
 
 export class AgencyRead extends Component {
     render () {

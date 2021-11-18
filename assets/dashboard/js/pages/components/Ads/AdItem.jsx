@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import Routing       from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
-import Sanitize      from "@dashboardComponents/functions/sanitaze";
+import Sanitize      from "@commonComponents/functions/sanitaze";
+
 import { Infos }     from "./split/Infos";
 import { Features }  from "./split/Features";
 import { Diag }      from "./split/Diag";

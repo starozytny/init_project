@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Page }          from "@dashboardComponents/Layout/Page";
 import { LoaderElement } from "@dashboardComponents/Layout/Loader";
 import Formulaire        from "@dashboardComponents/functions/Formulaire";
-import Sort              from "@dashboardComponents/functions/sort";
+import Sort              from "@commonComponents/functions/sort";
 
 import { AdsList } from "./AdsList";
 import { AdItem } from "./AdItem";

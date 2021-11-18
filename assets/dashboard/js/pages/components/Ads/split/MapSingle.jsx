@@ -4,7 +4,7 @@ import React, { Component } from "react";
 
 import axios from "axios";
 import L     from "leaflet/dist/leaflet";
-import Map   from "@dashboardComponents/functions/map";
+import Map   from "@commonComponents/functions/map";
 
 export class MapSingle extends Component {
     constructor(props) {

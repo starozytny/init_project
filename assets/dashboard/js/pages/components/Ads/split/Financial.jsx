@@ -1,5 +1,5 @@
 import React     from "react";
-import Sanitize  from "@dashboardComponents/functions/sanitaze";
+import Sanitize  from "@commonComponents/functions/sanitaze";
 
 export function Financial({ elem }){
 

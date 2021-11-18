@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
-import Sanitize         from "@dashboardComponents/functions/sanitaze";
+import Sanitize         from "@commonComponents/functions/sanitaze";
 
 export class AgencyItem extends Component {
     render () {

@@ -9,9 +9,9 @@ import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
-import Validateur              from "@dashboardComponents/functions/validateur";
+import Validateur              from "@commonComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
-import Sanitaze                from "@dashboardComponents/functions/sanitaze";
+import Sanitaze                from "@commonComponents/functions/sanitaze";
 
 import { RgpdInfo }            from "@appComponents/Tools/Rgpd";
 

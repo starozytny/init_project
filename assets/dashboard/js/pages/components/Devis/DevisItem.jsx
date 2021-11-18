@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
 import { Selector }     from "@dashboardComponents/Layout/Selector";
 
-import Sanitaze         from "@dashboardComponents/functions/sanitaze";
+import Sanitaze         from "@commonComponents/functions/sanitaze";
 
 export class DevisItem extends Component {
     render () {
