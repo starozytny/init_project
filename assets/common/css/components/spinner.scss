@@ -1,6 +1,6 @@
 .spinner{
   @include flex(row, center, flex-start);
-  background-color: var(--fondContent);
+  background-color: var(--alpha);
   border: 1px solid var(--grey);
   border-radius: 4px;
   padding: 12px;

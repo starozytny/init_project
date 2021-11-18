@@ -13,19 +13,24 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 import Validateur              from "@commonComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
+const URL_CREATE_ELEMENT     = "api_users_create";
+const URL_UPDATE_GROUP       = "api_users_update";
+const TXT_CREATE_BUTTON_FORM = "Ajouter l'utilisateur";
+const TXT_UPDATE_BUTTON_FORM = "Modifier l'utilisateur";
+
 export function UserFormulaire ({ type, onChangeContext, onUpdateList, element })
 {
     let title = "Ajouter un utilisateur";
-    let url = Routing.generate('api_users_create');
+    let url = Routing.generate(URL_CREATE_ELEMENT);
     let msg = "Félicitation ! Vous avez ajouté un nouveau utilisateur !"
 
     if(type === "update"){
         title = "Modifier " + element.username;
-        url = Routing.generate('api_users_update', {'id': element.id});
+        url = Routing.generate(URL_UPDATE_GROUP, {'id': element.id});
         msg = "Félicitation ! La mise à jour s'est réalisée avec succès !";
     }
 
-    let form = <UserForm
+    let form = <Form
         context={type}
         url={url}
         username={element ? element.username : ""}
@@ -42,7 +47,7 @@ export function UserFormulaire ({ type, onChangeContext, onUpdateList, element }
     return <FormLayout onChangeContext={onChangeContext} form={form}>{title}</FormLayout>
 }
 
-export class UserForm extends Component {
+class Form extends Component {
     constructor(props) {
         super(props);
 
@@ -92,11 +97,11 @@ export class UserForm extends Component {
         this.setState({ success: false})
 
         let paramsToValidate = [
-            {type: "text", id: 'username', value: username},
+            {type: "text", id: 'username',  value: username},
             {type: "text", id: 'firstname', value: firstname},
-            {type: "text", id: 'lastname', value: lastname},
-            {type: "email", id: 'email', value: email},
-            {type: "array", id: 'roles', value: roles}
+            {type: "text", id: 'lastname',  value: lastname},
+            {type: "email", id: 'email',    value: email},
+            {type: "array", id: 'roles',    value: roles}
         ];
         if(context === "create"){
             if(password !== ""){
@@ -210,7 +215,7 @@ export class UserForm extends Component {
 
                 <div className="line">
                     <div className="form-button">
-                        <Button isSubmit={true}>{context === "create" ? "Ajouter l'utilisateur" : 'Modifier l\'utilisateur'}</Button>
+                        <Button isSubmit={true}>{context === "create" ? TXT_CREATE_BUTTON_FORM : TXT_UPDATE_BUTTON_FORM}</Button>
                     </div>
                 </div>
             </form>

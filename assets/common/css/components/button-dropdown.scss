@@ -1,50 +1,55 @@
 .btn-dropdown{
-  display: inline-block;
   position: relative;
+  display: inline-block;
 
-  &:hover{
-    & > .items{
-      transition: all 0.2s ease-in-out;
-      top: 0;
-      opacity: 1;
-      z-index: 1;
-    }
+  .btn-icon, .btn{
+    position: relative;
 
-    & > .btn-icon + .items{
-      padding-top: 42px;
-    }
-  }
+    &:hover{
 
-  & > .items{
-    position: absolute;
-    top: -20px;
-    right: 0;
-    width: 100%;
-    min-width: 160px;
-    padding-top: 32%;
-    opacity: 0;
-    z-index: -1;
-
-
-    .items-container{
-      @include flex(column, flex-end, flex-end);
-      background-color: var(--alpha);
-      box-shadow: 0 4px 12px var(--greyShadow);
-
-      & > .item{
-        width: calc(100% - 24px);
-        word-break: break-word;
-        text-align: right;
-        padding: 6px 12px;
+      & + .dropdown-items,
+      & + .dropdown-items{
+        opacity: 1;
+        z-index: 12;
       }
     }
   }
 
+  .item{
+    width: calc(100% - 24px);
+    word-break: break-word;
+    text-align: right;
+    padding: 6px 12px;
+  }
+
   a{
-    color: var(--grey2);
+    color: var(--grey3);
 
     &:hover{
       color: var(--txt);
     }
+  }
+}
+
+.dropdown-items{
+  position: absolute;
+  width: 190px;
+  top: 42px; right: 0;
+  padding: 4px 0;
+  background: var(--alpha);
+  box-shadow: 0 4px 12px var(--greyShadow);
+  opacity: 0;
+  z-index: -1;
+  transition: all 0.2s ease-in-out;
+
+  .item{
+    padding: 6px 12px;
+    font-size: 15px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  &:hover{
+    opacity: 1;
+    z-index: 12;
   }
 }

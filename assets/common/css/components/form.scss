@@ -45,6 +45,7 @@
 
   .react-selectize.default.root-node{
     width: 100%;
+    @include fontRegular();
 
     &:not(.open){
       .react-selectize-control{
@@ -52,7 +53,7 @@
         border: 1px solid var(--grey);
 
         .react-selectize-placeholder{
-
+          color: var(--grey2);
         }
       }
     }
@@ -94,9 +95,11 @@ input, textarea, select{
   font-size: 14px;
   width: calc(100% - 20px);
   outline: none;
+  background-color: var(--alpha);
+  color: var(--grey2);
 
   &:focus{
-    border: 1px solid var(--grey2);
+    border: 1px solid var(--txt);
   }
 }
 
@@ -104,7 +107,9 @@ select{
   padding: 6.5px 10px;
   width: 100%;
 }
-
+.react-selectize{
+  color: var(--txt);
+}
 .trumbowyg-box, .trumbowyg-editor{
   margin-bottom: 0 !important;
 }
@@ -130,6 +135,7 @@ select{
       border-radius: 100px;
       background-color: var(--grey);
       transition: all 0.2s ease-in-out;
+      cursor: pointer;
 
       span{
         opacity: 0;
@@ -357,6 +363,10 @@ select{
   }
 }
 
+.trumbowyg-box, .trumbowyg-editor{
+  margin-top: 0 !important;
+}
+
 // **************************************
 // ERROR
 // STYLE
@@ -424,6 +434,27 @@ select{
   .password-rules{
     font-size: 14px;
     opacity: 0.8;
+  }
+}
+// **************************************
+// DARK-MODE
+// STYLE
+// **************************************
+.dark-mode{
+  input, textarea, select {
+    background-color: var(--fond);
+    color: var(--txt);
+  }
+  .react-selectize.default.root-node {
+    &:not(.open) {
+      .react-selectize-control {
+        background: var(--fond);
+      }
+
+      .react-selectize-placeholder{
+        color: var(--grey);
+      }
+    }
   }
 }
 

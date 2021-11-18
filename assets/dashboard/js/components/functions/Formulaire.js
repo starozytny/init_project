@@ -51,26 +51,26 @@ function updateData(self, sorter, newContext, context, data, element){
     })
 }
 
-function updateDataPagination(self, sorter, newContext, context, data, element, perPage=10){
+function updateDataPagination(self, sorter, newContext, context, data, element){
     let nContext = (newContext !== null) ? newContext : context;
     let newData = UpdateList.update(nContext, data, element);
-    newData.sort(sorter)
+    if(sorter){
+        newData.sort(sorter)
+    }
 
-    self.setState({
-        dataImmuable: newData,
-        data: newData,
-        currentData: newData.slice(0,perPage),
-        element: element
-    })
+    return newData;
 }
 
 function updatePerPage(self, sorter, data, perPage){
-    data.sort(sorter)
+    if(sorter) {
+        data.sort(sorter)
+    }
 
     self.setState({
         data: data,
         currentData: data.slice(0, perPage),
-        perPage: perPage
+        perPage: perPage,
+        sorter: sorter
     })
 }
 

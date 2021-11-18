@@ -9,16 +9,14 @@ export class UserItem extends Component {
     render () {
         const { developer, elem, onChangeContext, onDelete, onSelectors } = this.props
 
-        let url = Routing.generate('user_homepage', {'_switch_user' : elem.username})
-
+        let routeName = 'user_homepage'
         if(elem.highRoleCode === 2){
-            url = Routing.generate('admin_homepage', {'_switch_user' : elem.username})
+            routeName = 'admin_homepage'
         }
 
-        let avatar = `https://robohash.org/${elem.username}?size=64x64`;
-        if(elem.avatar){
-            avatar = "/avatars/" + elem.avatar;
-        }
+        let url = Routing.generate(routeName, {'_switch_user' : elem.username})
+
+        let avatar = (elem.avatar) ? avatar = "/avatars/" + elem.avatar : `https://robohash.org/${elem.username}?size=64x64`;
 
         return <div className="item">
             <Selector id={elem.id} onSelectors={onSelectors} />

@@ -83,9 +83,10 @@ export class Notifications extends Component{
         }
 
         return <div ref={this.wrapperRef} className={"notif-container" + (open ? " active" : "")}>
-            <div className="btn-notif" onClick={this.handleOpen}>
+            <div className="btn-notif" title="Notifications" onClick={this.handleOpen}>
                 <span className="icon-notification" />
                 {taille !== 0 && <span className="number">{taille}</span>}
+                <span className="tooltip">Notifications</span>
             </div>
             <div className="notif-card">
                 <div className="notif-cancel">

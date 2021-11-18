@@ -41,14 +41,12 @@ export function ButtonDropdown(props){
 
     return <div className="btn-dropdown">
         <Button {...props}>{children}</Button>
-        <div className="items">
-            <div className="items-container">
-                {items.map((item, index) => {
-                    return <div className="item" key={index}>
-                        {item.data}
-                    </div>
-                })}
-            </div>
+        <div className="dropdown-items">
+            {items.map((item, index) => {
+                return <div className="item" key={index}>
+                    {item.data}
+                </div>
+            })}
         </div>
     </div>
 }
@@ -58,14 +56,12 @@ export function ButtonIconDropdown(props){
 
     return <div className="btn-dropdown">
         <ButtonIcon {...props}>{children}</ButtonIcon>
-        <div className="items">
-            <div className="items-container">
-                {items && items.map((item, index) => {
-                    return <div className="item" key={index}>
-                        {item.data}
-                    </div>
-                })}
-            </div>
+        <div className="dropdown-items">
+            {items.map((item, index) => {
+                return <div className="item" key={index}>
+                    {item.data}
+                </div>
+            })}
         </div>
     </div>
 }
