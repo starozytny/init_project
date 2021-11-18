@@ -20,6 +20,11 @@ export class Alerts extends Component {
 
         this.state = {
             perPage: 10,
+            sorter: SORTER,
+            urlDeleteElement: Routing.generate(URL_DELETE_ELEMENT, {'token': element.token}),
+            msgDeleteElement: MSG_DELETE_ELEMENT,
+            pathDeleteGroup: URL_DELETE_GROUP,
+            msgDeleteGroup: MSG_DELETE_GROUP,
             sessionName: "alerts.pagination"
         }
 
@@ -27,29 +32,19 @@ export class Alerts extends Component {
 
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
         this.handleContentCreate = this.handleContentCreate.bind(this);
     }
 
-    handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees, SORTER); }
+    handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees); }
 
-    handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, SORTER); }
-
-    handleDelete = (element) => {
-        this.layout.current.handleDelete(this, element, Routing.generate(URL_DELETE_ELEMENT, {'token': element.token}), MSG_DELETE_ELEMENT);
-    }
-
-    handleDeleteGroup = () => {
-        this.layout.current.handleDeleteGroup(this, Routing.generate(URL_DELETE_GROUP), MSG_DELETE_GROUP);
-    }
+    handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
     handleContentList = (currentData, changeContext) => {
         return <AlertsList onChangeContext={changeContext}
-                            onDelete={this.handleDelete}
-                            onDeleteAll={this.handleDeleteGroup}
+                            onDelete={this.layout.current.handleDelete}
+                            onDeleteAll={this.layout.current.handleDeleteGroup}
                             data={currentData} />
     }
 
