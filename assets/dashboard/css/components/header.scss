@@ -7,10 +7,13 @@ header{
   .header-container{
     position: relative;
     @include flex(row, center, flex-end);
+    flex-wrap: wrap;
     margin: 12px 0;
 
     .header-name{
-      @include flex(row, center, flex-start);
+      @include flex(row, center, flex-end);
+      width: 100%;
+      margin-top: 12px;
 
       img{
         width: 42px; height: 42px;
@@ -50,6 +53,9 @@ header{
 @media (min-width:768px) {
   header{
     .header-container{
+      .header-name {
+        width: auto;
+      }
       a{
         span:last-child{
           display: inline-block;

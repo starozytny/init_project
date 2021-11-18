@@ -18,6 +18,7 @@ Encore
     .addAliases({
         '@publicFolder': path.resolve(__dirname, './public'),
         '@dashboardComponents': path.resolve(__dirname, './assets/dashboard/js/components'),
+        '@commonComponents': path.resolve(__dirname, './assets/common/js/components'),
         '@appComponents': path.resolve(__dirname, './assets/app/js/components'),
         '@nodeModulesFolder': path.resolve(__dirname, './node_modules'),
     })
@@ -41,8 +42,8 @@ Encore
     })
 
     .configureFilenames({
-        css: !Encore.isProduction() ? 'css/[name].css' : 'css/[name].[hash:8].css',
-        js: !Encore.isProduction() ? 'js/[name].js' : 'js/[name].[hash:8].js'
+        css: !Encore.isProduction() ? 'css/[name].[hash:8].css' : 'css/[name].[hash:8].css',
+        js: !Encore.isProduction() ? 'js/[name].[hash:8].js' : 'js/[name].[hash:8].js'
     })
 
     /*

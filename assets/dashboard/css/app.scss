@@ -16,6 +16,7 @@
 @import "components/header";
 @import "components/footer";
 
+@import "components/spinner";
 @import "components/page";
 @import "components/submenu";
 @import "components/loader";
@@ -39,6 +40,8 @@
 @import "components/progress";
 @import "components/filter";
 @import "components/accordion";
+@import "components/button-dropdown";
+@import "components/theme";
 
 html, body{
     scroll-behavior: smooth;

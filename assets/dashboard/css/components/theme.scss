@@ -1,0 +1,40 @@
+@import "../vars/vars";
+
+.theme-container{
+  position: relative;
+
+  .switcher-items .switcher-item label{
+    padding: 4px 8px;
+
+    &:before{
+      width: 16px; height: 16px;
+    }
+
+    &:after{
+      content: "\e97c";
+      top: 8px; left: 7px;
+      font-size: 9px;
+      color: var(--grey);
+    }
+  }
+
+  .switcher-items .switcher-item.checked label:before,
+  .switcher-items .switcher-item.checked label:after{
+    transform: translateX(24px);
+  }
+  .switcher-items .switcher-item.checked label:after {
+    content: "\e97b";
+  }
+}
+
+//                      __   _____ __    ___    __
+//                     | _| |___  / /_  ( _ )  |_ |
+//    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
+//   |_____|_____|_____| |    / /| (_) | (_) |  | |_____|_____|_____|
+//                     | |   /_/  \___/ \___/   | |
+//                     |__|                    |__|
+@media (min-width:768px) {
+  .theme-container {
+    margin-right: 36px;
+  }
+}

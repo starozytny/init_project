@@ -37,8 +37,9 @@ class DataEntity
                 'timezone' => 'Europe/Paris'
             ]);
             $time = Carbon::instance($date);
+            $time->subHours(1);
 
-            return $frenchFactory->make($time)->diffForHumans();
+            return str_replace("dans", "il y a", $frenchFactory->make($time)->diffForHumans());
         }
 
         return null;
@@ -60,6 +61,7 @@ class DataEntity
                 'timezone' => 'Europe/Paris'
             ]);
             $time = Carbon::instance($date);
+            $time->subHours(1);
 
             return $frenchFactory->make($time)->isoFormat($format);
         }

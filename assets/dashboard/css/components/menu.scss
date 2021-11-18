@@ -23,21 +23,19 @@
     @include flex(row, center, flex-start);
     padding: 12px;
     width: calc(100% - 24px);
-    color: var(--fond);
-    opacity: 0.6;
+    color: var(--grey3);
 
     [class^="icon-"]{
       display: inline-block;
       margin-right: 8px;
     }
 
-
     &:hover{
       transform: translateX(5px);
     }
 
     &.active{
-      opacity: 1;
+      color: var(--txt);
     }
   }
 
@@ -60,6 +58,7 @@
     width: 20%;
     height: 100vh;
     background: var(--fondMenu);
+    border-right: 1px solid var(--grey);
   }
 
   .nav-mobile{ display: none; }
