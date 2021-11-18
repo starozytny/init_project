@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Layout }         from "@dashboardComponents/Layout/Page";
-import Sort              from "@dashboardComponents/functions/sort";
+import Sort              from "@commonComponents/functions/sort";
 
 import { ArticlesList }      from "./ArticlesList";
 import { ArticleFormulaire } from "./ArticleForm";
@@ -33,6 +33,11 @@ export class Articles extends Component {
 
         this.state = {
             perPage: 10,
+            sorter: SORTER,
+            pathDeleteElement: URL_DELETE_ELEMENT,
+            msgDeleteElement: MSG_DELETE_ELEMENT,
+            pathDeleteGroup: URL_DELETE_GROUP,
+            msgDeleteGroup: MSG_DELETE_GROUP,
             categories: JSON.parse(props.categories),
             sessionName: "blog.pagination"
         }
@@ -41,8 +46,6 @@ export class Articles extends Component {
 
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSwitchPublished = this.handleSwitchPublished.bind(this);
 
@@ -51,17 +54,9 @@ export class Articles extends Component {
         this.handleContentUpdate = this.handleContentUpdate.bind(this);
     }
 
-    handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees, SORTER); }
+    handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees); }
 
-    handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext, SORTER); }
-
-    handleDelete = (element) => {
-        this.layout.current.handleDelete(this, element, Routing.generate(URL_DELETE_ELEMENT, {'id': element.id}), MSG_DELETE_ELEMENT);
-    }
-
-    handleDeleteGroup = () => {
-        this.layout.current.handleDeleteGroup(this, Routing.generate(URL_DELETE_GROUP), MSG_DELETE_GROUP);
-    }
+    handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
     handleSearch = (search) => { this.layout.current.handleSearch(search, searchFunction) }
 
@@ -71,9 +66,9 @@ export class Articles extends Component {
 
     handleContentList = (currentData, changeContext) => {
         return <ArticlesList onChangeContext={changeContext}
-                             onDelete={this.handleDelete}
+                             onDelete={this.layout.current.handleDelete}
+                             onDeleteAll={this.layout.current.handleDeleteGroup}
                              onSearch={this.handleSearch}
-                             onDeleteAll={this.handleDeleteGroup}
                              onChangePublished={this.handleSwitchPublished}
                              data={currentData} />
     }
