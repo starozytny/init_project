@@ -43,16 +43,16 @@ class FoFormation extends DataEntity
     private $isPublished = false;
 
     /**
-     * @ORM\Column(type="text")
-     * @Groups({"admin:read"})
-     */
-    private $content;
-
-    /**
      * @ORM\Column(type="float", nullable=true)
      * @Groups({"admin:read"})
      */
     private $rating;
+
+    /**
+     * @ORM\Column(type="text")
+     * @Groups({"admin:read"})
+     */
+    private $content;
 
     /**
      * @ORM\Column(type="text", nullable=true)
