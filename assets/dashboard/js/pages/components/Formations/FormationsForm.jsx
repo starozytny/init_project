@@ -8,20 +8,25 @@ import { Input }               from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { Trumb }               from "@dashboardComponents/Tools/Trumb";
-
-import Validateur              from "@dashboardComponents/functions/validateur";
-import Formulaire              from "@dashboardComponents/functions/Formulaire";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
+
+import Validateur              from "@commonComponents/functions/validateur";
+import Formulaire              from "@dashboardComponents/functions/Formulaire";
+
+const URL_CREATE_ELEMENT     = "api_formations_create";
+const URL_UPDATE_GROUP       = "api_formations_update";
+const TXT_CREATE_BUTTON_FORM = "Ajouter la formation";
+const TXT_UPDATE_BUTTON_FORM = "Modifier la formation";
 
 export function FormationsFormulaire ({ type, onChangeContext, onUpdateList, element })
 {
-    let title = "Ajouter une formations";
-    let url = Routing.generate('api_formations_create');
+    let title = "Ajouter une formation";
+    let url = Routing.generate(URL_CREATE_ELEMENT);
     let msg = "Félicitation ! Vous avez ajouté une nouvelle formation !"
 
     if(type === "update"){
         title = "Modifier " + element.name;
-        url = Routing.generate('api_formations_update', {'id': element.id});
+        url = Routing.generate(URL_UPDATE_GROUP, {'id': element.id});
         msg = "Félicitation ! La mise à jour s'est réalisé avec succès !";
     }
 
@@ -88,12 +93,12 @@ export class FormationsForm extends Component {
         const { context, url, messageSuccess } = this.props;
         const { name, content, price } = this.state;
 
-        this.setState({ success: false})
+        this.setState({ success: false })
 
         let paramsToValidate = [
-            {type: "text", id: 'username', value: name},
+            {type: "text", id: 'username',  value: name},
             {type: "text", id: 'firstname', value: content.html},
-            {type: "text", id: 'lastname', value: price},
+            {type: "text", id: 'lastname',  value: price},
         ];
 
         // validate global
@@ -151,7 +156,7 @@ export class FormationsForm extends Component {
 
                 <div className="line">
                     <div className="form-button">
-                        <Button isSubmit={true}>{context === "create" ? "Ajouter la formation" : 'Modifier la formation'}</Button>
+                        <Button isSubmit={true}>{context === "create" ? TXT_CREATE_BUTTON_FORM : TXT_UPDATE_BUTTON_FORM}</Button>
                     </div>
                 </div>
             </form>

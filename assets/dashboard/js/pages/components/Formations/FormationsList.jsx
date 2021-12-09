@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 
-import {Button, ButtonIcon} from "@dashboardComponents/Tools/Button";
+import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
 import { Alert }      from "@dashboardComponents/Tools/Alert";
 
 import { FormationsItem }   from "./FormationsItem";
-import {Filter, FilterSelected} from "@dashboardComponents/Layout/Filter";
-import {Search} from "@dashboardComponents/Layout/Search";
 
 export class FormationsList extends Component {
     render () {
