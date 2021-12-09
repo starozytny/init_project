@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -11,6 +12,13 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     /**
      * @Route("/login", options={"expose"=true}, name="app_login")
      * @param AuthenticationUtils $authenticationUtils
@@ -51,7 +59,7 @@ class SecurityController extends AbstractController
      */
     public function reinit($token, $code): Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $user = $em->getRepository(User::class)->findOneBy(['token' => $token]);
         if(!$user){
             throw new NotFoundHttpException("Cet utilisateur n'existe pas.");
