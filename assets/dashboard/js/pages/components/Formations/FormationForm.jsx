@@ -4,7 +4,7 @@ import axios                   from "axios";
 import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import {Input, Select} from "@dashboardComponents/Tools/Fields";
+import { Input, Select }       from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { Trumb }               from "@dashboardComponents/Tools/Trumb";
@@ -30,7 +30,7 @@ export function FormationsFormulaire ({ type, onChangeContext, onUpdateList, ele
         msg = "Félicitation ! La mise à jour s'est réalisé avec succès !";
     }
 
-    let form = <FormationsForm
+    let form = <FormationForm
         context={type}
         url={url}
         name={element ? element.name : ""}
@@ -50,7 +50,7 @@ export function FormationsFormulaire ({ type, onChangeContext, onUpdateList, ele
     return <FormLayout onChangeContext={onChangeContext} form={form}>{title}</FormLayout>
 }
 
-export class FormationsForm extends Component {
+export class FormationForm extends Component {
     constructor(props) {
         super(props);
 

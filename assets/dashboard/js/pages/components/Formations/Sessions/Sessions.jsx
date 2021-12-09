@@ -5,18 +5,18 @@ import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@commonComponents/functions/sort";
 
-import { FormationsList }       from "./FormationsList";
-import { FormationsFormulaire } from "./FormationForm";
+import { SessionsList }       from "./SessionsList";
+import { SessionsFormulaire } from "./SessionForm";
 
 const URL_DELETE_ELEMENT    = 'api_formations_delete';
 const URL_DELETE_GROUP      = 'api_formations_delete_group';
-const MSG_DELETE_ELEMENT    = 'Supprimer cette formation ?';
-const MSG_DELETE_GROUP      = 'Aucune formation sélectionnée.';
+const MSG_DELETE_ELEMENT    = 'Supprimer cette session de formation ?';
+const MSG_DELETE_GROUP      = 'Aucune session sélectionnée.';
 const URL_SWITCH_PUBLISHED  = 'api_formations_formation_published';
 const MSG_SWITCH_PUBLISHED  = 'Formation';
 const SORTER = Sort.compareCreatedAt;
 
-export class Formations extends Component {
+export class Sessions extends Component {
     constructor(props) {
         super(props);
 
@@ -28,7 +28,7 @@ export class Formations extends Component {
             msgDeleteElement: MSG_DELETE_ELEMENT,
             pathDeleteGroup: URL_DELETE_GROUP,
             msgDeleteGroup: MSG_DELETE_GROUP,
-            sessionName: "formations.pagination"
+            sessionName: "sessions.formations.pagination"
         }
 
         this.layout = React.createRef();
@@ -51,19 +51,19 @@ export class Formations extends Component {
     }
 
     handleContentList = (currentData, changeContext) => {
-        return <FormationsList onChangeContext={changeContext}
-                               onDelete={this.layout.current.handleDelete}
-                               onDeleteAll={this.layout.current.handleDeleteGroup}
-                               onSwitchPublished={this.handleSwitchPublished}
-                               data={currentData} />
+        return <SessionsList onChangeContext={changeContext}
+                             onDelete={this.layout.current.handleDelete}
+                             onDeleteAll={this.layout.current.handleDeleteGroup}
+                             onSwitchPublished={this.handleSwitchPublished}
+                             data={currentData} />
     }
 
     handleContentCreate = (changeContext) => {
-        return <FormationsFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        return <SessionsFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        return <FormationsFormulaire type="update" element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        return <SessionsFormulaire type="update" element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     render () {

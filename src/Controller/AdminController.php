@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Entity\Formation\FoFormation;
+use App\Entity\Formation\FoSession;
 use App\Entity\Notification;
 use App\Entity\Settings;
 use App\Entity\User;
@@ -137,6 +138,22 @@ class AdminController extends AbstractController
 
         return $this->render('admin/pages/formations/index.html.twig', [
             'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/formations/{slug}/sessions", options={"expose"=true}, name="sessions_index")
+     */
+    public function sessions(FoFormation $formation, SerializerInterface $serializer): Response
+    {
+        $em = $this->doctrine->getManager();
+        $objs = $em->getRepository(FoSession::class)->findBy(['formation' => $formation]);
+
+        $objs = $serializer->serialize($objs, 'json', ['groups' => User::ADMIN_READ]);
+
+        return $this->render('admin/pages/formations/sessions.html.twig', [
+            'donnees' => $objs,
+            'formation' => $formation
         ]);
     }
 }

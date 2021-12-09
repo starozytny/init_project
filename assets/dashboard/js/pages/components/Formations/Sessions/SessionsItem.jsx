@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 
-import Routing          from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
+import { Selector }     from "@dashboardComponents/Layout/Selector";
 
-import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
-import { Selector }           from "@dashboardComponents/Layout/Selector";
-
-export class FormationsItem extends Component {
+export class SessionsItem extends Component {
     render () {
         const { elem, onChangeContext, onDelete, onSelectors, onSwitchPublished } = this.props
 
@@ -17,14 +15,11 @@ export class FormationsItem extends Component {
                     <div className="infos infos-col-3">
                         <div className="col-1">
                             <div className="name">
-                                <span>{elem.name}</span>
+                                <span>{elem.id}</span>
                             </div>
-                            {elem.rating && <div className="rating">{elem.rating} <span className="icon-star-2" /></div> }
                         </div>
                         <div className="col-2">
-                            <div className="sub">
-                                <Button element="a" onClick={Routing.generate('admin_sessions_index', {'slug': elem.slug})} >Ajouter une session</Button>
-                            </div>
+                            <div className="sub" />
                         </div>
                         <div className="col-3 actions">
                             <ButtonIcon icon={elem.isPublished ? "vision" : "vision-not"} onClick={() => onSwitchPublished(elem)}>

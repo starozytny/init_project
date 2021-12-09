@@ -1,0 +1,8 @@
+{% extends 'admin/pages/formations/template.html.twig' %}
+
+{% set page_title %}Liste des sessions de {{ formation.name }}{% endset %}
+{% set submenuActive = "" %}
+
+{% block main_content %}
+    <div id="formation-sessions" data-donnees="{{ donnees }}"></div>
+{% endblock %}

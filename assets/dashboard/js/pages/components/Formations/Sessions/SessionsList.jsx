@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
 import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
-import { Alert }              from "@dashboardComponents/Tools/Alert";
+import { Alert }      from "@dashboardComponents/Tools/Alert";
 
-import { FormationsItem }     from "./FormationsItem";
+import { SessionsItem }   from "./SessionsItem";
 
-export class FormationsList extends Component {
+export class SessionsList extends Component {
     render () {
         const { data, onChangeContext, onDeleteAll } = this.props;
 
@@ -13,7 +13,7 @@ export class FormationsList extends Component {
             <div>
                 <div className="toolbar">
                     <div className="item create">
-                        <Button onClick={() => onChangeContext("create")}>Ajouter une formation</Button>
+                        <Button onClick={() => onChangeContext("create")}>Ajouter une session</Button>
                     </div>
                 </div>
 
@@ -32,7 +32,7 @@ export class FormationsList extends Component {
                             </div>
                         </div>
                         {data && data.length !== 0 ? data.map(elem => {
-                            return <FormationsItem {...this.props} elem={elem} key={elem.id}/>
+                            return <SessionsItem {...this.props} elem={elem} key={elem.id}/>
                         }) : <Alert>Aucun résultat</Alert>}
                     </div>
                 </div>

@@ -4,6 +4,7 @@ namespace App\Entity\Formation;
 
 use App\Repository\Formation\FoSessionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=FoSessionRepository::class)
@@ -14,6 +15,7 @@ class FoSession
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $id;
 
@@ -29,106 +31,103 @@ class FoSession
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"admin:read"})
      */
     private $isPublished;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"admin:read"})
      */
     private $time;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Groups({"admin:read"})
      */
     private $time2;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"admin:read"})
      */
     private $priceHT;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"admin:read"})
      */
     private $priceTTC;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"admin:read"})
      */
     private $tva;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $duration;
-
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    private $duration2;
-
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $durationTotal;
-
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $durationByDay;
-
-    /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $max;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $min;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $animator;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $zipcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $modTrav;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $modEval;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $modPeda;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $modAssi;
 
@@ -235,54 +234,6 @@ class FoSession
     public function setTva(float $tva): self
     {
         $this->tva = $tva;
-
-        return $this;
-    }
-
-    public function getDuration(): ?string
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(string $duration): self
-    {
-        $this->duration = $duration;
-
-        return $this;
-    }
-
-    public function getDuration2(): ?string
-    {
-        return $this->duration2;
-    }
-
-    public function setDuration2(?string $duration2): self
-    {
-        $this->duration2 = $duration2;
-
-        return $this;
-    }
-
-    public function getDurationTotal(): ?string
-    {
-        return $this->durationTotal;
-    }
-
-    public function setDurationTotal(string $durationTotal): self
-    {
-        $this->durationTotal = $durationTotal;
-
-        return $this;
-    }
-
-    public function getDurationByDay(): ?string
-    {
-        return $this->durationByDay;
-    }
-
-    public function setDurationByDay(string $durationByDay): self
-    {
-        $this->durationByDay = $durationByDay;
 
         return $this;
     }
