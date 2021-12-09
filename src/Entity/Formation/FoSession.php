@@ -11,6 +11,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class FoSession
 {
+    const TYPE_PRESENTIEL = 0;
+    const TYPE_DISTANCE = 1;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -33,7 +36,7 @@ class FoSession
      * @ORM\Column(type="boolean")
      * @Groups({"admin:read"})
      */
-    private $isPublished;
+    private $isPublished = false;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -63,7 +66,31 @@ class FoSession
      * @ORM\Column(type="float")
      * @Groups({"admin:read"})
      */
-    private $tva;
+    private $tva = 20;
+
+    /**
+     * @ORM\Column(type="time")
+     * @Groups({"admin:read"})
+     */
+    private $duration;
+
+    /**
+     * @ORM\Column(type="time", nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $duration2;
+
+    /**
+     * @ORM\Column(type="time")
+     * @Groups({"admin:read"})
+     */
+    private $durationTotal;
+
+    /**
+     * @ORM\Column(type="time")
+     * @Groups({"admin:read"})
+     */
+    private $durationByDay;
 
     /**
      * @ORM\Column(type="integer")
@@ -75,7 +102,7 @@ class FoSession
      * @ORM\Column(type="integer")
      * @Groups({"admin:read"})
      */
-    private $min;
+    private $min = 0;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -142,6 +169,16 @@ class FoSession
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getStartJavascript(): ?string
+    {
+        date_default_timezone_set('Europe/Paris');
+        return $this->start != null ? date_format($this->start, 'F d, Y H:i:s') : null;
+    }
+
     public function getStart(): ?\DateTimeInterface
     {
         return $this->start;
@@ -153,6 +190,17 @@ class FoSession
 
         return $this;
     }
+
+    /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getEndJavascript(): ?string
+    {
+        date_default_timezone_set('Europe/Paris');
+        return $this->end != null ? date_format($this->end, 'F d, Y H:i:s') : null;
+    }
+
 
     public function getEnd(): ?\DateTimeInterface
     {
@@ -378,6 +426,54 @@ class FoSession
     public function setFormation(?FoFormation $formation): self
     {
         $this->formation = $formation;
+
+        return $this;
+    }
+
+    public function getDuration(): ?\DateTimeInterface
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(\DateTimeInterface $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getDuration2(): ?\DateTimeInterface
+    {
+        return $this->duration2;
+    }
+
+    public function setDuration2(?\DateTimeInterface $duration2): self
+    {
+        $this->duration2 = $duration2;
+
+        return $this;
+    }
+
+    public function getDurationTotal(): ?\DateTimeInterface
+    {
+        return $this->durationTotal;
+    }
+
+    public function setDurationTotal(\DateTimeInterface $durationTotal): self
+    {
+        $this->durationTotal = $durationTotal;
+
+        return $this;
+    }
+
+    public function getDurationByDay(): ?\DateTimeInterface
+    {
+        return $this->durationByDay;
+    }
+
+    public function setDurationByDay(\DateTimeInterface $durationByDay): self
+    {
+        $this->durationByDay = $durationByDay;
 
         return $this;
     }

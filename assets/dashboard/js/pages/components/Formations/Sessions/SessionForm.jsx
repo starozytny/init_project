@@ -12,6 +12,7 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@commonComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
+import {DatePick} from "@dashboardComponents/Tools/DatePicker";
 
 const URL_CREATE_ELEMENT     = "api_formations_create";
 const URL_UPDATE_GROUP       = "api_formations_update";
@@ -33,15 +34,28 @@ export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, eleme
     let form = <Form
         context={type}
         url={url}
-        name={element ? element.name : ""}
-        content={element ? element.content : ""}
-        prerequis={element ? element.prerequis : ""}
-        goals={element ? element.goals : ""}
-        aptitudes={element ? element.aptitudes : ""}
-        skills={element ? element.skills : ""}
-        target={element ? element.target : ""}
-        cat={element ? element.cat : ""}
-        accessibility={element ? element.accessibility : 0}
+        start={element ? new Date(element.starJavascriptt) : ""}
+        end={element ? new Date(element.endJavascript) : ""}
+        time={element ? element.time : ""}
+        time2={element ? element.time2 : ""}
+        priceHt={element ? element.priceHt : ""}
+        priceTtc={element ? element.priceTtc : ""}
+        tva={element ? element.tva : 20}
+        duration={element ? element.duration : ""}
+        duration2={element ? element.duration2 : ""}
+        durationTotal={element ? element.durationTotal : ""}
+        durationByDay={element ? element.durationByDay : ""}
+        min={element ? element.min : ""}
+        max={element ? element.max : ""}
+        animator={element ? element.animator : ""}
+        address={element ? element.address : ""}
+        zipcode={element ? element.zipcode : ""}
+        city={element ? element.city : ""}
+        type={element ? element.type : 0}
+        modTrav={element ? element.modTrav : ""}
+        modEval={element ? element.modEval : ""}
+        modPeda={element ? element.modPeda : ""}
+        modAssi={element ? element.modAssi : ""}
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
         messageSuccess={msg}
@@ -55,16 +69,12 @@ export class Form extends Component {
         super(props);
 
         this.state = {
-            name: props.name,
-            price: props.price,
-            content: { value: props.content ? props.content : "", html: props.content ? props.content : "" },
-            prerequis: { value: props.prerequis ? props.prerequis : "", html: props.prerequis ? props.prerequis : "" },
-            goals: { value: props.goals ? props.goals : "", html: props.goals ? props.goals : "" },
-            aptitudes: { value: props.aptitudes ? props.aptitudes : "", html: props.aptitudes ? props.aptitudes : "" },
-            skills: { value: props.skills ? props.skills : "", html: props.skills ? props.skills : "" },
-            target: { value: props.target ? props.target : "", html: props.target ? props.target : "" },
-            cat: { value: props.cat ? props.cat : "", html: props.cat ? props.cat : "" },
-            accessibility: props.accessibility,
+            start: props.start,
+            end: props.end,
+            modTrav: { value: props.modTrav ? props.modTrav : "", html: props.modTrav ? props.modTrav : "" },
+            modEval: { value: props.modEval ? props.modEval : "", html: props.modEval ? props.modEval : "" },
+            modPeda: { value: props.modPeda ? props.modPeda : "", html: props.modPeda ? props.modPeda : "" },
+            modAssi: { value: props.modAssi ? props.modAssi : "", html: props.modAssi ? props.modAssi : "" },
             errors: [],
             success: false
         }
@@ -72,13 +82,18 @@ export class Form extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeTrumb = this.handleChangeTrumb.bind(this);
+
+        this.handleChangeDateStart = this.handleChangeDateStart.bind(this);
+        this.handleChangeDateEnd = this.handleChangeDateEnd.bind(this);
     }
 
     componentDidMount() {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        document.getElementById("name").focus()
     }
+
+    handleChangeDateStart = (e) => { this.setState({ start: e }) }
+    handleChangeDateEnd = (e) => { this.setState({ end: e }) }
 
     handleChange = (e) => {
         let name = e.currentTarget.name;
@@ -88,32 +103,23 @@ export class Form extends Component {
     }
 
     handleChangeTrumb = (e) => {
-        const { content, prerequis, goals, aptitudes, skills, target, cat } = this.state
+        const { modTrav, modEval, modPeda, modAssi } = this.state
 
         let name = e.currentTarget.id;
         let text = e.currentTarget.innerHTML;
         let el;
         switch (name) {
-            case "cat":
-                el = cat;
+            case "modAssi":
+                el = modAssi;
                 break;
-            case "target":
-                el = target;
+            case "modPeda":
+                el = modPeda;
                 break;
-            case "skills":
-                el = skills;
-                break;
-            case "aptitudes":
-                el = aptitudes;
-                break;
-            case "goals":
-                el = goals;
-                break;
-            case "prerequis":
-                el = prerequis;
+            case "modEval":
+                el = modEval;
                 break;
             default:
-                el = content;
+                el = modTrav;
                 break;
         }
 
@@ -124,12 +130,12 @@ export class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { name, content } = this.state;
+        const { start } = this.state;
 
         this.setState({ success: false })
 
         let paramsToValidate = [
-            {type: "text", id: 'username',  value: name}
+            {type: "text", id: 'start',  value: start}
         ];
 
         // validate global
@@ -169,12 +175,7 @@ export class Form extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, name, content, prerequis, goals, aptitudes, skills, target, cat, accessibility } = this.state;
-
-        let selectItems = [
-            { value: 0, label: 'Bâtiment non conforme', identifiant: 'bat-not-conforme' },
-            { value: 1, label: 'Bâtiment conforme', identifiant: 'bat-conforme' },
-        ]
+        const { errors, success, start, end, modTrav, modEval, modPeda, modAssi } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -182,30 +183,18 @@ export class Form extends Component {
                 {success !== false && <Alert type="info">{success}</Alert>}
 
                 <div className="line">
-                    <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange} >Intitulé</Input>
-                </div>
-                <div className="line line-2">
-                    <Select items={selectItems} identifiant="accessibility" valeur={accessibility} errors={errors} onChange={this.handleChange} noEmpty={true}>Accessibilité handicapé ?</Select>
-                    <div className="form-group" />
-                </div>
-
-                <div className="line">
-                    <Trumb identifiant="content" valeur={content.value} errors={errors} onChange={this.handleChangeTrumb}>Description</Trumb>
+                    <DatePick identifiant="start" valeur={start} errors={errors} onChange={this.handleChangeDateStart}>Date de début</DatePick>
+                    <DatePick identifiant="end" valeur={end} errors={errors} onChange={this.handleChangeDateEnd}>Date de fin</DatePick>
                 </div>
 
                 <div className="line line-2">
-                    <Trumb identifiant="prerequis" valeur={prerequis.value} errors={errors} onChange={this.handleChangeTrumb}>Prérequis</Trumb>
-                    <Trumb identifiant="goals" valeur={goals.value} errors={errors} onChange={this.handleChangeTrumb}>Objectifs</Trumb>
+                    <Trumb identifiant="modTrav" valeur={modTrav.value} errors={errors} onChange={this.handleChangeTrumb}>ModTrav</Trumb>
+                    <Trumb identifiant="modEval" valeur={modEval.value} errors={errors} onChange={this.handleChangeTrumb}>modEval</Trumb>
                 </div>
 
                 <div className="line line-2">
-                    <Trumb identifiant="aptitudes" valeur={aptitudes.value} errors={errors} onChange={this.handleChangeTrumb}>Aptitudes</Trumb>
-                    <Trumb identifiant="skills" valeur={skills.value} errors={errors} onChange={this.handleChangeTrumb}>Compétences</Trumb>
-                </div>
-
-                <div className="line line-2">
-                    <Trumb identifiant="target" valeur={target.value} errors={errors} onChange={this.handleChangeTrumb}>Public cible</Trumb>
-                    <Trumb identifiant="cat" valeur={cat.value} errors={errors} onChange={this.handleChangeTrumb}>Catégorie de formation</Trumb>
+                    <Trumb identifiant="modPeda" valeur={modPeda.value} errors={errors} onChange={this.handleChangeTrumb}>modPeda</Trumb>
+                    <Trumb identifiant="modAssi" valeur={modAssi.value} errors={errors} onChange={this.handleChangeTrumb}>modAssi</Trumb>
                 </div>
 
                 <div className="line">

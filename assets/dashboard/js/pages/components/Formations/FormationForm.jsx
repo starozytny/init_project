@@ -124,12 +124,12 @@ export class FormationForm extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { name, content } = this.state;
+        const { name } = this.state;
 
         this.setState({ success: false })
 
         let paramsToValidate = [
-            {type: "text", id: 'username',  value: name}
+            {type: "text", id: 'name',  value: name}
         ];
 
         // validate global
