@@ -8,6 +8,7 @@ use App\Service\ApiResponse;
 use App\Service\Data\DataFormation;
 use App\Service\Data\DataService;
 use App\Service\ValidatorService;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,6 +21,13 @@ use OpenApi\Annotations as OA;
  */
 class FormationController extends AbstractController
 {
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     /**
      * Create a formation
      *
@@ -43,7 +51,7 @@ class FormationController extends AbstractController
     public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
                            DataFormation $dataEntity): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->get('data'));
 
         if ($data === null) {
@@ -93,7 +101,7 @@ class FormationController extends AbstractController
                            ApiResponse $apiResponse, FoFormation $obj, DataFormation $dataEntity): JsonResponse
     {
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->get('data'));
 
         if($data === null){
