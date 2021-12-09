@@ -12,6 +12,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class FoFormation extends DataEntity
 {
+    const ACCESSIBILITY_HANDI = 1;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -33,16 +35,10 @@ class FoFormation extends DataEntity
     private $slug;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @Groups({"admin:read"})
-     */
-    private $createdAt;
-
-    /**
      * @ORM\Column(type="boolean")
      * @Groups({"admin:read"})
      */
-    private $isPublished;
+    private $isPublished = false;
 
     /**
      * @ORM\Column(type="text")
@@ -51,21 +47,59 @@ class FoFormation extends DataEntity
     private $content;
 
     /**
-     * @ORM\Column(type="float")
-     * @Groups({"admin:read"})
-     */
-    private $price;
-
-    /**
      * @ORM\Column(type="float", nullable=true)
      * @Groups({"admin:read"})
      */
     private $rating;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $prerequis;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $goals;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $aptitudes;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $skills;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $target;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $cat;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $accessibility = 0;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
-        $this->isPublished = false;
     }
 
     public function getId(): ?int
@@ -144,18 +178,6 @@ class FoFormation extends DataEntity
         return $this;
     }
 
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): self
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
     public function getRating(): ?float
     {
         return $this->rating;
@@ -164,6 +186,102 @@ class FoFormation extends DataEntity
     public function setRating(?float $rating): self
     {
         $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function getPrerequis(): ?string
+    {
+        return $this->prerequis;
+    }
+
+    public function setPrerequis(?string $prerequis): self
+    {
+        $this->prerequis = $prerequis;
+
+        return $this;
+    }
+
+    public function getGoals(): ?string
+    {
+        return $this->goals;
+    }
+
+    public function setGoals(?string $goals): self
+    {
+        $this->goals = $goals;
+
+        return $this;
+    }
+
+    public function getAptitudes(): ?string
+    {
+        return $this->aptitudes;
+    }
+
+    public function setAptitudes(?string $aptitudes): self
+    {
+        $this->aptitudes = $aptitudes;
+
+        return $this;
+    }
+
+    public function getSkills(): ?string
+    {
+        return $this->skills;
+    }
+
+    public function setSkills(?string $skills): self
+    {
+        $this->skills = $skills;
+
+        return $this;
+    }
+
+    public function getTarget(): ?string
+    {
+        return $this->target;
+    }
+
+    public function setTarget(?string $target): self
+    {
+        $this->target = $target;
+
+        return $this;
+    }
+
+    public function getCat(): ?string
+    {
+        return $this->cat;
+    }
+
+    public function setCat(?string $cat): self
+    {
+        $this->cat = $cat;
+
+        return $this;
+    }
+
+    public function getAccessibility(): ?int
+    {
+        return $this->accessibility;
+    }
+
+    public function setAccessibility(int $accessibility): self
+    {
+        $this->accessibility = $accessibility;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

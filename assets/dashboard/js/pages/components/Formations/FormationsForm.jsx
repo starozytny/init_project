@@ -35,7 +35,13 @@ export function FormationsFormulaire ({ type, onChangeContext, onUpdateList, ele
         url={url}
         name={element ? element.name : ""}
         content={element ? element.content : ""}
-        price={element ? element.price : ""}
+        prerequis={element ? element.prerequis : ""}
+        goals={element ? element.goals : ""}
+        aptitudes={element ? element.aptitudes : ""}
+        skills={element ? element.skills : ""}
+        target={element ? element.target : ""}
+        cat={element ? element.cat : ""}
+        accessibility={element ? element.accessibility : 0}
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
         messageSuccess={msg}
@@ -52,6 +58,13 @@ export class FormationsForm extends Component {
             name: props.name,
             price: props.price,
             content: { value: props.content ? props.content : "", html: props.content ? props.content : "" },
+            prerequis: { value: props.prerequis ? props.prerequis : "", html: props.prerequis ? props.prerequis : "" },
+            goals: { value: props.goals ? props.goals : "", html: props.goals ? props.goals : "" },
+            aptitudes: { value: props.aptitudes ? props.aptitudes : "", html: props.aptitudes ? props.aptitudes : "" },
+            skills: { value: props.skills ? props.skills : "", html: props.skills ? props.skills : "" },
+            target: { value: props.target ? props.target : "", html: props.target ? props.target : "" },
+            cat: { value: props.cat ? props.cat : "", html: props.cat ? props.cat : "" },
+            accessibility: props.accessibility,
             errors: [],
             success: false
         }
@@ -75,30 +88,48 @@ export class FormationsForm extends Component {
     }
 
     handleChangeTrumb = (e) => {
-        const { content  } = this.state
+        const { content, prerequis, goals, aptitudes, skills, target, cat } = this.state
 
         let name = e.currentTarget.id;
         let text = e.currentTarget.innerHTML;
-        let value = "";
-        if(name === "content"){
-            value = content.value;
+        let el;
+        switch (name) {
+            case "cat":
+                el = cat;
+                break;
+            case "target":
+                el = target;
+                break;
+            case "skills":
+                el = skills;
+                break;
+            case "aptitudes":
+                el = aptitudes;
+                break;
+            case "goals":
+                el = goals;
+                break;
+            case "prerequis":
+                el = prerequis;
+                break;
+            default:
+                el = content;
+                break;
         }
 
-        this.setState({[name]: {value: value, html: text}})
+        this.setState({[name]: {value: el.value, html: text}})
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { name, content, price } = this.state;
+        const { name, content } = this.state;
 
         this.setState({ success: false })
 
         let paramsToValidate = [
-            {type: "text", id: 'username',  value: name},
-            {type: "text", id: 'firstname', value: content.html},
-            {type: "text", id: 'lastname',  value: price},
+            {type: "text", id: 'username',  value: name}
         ];
 
         // validate global
@@ -138,20 +169,34 @@ export class FormationsForm extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, name, content, price } = this.state;
+        const { errors, success, name, content, prerequis, goals, aptitudes, skills, target, cat } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
 
                 {success !== false && <Alert type="info">{success}</Alert>}
 
-                <div className="line line-2">
+                <div className="line">
                     <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange} >Intitulé</Input>
-                    <Input valeur={price} identifiant="price" errors={errors} onChange={this.handleChange} type="number" >Prix</Input>
                 </div>
 
                 <div className="line">
                     <Trumb identifiant="content" valeur={content.value} errors={errors} onChange={this.handleChangeTrumb}>Description</Trumb>
+                </div>
+
+                <div className="line line-2">
+                    <Trumb identifiant="prerequis" valeur={prerequis.value} errors={errors} onChange={this.handleChangeTrumb}>Prérequis</Trumb>
+                    <Trumb identifiant="goals" valeur={goals.value} errors={errors} onChange={this.handleChangeTrumb}>Objectifs</Trumb>
+                </div>
+
+                <div className="line line-2">
+                    <Trumb identifiant="aptitudes" valeur={aptitudes.value} errors={errors} onChange={this.handleChangeTrumb}>Aptitudes</Trumb>
+                    <Trumb identifiant="skills" valeur={skills.value} errors={errors} onChange={this.handleChangeTrumb}>Compétences</Trumb>
+                </div>
+
+                <div className="line line-2">
+                    <Trumb identifiant="target" valeur={target.value} errors={errors} onChange={this.handleChangeTrumb}>Public cible</Trumb>
+                    <Trumb identifiant="cat" valeur={cat.value} errors={errors} onChange={this.handleChangeTrumb}>Catégorie de formation</Trumb>
                 </div>
 
                 <div className="line">
