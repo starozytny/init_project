@@ -2,7 +2,7 @@
 
 .role{
   display: inline-block;
-  padding: 4px 8px;
+  padding: 4px 8px 2px 8px;
   background: var(--primaryShadow);
   border-radius: 4px;
   font-size: 12px;
@@ -20,7 +20,7 @@
   background-color: var(--alpha);
   border-radius: 4px;
   box-shadow: 0 0 10px var(--greyShadow2);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 
   & > .items{
     & > .item{
@@ -53,8 +53,8 @@
   }
 
   .selector{
-    width: 12px;
-    margin-right: 12px;
+    width: 14px;
+    margin-right: 14px;
 
     input{
       display: none;
@@ -63,7 +63,7 @@
     .item-selector{
       position: relative;
       display: block;
-      width: 100%; height: 12px;
+      width: 14px; height: 14px;
       border: 1px solid var(--grey);
       border-radius: 4px;
       cursor: pointer;
@@ -130,7 +130,7 @@
 
   .sub{
     font-size: 14px;
-    opacity: 0.7;
+    opacity: 0.8;
   }
 
   .createAt{
@@ -367,6 +367,60 @@
       }
       .col-5{
         width: 120px;
+      }
+    }
+  }
+}
+
+//                      __   _  __    ___   ___    __
+//                     | _| / |/ /_  / _ \ / _ \  |_ |
+//    _____ _____ _____| |  | | '_ \| | | | | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | | (_) | |_| | |_| |  | |_____|_____|_____|
+//                     | |  |_|\___/ \___/ \___/   | |
+//                     |__|                       |__|
+@media (min-width: 1600px){
+  .role{
+    font-size: 13px;
+  }
+
+  .items-default .sub {
+    font-size: 15px;
+  }
+
+  .items-default{
+    .infos-col-2{
+      .col-1{
+        width: calc(100% - 24px - 128px);
+      }
+      .col-2{
+        width: 128px;
+      }
+    }
+
+    .infos-col-3{
+      .col-1{
+        width: calc(100% - 40% - 48px - 128px);
+      }
+      .col-3{
+        width: 128px;
+      }
+    }
+
+    .infos-col-4{
+      .col-1{
+        width: calc(100% - 50% - 72px - 128px);
+      }
+      .col-4{
+        width: 128px;
+      }
+    }
+
+    .infos-col-5{
+      .col-1{
+        width: calc(100% - 60% - 96px - 128px);
+      }
+      .col-5{
+        width: 128px;
       }
     }
   }

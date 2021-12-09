@@ -27,6 +27,22 @@ class AdminController extends AbstractController
         return $serializer->serialize($objs, 'json', ['groups' => User::ADMIN_READ]);
     }
 
+    private function getRenderView(Request $request, SerializerInterface $serializer, $class, $route): Response
+    {
+        $objs = $this->getAllData($class, $serializer);
+        $search = $request->query->get('search');
+        if($search){
+            return $this->render($route, [
+                'donnees' => $objs,
+                'search' => $search
+            ]);
+        }
+
+        return $this->render($route, [
+            'donnees' => $objs
+        ]);
+    }
+
     /**
      * @Route("/", options={"expose"=true}, name="homepage")
      */
@@ -73,18 +89,7 @@ class AdminController extends AbstractController
      */
     public function users(Request $request, SerializerInterface $serializer): Response
     {
-        $objs = $this->getAllData(User::class, $serializer);
-        $search = $request->query->get('search');
-        if($search){
-            return $this->render('admin/pages/user/index.html.twig', [
-                'donnees' => $objs,
-                'search' => $search
-            ]);
-        }
-
-        return $this->render('admin/pages/user/index.html.twig', [
-            'donnees' => $objs
-        ]);
+        return $this->getRenderView($request, $serializer, User::class, 'admin/pages/user/index.html.twig');
     }
 
     /**
@@ -98,13 +103,9 @@ class AdminController extends AbstractController
     /**
      * @Route("/contact", name="contact_index")
      */
-    public function contact(SerializerInterface $serializer): Response
+    public function contact(Request $request, SerializerInterface $serializer): Response
     {
-        $objs = $this->getAllData(Contact::class, $serializer);
-
-        return $this->render('admin/pages/contact/index.html.twig', [
-            'donnees' => $objs
-        ]);
+        return $this->getRenderView($request, $serializer, Contact::class, 'admin/pages/contact/index.html.twig');
     }
 
     /**

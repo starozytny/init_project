@@ -4,15 +4,15 @@ import axios       from "axios";
 import toastr      from "toastr";
 import Routing     from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Checkbox, Input, Radiobox, Select, TextArea,
-    SelectReactSelectize }                        from "@dashboardComponents/Tools/Fields";
 import { DatePick, DateTimePick, TimePick }            from "@dashboardComponents/Tools/DatePicker";
 import { Drop }                                        from "@dashboardComponents/Tools/Drop"
 import { Button }                                      from "@dashboardComponents/Tools/Button";
 import { Trumb }                                       from "@dashboardComponents/Tools/Trumb";
+import { Checkbox, Input, Radiobox, Select, TextArea,
+    SelectReactSelectize }                             from "@dashboardComponents/Tools/Fields";
 
-import Validator    from "@dashboardComponents/functions/validateur";
-import Sanitaze     from "@dashboardComponents/functions/sanitaze";
+import Validator    from "@commonComponents/functions/validateur";
+import Sanitaze     from "@commonComponents/functions/sanitaze";
 import Formulaire   from "@dashboardComponents/functions/Formulaire";
 
 export class StyleguideForm extends Component {
@@ -67,7 +67,7 @@ export class StyleguideForm extends Component {
         let value = e.currentTarget.value;
 
         if(name === "roles"){
-            value = (e.currentTarget.checked) ? [...roles, ...[value]] : roles.filter(v => v !== value)
+            value = Formulaire.updateValueCheckbox(e, roles, value);
         }
 
         if(name === "question"){
@@ -82,21 +82,7 @@ export class StyleguideForm extends Component {
     handleChangePostalCodeCity = (e) => {
         const { arrayPostalCode } = this.state;
 
-        let name = e.currentTarget.name;
-        let value = e.currentTarget.value;
-
-        if(value.length <= 5){
-            this.setState({ [name]: value })
-
-            let v = ""
-            if(arrayPostalCode.length !== 0){
-                v = arrayPostalCode.filter(el => el.cp === value)
-
-                if(v.length === 1){
-                    this.setState({ city: v[0].city })
-                }
-            }
-        }
+        Sanitaze.setCityFromZipcode(this, e, arrayPostalCode)
     }
 
     handleChangeDateBirthday = (e) => { this.setState({ birthday: e }) }
@@ -209,66 +195,94 @@ export class StyleguideForm extends Component {
         let switcherItems = [ { value: 0, label: 'Non', identifiant: 'non' } ]
 
         return (
-            <section className="form">
-                <h2>Formulaire</h2>
-                <div className="form-items">
-                    <form onSubmit={this.handleSubmit}>
+            <>
+                <section className="form">
+                    <h2>Formulaire Line</h2>
+                    <div className="form-items">
+                        <form>
+                            <div className="line">
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Line 1 - Col 1</Input>
+                            </div>
 
-                        <div className="line line-2">
-                            <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Username</Input>
-                            <Input identifiant="email" valeur={email} errors={errors} onChange={this.handleChange} type="email">Adresse e-mail</Input>
-                        </div>
+                            <div className="line line-2">
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Line 2 - Col 1</Input>
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Line 2 - Col 2</Input>
+                            </div>
 
-                        <div className="line">
-                            <TextArea identifiant="message" valeur={message} errors={errors} onChange={this.handleChange}>Message</TextArea>
-                        </div>
+                            <div className="line line-3">
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Line 3 - Col 1</Input>
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Line 3 - Col 2</Input>
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Line 3 - Col 3</Input>
+                            </div>
+                            <div className="line line-4">
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Line 4 - Col 1</Input>
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Line 4 - Col 2</Input>
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Line 4 - Col 3</Input>
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Line 4 - Col 4</Input>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+                <section className="form">
+                    <h2>Formulaire</h2>
+                    <div className="form-items">
+                        <form onSubmit={this.handleSubmit}>
+                            <div className="line line-2">
+                                <Input identifiant="username" valeur={username} errors={errors} onChange={this.handleChange}>Username</Input>
+                                <Input identifiant="email" valeur={email} errors={errors} onChange={this.handleChange} type="email">Adresse e-mail</Input>
+                            </div>
 
-                        <div className="line">
-                            <Trumb identifiant="faq" valeur={faq.value} errors={errors} onChange={this.handleChangeTrumb}>F.A.Q</Trumb>
-                        </div>
+                            <div className="line">
+                                <TextArea identifiant="message" valeur={message} errors={errors} onChange={this.handleChange}>Message</TextArea>
+                            </div>
 
-                        <div className="line line-2">
-                            <Checkbox items={checkboxItems} identifiant="roles" valeur={roles} errors={errors} onChange={this.handleChange}>Roles</Checkbox>
-                            <Radiobox items={radioboxItems} identifiant="sexe" valeur={sexe} errors={errors} onChange={this.handleChange}>Sexe</Radiobox>
-                        </div>
+                            <div className="line">
+                                <Trumb identifiant="faq" valeur={faq.value} errors={errors} onChange={this.handleChangeTrumb}>F.A.Q</Trumb>
+                            </div>
 
-                        <div className="line">
-                            <Select items={selectItems} identifiant="pays" valeur={pays} errors={errors} onChange={this.handleChange}>De quel pays viens-tu ?</Select>
-                        </div>
+                            <div className="line line-2">
+                                <Checkbox items={checkboxItems} identifiant="roles" valeur={roles} errors={errors} onChange={this.handleChange}>Roles</Checkbox>
+                                <Radiobox items={radioboxItems} identifiant="sexe" valeur={sexe} errors={errors} onChange={this.handleChange}>Sexe</Radiobox>
+                            </div>
 
-                        <div className="line">
-                            <SelectReactSelectize items={selectFruitItems} identifiant="fruit" placeholder={"Sélectionner votre fruit"} valeur={fruit} errors={errors} onChange={this.handleChangeSelect}>Votre fruit préféré ?</SelectReactSelectize>
-                        </div>
+                            <div className="line">
+                                <Select items={selectItems} identifiant="pays" valeur={pays} errors={errors} onChange={this.handleChange}>De quel pays viens-tu ?</Select>
+                            </div>
 
-                        <div className="line line-3">
-                            <DatePick identifiant="birthday" valeur={birthday} errors={errors} onChange={this.handleChangeDateBirthday}>Date de naissance</DatePick>
-                            <DateTimePick identifiant="createAt" valeur={createAt} errors={errors} onChange={this.handleChangeDateCreateAt}>Date de création</DateTimePick>
-                            <TimePick identifiant="arrived" valeur={arrived} errors={errors} onChange={this.handleChangeDateArrived}>Heure d'arrivée</TimePick>
-                        </div>
+                            <div className="line">
+                                <SelectReactSelectize items={selectFruitItems} identifiant="fruit" placeholder={"Sélectionner votre fruit"} valeur={fruit} errors={errors} onChange={this.handleChangeSelect}>Votre fruit préféré ?</SelectReactSelectize>
+                            </div>
 
-                        <div className="line line-2">
-                            <Input identifiant="postalCode" valeur={postalCode} errors={errors} onChange={this.handleChangePostalCodeCity} type="number" >Code postal</Input>
-                            <Input identifiant="city" valeur={city} errors={errors} onChange={this.handleChange}>Ville</Input>
-                        </div>
+                            <div className="line line-3">
+                                <DatePick identifiant="birthday" valeur={birthday} errors={errors} onChange={this.handleChangeDateBirthday}>Date de naissance</DatePick>
+                                <DateTimePick identifiant="createAt" valeur={createAt} errors={errors} onChange={this.handleChangeDateCreateAt}>Date de création</DateTimePick>
+                                <TimePick identifiant="arrived" valeur={arrived} errors={errors} onChange={this.handleChangeDateArrived}>Heure d'arrivée</TimePick>
+                            </div>
 
-                        <div className="line line-2">
-                            <Drop ref={this.inputAvatar} identifiant="avatar" errors={errors} accept={"image/*"} maxFiles={1}
-                                  label="Téléverser un avatar" labelError="Seules les images sont acceptées.">Fichier</Drop>
-                            <Drop ref={this.inputFiles} identifiant="files" errors={errors} accept={"image/*"} maxFiles={3}
-                                  label="Téléverser des fichiers" labelError="Seules les images sont acceptées.">FichierS</Drop>
-                        </div>
+                            <div className="line line-2">
+                                <Input identifiant="postalCode" valeur={postalCode} errors={errors} onChange={this.handleChangePostalCodeCity} type="number" >Code postal</Input>
+                                <Input identifiant="city" valeur={city} errors={errors} onChange={this.handleChange}>Ville</Input>
+                            </div>
 
-                        <div className="line">
-                            <Checkbox isSwitcher={true} items={switcherItems} identifiant="question" valeur={question} errors={errors} onChange={this.handleChange}>Question ?</Checkbox>
-                        </div>
+                            <div className="line line-2">
+                                <Drop ref={this.inputAvatar} identifiant="avatar" errors={errors} accept={"image/*"} maxFiles={1}
+                                      label="Téléverser un avatar" labelError="Seules les images sont acceptées.">Fichier</Drop>
+                                <Drop ref={this.inputFiles} identifiant="files" errors={errors} accept={"image/*"} maxFiles={3}
+                                      label="Téléverser des fichiers" labelError="Seules les images sont acceptées.">FichierS</Drop>
+                            </div>
 
-                        <div className="form-button">
-                            <Button isSubmit={true}>Test Error</Button>
-                        </div>
+                            <div className="line">
+                                <Checkbox isSwitcher={true} items={switcherItems} identifiant="question" valeur={question} errors={errors} onChange={this.handleChange}>Question ?</Checkbox>
+                            </div>
 
-                    </form>
-                </div>
-            </section>
+                            <div className="form-button">
+                                <Button isSubmit={true}>Test Error</Button>
+                            </div>
+
+                        </form>
+                    </div>
+                </section>
+            </>
         )
     }
 }

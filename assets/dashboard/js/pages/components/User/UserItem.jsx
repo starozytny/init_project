@@ -7,18 +7,16 @@ import { Selector }     from "@dashboardComponents/Layout/Selector";
 
 export class UserItem extends Component {
     render () {
-        const { elem, onChangeContext, onDelete, onSelectors } = this.props
+        const { developer, elem, onChangeContext, onDelete, onSelectors } = this.props
 
-        let url = Routing.generate('user_homepage', {'_switch_user' : elem.username})
-
+        let routeName = 'user_homepage'
         if(elem.highRoleCode === 2){
-            url = Routing.generate('admin_homepage', {'_switch_user' : elem.username})
+            routeName = 'admin_homepage'
         }
 
-        let avatar = `https://robohash.org/${elem.username}?size=64x64`;
-        if(elem.avatar){
-            avatar = "/avatars/" + elem.avatar;
-        }
+        let url = Routing.generate(routeName, {'_switch_user' : elem.username})
+
+        let avatar = (elem.avatar) ? "/avatars/" + elem.avatar : `https://robohash.org/${elem.username}?size=64x64`;
 
         return <div className="item">
             <Selector id={elem.id} onSelectors={onSelectors} />
@@ -46,7 +44,7 @@ export class UserItem extends Component {
                                 <ButtonIcon icon="vision" onClick={() => onChangeContext("read", elem)}>Profil</ButtonIcon>
                                 <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
                                 <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
-                                <ButtonIcon icon="share" element="a" target="_blank" onClick={url}>Imiter</ButtonIcon>
+                                {developer === 1 && <ButtonIcon icon="share" element="a" target="_blank" onClick={url}>Imiter</ButtonIcon>}
                             </>
                             }
                         </div>

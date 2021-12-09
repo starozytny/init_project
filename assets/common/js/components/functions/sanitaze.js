@@ -89,6 +89,35 @@ function getPostalCodes(self){
     ;
 }
 
+function setCityFromZipcode(self, e, arrayPostalCode){
+    let name = e.currentTarget.name;
+    let value = e.currentTarget.value;
+
+    if(value.length <= 5){
+        self.setState({ [name]: value })
+
+        let v = ""
+        if(arrayPostalCode.length !== 0){
+            v = arrayPostalCode.filter(el => el.cp === value)
+
+            if(v.length === 1){
+                self.setState({ city: v[0].city })
+            }
+        }
+    }
+}
+
+function setActive(tab, value) {
+    let active = "";
+    tab.forEach(elem => {
+        if(elem === value){
+            active = " active";
+        }
+    })
+
+    return active;
+}
+
 module.exports = {
     sanitizeString,
     getPostalCodes,
@@ -96,5 +125,7 @@ module.exports = {
     toFormatDate,
     toFormatDateTime,
     toFormatPhone,
-    toFormatCurrency
+    toFormatCurrency,
+    setCityFromZipcode,
+    setActive
 }
