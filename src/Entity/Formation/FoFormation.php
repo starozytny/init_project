@@ -4,6 +4,8 @@ namespace App\Entity\Formation;
 
 use App\Entity\DataEntity;
 use App\Repository\Formation\FoFormationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -106,9 +108,15 @@ class FoFormation extends DataEntity
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity=FoSession::class, mappedBy="formation")
+     */
+    private $sessions;
+
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
+        $this->sessions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -292,6 +300,36 @@ class FoFormation extends DataEntity
     {
         $updatedAt->setTimezone(new \DateTimeZone("Europe/Paris"));
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FoSession[]
+     */
+    public function getSessions(): Collection
+    {
+        return $this->sessions;
+    }
+
+    public function addSession(FoSession $session): self
+    {
+        if (!$this->sessions->contains($session)) {
+            $this->sessions[] = $session;
+            $session->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSession(FoSession $session): self
+    {
+        if ($this->sessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getFormation() === $this) {
+                $session->setFormation(null);
+            }
+        }
 
         return $this;
     }
