@@ -5,6 +5,7 @@ namespace App\Entity\Formation;
 use App\Entity\DataEntity;
 use App\Repository\Formation\FoFormationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -30,6 +31,7 @@ class FoFormation extends DataEntity
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Gedmo\Slug(updatable=true, fields={"name"})
      * @Groups({"admin:read"})
      */
     private $slug;
@@ -54,36 +56,43 @@ class FoFormation extends DataEntity
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $prerequis;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $goals;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $aptitudes;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $skills;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $target;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"admin:read"})
      */
     private $cat;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $accessibility = 0;
 
@@ -124,7 +133,7 @@ class FoFormation extends DataEntity
         return $this->slug;
     }
 
-    public function setSlug(string $slug): self
+    public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
 
@@ -281,6 +290,7 @@ class FoFormation extends DataEntity
 
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
+        $updatedAt->setTimezone(new \DateTimeZone("Europe/Paris"));
         $this->updatedAt = $updatedAt;
 
         return $this;

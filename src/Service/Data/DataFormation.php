@@ -15,7 +15,15 @@ class DataFormation extends DataConstructor
 
         return ($obj)
             ->setName($name)
-            ->setContent($data->content->html)
+            ->setSlug(null)
+            ->setContent(trim($data->content->html))
+            ->setPrerequis(trim($data->prerequis->html))
+            ->setGoals(trim($data->goals->html))
+            ->setAptitudes(trim($data->aptitudes->html))
+            ->setSkills(trim($data->skills->html))
+            ->setTarget(trim($data->target->html))
+            ->setCat(trim($data->cat->html))
+            ->setAccessibility((int) $data->accessibility)
         ;
     }
 }

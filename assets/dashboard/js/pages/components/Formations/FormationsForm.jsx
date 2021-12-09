@@ -4,7 +4,7 @@ import axios                   from "axios";
 import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Input }               from "@dashboardComponents/Tools/Fields";
+import {Input, Select} from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { Trumb }               from "@dashboardComponents/Tools/Trumb";
@@ -169,7 +169,12 @@ export class FormationsForm extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, name, content, prerequis, goals, aptitudes, skills, target, cat } = this.state;
+        const { errors, success, name, content, prerequis, goals, aptitudes, skills, target, cat, accessibility } = this.state;
+
+        let selectItems = [
+            { value: 0, label: 'Bâtiment non conforme', identifiant: 'bat-not-conforme' },
+            { value: 1, label: 'Bâtiment conforme', identifiant: 'bat-conforme' },
+        ]
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -178,6 +183,10 @@ export class FormationsForm extends Component {
 
                 <div className="line">
                     <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange} >Intitulé</Input>
+                </div>
+                <div className="line line-2">
+                    <Select items={selectItems} identifiant="accessibility" valeur={accessibility} errors={errors} onChange={this.handleChange} noEmpty={true}>Accessibilité handicapé ?</Select>
+                    <div className="form-group" />
                 </div>
 
                 <div className="line">

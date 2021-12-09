@@ -8,6 +8,7 @@ use App\Service\ApiResponse;
 use App\Service\Data\DataFormation;
 use App\Service\Data\DataService;
 use App\Service\ValidatorService;
+use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,33 @@ class FormationController extends AbstractController
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->doctrine = $doctrine;
+    }
+
+    public function submitForm($type, FoFormation $obj, Request $request, ApiResponse $apiResponse,
+                               ValidatorService $validator, DataFormation $dataEntity): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+        $data = json_decode($request->get('data'));
+
+        if ($data === null) {
+            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
+        }
+
+        $obj = $dataEntity->setData($obj, $data);
+
+        if($type == "update"){
+            $obj->setUpdatedAt(new DateTime());
+        }
+
+        $noErrors = $validator->validate($obj);
+        if ($noErrors !== true) {
+            return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+        }
+
+        $em->persist($obj);
+        $em->flush();
+
+        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }
     
     /**
@@ -51,24 +79,7 @@ class FormationController extends AbstractController
     public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
                            DataFormation $dataEntity): JsonResponse
     {
-        $em = $this->doctrine->getManager();
-        $data = json_decode($request->get('data'));
-
-        if ($data === null) {
-            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
-        }
-
-        $obj = $dataEntity->setData(new FoFormation(), $data);
-
-        $noErrors = $validator->validate($obj);
-        if ($noErrors !== true) {
-            return $apiResponse->apiJsonResponseValidationFailed($noErrors);
-        }
-
-        $em->persist($obj);
-        $em->flush();
-
-        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+        return $this->submitForm("create", new FoFormation(), $request, $apiResponse, $validator, $dataEntity);
     }
 
     /**
@@ -91,34 +102,16 @@ class FormationController extends AbstractController
      * @OA\Tag(name="Formations")
      *
      * @param Request $request
+     * @param FoFormation $obj
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
-     * @param FoFormation $obj
      * @param DataFormation $dataEntity
      * @return JsonResponse
      */
-    public function update(Request $request, ValidatorService $validator,
-                           ApiResponse $apiResponse, FoFormation $obj, DataFormation $dataEntity): JsonResponse
+    public function update(Request $request, FoFormation $obj, ValidatorService $validator,
+                           ApiResponse $apiResponse, DataFormation $dataEntity): JsonResponse
     {
-
-        $em = $this->doctrine->getManager();
-        $data = json_decode($request->get('data'));
-
-        if($data === null){
-            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
-        }
-
-        $obj = $dataEntity->setData($obj, $data);
-
-        $noErrors = $validator->validate($obj);
-        if ($noErrors !== true) {
-            return $apiResponse->apiJsonResponseValidationFailed($noErrors);
-        }
-
-        $em->persist($obj);
-        $em->flush();
-
-        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+        return $this->submitForm("update", $obj, $request, $apiResponse, $validator, $dataEntity);
     }
 
     /**
