@@ -201,7 +201,6 @@ class FoSession
         return $this->end != null ? date_format($this->end, 'F d, Y H:i:s') : null;
     }
 
-
     public function getEnd(): ?\DateTimeInterface
     {
         return $this->end;
@@ -428,6 +427,16 @@ class FoSession
         $this->formation = $formation;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getDurationJavascript(): ?string
+    {
+        date_default_timezone_set('Europe/Paris');
+        return $this->duration != null ? date_format($this->duration, 'F d, Y H:i:s') : null;
     }
 
     public function getDuration(): ?\DateTimeInterface

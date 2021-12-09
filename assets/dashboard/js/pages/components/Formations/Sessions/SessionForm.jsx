@@ -41,10 +41,10 @@ export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, eleme
         priceHt={element ? element.priceHt : ""}
         priceTtc={element ? element.priceTtc : ""}
         tva={element ? element.tva : 20}
-        duration={element ? element.duration : ""}
-        duration2={element ? element.duration2 : ""}
-        durationTotal={element ? element.durationTotal : ""}
-        durationByDay={element ? element.durationByDay : ""}
+        duration={element ? new Date(element.durationJavascript) : ""}
+        duration2={element ? new Date(element.duration2Javascript) : ""}
+        durationTotal={element ? new Date(element.durationTotalJavascript) : ""}
+        durationByDay={element ? new Date(element.durationByDayJavascript) : ""}
         min={element ? element.min : ""}
         max={element ? element.max : ""}
         animator={element ? element.animator : ""}
@@ -71,6 +71,22 @@ export class Form extends Component {
         this.state = {
             start: props.start,
             end: props.end,
+            time: props.time,
+            time2: props.time2,
+            priceHt: props.priceHt,
+            priceTtc: props.priceTtc,
+            tva: props.tva,
+            duration: props.duration,
+            duration2: props.duration2,
+            durationTotal: props.durationTotal,
+            durationByDay: props.durationByDay,
+            min: props.min,
+            max: props.max,
+            animator: props.animator,
+            address: props.address,
+            zipcode: props.zipcode,
+            city: props.city,
+            type: props.type,
             modTrav: { value: props.modTrav ? props.modTrav : "", html: props.modTrav ? props.modTrav : "" },
             modEval: { value: props.modEval ? props.modEval : "", html: props.modEval ? props.modEval : "" },
             modPeda: { value: props.modPeda ? props.modPeda : "", html: props.modPeda ? props.modPeda : "" },
