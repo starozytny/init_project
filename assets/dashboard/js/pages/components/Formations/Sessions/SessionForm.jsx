@@ -303,6 +303,11 @@ export class Form extends Component {
         let minHoursAfternoonEnd = timeAfterStart ? timeAfterStart : Helper.createTimeHoursMinutes(12, 0);
         let maxHoursAfternoonEnd = Helper.createTimeHoursMinutes(22, 0);
 
+        let selectItems = [
+            { value: 0, label: 'Présentiel', identifiant: 'présentiel' },
+            { value: 1, label: 'Distance', identifiant: 'distance' },
+        ]
+
         return <>
             <form onSubmit={this.handleSubmit}>
 
@@ -401,8 +406,12 @@ export class Form extends Component {
 
                 <div className="line">
                     <div className="form-group">
-                        <div className="form-group-title">Contenu</div>
+                        <div className="form-group-title">Type et contenu</div>
                     </div>
+                </div>
+
+                <div className="line">
+                    <Select items={selectItems} identifiant="type" valeur={type} errors={errors} onChange={this.handleChange} noEmpty={true}>Type de formation ?</Select>
                 </div>
 
                 <div className="line line-2">
