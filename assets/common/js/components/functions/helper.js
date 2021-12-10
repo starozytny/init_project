@@ -115,7 +115,7 @@ function getNbDayBetweenDateArray(startArray, endArray)
     if(nbYears >= 0){
         if(nbYears === 0){ // même année
             if(startMonth === endMonth){ // même mois
-                days = endDay - startDay;
+                days = endDay - startDay + 1;
                 days = days === 0 ? 1 : days;
             }else if(startMonth < endMonth){ // classique date
                 days = days + (nbDaysByMonth[startMonth] - startDay + 1); //calcul en fonction du nb de jours dans le current mois
