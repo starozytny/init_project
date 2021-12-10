@@ -51,8 +51,7 @@ export class StyleguideForm extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleChangePostalCodeCity = this.handleChangePostalCodeCity.bind(this);
-        this.handleChangeDateBirthday = this.handleChangeDateBirthday.bind(this);
-        this.handleChangeDateCreateAt = this.handleChangeDateCreateAt.bind(this);
+        this.handleChangeDate = this.handleChangeDate.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTrumb = this.handleChangeTrumb.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -85,21 +84,13 @@ export class StyleguideForm extends Component {
         Helper.setCityFromZipcode(this, e, arrayPostalCode)
     }
 
-    handleChangeDateBirthday = (e) => { this.setState({ birthday: e !== null ? e : "" }) }
-    handleChangeDateCreateAt = (e) => { this.setState({ createAt: e !== null ? e : "" }) }
-    handleChangeDateArrived = (e) => { this.setState({ arrived: e !== null ? e : "" }) }
+    handleChangeDate = (name, e) => { this.setState({ [name]: e !== null ? e : "" }) }
 
     handleChangeTrumb = (e) => {
-        const { faq } = this.state
-
         let name = e.currentTarget.id;
         let text = e.currentTarget.innerHTML;
-        let value = "";
-        if(name === "faq"){
-            value = faq.value;
-        }
 
-        this.setState({[name]: {value: value, html: text}})
+        this.setState({[name]: {value: [name].value, html: text}})
     }
 
     handleSubmit = (e) => {
@@ -256,9 +247,9 @@ export class StyleguideForm extends Component {
                             </div>
 
                             <div className="line line-3">
-                                <DatePick identifiant="birthday" valeur={birthday} errors={errors} onChange={this.handleChangeDateBirthday}>Date de naissance</DatePick>
-                                <DateTimePick identifiant="createAt" valeur={createAt} errors={errors} onChange={this.handleChangeDateCreateAt}>Date de création</DateTimePick>
-                                <TimePick identifiant="arrived" valeur={arrived} errors={errors} onChange={this.handleChangeDateArrived} includeTimes={includeTimesMorning}>Heure d'arrivée</TimePick>
+                                <DatePick identifiant="birthday" valeur={birthday} errors={errors} onChange={(e) => this.handleChangeDate("birthday", e)}>Date de naissance</DatePick>
+                                <DateTimePick identifiant="createAt" valeur={createAt} errors={errors} onChange={(e) => this.handleChangeDate("createAt", e)}>Date de création</DateTimePick>
+                                <TimePick identifiant="arrived" valeur={arrived} errors={errors} onChange={(e) => this.handleChangeDate("arrived", e)} includeTimes={includeTimesMorning}>Heure d'arrivée</TimePick>
                             </div>
 
                             <div className="line line-2">
