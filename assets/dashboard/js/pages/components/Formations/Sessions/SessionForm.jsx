@@ -191,9 +191,8 @@ export class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { animator, start,
+        const { animator, start, type, priceHt, priceTtc, tva, min, max,
             timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
-            priceHt, priceTtc, tva, min, max
         } = this.state;
 
         this.setState({ success: false })
@@ -207,6 +206,7 @@ export class Form extends Component {
             {type: "text",   id: 'min',       value: min},
             {type: "text",   id: 'max',       value: max},
             {type: "minMax", id: 'min',       value: min, idCheck: 'max', valueCheck: max},
+            {type: "text",   id: 'type',      value: type},
         ];
 
         if(timeMorningStart === "" && timeMorningEnd === "" && timeAfterStart === "" && timeAfterEnd === ""){
