@@ -212,10 +212,7 @@ export class Form extends Component {
         // validate global
         let validate = Validateur.validateur(paramsToValidate);
         if(!validate.code){
-            document.body.scrollTop = 0; // For Safari
-            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-            toastr.warning("Veuillez vérifier les informations transmises.");
-            this.setState({ errors: validate.errors });
+            Formulaire.showErrors(this, validate);
         }else{
             Formulaire.loader(true);
             let self = this;
@@ -230,9 +227,30 @@ export class Form extends Component {
                     self.setState({ success: messageSuccess, errors: [] });
                     if(context === "create"){
                         self.setState( {
-                            name: '',
-                            content: { value: "", html: "" },
-                            price: '',
+                            start: "",
+                            end: "",
+                            timeMorningStart: "",
+                            timeMorningEnd: "",
+                            timeAfterStart: "",
+                            timeAfterEnd: "",
+                            duration: "",
+                            duration2: "",
+                            durationTotal: "",
+                            durationByDay: "",
+                            priceHt: "",
+                            priceTtc: "",
+                            tva: "",
+                            min: "",
+                            max: "",
+                            animator: "",
+                            address: "",
+                            zipcode: "",
+                            city: "",
+                            type: "",
+                            modTrav: { value: "", html: "" },
+                            modEval: { value: "", html: "" },
+                            modPeda: { value: "", html: "" },
+                            modAssi: { value: "", html: "" },
                         })
                     }
                 })
