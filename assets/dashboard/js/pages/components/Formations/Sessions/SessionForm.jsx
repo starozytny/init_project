@@ -20,6 +20,34 @@ const URL_UPDATE_GROUP       = "api_formations_update";
 const TXT_CREATE_BUTTON_FORM = "Ajouter la session";
 const TXT_UPDATE_BUTTON_FORM = "Modifier la session";
 
+function getIntervalTime(end, start) {
+    let nInterval = ""
+    if((end !== null && end !== "") && start !== ""){
+        let timeStartHours = parseInt(start.getHours());
+        let timeStartMinutes = parseInt(start.getMinutes());
+
+        let timeEndHours = parseInt(end.getHours());
+        let timeEndMinutes = parseInt(end.getMinutes());
+
+        if(timeEndHours > timeStartHours && timeEndMinutes === 0){
+            timeEndHours = timeEndHours - 1;
+            timeEndMinutes = 60;
+        }
+
+        let intervalHours = timeEndHours - timeStartHours;
+        let intervalMinutes = timeEndMinutes - timeStartMinutes;
+
+        if(intervalMinutes === 60){
+            intervalHours = intervalHours + 1;
+            intervalMinutes = 0;
+        }
+
+        nInterval = (intervalHours !== 0 ? (intervalHours + "h ") : "") + (intervalMinutes !== 0 ? (intervalMinutes + "min") : "");
+    }
+
+    return nInterval;
+}
+
 export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, element })
 {
     let title = "Ajouter une session";
@@ -39,13 +67,13 @@ export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, eleme
         end={element ? new Date(element.endJavascript) : ""}
         time={element ? element.time : ""}
         time2={element ? element.time2 : ""}
-        priceHt={element ? element.priceHt : ""}
-        priceTtc={element ? element.priceTtc : ""}
-        tva={element ? element.tva : 20}
         duration={element ? new Date(element.durationJavascript) : ""}
         duration2={element ? new Date(element.duration2Javascript) : ""}
         durationTotal={element ? new Date(element.durationTotalJavascript) : ""}
         durationByDay={element ? new Date(element.durationByDayJavascript) : ""}
+        priceHt={element ? element.priceHt : ""}
+        priceTtc={element ? element.priceTtc : ""}
+        tva={element ? element.tva : 20}
         min={element ? element.min : ""}
         max={element ? element.max : ""}
         animator={element ? element.animator : ""}
@@ -76,13 +104,13 @@ export class Form extends Component {
             timeMorningEnd: props.time,
             timeAfterStart: props.time2,
             timeAfterEnd: props.time2,
-            priceHt: props.priceHt,
-            priceTtc: props.priceTtc,
-            tva: props.tva,
             duration: props.duration,
             duration2: props.duration2,
             durationTotal: props.durationTotal,
             durationByDay: props.durationByDay,
+            priceHt: props.priceHt,
+            priceTtc: props.priceTtc,
+            tva: props.tva,
             min: props.min,
             max: props.max,
             animator: props.animator,
@@ -117,8 +145,12 @@ export class Form extends Component {
 
     handleChangeDateStart = (e) => { this.setState({ start: e !== null ? e : "" }) }
     handleChangeDateEnd = (e) => { this.setState({ end: e !== null ? e : "" }) }
-    handleChangeTimeMorningStart = (e) => { this.setState({ timeMorningStart: e !== null ? e : "" }) }
-    handleChangeTimeMorningEnd = (e) => { this.setState({ timeMorningEnd: e !== null ? e : "" }) }
+    handleChangeTimeMorningStart = (e) => {
+        this.setState({ timeMorningStart: e !== null ? e : "", duration: getIntervalTime(this.state.timeMorningEnd, e) })
+    }
+    handleChangeTimeMorningEnd = (e) => {
+        this.setState({ timeMorningEnd: e !== null ? e : "", duration: getIntervalTime(e, this.state.timeMorningStart) });
+    }
     handleChangeTimeAfterStart = (e) => { this.setState({ timeAfterStart: e !== null ? e : "" }) }
     handleChangeTimeAfterEnd = (e) => { this.setState({ timeAfterEnd: e !== null ? e : "" }) }
 
@@ -249,6 +281,7 @@ export class Form extends Component {
         const { context } = this.props;
         const { errors, success, start, end,
             timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
+            duration, duration2, durationTotal, durationByDay,
             priceHt, priceTtc, tva,
             modTrav, modEval, modPeda, modAssi } = this.state;
 
@@ -301,6 +334,13 @@ export class Form extends Component {
                               timeIntervals={5} minTime={minHoursAfternoonEnd} maxTime={maxHoursAfternoonEnd}>
                         Horaire après midi - fin
                     </TimePick>
+                </div>
+
+                <div className="line line-4">
+                    <div className="form-group">Durée matin : {duration ? duration : "/"}</div>
+                    <div className="form-group">h</div>
+                    <div className="form-group">h</div>
+                    <div className="form-group">h</div>
                 </div>
 
                 <div className="line">
