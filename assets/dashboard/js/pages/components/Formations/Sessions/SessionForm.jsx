@@ -15,8 +15,8 @@ import Helper                  from "@commonComponents/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 import HelpFunction            from "./helpFunction";
 
-const URL_CREATE_ELEMENT     = "api_formations_create";
-const URL_UPDATE_GROUP       = "api_formations_update";
+const URL_CREATE_ELEMENT     = "api_sessions_create";
+const URL_UPDATE_GROUP       = "api_sessions_update";
 const TXT_CREATE_BUTTON_FORM = "Ajouter la session";
 const TXT_UPDATE_BUTTON_FORM = "Modifier la session";
 
@@ -316,13 +316,13 @@ export class Form extends Component {
 
                 <div className="line">
                     <div className="form-group">
-                        <div className="form-group-title">Animé par</div>
+                        <div className="form-group-title">Formation</div>
                     </div>
                 </div>
 
                 <div className="line line-2">
                     <Input identifiant="animator" valeur={animator} errors={errors} onChange={this.handleChange}>Animateur (s)</Input>
-                    <div className="form-group" />
+                    <Select items={selectItems} identifiant="type" valeur={type} errors={errors} onChange={this.handleChange} noEmpty={true}>Type de formation ?</Select>
                 </div>
 
                 <div className="line">
@@ -409,10 +409,6 @@ export class Form extends Component {
                     <div className="form-group">
                         <div className="form-group-title">Type et contenu</div>
                     </div>
-                </div>
-
-                <div className="line">
-                    <Select items={selectItems} identifiant="type" valeur={type} errors={errors} onChange={this.handleChange} noEmpty={true}>Type de formation ?</Select>
                 </div>
 
                 <div className="line line-2">

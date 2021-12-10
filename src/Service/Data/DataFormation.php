@@ -30,6 +30,17 @@ class DataFormation extends DataConstructor
 
     public function setDataSession(FoSession $obj, $data): FoSession
     {
+        $animator = $this->sanitizeData->sanitizeString($data->animator);
 
+        dd($data);
+
+        return ($obj)
+            ->setAnimator($animator)
+            ->setType((int) $data->type)
+            ->setModTrav(trim($data->modTrav->html))
+            ->setModEval(trim($data->modEval->html))
+            ->setModPeda(trim($data->modPeda->html))
+            ->setModAssi(trim($data->modAssi->html))
+            ;
     }
 }
