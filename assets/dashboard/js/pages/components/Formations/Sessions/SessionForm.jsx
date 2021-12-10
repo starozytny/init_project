@@ -182,12 +182,13 @@ export class Form extends Component {
         this.setState({ success: false })
 
         let paramsToValidate = [
-            {type: "text", id: 'start',     value: start},
-            {type: "text", id: 'priceHt',   value: priceHt},
-            {type: "text", id: 'tva',       value: tva},
-            {type: "text", id: 'priceTtc',  value: priceTtc},
-            {type: "text", id: 'min',       value: min},
-            {type: "text", id: 'max',       value: max},
+            {type: "text",   id: 'start',     value: start},
+            {type: "text",   id: 'priceHt',   value: priceHt},
+            {type: "text",   id: 'tva',       value: tva},
+            {type: "text",   id: 'priceTtc',  value: priceTtc},
+            {type: "text",   id: 'min',       value: min},
+            {type: "text",   id: 'max',       value: max},
+            {type: "minMax", id: 'min',       value: min, idCheck: 'max', valueCheck: max},
         ];
 
         if(timeMorningStart === "" && timeMorningEnd === "" && timeAfterStart === "" && timeAfterEnd === ""){
@@ -211,6 +212,8 @@ export class Form extends Component {
         // validate global
         let validate = Validateur.validateur(paramsToValidate);
         if(!validate.code){
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
             toastr.warning("Veuillez vérifier les informations transmises.");
             this.setState({ errors: validate.errors });
         }else{
@@ -320,8 +323,8 @@ export class Form extends Component {
                 </div>
 
                 <div className="line line-2">
-                    <Input identifiant="min" valeur={min} errors={errors} onChange={this.handleChange} type="number" min={0} max={max}>Place min</Input>
-                    <Input identifiant="max" valeur={max} errors={errors} onChange={this.handleChange} type="number" min={min}>Place max</Input>
+                    <Input identifiant="min" valeur={min} errors={errors} onChange={this.handleChange} type="number">Place min</Input>
+                    <Input identifiant="max" valeur={max} errors={errors} onChange={this.handleChange} type="number">Place max</Input>
                 </div>
 
                 <div className="line">
