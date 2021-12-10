@@ -38,21 +38,21 @@ export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, eleme
         context={type}
         url={url}
         animator={element ? element.animator : ""}
-        start={element ? new Date(element.starJavascriptt) : ""}
+        start={element ? new Date(element.startJavascript) : ""}
         end={element ? new Date(element.endJavascript) : ""}
         time={element ? element.time : ""}
         time2={element ? element.time2 : ""}
-        duration={element ? new Date(element.durationJavascript) : ""}
-        duration2={element ? new Date(element.duration2Javascript) : ""}
-        durationTotal={element ? new Date(element.durationTotalJavascript) : ""}
-        durationByDay={element ? new Date(element.durationByDayJavascript) : ""}
-        priceHt={element ? element.priceHt : ""}
-        priceTtc={element ? element.priceTtc : ""}
+        duration={element ? element.duration : ""}
+        duration2={element ? element.duration2 : ""}
+        durationTotal={element ? element.durationTotal : ""}
+        durationByDay={element ? element.durationByDay : ""}
+        priceHt={element ? element.priceHT : ""}
+        priceTtc={element ? element.priceTTC : ""}
         tva={element ? element.tva : 20}
         min={element ? element.min : ""}
         max={element ? element.max : ""}
         address={element ? element.address : ""}
-        zipcode={element ? element.zipcode : ""}
+        zipcode={element ? (element.zipcode ? element.zipcode : "") : ""}
         city={element ? element.city : ""}
         type={element ? element.type : 0}
         modTrav={element ? element.modTrav : ""}
@@ -71,16 +71,33 @@ export class Form extends Component {
     constructor(props) {
         super(props);
 
+        let timeMorningStart = "";
+        let timeMorningEnd = "";
+        let timeAfterStart = "";
+        let timeAfterEnd = "";
+
+        if(props.time){
+            let timeArray = HelpFunction.getTimeFromDatabase(props.time);
+            timeMorningStart = timeArray[0];
+            timeMorningEnd   = timeArray[1];
+        }
+
+        if(props.time2){
+            let timeArray = HelpFunction.getTimeFromDatabase(props.time2);
+            timeAfterStart = timeArray[0];
+            timeAfterEnd   = timeArray[1];
+        }
+
         this.state = {
             animator: props.animator,
             start: props.start,
             end: props.end,
             time: props.time,
             time2: props.time2,
-            timeMorningStart: props.time,
-            timeMorningEnd: props.time,
-            timeAfterStart: props.time2,
-            timeAfterEnd: props.time2,
+            timeMorningStart: timeMorningStart ? timeMorningStart : "",
+            timeMorningEnd: timeMorningEnd ? timeMorningEnd : "",
+            timeAfterStart: timeAfterStart ? timeAfterStart : "",
+            timeAfterEnd: timeAfterEnd ? timeAfterEnd : "",
             duration: props.duration,
             duration2: props.duration2,
             durationTotal: props.durationTotal,
@@ -417,7 +434,7 @@ export class Form extends Component {
 
                 <div className="line">
                     <div className="form-group">
-                        <div className="form-group-title">Type et contenu</div>
+                        <div className="form-group-title">Contenu</div>
                     </div>
                 </div>
 

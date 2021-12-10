@@ -6,7 +6,7 @@ function formatTimeZero(temps){
 
 function setToStringDatabase(hours, minutes)
 {
-    return (hours !== 0 ? (hours + "h") : "") + (minutes !== 0 ? (formatTimeZero(minutes) + "") : "");
+    return (hours !== 0 ? (hours + "h") : "") + (minutes !== 0 ? (formatTimeZero(minutes) + "min") : "");
 }
 
 function setToString(hours, minutes)
@@ -41,6 +41,29 @@ function getIntervalTime(end, start)
     }
 
     return nInterval;
+}
+
+function getHoursMinutesFromDatabase(duration)
+{
+    let timeDurationHours = 0;
+    let timeDurationMinutes = 0;
+
+    if(duration){
+        let timeDuration = duration.split("h");
+
+        if(timeDuration.length >= 2){
+            timeDurationHours = timeDuration[0];
+            timeDurationMinutes = timeDuration[1] !== "" ? timeDuration[1] : 0;
+        }else{
+            if(duration.indexOf("h") !== -1){
+                timeDurationHours = timeDuration[0];
+            }else if(duration.indexOf("min") !== -1){
+                timeDurationMinutes = timeDuration[0];
+            }
+        }
+    }
+
+    return [parseInt(timeDurationHours !== "" ? timeDurationHours : 0), parseInt(timeDurationMinutes !== "" ? timeDurationMinutes : 0)];
 }
 
 function getHoursMinutes(duration)
@@ -110,9 +133,28 @@ function setTimeToString(start, end)
     return a + " - " + b;
 }
 
+function getTimeFromDatabase(time)
+{
+    time.replaceAll(" ", "");
+    time = time.split('-');
+
+    let a = getHoursMinutesFromDatabase(time[0].trim());
+    let b = getHoursMinutesFromDatabase(time[1].trim());
+
+    let timeA = new Date();
+    timeA.setHours(a[0]); timeA.setMinutes(a[1]);
+
+    let timeB = new Date();
+    timeB.setHours(b[0]); timeB.setMinutes(b[1]);
+
+    return [timeA, timeB];
+}
+
 module.exports = {
     getIntervalTime,
     getDurationTotal,
     getDurationByDay,
-    setTimeToString
+    setTimeToString,
+    getHoursMinutes,
+    getTimeFromDatabase
 }
