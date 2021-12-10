@@ -59,7 +59,7 @@ function getHoursMinutes(duration)
     return [parseInt(timeDurationHours !== "" ? timeDurationHours : 0), parseInt(timeDurationMinutes !== "" ? timeDurationMinutes : 0)];
 }
 
-function getDurationTotal(duration, duration2)
+function getDurationByDay(duration, duration2)
 {
     let nDuration = getHoursMinutes(duration);
     let nDuration2 = getHoursMinutes(duration2);
@@ -67,7 +67,7 @@ function getDurationTotal(duration, duration2)
     return setToString(nDuration[0] + nDuration2[0], nDuration[1] + nDuration2[1]);
 }
 
-function getDurationByDay(duration, duration2, start, end)
+function getDurationTotal(duration, duration2, start, end)
 {
     if(start !== null && start !== "" && end !== null && end !== ""){
         let nDuration = getHoursMinutes(duration);
@@ -85,8 +85,6 @@ function getDurationByDay(duration, duration2, start, end)
 
         let hours = Math.floor(total / 60);
         let minutes = total % 60;
-
-        console.log(nbDays)
 
         return setToString(hours, minutes);
     }

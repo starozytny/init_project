@@ -123,10 +123,10 @@ export class Form extends Component {
             name === "timeMorningStart" ? e : this.state.timeMorningStart
         )
 
-        let durationTotal = HelpFunction.getDurationTotal(duration, duration2);
-        let durationByDay = HelpFunction.getDurationByDay(duration, duration2, start, end);
+        let durationByDay = HelpFunction.getDurationByDay(duration, duration2);
+        let durationTotal = HelpFunction.getDurationTotal(duration, duration2, start, end);
 
-        this.setState({ [name]: e !== null ? e : "", duration: duration, durationTotal: durationTotal, durationByDay: durationByDay })
+        this.setState({ [name]: e !== null ? e : "", duration: duration, durationByDay: durationByDay, durationTotal: durationTotal })
     }
 
     handleChangeTimeAfter = (name, e) => {
@@ -137,10 +137,10 @@ export class Form extends Component {
             name === "timeAfterStart" ? e : this.state.timeAfterStart
         )
 
-        let durationTotal = HelpFunction.getDurationTotal(duration, duration2);
-        let durationByDay = HelpFunction.getDurationByDay(duration, duration2, start, end);
+        let durationByDay = HelpFunction.getDurationByDay(duration, duration2);
+        let durationTotal = HelpFunction.getDurationTotal(duration, duration2, start, end);
 
-        this.setState({ [name]: e !== null ? e : "", duration2: duration2, durationTotal: durationTotal, durationByDay: durationByDay })
+        this.setState({ [name]: e !== null ? e : "", duration2: duration2, durationByDay: durationByDay, durationTotal: durationTotal })
     }
 
     handleChange = (e) => {
@@ -307,8 +307,8 @@ export class Form extends Component {
                     <div className="form-group" />
                 </div>
                 <div className="line line-2">
-                    <div className="form-group">Durée totale : {durationTotal ? durationTotal : "/"}</div>
                     <div className="form-group">Durée par jour  : {durationByDay ? durationByDay : "/"}</div>
+                    <div className="form-group">Durée totale : {durationTotal ? durationTotal : "/"}</div>
                 </div>
 
                 <div className="line">
