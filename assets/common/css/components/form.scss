@@ -99,7 +99,7 @@ input, textarea, select{
   width: calc(100% - 20px);
   outline: none;
   background-color: var(--alpha);
-  color: var(--grey2);
+  color: var(--txt);
 
   &:focus{
     border: 1px solid var(--txt);
