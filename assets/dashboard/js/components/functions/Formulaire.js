@@ -159,6 +159,16 @@ function axiosDeleteGroupElement(self, checked, url,
     }
 }
 
+function showErrors(self, validate, text="Veuillez vérifier les informations transmises.", toTop = true)
+{
+    if(toTop){
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+    toastr.warning(text);
+    self.setState({ errors: validate.errors });
+}
+
 function loader(status){
     let loader = document.querySelector('#loader');
     if(status){
@@ -212,5 +222,6 @@ module.exports = {
     isSeen,
     switchPublished,
     updateValueCheckbox,
-    updatePerPage
+    updatePerPage,
+    showErrors
 }
