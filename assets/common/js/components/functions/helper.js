@@ -55,6 +55,14 @@ function setActive(tab, value)
     return active;
 }
 
+function createTimeHoursMinutes(hours, minutes)
+{
+    let date = new Date();
+    date.setHours(hours); date.setMinutes(minutes);
+
+    return date;
+}
+
 function setIncludeTimes(startHours, endHours, startMinutes, endMinutes)
 {
     let includeTimes = [];
@@ -73,5 +81,6 @@ module.exports = {
     getPostalCodes,
     setCityFromZipcode,
     setActive,
-    setIncludeTimes
+    setIncludeTimes,
+    createTimeHoursMinutes
 }
