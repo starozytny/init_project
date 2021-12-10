@@ -88,36 +88,10 @@ export class FormationForm extends Component {
     }
 
     handleChangeTrumb = (e) => {
-        const { content, prerequis, goals, aptitudes, skills, target, cat } = this.state
-
         let name = e.currentTarget.id;
         let text = e.currentTarget.innerHTML;
-        let el;
-        switch (name) {
-            case "cat":
-                el = cat;
-                break;
-            case "target":
-                el = target;
-                break;
-            case "skills":
-                el = skills;
-                break;
-            case "aptitudes":
-                el = aptitudes;
-                break;
-            case "goals":
-                el = goals;
-                break;
-            case "prerequis":
-                el = prerequis;
-                break;
-            default:
-                el = content;
-                break;
-        }
 
-        this.setState({[name]: {value: el.value, html: text}})
+        this.setState({[name]: {value: [name].value, html: text}})
     }
 
     handleSubmit = (e) => {

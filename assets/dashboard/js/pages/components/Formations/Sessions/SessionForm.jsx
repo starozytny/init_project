@@ -163,47 +163,22 @@ export class Form extends Component {
         let nPriceHt = priceHt;
         if(name === "priceHt"){
             nPriceHt = value;
-            if(tva !== ""){
-                nPriceTtc =  ( (parseFloat(value) * parseFloat(tva)) / 100 ) + parseFloat(value);
-            }else{
-                nPriceTtc = "";
-            }
+            nPriceTtc = tva !== "" ? ((parseFloat(value) * parseFloat(tva)) / 100) + parseFloat(value) : ""
         }
 
         if(name === "priceTtc"){
             nPriceTtc = value;
-            if(tva !== ""){
-                nPriceHt = parseFloat(value) / (1 + (parseFloat(tva) / 100));
-            }else{
-                nPriceHt = "";
-            }
+            nPriceHt = tva !== "" ? parseFloat(value) / (1 + (parseFloat(tva) / 100)) : "";
         }
 
         this.setState({[name]: value, priceTtc: nPriceTtc, priceHt: nPriceHt});
     }
 
     handleChangeTrumb = (e) => {
-        const { modTrav, modEval, modPeda, modAssi } = this.state
-
         let name = e.currentTarget.id;
         let text = e.currentTarget.innerHTML;
-        let el;
-        switch (name) {
-            case "modAssi":
-                el = modAssi;
-                break;
-            case "modPeda":
-                el = modPeda;
-                break;
-            case "modEval":
-                el = modEval;
-                break;
-            default:
-                el = modTrav;
-                break;
-        }
 
-        this.setState({[name]: {value: el.value, html: text}})
+        this.setState({[name]: {value: [name].value, html: text}})
     }
 
     handleSubmit = (e) => {
