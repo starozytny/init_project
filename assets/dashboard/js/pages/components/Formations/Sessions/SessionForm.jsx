@@ -123,10 +123,31 @@ export class Form extends Component {
     handleChangeTimeAfterEnd = (e) => { this.setState({ timeAfterEnd: e !== null ? e : "" }) }
 
     handleChange = (e) => {
+        const { priceHt, tva, priceTtc } = this.state;
         let name = e.currentTarget.name;
         let value = e.currentTarget.value;
 
-        this.setState({[name]: value})
+        let nPriceTtc = priceTtc;
+        let nPriceHt = priceHt;
+        if(name === "priceHt"){
+            nPriceHt = value;
+            if(tva !== ""){
+                nPriceTtc =  ( (parseFloat(value) * parseFloat(tva)) / 100 ) + parseFloat(value);
+            }else{
+                nPriceTtc = "";
+            }
+        }
+
+        if(name === "priceTtc"){
+            nPriceTtc = value;
+            if(tva !== ""){
+                nPriceHt = parseFloat(value) / (1 + (parseFloat(tva) / 100));
+            }else{
+                nPriceHt = "";
+            }
+        }
+
+        this.setState({[name]: value, priceTtc: nPriceTtc, priceHt: nPriceHt});
     }
 
     handleChangeTrumb = (e) => {
@@ -157,12 +178,18 @@ export class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { start, timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd } = this.state;
+        const { start,
+            timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
+            priceHt, priceTtc, tva
+        } = this.state;
 
         this.setState({ success: false })
 
         let paramsToValidate = [
-            {type: "text", id: 'start',  value: start}
+            {type: "text", id: 'start',  value: start},
+            {type: "text", id: 'priceHt',  value: priceHt},
+            {type: "text", id: 'tva',  value: tva},
+            {type: "text", id: 'priceTtc',  value: priceTtc},
         ];
 
         if(timeMorningStart === "" && timeMorningEnd === "" && timeAfterStart === "" && timeAfterEnd === ""){
@@ -222,6 +249,7 @@ export class Form extends Component {
         const { context } = this.props;
         const { errors, success, start, end,
             timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
+            priceHt, priceTtc, tva,
             modTrav, modEval, modPeda, modAssi } = this.state;
 
         let minHoursMorningStart = Helper.createTimeHoursMinutes(6, 0);
@@ -241,6 +269,12 @@ export class Form extends Component {
 
                 {success !== false && <Alert type="info">{success}</Alert>}
 
+                <div className="line">
+                    <div className="form-group">
+                        <div className="form-group-title">Quand ?</div>
+                    </div>
+                </div>
+
                 <div className="line line-2">
                     <DatePick identifiant="start" valeur={start} errors={errors} onChange={this.handleChangeDateStart} minDate={new Date()} maxDate={end ? end : ""}>
                         Date de début
@@ -253,20 +287,32 @@ export class Form extends Component {
                 <div className="line line-4">
                     <TimePick identifiant="timeMorningStart"  valeur={timeMorningStart}  errors={errors} onChange={this.handleChangeTimeMorningStart}
                               timeIntervals={5} minTime={minHoursMorningStart} maxTime={maxHoursMorningStart}>
-                        Horaire matin
+                        Horaire matin - début
                     </TimePick>
                     <TimePick identifiant="timeMorningEnd"  valeur={timeMorningEnd}  errors={errors} onChange={this.handleChangeTimeMorningEnd}
                               timeIntervals={5} minTime={minHoursMorningEnd} maxTime={maxHoursMorningEnd}>
-                        Horaire matin
+                        Horaire matin - fin
                     </TimePick>
                     <TimePick identifiant="timeAfterStart" valeur={timeAfterStart} errors={errors} onChange={this.handleChangeTimeAfterStart}
                               timeIntervals={5} minTime={minHoursAfternoonStart} maxTime={maxHoursAfternoonStart}>
-                        Horaire après midi
+                        Horaire après midi - début
                     </TimePick>
                     <TimePick identifiant="timeAfterEnd" valeur={timeAfterEnd} errors={errors} onChange={this.handleChangeTimeAfterEnd}
                               timeIntervals={5} minTime={minHoursAfternoonEnd} maxTime={maxHoursAfternoonEnd}>
-                        Horaire après midi
+                        Horaire après midi - fin
                     </TimePick>
+                </div>
+
+                <div className="line">
+                    <div className="form-group">
+                        <div className="form-group-title">Financier</div>
+                    </div>
+                </div>
+
+                <div className="line line-3">
+                    <Input identifiant="priceHt" valeur={priceHt} errors={errors} onChange={this.handleChange} type="number" step={"any"}>Prix HT (€)</Input>
+                    <Input identifiant="tva" valeur={tva} errors={errors} onChange={this.handleChange} type="number" step={"any"}>TVA (%)</Input>
+                    <Input identifiant="priceTtc" valeur={priceTtc} errors={errors} onChange={this.handleChange} type="number" step={"any"}>Prix TTC (€)</Input>
                 </div>
 
                 <div className="line line-2">
