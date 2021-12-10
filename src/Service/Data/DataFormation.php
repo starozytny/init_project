@@ -28,13 +28,18 @@ class DataFormation extends DataConstructor
         ;
     }
 
-    public function setDataSession(FoSession $obj, $data): FoSession
+    public function setDataSession(FoFormation $formation, FoSession $obj, $data): FoSession
     {
         $animator = $this->sanitizeData->sanitizeString($data->animator);
 
         return ($obj)
+            ->setFormation($formation)
             ->setAnimator($animator)
             ->setType((int) $data->type)
+            ->setStart($this->sanitizeData->createDateFromString($data->start))
+            ->setEnd($this->sanitizeData->createDateFromString($data->end))
+            ->setTime($data->time ? trim($data->time) : null)
+            ->setTime2($data->time2 ? trim($data->time2) : null)
             ->setDuration(trim($data->duration))
             ->setDuration2(trim($data->duration2))
             ->setDurationTotal(trim($data->durationTotal))
@@ -45,12 +50,12 @@ class DataFormation extends DataConstructor
             ->setMin((int) $data->min)
             ->setMax((int) $data->max)
             ->setAddress(trim($data->address))
-            ->setZipcode(trim($data->zipcode))
-            ->setCity(trim($data->city))
-            ->setModTrav(trim($data->modTrav->html))
-            ->setModEval(trim($data->modEval->html))
-            ->setModPeda(trim($data->modPeda->html))
-            ->setModAssi(trim($data->modAssi->html))
+            ->setZipcode($data->zipcode ? (int) trim($data->zipcode) : null)
+            ->setCity($data->city ? trim($data->city) : null)
+            ->setModTrav($data->modTrav->html ? trim($data->modTrav->html) : null)
+            ->setModEval($data->modEval->html ? trim($data->modEval->html) : null)
+            ->setModPeda($data->modPeda->html ? trim($data->modPeda->html) : null)
+            ->setModAssi($data->modAssi->html ? trim($data->modAssi->html) : null)
             ;
     }
 }

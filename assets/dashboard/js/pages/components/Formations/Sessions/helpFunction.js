@@ -1,6 +1,16 @@
 const Helper = require('@commonComponents/functions/helper');
 
-function setToString(hours, minutes){
+function formatTimeZero(temps){
+    return (temps < 10) ? "0" + temps : temps
+}
+
+function setToStringDatabase(hours, minutes)
+{
+    return (hours !== 0 ? (hours + "h") : "") + (minutes !== 0 ? (formatTimeZero(minutes) + "") : "");
+}
+
+function setToString(hours, minutes)
+{
     return (hours !== 0 ? (hours + "h ") : "") + (minutes !== 0 ? (minutes + "min") : "");
 }
 
@@ -92,8 +102,17 @@ function getDurationTotal(duration, duration2, start, end)
     return "";
 }
 
+function setTimeToString(start, end)
+{
+    let a = setToStringDatabase(start.getHours(), start.getMinutes());
+    let b = setToStringDatabase(end.getHours(), end.getMinutes())
+
+    return a + " - " + b;
+}
+
 module.exports = {
     getIntervalTime,
     getDurationTotal,
-    getDurationByDay
+    getDurationByDay,
+    setTimeToString
 }

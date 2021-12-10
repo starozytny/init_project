@@ -15,7 +15,7 @@ export class SessionsItem extends Component {
                     <div className="infos infos-col-3">
                         <div className="col-1">
                             <div className="name">
-                                <span>{elem.id}</span>
+                                <span>{elem.animator}</span>
                             </div>
                         </div>
                         <div className="col-2">

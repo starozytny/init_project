@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api\Formation;
 
+use App\Entity\Formation\FoFormation;
 use App\Entity\Formation\FoSession;
 use App\Entity\User;
 use App\Service\ApiResponse;
@@ -28,7 +29,7 @@ class SessionController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    public function submitForm($type, FoSession $obj, Request $request, ApiResponse $apiResponse,
+    public function submitForm($type, FoFormation $formation, FoSession $obj, Request $request, ApiResponse $apiResponse,
                                ValidatorService $validator, DataFormation $dataEntity): JsonResponse
     {
         $em = $this->doctrine->getManager();
@@ -38,7 +39,7 @@ class SessionController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $obj = $dataEntity->setDataSession($obj, $data);
+        $obj = $dataEntity->setDataSession($formation, $obj, $data);
 
         $noErrors = $validator->validate($obj);
         if ($noErrors !== true) {
@@ -50,13 +51,13 @@ class SessionController extends AbstractController
 
         return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }
-    
+
     /**
      * Create a session
      *
      * @Security("is_granted('ROLE_ADMIN')")
      *
-     * @Route("/", name="create", options={"expose"=true}, methods={"POST"})
+     * @Route("/{formation}", name="create", options={"expose"=true}, methods={"POST"})
      *
      * @OA\Response(
      *     response=200,
@@ -66,15 +67,16 @@ class SessionController extends AbstractController
      * @OA\Tag(name="Formations")
      *
      * @param Request $request
+     * @param FoFormation $formation
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
      * @param DataFormation $dataEntity
      * @return JsonResponse
      */
-    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
+    public function create(Request $request, FoFormation $formation, ValidatorService $validator, ApiResponse $apiResponse,
                            DataFormation $dataEntity): JsonResponse
     {
-        return $this->submitForm("create", new FoSession(), $request, $apiResponse, $validator, $dataEntity);
+        return $this->submitForm("create", $formation, new FoSession(), $request, $apiResponse, $validator, $dataEntity);
     }
 
     /**
@@ -82,7 +84,7 @@ class SessionController extends AbstractController
      *
      * @Security("is_granted('ROLE_ADMIN')")
      *
-     * @Route("/{id}", name="update", options={"expose"=true}, methods={"PUT"})
+     * @Route("/{formation}/{id}", name="update", options={"expose"=true}, methods={"PUT"})
      *
      * @OA\Response(
      *     response=200,
@@ -97,16 +99,17 @@ class SessionController extends AbstractController
      * @OA\Tag(name="Formations")
      *
      * @param Request $request
+     * @param FoFormation $formation
      * @param FoSession $obj
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
      * @param DataFormation $dataEntity
      * @return JsonResponse
      */
-    public function update(Request $request, FoSession $obj, ValidatorService $validator,
+    public function update(Request $request, FoFormation $formation, FoSession $obj, ValidatorService $validator,
                            ApiResponse $apiResponse, DataFormation $dataEntity): JsonResponse
     {
-        return $this->submitForm("update", $obj, $request, $apiResponse, $validator, $dataEntity);
+        return $this->submitForm("update", $formation, $obj, $request, $apiResponse, $validator, $dataEntity);
     }
 
     /**

@@ -22,15 +22,15 @@ const TXT_UPDATE_BUTTON_FORM = "Modifier la session";
 
 let arrayZipcodes = [];
 
-export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, element })
+export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, element, formationId })
 {
     let title = "Ajouter une session";
-    let url = Routing.generate(URL_CREATE_ELEMENT);
+    let url = Routing.generate(URL_CREATE_ELEMENT, {'formation': formationId});
     let msg = "Félicitation ! Vous avez ajouté une nouvelle session !"
 
     if(type === "update"){
         title = "Modifier " + element.id;
-        url = Routing.generate(URL_UPDATE_GROUP, {'id': element.id});
+        url = Routing.generate(URL_UPDATE_GROUP, {'formation': formationId, 'id': element.id});
         msg = "Félicitation ! La mise à jour s'est réalisé avec succès !";
     }
 
@@ -75,6 +75,8 @@ export class Form extends Component {
             animator: props.animator,
             start: props.start,
             end: props.end,
+            time: props.time,
+            time2: props.time2,
             timeMorningStart: props.time,
             timeMorningEnd: props.time,
             timeAfterStart: props.time2,
@@ -225,12 +227,16 @@ export class Form extends Component {
             paramsToValidate = [...paramsToValidate,
                 ...[{type: "text", id: 'timeMorningStart', value: timeMorningStart}, {type: "text", id: 'timeMorningEnd', value: timeMorningEnd}]
             ];
+
+            this.state.time = HelpFunction.setTimeToString(timeMorningStart, timeMorningEnd);
         }
 
         if(timeAfterStart !== "" || timeAfterEnd !== ""){
             paramsToValidate = [...paramsToValidate,
                 ...[{type: "text", id: 'timeAfterStart', value: timeAfterStart}, {type: "text", id: 'timeAfterEnd', value: timeAfterEnd}]
             ];
+
+            this.state.time2 = HelpFunction.setTimeToString(timeAfterStart, timeAfterEnd);
         }
 
         // validate global

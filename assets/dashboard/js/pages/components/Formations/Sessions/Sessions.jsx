@@ -8,12 +8,12 @@ import Sort              from "@commonComponents/functions/sort";
 import { SessionsList }       from "./SessionsList";
 import { SessionsFormulaire } from "./SessionForm";
 
-const URL_DELETE_ELEMENT    = 'api_formations_delete';
-const URL_DELETE_GROUP      = 'api_formations_delete_group';
+const URL_DELETE_ELEMENT    = 'api_sessions_delete';
+const URL_DELETE_GROUP      = 'api_sessions_delete_group';
 const MSG_DELETE_ELEMENT    = 'Supprimer cette session de formation ?';
 const MSG_DELETE_GROUP      = 'Aucune session sélectionnée.';
-const URL_SWITCH_PUBLISHED  = 'api_formations_formation_published';
-const MSG_SWITCH_PUBLISHED  = 'Formation';
+const URL_SWITCH_PUBLISHED  = 'api_sessions_formation_published';
+const MSG_SWITCH_PUBLISHED  = 'Session';
 const SORTER = Sort.compareCreatedAt;
 
 export class Sessions extends Component {
@@ -59,11 +59,11 @@ export class Sessions extends Component {
     }
 
     handleContentCreate = (changeContext) => {
-        return <SessionsFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        return <SessionsFormulaire type="create" formationId={this.props.formation} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        return <SessionsFormulaire type="update" element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        return <SessionsFormulaire type="update" formationId={this.props.formation} element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     render () {
