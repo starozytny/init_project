@@ -149,7 +149,15 @@ export class Form extends Component {
         this.setState({[name]: {value: [name].value, html: text}})
     }
 
-    handleChangeDate = (name, e) => { this.setState({ [name]: e !== null ? e : "" }) }
+    handleChangeDate = (name, e) => {
+        const { duration, duration2, start, end } = this.state;
+
+        let nStart = name === "start" ? e : start;
+        let nEnd   = name === "start" ? end : e;
+
+        let durationTotal = HelpFunction.getDurationTotal(duration, duration2, nStart, nEnd);
+        this.setState({ [name]: e !== null ? e : "", durationTotal: durationTotal })
+    }
 
     handleChangeTimeMorning = (name, e) => {
         const { duration2, start, end } = this.state;
@@ -249,14 +257,14 @@ export class Form extends Component {
                             durationByDay: "",
                             priceHt: "",
                             priceTtc: "",
-                            tva: "",
+                            tva: 20,
                             min: "",
                             max: "",
                             animator: "",
                             address: "",
                             zipcode: "",
                             city: "",
-                            type: "",
+                            type: 0,
                             modTrav: { value: "", html: "" },
                             modEval: { value: "", html: "" },
                             modPeda: { value: "", html: "" },
