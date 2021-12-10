@@ -12,6 +12,7 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 import { DatePick, TimePick }  from "@dashboardComponents/Tools/DatePicker";
 
 import Validateur              from "@commonComponents/functions/validateur";
+import Helper                  from "@commonComponents/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
 const URL_CREATE_ELEMENT     = "api_formations_create";
@@ -71,8 +72,10 @@ export class Form extends Component {
         this.state = {
             start: props.start,
             end: props.end,
-            time: props.time,
-            time2: props.time2,
+            timeMorningStart: props.time,
+            timeMorningEnd: props.time,
+            timeAfterStart: props.time2,
+            timeAfterEnd: props.time2,
             priceHt: props.priceHt,
             priceTtc: props.priceTtc,
             tva: props.tva,
@@ -101,8 +104,10 @@ export class Form extends Component {
 
         this.handleChangeDateStart = this.handleChangeDateStart.bind(this);
         this.handleChangeDateEnd = this.handleChangeDateEnd.bind(this);
-        this.handleChangeTime = this.handleChangeTime.bind(this);
-        this.handleChangeTime2 = this.handleChangeTime2.bind(this);
+        this.handleChangeTimeMorningStart = this.handleChangeTimeMorningStart.bind(this);
+        this.handleChangeTimeMorningEnd = this.handleChangeTimeMorningEnd.bind(this);
+        this.handleChangeTimeAfterStart = this.handleChangeTimeAfterStart.bind(this);
+        this.handleChangeTimeAfterEnd = this.handleChangeTimeAfterEnd.bind(this);
     }
 
     componentDidMount() {
@@ -112,8 +117,10 @@ export class Form extends Component {
 
     handleChangeDateStart = (e) => { this.setState({ start: e }) }
     handleChangeDateEnd = (e) => { this.setState({ end: e }) }
-    handleChangeTime = (e) => { this.setState({ time: e }) }
-    handleChangeTime2 = (e) => { this.setState({ time2: e }) }
+    handleChangeTimeMorningStart = (e) => { this.setState({ timeMorningStart: e }) }
+    handleChangeTimeMorningEnd = (e) => { this.setState({ timeMorningEnd: e }) }
+    handleChangeTimeAfterStart = (e) => { this.setState({ timeAfterStart: e }) }
+    handleChangeTimeAfterEnd = (e) => { this.setState({ timeAfterEnd: e }) }
 
     handleChange = (e) => {
         let name = e.currentTarget.name;
@@ -195,24 +202,12 @@ export class Form extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, start, end, time, time2, modTrav, modEval, modPeda, modAssi } = this.state;
+        const { errors, success, start, end,
+            timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
+            modTrav, modEval, modPeda, modAssi } = this.state;
 
-        let includeTimesMorning = []; let includeTimesAfternoon = [];
-        for(let i=6; i <= 12 ; i++){
-            for(let j=0; j <= 55 ; j++){
-                let includeTime = new Date();
-                includeTime.setHours(i); includeTime.setMinutes(j);
-                includeTimesMorning.push(includeTime)
-            }
-        }
-
-        for(let i=12; i <= 22 ; i++){
-            for(let j=0; j <= 55 ; j++){
-                let includeTime = new Date();
-                includeTime.setHours(i); includeTime.setMinutes(j);
-                includeTimesAfternoon.push(includeTime)
-            }
-        }
+        let includeTimesMorning = Helper.setIncludeTimes(6, 12, 0, 55);
+        let includeTimesAfternoon = Helper.setIncludeTimes(12, 22, 0, 55);
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -228,11 +223,21 @@ export class Form extends Component {
                     </DatePick>
                 </div>
 
-                <div className="line line-2">
-                    <TimePick identifiant="time"  valeur={time}  errors={errors} onChange={this.handleChangeDateStart} timeIntervals={5} includeTimes={includeTimesMorning}>
+                <div className="line line-4">
+                    <TimePick identifiant="timeMorningStart"  valeur={timeMorningStart}  errors={errors} onChange={this.handleChangeTimeMorningStart}
+                              timeIntervals={5} includeTimes={includeTimesMorning}>
                         Horaire matin
                     </TimePick>
-                    <TimePick identifiant="time2" valeur={time2} errors={errors} onChange={this.handleChangeDateEnd}   timeIntervals={5} includeTimes={includeTimesAfternoon}>
+                    <TimePick identifiant="timeMorningEnd"  valeur={timeMorningEnd}  errors={errors} onChange={this.handleChangeTimeMorningEnd}
+                              timeIntervals={5} includeTimes={includeTimesMorning}>
+                        Horaire matin
+                    </TimePick>
+                    <TimePick identifiant="timeAfterStart" valeur={timeAfterStart} errors={errors} onChange={this.handleChangeTimeAfterStart}
+                              timeIntervals={5} includeTimes={includeTimesAfternoon}>
+                        Horaire après midi
+                    </TimePick>
+                    <TimePick identifiant="timeAfterEnd" valeur={timeAfterEnd} errors={errors} onChange={this.handleChangeTimeAfterEnd}
+                              timeIntervals={5} includeTimes={includeTimesAfternoon}>
                         Horaire après midi
                     </TimePick>
                 </div>
