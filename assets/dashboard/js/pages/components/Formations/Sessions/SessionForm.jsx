@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import axios                   from "axios";
-import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Input, Select }       from "@dashboardComponents/Tools/Fields";
@@ -36,6 +35,7 @@ export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, eleme
     let form = <Form
         context={type}
         url={url}
+        animator={element ? element.animator : ""}
         start={element ? new Date(element.starJavascriptt) : ""}
         end={element ? new Date(element.endJavascript) : ""}
         time={element ? element.time : ""}
@@ -49,7 +49,6 @@ export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, eleme
         tva={element ? element.tva : 20}
         min={element ? element.min : ""}
         max={element ? element.max : ""}
-        animator={element ? element.animator : ""}
         address={element ? element.address : ""}
         zipcode={element ? element.zipcode : ""}
         city={element ? element.city : ""}
@@ -71,6 +70,7 @@ export class Form extends Component {
         super(props);
 
         this.state = {
+            animator: props.animator,
             start: props.start,
             end: props.end,
             timeMorningStart: props.time,
@@ -86,7 +86,6 @@ export class Form extends Component {
             tva: props.tva,
             min: props.min,
             max: props.max,
-            animator: props.animator,
             address: props.address,
             zipcode: props.zipcode,
             city: props.city,
@@ -96,10 +95,12 @@ export class Form extends Component {
             modPeda: { value: props.modPeda ? props.modPeda : "", html: props.modPeda ? props.modPeda : "" },
             modAssi: { value: props.modAssi ? props.modAssi : "", html: props.modAssi ? props.modAssi : "" },
             errors: [],
+            arrayPostalCode: [],
             success: false
         }
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeZipcodeCity = this.handleChangeZipcodeCity.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeTrumb = this.handleChangeTrumb.bind(this);
 
@@ -111,6 +112,41 @@ export class Form extends Component {
     componentDidMount() {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+        Helper.getPostalCodes(this);
+    }
+
+    handleChange = (e) => {
+        const { priceHt, tva, priceTtc } = this.state;
+        let name = e.currentTarget.name;
+        let value = e.currentTarget.value;
+
+        let nPriceTtc = priceTtc;
+        let nPriceHt = priceHt;
+        if(name === "priceHt"){
+            nPriceHt = value;
+            nPriceTtc = tva !== "" ? ((parseFloat(value) * parseFloat(tva)) / 100) + parseFloat(value) : ""
+        }
+
+        if(name === "priceTtc"){
+            nPriceTtc = value;
+            nPriceHt = tva !== "" ? parseFloat(value) / (1 + (parseFloat(tva) / 100)) : "";
+        }
+
+        this.setState({[name]: value, priceTtc: nPriceTtc, priceHt: nPriceHt});
+    }
+
+    handleChangeZipcodeCity = (e) => {
+        const { arrayPostalCode } = this.state;
+
+        Helper.setCityFromZipcode(this, e, arrayPostalCode)
+    }
+
+    handleChangeTrumb = (e) => {
+        let name = e.currentTarget.id;
+        let text = e.currentTarget.innerHTML;
+
+        this.setState({[name]: {value: [name].value, html: text}})
     }
 
     handleChangeDate = (name, e) => { this.setState({ [name]: e !== null ? e : "" }) }
@@ -143,38 +179,11 @@ export class Form extends Component {
         this.setState({ [name]: e !== null ? e : "", duration2: duration2, durationByDay: durationByDay, durationTotal: durationTotal })
     }
 
-    handleChange = (e) => {
-        const { priceHt, tva, priceTtc } = this.state;
-        let name = e.currentTarget.name;
-        let value = e.currentTarget.value;
-
-        let nPriceTtc = priceTtc;
-        let nPriceHt = priceHt;
-        if(name === "priceHt"){
-            nPriceHt = value;
-            nPriceTtc = tva !== "" ? ((parseFloat(value) * parseFloat(tva)) / 100) + parseFloat(value) : ""
-        }
-
-        if(name === "priceTtc"){
-            nPriceTtc = value;
-            nPriceHt = tva !== "" ? parseFloat(value) / (1 + (parseFloat(tva) / 100)) : "";
-        }
-
-        this.setState({[name]: value, priceTtc: nPriceTtc, priceHt: nPriceHt});
-    }
-
-    handleChangeTrumb = (e) => {
-        let name = e.currentTarget.id;
-        let text = e.currentTarget.innerHTML;
-
-        this.setState({[name]: {value: [name].value, html: text}})
-    }
-
     handleSubmit = (e) => {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { start,
+        const { animator, start,
             timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
             priceHt, priceTtc, tva, min, max
         } = this.state;
@@ -182,6 +191,7 @@ export class Form extends Component {
         this.setState({ success: false })
 
         let paramsToValidate = [
+            {type: "text",   id: 'animator',  value: animator},
             {type: "text",   id: 'start',     value: start},
             {type: "text",   id: 'priceHt',   value: priceHt},
             {type: "text",   id: 'tva',       value: tva},
@@ -266,10 +276,11 @@ export class Form extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, start, end,
+        const { errors, success, animator, start, end,
             timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
             duration, duration2, durationTotal, durationByDay,
             priceHt, priceTtc, tva, min, max,
+            address, zipcode, city, type,
             modTrav, modEval, modPeda, modAssi } = this.state;
 
         let minHoursMorningStart = Helper.createTimeHoursMinutes(6, 0);
@@ -291,7 +302,18 @@ export class Form extends Component {
 
                 <div className="line">
                     <div className="form-group">
-                        <div className="form-group-title">Quand ?</div>
+                        <div className="form-group-title">Animé par</div>
+                    </div>
+                </div>
+
+                <div className="line line-2">
+                    <Input identifiant="animator" valeur={animator} errors={errors} onChange={this.handleChange}>Animateur (s)</Input>
+                    <div className="form-group" />
+                </div>
+
+                <div className="line">
+                    <div className="form-group">
+                        <div className="form-group-title">Quand</div>
                     </div>
                 </div>
 
@@ -355,6 +377,24 @@ export class Form extends Component {
                     <Input identifiant="priceHt"  valeur={priceHt} errors={errors} onChange={this.handleChange}  type="number" step={"any"}>Prix HT (€)</Input>
                     <Input identifiant="tva"      valeur={tva} errors={errors} onChange={this.handleChange}      type="number" step={"any"}>TVA (%)</Input>
                     <Input identifiant="priceTtc" valeur={priceTtc} errors={errors} onChange={this.handleChange} type="number" step={"any"}>Prix TTC (€)</Input>
+                </div>
+
+                <div className="line">
+                    <div className="form-group">
+                        <div className="form-group-title">Localisation</div>
+                    </div>
+                </div>
+
+                <div className="line line-3">
+                    <Input identifiant="address" valeur={address} errors={errors} onChange={this.handleChange}>Adresse</Input>
+                    <Input identifiant="zipcode" valeur={zipcode} errors={errors} onChange={this.handleChangeZipcodeCity} type="number">Code postal</Input>
+                    <Input identifiant="city" valeur={city} errors={errors} onChange={this.handleChange}>Ville</Input>
+                </div>
+
+                <div className="line">
+                    <div className="form-group">
+                        <div className="form-group-title">Contenu</div>
+                    </div>
                 </div>
 
                 <div className="line line-2">
