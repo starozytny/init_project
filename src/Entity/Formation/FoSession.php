@@ -70,25 +70,25 @@ class FoSession extends DataEntity
     private $tva = 20;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="string", length=50)
      * @Groups({"admin:read"})
      */
     private $duration;
 
     /**
-     * @ORM\Column(type="time", nullable=true)
+     * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"admin:read"})
      */
     private $duration2;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="string", length=50)
      * @Groups({"admin:read"})
      */
     private $durationTotal;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="string", length=50)
      * @Groups({"admin:read"})
      */
     private $durationByDay;
@@ -428,84 +428,48 @@ class FoSession extends DataEntity
         return $this;
     }
 
-    /**
-     * @return string|null
-     * @Groups({"admin:read"})
-     */
-    public function getDurationJavascript(): ?string
-    {
-        return $this->setDateJavascript($this->duration);
-    }
-
-    public function getDuration(): ?\DateTimeInterface
+    public function getDuration(): ?string
     {
         return $this->duration;
     }
 
-    public function setDuration(\DateTimeInterface $duration): self
+    public function setDuration(string $duration): self
     {
         $this->duration = $duration;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     * @Groups({"admin:read"})
-     */
-    public function getDuration2Javascript(): ?string
-    {
-        return $this->setDateJavascript($this->duration2);
-    }
-
-    public function getDuration2(): ?\DateTimeInterface
+    public function getDuration2(): ?string
     {
         return $this->duration2;
     }
 
-    public function setDuration2(?\DateTimeInterface $duration2): self
+    public function setDuration2(?string $duration2): self
     {
         $this->duration2 = $duration2;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     * @Groups({"admin:read"})
-     */
-    public function getDurationTotalJavascript(): ?string
-    {
-        return $this->setDateJavascript($this->durationTotal);
-    }
-
-    public function getDurationTotal(): ?\DateTimeInterface
+    public function getDurationTotal(): ?string
     {
         return $this->durationTotal;
     }
 
-    public function setDurationTotal(\DateTimeInterface $durationTotal): self
+    public function setDurationTotal(string $durationTotal): self
     {
         $this->durationTotal = $durationTotal;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     * @Groups({"admin:read"})
-     */
-    public function getDurationByDayJavascript(): ?string
-    {
-        return $this->setDateJavascript($this->durationByDay);
-    }
-
-    public function getDurationByDay(): ?\DateTimeInterface
+    public function getDurationByDay(): ?string
     {
         return $this->durationByDay;
     }
 
-    public function setDurationByDay(\DateTimeInterface $durationByDay): self
+    public function setDurationByDay(string $durationByDay): self
     {
         $this->durationByDay = $durationByDay;
 
