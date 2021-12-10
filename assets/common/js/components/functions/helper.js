@@ -77,10 +77,27 @@ function setIncludeTimes(startHours, endHours, startMinutes, endMinutes)
     return includeTimes;
 }
 
+function extractDateToArray(date){
+    if(date !== "" && date !== null){
+        let string = date.toLocaleString('fr-FR').slice(0,10).replace(/-/g,'');
+        string = string.split('/');
+
+
+        if(string.length !== 3){
+            return "";
+        }
+
+        return [parseInt(string[0]), parseInt(string[1]), parseInt(string[2])];
+    }
+
+    return "";
+}
+
 module.exports = {
     getPostalCodes,
     setCityFromZipcode,
     setActive,
     setIncludeTimes,
-    createTimeHoursMinutes
+    createTimeHoursMinutes,
+    extractDateToArray
 }
