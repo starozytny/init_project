@@ -176,16 +176,18 @@ export class Form extends Component {
         const { context, url, messageSuccess } = this.props;
         const { start,
             timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
-            priceHt, priceTtc, tva
+            priceHt, priceTtc, tva, min, max
         } = this.state;
 
         this.setState({ success: false })
 
         let paramsToValidate = [
-            {type: "text", id: 'start',  value: start},
-            {type: "text", id: 'priceHt',  value: priceHt},
-            {type: "text", id: 'tva',  value: tva},
+            {type: "text", id: 'start',     value: start},
+            {type: "text", id: 'priceHt',   value: priceHt},
+            {type: "text", id: 'tva',       value: tva},
             {type: "text", id: 'priceTtc',  value: priceTtc},
+            {type: "text", id: 'min',       value: min},
+            {type: "text", id: 'max',       value: max},
         ];
 
         if(timeMorningStart === "" && timeMorningEnd === "" && timeAfterStart === "" && timeAfterEnd === ""){
@@ -207,7 +209,7 @@ export class Form extends Component {
         }
 
         // validate global
-        let validate = Validateur.validateur(paramsToValidate)
+        let validate = Validateur.validateur(paramsToValidate);
         if(!validate.code){
             toastr.warning("Veuillez vérifier les informations transmises.");
             this.setState({ errors: validate.errors });
@@ -246,7 +248,7 @@ export class Form extends Component {
         const { errors, success, start, end,
             timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
             duration, duration2, durationTotal, durationByDay,
-            priceHt, priceTtc, tva,
+            priceHt, priceTtc, tva, min, max,
             modTrav, modEval, modPeda, modAssi } = this.state;
 
         let minHoursMorningStart = Helper.createTimeHoursMinutes(6, 0);
@@ -313,13 +315,24 @@ export class Form extends Component {
 
                 <div className="line">
                     <div className="form-group">
+                        <div className="form-group-title">Nombre de places</div>
+                    </div>
+                </div>
+
+                <div className="line line-2">
+                    <Input identifiant="min" valeur={min} errors={errors} onChange={this.handleChange} type="number" min={0} max={max}>Place min</Input>
+                    <Input identifiant="max" valeur={max} errors={errors} onChange={this.handleChange} type="number" min={min}>Place max</Input>
+                </div>
+
+                <div className="line">
+                    <div className="form-group">
                         <div className="form-group-title">Financier</div>
                     </div>
                 </div>
 
                 <div className="line line-3">
-                    <Input identifiant="priceHt" valeur={priceHt} errors={errors} onChange={this.handleChange} type="number" step={"any"}>Prix HT (€)</Input>
-                    <Input identifiant="tva" valeur={tva} errors={errors} onChange={this.handleChange} type="number" step={"any"}>TVA (%)</Input>
+                    <Input identifiant="priceHt"  valeur={priceHt} errors={errors} onChange={this.handleChange}  type="number" step={"any"}>Prix HT (€)</Input>
+                    <Input identifiant="tva"      valeur={tva} errors={errors} onChange={this.handleChange}      type="number" step={"any"}>TVA (%)</Input>
                     <Input identifiant="priceTtc" valeur={priceTtc} errors={errors} onChange={this.handleChange} type="number" step={"any"}>Prix TTC (€)</Input>
                 </div>
 
