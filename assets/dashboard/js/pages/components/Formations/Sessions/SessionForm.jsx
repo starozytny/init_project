@@ -191,16 +191,16 @@ export class Form extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, start, end, modTrav, modEval, modPeda, modAssi } = this.state;
+        const { errors, success, start, end, time, time2, modTrav, modEval, modPeda, modAssi } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
 
                 {success !== false && <Alert type="info">{success}</Alert>}
 
-                <div className="line">
-                    <DatePick identifiant="start" valeur={start} errors={errors} onChange={this.handleChangeDateStart}>Date de début</DatePick>
-                    <DatePick identifiant="end" valeur={end} errors={errors} onChange={this.handleChangeDateEnd}>Date de fin</DatePick>
+                <div className="line line-2">
+                    <DatePick identifiant="start" minDate={new Date()} maxDate={end ? end : new Date()} valeur={start} errors={errors} onChange={this.handleChangeDateStart}>Date de début</DatePick>
+                    <DatePick identifiant="end" minDate={start ? start : new Date()} valeur={end} errors={errors} onChange={this.handleChangeDateEnd}>Date de fin</DatePick>
                 </div>
 
                 <div className="line line-2">

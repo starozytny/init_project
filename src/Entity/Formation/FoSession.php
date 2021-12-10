@@ -2,6 +2,7 @@
 
 namespace App\Entity\Formation;
 
+use App\Entity\DataEntity;
 use App\Repository\Formation\FoSessionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -9,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=FoSessionRepository::class)
  */
-class FoSession
+class FoSession extends DataEntity
 {
     const TYPE_PRESENTIEL = 0;
     const TYPE_DISTANCE = 1;
@@ -175,8 +176,7 @@ class FoSession
      */
     public function getStartJavascript(): ?string
     {
-        date_default_timezone_set('Europe/Paris');
-        return $this->start != null ? date_format($this->start, 'F d, Y H:i:s') : null;
+        return $this->setDateJavascript($this->start);
     }
 
     public function getStart(): ?\DateTimeInterface
@@ -197,8 +197,7 @@ class FoSession
      */
     public function getEndJavascript(): ?string
     {
-        date_default_timezone_set('Europe/Paris');
-        return $this->end != null ? date_format($this->end, 'F d, Y H:i:s') : null;
+        return $this->setDateJavascript($this->end);
     }
 
     public function getEnd(): ?\DateTimeInterface
@@ -435,8 +434,7 @@ class FoSession
      */
     public function getDurationJavascript(): ?string
     {
-        date_default_timezone_set('Europe/Paris');
-        return $this->duration != null ? date_format($this->duration, 'F d, Y H:i:s') : null;
+        return $this->setDateJavascript($this->duration);
     }
 
     public function getDuration(): ?\DateTimeInterface
@@ -451,6 +449,15 @@ class FoSession
         return $this;
     }
 
+    /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getDuration2Javascript(): ?string
+    {
+        return $this->setDateJavascript($this->duration2);
+    }
+
     public function getDuration2(): ?\DateTimeInterface
     {
         return $this->duration2;
@@ -463,6 +470,15 @@ class FoSession
         return $this;
     }
 
+    /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getDurationTotalJavascript(): ?string
+    {
+        return $this->setDateJavascript($this->durationTotal);
+    }
+
     public function getDurationTotal(): ?\DateTimeInterface
     {
         return $this->durationTotal;
@@ -473,6 +489,15 @@ class FoSession
         $this->durationTotal = $durationTotal;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getDurationByDayJavascript(): ?string
+    {
+        return $this->setDateJavascript($this->durationByDay);
     }
 
     public function getDurationByDay(): ?\DateTimeInterface
