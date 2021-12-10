@@ -1,3 +1,5 @@
+const {func} = require("prop-types");
+
 function validateDate($value) {
     if($value === "" || $value === null){
         return {
@@ -96,6 +98,15 @@ function validateAtLeastOne($value, $valueCheck) {
     return {'code': true};
 }
 
+function validateMinMax($value, $valueCheck) {
+    if($value > $valueCheck){
+        return {
+            'code': false,
+            'message': 'La valeur MIN doit être inférieur à la valeur MAX.'
+        };
+    }
+}
+
 function switchCase(element){
     let validate;
     switch (element.type) {
@@ -119,6 +130,9 @@ function switchCase(element){
             break;
         case 'date':
             validate = validateDate(element.value);
+            break;
+        case 'minMax':
+            validate = validateMinMax(element.value, element.valueCheck);
             break;
     }
 
