@@ -197,7 +197,22 @@ export class Form extends Component {
         const { context } = this.props;
         const { errors, success, start, end, time, time2, modTrav, modEval, modPeda, modAssi } = this.state;
 
-        let excludeTimesMorning = [];
+        let includeTimesMorning = []; let includeTimesAfternoon = [];
+        for(let i=6; i <= 12 ; i++){
+            for(let j=0; j <= 55 ; j++){
+                let includeTime = new Date();
+                includeTime.setHours(i); includeTime.setMinutes(j);
+                includeTimesMorning.push(includeTime)
+            }
+        }
+
+        for(let i=12; i <= 22 ; i++){
+            for(let j=0; j <= 55 ; j++){
+                let includeTime = new Date();
+                includeTime.setHours(i); includeTime.setMinutes(j);
+                includeTimesAfternoon.push(includeTime)
+            }
+        }
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -214,10 +229,10 @@ export class Form extends Component {
                 </div>
 
                 <div className="line line-2">
-                    <TimePick identifiant="time"  valeur={time}  errors={errors} onChange={this.handleChangeDateStart} timeIntervals={5}>
+                    <TimePick identifiant="time"  valeur={time}  errors={errors} onChange={this.handleChangeDateStart} timeIntervals={5} includeTimes={includeTimesMorning}>
                         Horaire matin
                     </TimePick>
-                    <TimePick identifiant="time2" valeur={time2} errors={errors} onChange={this.handleChangeDateEnd}   timeIntervals={5}>
+                    <TimePick identifiant="time2" valeur={time2} errors={errors} onChange={this.handleChangeDateEnd}   timeIntervals={5} includeTimes={includeTimesAfternoon}>
                         Horaire après midi
                     </TimePick>
                 </div>
