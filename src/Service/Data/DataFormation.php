@@ -5,6 +5,7 @@ namespace App\Service\Data;
 
 
 use App\Entity\Formation\FoFormation;
+use App\Entity\Formation\FoSession;
 use App\Service\SanitizeData;
 
 class DataFormation extends DataConstructor
@@ -25,5 +26,10 @@ class DataFormation extends DataConstructor
             ->setCat(trim($data->cat->html))
             ->setAccessibility((int) $data->accessibility)
         ;
+    }
+
+    public function setDataSession(FoSession $obj, $data): FoSession
+    {
+
     }
 }

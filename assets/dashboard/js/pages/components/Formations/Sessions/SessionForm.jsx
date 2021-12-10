@@ -191,7 +191,7 @@ export class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { animator, start, type, priceHt, priceTtc, tva, min, max,
+        const { animator, start, type, priceHt, priceTtc, tva, min, max, address,
             timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
         } = this.state;
 
@@ -206,6 +206,7 @@ export class Form extends Component {
             {type: "text",   id: 'min',       value: min},
             {type: "text",   id: 'max',       value: max},
             {type: "minMax", id: 'min',       value: min, idCheck: 'max', valueCheck: max},
+            {type: "text",   id: 'address',   value: address},
             {type: "text",   id: 'type',      value: type},
         ];
 
@@ -399,7 +400,7 @@ export class Form extends Component {
                 </div>
 
                 <div className="line line-3">
-                    <Input identifiant="address" valeur={address} errors={errors} onChange={this.handleChange}>Adresse</Input>
+                    <Input identifiant="address" valeur={address} errors={errors} onChange={this.handleChange} placeholder="'En ligne' - si formation à distance">Adresse</Input>
                     <Input identifiant="zipcode" valeur={zipcode} errors={errors} onChange={this.handleChangeZipcodeCity} type="number">Code postal</Input>
                     <Input identifiant="city" valeur={city} errors={errors} onChange={this.handleChange}>Ville</Input>
                 </div>
