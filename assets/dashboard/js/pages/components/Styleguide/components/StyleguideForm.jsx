@@ -12,7 +12,7 @@ import { Checkbox, Input, Radiobox, Select, TextArea,
     SelectReactSelectize }                             from "@dashboardComponents/Tools/Fields";
 
 import Validator    from "@commonComponents/functions/validateur";
-import Sanitaze     from "@commonComponents/functions/sanitaze";
+import Helper       from "@commonComponents/functions/helper";
 import Formulaire   from "@dashboardComponents/functions/Formulaire";
 
 export class StyleguideForm extends Component {
@@ -27,7 +27,7 @@ export class StyleguideForm extends Component {
             roles: [], // default : ["ROLE_USER"]
             sexe: "",  // default : 0
             pays: "",  // default : "France"
-            birthday: "", // from entity : new Date(getCreatedAtJavascript)
+            birthday: "", // from component : new Date(getCreatedAtJavascript)
             createAt: "",
             arrived: "",
             postalCode: "",
@@ -51,14 +51,14 @@ export class StyleguideForm extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleChangePostalCodeCity = this.handleChangePostalCodeCity.bind(this);
-        this.handleChangeDateCreateAt = this.handleChangeDateCreateAt.bind(this);
+        this.handleChangeDateBirthday = this.handleChangeDateBirthday.bind(this);
         this.handleChangeDateCreateAt = this.handleChangeDateCreateAt.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTrumb = this.handleChangeTrumb.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount = () => { Sanitaze.getPostalCodes(this); } // fill arrayPostalCode
+    componentDidMount = () => { Helper.getPostalCodes(this); } // fill arrayPostalCode
 
     handleChange = (e) => {
         const { roles } = this.state;
@@ -82,7 +82,7 @@ export class StyleguideForm extends Component {
     handleChangePostalCodeCity = (e) => {
         const { arrayPostalCode } = this.state;
 
-        Sanitaze.setCityFromZipcode(this, e, arrayPostalCode)
+        Helper.setCityFromZipcode(this, e, arrayPostalCode)
     }
 
     handleChangeDateBirthday = (e) => { this.setState({ birthday: e }) }
@@ -112,22 +112,22 @@ export class StyleguideForm extends Component {
         let files = this.inputFiles.current.drop.current.files;
 
         let validate = Validator.validateur([
-            {type: "text", id: 'username', value: username},
-            {type: "email", id: 'email', value: email},
-            {type: "text", id: 'message', value: message},
-            {type: "array", id: 'roles', value: roles},
-            {type: "text", id: 'sexe', value: sexe},
-            {type: "text", id: 'pays', value: pays},
-            {type: "text", id: 'birthday', value: birthday},
-            {type: "text", id: 'createAt', value: createAt},
-            {type: "text", id: 'arrived', value: arrived},
-            {type: "text", id: 'postalCode', value: postalCode},
-            {type: "text", id: 'city', value: city},
-            {type: "array", id: 'avatar', value: avatar},
-            {type: "array", id: 'files', value: files},
-            {type: "text", id: 'fruit', value: fruit},
-            {type: "text", id: 'faq', value: faq.html},
-            {type: "text", id: 'question', value: question},
+            {type: "text",  id: 'username',     value: username},
+            {type: "email", id: 'email',        value: email},
+            {type: "text",  id: 'message',      value: message},
+            {type: "array", id: 'roles',        value: roles},
+            {type: "text",  id: 'sexe',         value: sexe},
+            {type: "text",  id: 'pays',         value: pays},
+            {type: "text",  id: 'birthday',     value: birthday},
+            {type: "text",  id: 'createAt',     value: createAt},
+            {type: "text",  id: 'arrived',      value: arrived},
+            {type: "text",  id: 'postalCode',   value: postalCode},
+            {type: "text",  id: 'city',         value: city},
+            {type: "array", id: 'avatar',       value: avatar},
+            {type: "array", id: 'files',        value: files},
+            {type: "text",  id: 'fruit',        value: fruit},
+            {type: "text",  id: 'faq',          value: faq.html},
+            {type: "text",  id: 'question',     value: question},
         ])
 
         toastr.error("Bonjour, je suis un <b>message d'erreur</b>, je suis un peu long pour tester la taille de la boite de dialogue.")
@@ -194,6 +194,8 @@ export class StyleguideForm extends Component {
 
         let switcherItems = [ { value: 0, label: 'Non', identifiant: 'non' } ]
 
+        let includeTimesMorning = Helper.setIncludeTimes(6, 12, 0, 55);
+
         return (
             <>
                 <section className="form">
@@ -256,7 +258,7 @@ export class StyleguideForm extends Component {
                             <div className="line line-3">
                                 <DatePick identifiant="birthday" valeur={birthday} errors={errors} onChange={this.handleChangeDateBirthday}>Date de naissance</DatePick>
                                 <DateTimePick identifiant="createAt" valeur={createAt} errors={errors} onChange={this.handleChangeDateCreateAt}>Date de création</DateTimePick>
-                                <TimePick identifiant="arrived" valeur={arrived} errors={errors} onChange={this.handleChangeDateArrived}>Heure d'arrivée</TimePick>
+                                <TimePick identifiant="arrived" valeur={arrived} errors={errors} onChange={this.handleChangeDateArrived} includeTimes={includeTimesMorning}>Heure d'arrivée</TimePick>
                             </div>
 
                             <div className="line line-2">
