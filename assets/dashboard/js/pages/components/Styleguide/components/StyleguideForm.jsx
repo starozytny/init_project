@@ -85,9 +85,9 @@ export class StyleguideForm extends Component {
         Helper.setCityFromZipcode(this, e, arrayPostalCode)
     }
 
-    handleChangeDateBirthday = (e) => { this.setState({ birthday: e }) }
-    handleChangeDateCreateAt = (e) => { this.setState({ createAt: e }) }
-    handleChangeDateArrived = (e) => { this.setState({ arrived: e }) }
+    handleChangeDateBirthday = (e) => { this.setState({ birthday: e !== null ? e : "" }) }
+    handleChangeDateCreateAt = (e) => { this.setState({ createAt: e !== null ? e : "" }) }
+    handleChangeDateArrived = (e) => { this.setState({ arrived: e !== null ? e : "" }) }
 
     handleChangeTrumb = (e) => {
         const { faq } = this.state
