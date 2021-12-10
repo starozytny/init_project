@@ -22,7 +22,7 @@ const TXT_UPDATE_BUTTON_FORM = "Modifier la session";
 
 function getIntervalTime(end, start) {
     let nInterval = ""
-    if((end !== null && end !== "") && start !== ""){
+    if((end !== null && end !== "") && (start !== null && start !== "")){
         let timeStartHours = parseInt(start.getHours());
         let timeStartMinutes = parseInt(start.getMinutes());
 
@@ -130,12 +130,9 @@ export class Form extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeTrumb = this.handleChangeTrumb.bind(this);
 
-        this.handleChangeDateStart = this.handleChangeDateStart.bind(this);
-        this.handleChangeDateEnd = this.handleChangeDateEnd.bind(this);
-        this.handleChangeTimeMorningStart = this.handleChangeTimeMorningStart.bind(this);
-        this.handleChangeTimeMorningEnd = this.handleChangeTimeMorningEnd.bind(this);
-        this.handleChangeTimeAfterStart = this.handleChangeTimeAfterStart.bind(this);
-        this.handleChangeTimeAfterEnd = this.handleChangeTimeAfterEnd.bind(this);
+        this.handleChangeDate = this.handleChangeDate.bind(this);
+        this.handleChangeTimeMorning = this.handleChangeTimeMorning.bind(this);
+        this.handleChangeTimeAfter = this.handleChangeTimeAfter.bind(this);
     }
 
     componentDidMount() {
@@ -143,16 +140,21 @@ export class Form extends Component {
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     }
 
-    handleChangeDateStart = (e) => { this.setState({ start: e !== null ? e : "" }) }
-    handleChangeDateEnd = (e) => { this.setState({ end: e !== null ? e : "" }) }
-    handleChangeTimeMorningStart = (e) => {
-        this.setState({ timeMorningStart: e !== null ? e : "", duration: getIntervalTime(this.state.timeMorningEnd, e) })
+    handleChangeDate = (name, e) => { this.setState({ [name]: e !== null ? e : "" }) }
+    handleChangeTimeMorning = (name, e) => {
+        let duration = getIntervalTime(
+            name === "timeMorningStart" ? this.state.timeMorningEnd : e,
+            name === "timeMorningStart" ? e : this.state.timeMorningStart
+        )
+        this.setState({ [name]: e !== null ? e : "", duration: duration })
     }
-    handleChangeTimeMorningEnd = (e) => {
-        this.setState({ timeMorningEnd: e !== null ? e : "", duration: getIntervalTime(e, this.state.timeMorningStart) });
+    handleChangeTimeAfter = (name, e) => {
+        let duration = getIntervalTime(
+            name === "timeAfterStart" ? this.state.timeAfterEnd : e,
+            name === "timeAfterStart" ? e : this.state.timeAfterStart
+        )
+        this.setState({ [name]: e !== null ? e : "", duration2: duration })
     }
-    handleChangeTimeAfterStart = (e) => { this.setState({ timeAfterStart: e !== null ? e : "" }) }
-    handleChangeTimeAfterEnd = (e) => { this.setState({ timeAfterEnd: e !== null ? e : "" }) }
 
     handleChange = (e) => {
         const { priceHt, tva, priceTtc } = this.state;
@@ -284,38 +286,42 @@ export class Form extends Component {
                 </div>
 
                 <div className="line line-2">
-                    <DatePick identifiant="start" valeur={start} errors={errors} onChange={this.handleChangeDateStart} minDate={new Date()} maxDate={end ? end : ""}>
+                    <DatePick identifiant="start" valeur={start} errors={errors} onChange={(e) => this.handleChangeDate('start', e)} minDate={new Date()} maxDate={end ? end : ""}>
                         Date de début
                     </DatePick>
-                    <DatePick identifiant="end"   valeur={end} errors={errors}   onChange={this.handleChangeDateEnd} minDate={start ? start : new Date()}>
+                    <DatePick identifiant="end"   valeur={end} errors={errors}   onChange={(e) => this.handleChangeDate('end', e)} minDate={start ? start : new Date()}>
                         Date de fin
                     </DatePick>
                 </div>
 
                 <div className="line line-4">
-                    <TimePick identifiant="timeMorningStart"  valeur={timeMorningStart}  errors={errors} onChange={this.handleChangeTimeMorningStart}
+                    <TimePick identifiant="timeMorningStart"  valeur={timeMorningStart}  errors={errors} onChange={(e) => this.handleChangeTimeMorning('timeMorningStart', e)}
                               timeIntervals={5} minTime={minHoursMorningStart} maxTime={maxHoursMorningStart}>
                         Horaire matin - début
                     </TimePick>
-                    <TimePick identifiant="timeMorningEnd"  valeur={timeMorningEnd}  errors={errors} onChange={this.handleChangeTimeMorningEnd}
+                    <TimePick identifiant="timeMorningEnd"  valeur={timeMorningEnd}  errors={errors} onChange={(e) => this.handleChangeTimeMorning('timeMorningEnd', e)}
                               timeIntervals={5} minTime={minHoursMorningEnd} maxTime={maxHoursMorningEnd}>
                         Horaire matin - fin
                     </TimePick>
-                    <TimePick identifiant="timeAfterStart" valeur={timeAfterStart} errors={errors} onChange={this.handleChangeTimeAfterStart}
+                    <TimePick identifiant="timeAfterStart" valeur={timeAfterStart} errors={errors} onChange={(e) => this.handleChangeTimeAfter('timeAfterStart', e)}
                               timeIntervals={5} minTime={minHoursAfternoonStart} maxTime={maxHoursAfternoonStart}>
-                        Horaire après midi - début
+                        Horaire après-midi - début
                     </TimePick>
-                    <TimePick identifiant="timeAfterEnd" valeur={timeAfterEnd} errors={errors} onChange={this.handleChangeTimeAfterEnd}
+                    <TimePick identifiant="timeAfterEnd" valeur={timeAfterEnd} errors={errors} onChange={(e) => this.handleChangeTimeAfter('timeAfterEnd', e)}
                               timeIntervals={5} minTime={minHoursAfternoonEnd} maxTime={maxHoursAfternoonEnd}>
-                        Horaire après midi - fin
+                        Horaire après-midi - fin
                     </TimePick>
                 </div>
 
                 <div className="line line-4">
                     <div className="form-group">Durée matin : {duration ? duration : "/"}</div>
-                    <div className="form-group">h</div>
-                    <div className="form-group">h</div>
-                    <div className="form-group">h</div>
+                    <div className="form-group" />
+                    <div className="form-group">Durée après-midi : {duration2 ? duration2 : "/"}</div>
+                    <div className="form-group" />
+                </div>
+                <div className="line line-2">
+                    <div className="form-group">Durée totale : {durationTotal ? durationTotal : "/"}</div>
+                    <div className="form-group">Durée par jour  : {durationByDay ? durationByDay : "/"}</div>
                 </div>
 
                 <div className="line">
