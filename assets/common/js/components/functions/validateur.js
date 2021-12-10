@@ -105,6 +105,7 @@ function validateMinMax($value, $valueCheck) {
             'message': 'La valeur MIN doit être inférieur à la valeur MAX.'
         };
     }
+    return {'code': true};
 }
 
 function switchCase(element){
