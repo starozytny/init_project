@@ -115,12 +115,12 @@ export class Form extends Component {
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     }
 
-    handleChangeDateStart = (e) => { this.setState({ start: e }) }
-    handleChangeDateEnd = (e) => { this.setState({ end: e }) }
-    handleChangeTimeMorningStart = (e) => { this.setState({ timeMorningStart: e }) }
-    handleChangeTimeMorningEnd = (e) => { this.setState({ timeMorningEnd: e }) }
-    handleChangeTimeAfterStart = (e) => { this.setState({ timeAfterStart: e }) }
-    handleChangeTimeAfterEnd = (e) => { this.setState({ timeAfterEnd: e }) }
+    handleChangeDateStart = (e) => { this.setState({ start: e !== null ? e : "" }) }
+    handleChangeDateEnd = (e) => { this.setState({ end: e !== null ? e : "" }) }
+    handleChangeTimeMorningStart = (e) => { this.setState({ timeMorningStart: e !== null ? e : "" }) }
+    handleChangeTimeMorningEnd = (e) => { this.setState({ timeMorningEnd: e !== null ? e : "" }) }
+    handleChangeTimeAfterStart = (e) => { this.setState({ timeAfterStart: e !== null ? e : "" }) }
+    handleChangeTimeAfterEnd = (e) => { this.setState({ timeAfterEnd: e !== null ? e : "" }) }
 
     handleChange = (e) => {
         let name = e.currentTarget.name;
@@ -157,13 +157,31 @@ export class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { start } = this.state;
+        const { start, timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd } = this.state;
 
         this.setState({ success: false })
 
         let paramsToValidate = [
             {type: "text", id: 'start',  value: start}
         ];
+
+        if(timeMorningStart === "" && timeMorningEnd === "" && timeAfterStart === "" && timeAfterEnd === ""){
+            paramsToValidate = [...paramsToValidate,
+                ...[{type: "atLeastOne", id: 'timeMorningStart', value: timeMorningStart, idCheck: 'timeAfterStart', valueCheck: timeAfterStart}]
+            ];
+        }
+
+        if(timeMorningStart !== "" || timeMorningEnd !== ""){
+            paramsToValidate = [...paramsToValidate,
+                ...[{type: "text", id: 'timeMorningStart', value: timeMorningStart}, {type: "text", id: 'timeMorningEnd', value: timeMorningEnd}]
+            ];
+        }
+
+        if(timeAfterStart !== "" || timeAfterEnd !== ""){
+            paramsToValidate = [...paramsToValidate,
+                ...[{type: "text", id: 'timeAfterStart', value: timeAfterStart}, {type: "text", id: 'timeAfterEnd', value: timeAfterEnd}]
+            ];
+        }
 
         // validate global
         let validate = Validateur.validateur(paramsToValidate)
