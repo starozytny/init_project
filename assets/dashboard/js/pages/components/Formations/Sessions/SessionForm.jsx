@@ -206,10 +206,17 @@ export class Form extends Component {
             timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
             modTrav, modEval, modPeda, modAssi } = this.state;
 
-        let minHoursMorning = Helper.createTimeHoursMinutes(6, 0);
-        let maxHoursMorning = Helper.createTimeHoursMinutes(12, 0);
-        let minHoursAfternoon = Helper.createTimeHoursMinutes(12, 0);
-        let maxHoursAfternoon = Helper.createTimeHoursMinutes(22, 0);
+        let minHoursMorningStart = Helper.createTimeHoursMinutes(6, 0);
+        let maxHoursMorningStart = timeMorningEnd ? timeMorningEnd : Helper.createTimeHoursMinutes(12, 0);
+
+        let minHoursMorningEnd = timeMorningStart ? timeMorningStart : Helper.createTimeHoursMinutes(6, 0);
+        let maxHoursMorningEnd = Helper.createTimeHoursMinutes(12, 0);
+
+        let minHoursAfternoonStart = Helper.createTimeHoursMinutes(12, 0);
+        let maxHoursAfternoonStart = timeAfterEnd ? timeAfterEnd : Helper.createTimeHoursMinutes(22, 0);
+
+        let minHoursAfternoonEnd = timeAfterStart ? timeAfterStart : Helper.createTimeHoursMinutes(12, 0);
+        let maxHoursAfternoonEnd = Helper.createTimeHoursMinutes(22, 0);
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -217,7 +224,7 @@ export class Form extends Component {
                 {success !== false && <Alert type="info">{success}</Alert>}
 
                 <div className="line line-2">
-                    <DatePick identifiant="start" valeur={start} errors={errors} onChange={this.handleChangeDateStart} minDate={new Date()} maxDate={end ? end : new Date()}>
+                    <DatePick identifiant="start" valeur={start} errors={errors} onChange={this.handleChangeDateStart} minDate={new Date()} maxDate={end ? end : ""}>
                         Date de début
                     </DatePick>
                     <DatePick identifiant="end"   valeur={end} errors={errors}   onChange={this.handleChangeDateEnd} minDate={start ? start : new Date()}>
@@ -227,19 +234,19 @@ export class Form extends Component {
 
                 <div className="line line-4">
                     <TimePick identifiant="timeMorningStart"  valeur={timeMorningStart}  errors={errors} onChange={this.handleChangeTimeMorningStart}
-                              timeIntervals={5} minTime={minHoursMorning} maxTime={maxHoursMorning}>
+                              timeIntervals={5} minTime={minHoursMorningStart} maxTime={maxHoursMorningStart}>
                         Horaire matin
                     </TimePick>
                     <TimePick identifiant="timeMorningEnd"  valeur={timeMorningEnd}  errors={errors} onChange={this.handleChangeTimeMorningEnd}
-                              timeIntervals={5} minTime={minHoursMorning} maxTime={maxHoursMorning}>
+                              timeIntervals={5} minTime={minHoursMorningEnd} maxTime={maxHoursMorningEnd}>
                         Horaire matin
                     </TimePick>
                     <TimePick identifiant="timeAfterStart" valeur={timeAfterStart} errors={errors} onChange={this.handleChangeTimeAfterStart}
-                              timeIntervals={5} minTime={minHoursAfternoon} maxTime={maxHoursAfternoon}>
+                              timeIntervals={5} minTime={minHoursAfternoonStart} maxTime={maxHoursAfternoonStart}>
                         Horaire après midi
                     </TimePick>
                     <TimePick identifiant="timeAfterEnd" valeur={timeAfterEnd} errors={errors} onChange={this.handleChangeTimeAfterEnd}
-                              timeIntervals={5} minTime={minHoursAfternoon} maxTime={maxHoursAfternoon}>
+                              timeIntervals={5} minTime={minHoursAfternoonEnd} maxTime={maxHoursAfternoonEnd}>
                         Horaire après midi
                     </TimePick>
                 </div>
