@@ -99,7 +99,7 @@ function validateAtLeastOne($value, $valueCheck) {
 }
 
 function validateMinMax($value, $valueCheck) {
-    if($value > $valueCheck){
+    if(parseFloat($value) > parseFloat($valueCheck)){
         return {
             'code': false,
             'message': 'La valeur MIN doit être inférieur à la valeur MAX.'
