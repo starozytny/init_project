@@ -14,39 +14,12 @@ import { DatePick, TimePick }  from "@dashboardComponents/Tools/DatePicker";
 import Validateur              from "@commonComponents/functions/validateur";
 import Helper                  from "@commonComponents/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
+import HelpFunction            from "./helpFunction";
 
 const URL_CREATE_ELEMENT     = "api_formations_create";
 const URL_UPDATE_GROUP       = "api_formations_update";
 const TXT_CREATE_BUTTON_FORM = "Ajouter la session";
 const TXT_UPDATE_BUTTON_FORM = "Modifier la session";
-
-function getIntervalTime(end, start) {
-    let nInterval = ""
-    if((end !== null && end !== "") && (start !== null && start !== "")){
-        let timeStartHours = parseInt(start.getHours());
-        let timeStartMinutes = parseInt(start.getMinutes());
-
-        let timeEndHours = parseInt(end.getHours());
-        let timeEndMinutes = parseInt(end.getMinutes());
-
-        if(timeEndHours > timeStartHours && timeEndMinutes === 0){
-            timeEndHours = timeEndHours - 1;
-            timeEndMinutes = 60;
-        }
-
-        let intervalHours = timeEndHours - timeStartHours;
-        let intervalMinutes = timeEndMinutes - timeStartMinutes;
-
-        if(intervalMinutes === 60){
-            intervalHours = intervalHours + 1;
-            intervalMinutes = 0;
-        }
-
-        nInterval = (intervalHours !== 0 ? (intervalHours + "h ") : "") + (intervalMinutes !== 0 ? (intervalMinutes + "min") : "");
-    }
-
-    return nInterval;
-}
 
 export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, element })
 {
@@ -141,19 +114,31 @@ export class Form extends Component {
     }
 
     handleChangeDate = (name, e) => { this.setState({ [name]: e !== null ? e : "" }) }
+
     handleChangeTimeMorning = (name, e) => {
-        let duration = getIntervalTime(
+        const { duration2 } = this.state;
+
+        let duration = HelpFunction.getIntervalTime(
             name === "timeMorningStart" ? this.state.timeMorningEnd : e,
             name === "timeMorningStart" ? e : this.state.timeMorningStart
         )
-        this.setState({ [name]: e !== null ? e : "", duration: duration })
+
+        let durationTotal = HelpFunction.getDurationTotal(duration, duration2);
+
+        this.setState({ [name]: e !== null ? e : "", duration: duration, durationTotal: durationTotal })
     }
+
     handleChangeTimeAfter = (name, e) => {
-        let duration = getIntervalTime(
+        const { duration } = this.state;
+
+        let duration2 = HelpFunction.getIntervalTime(
             name === "timeAfterStart" ? this.state.timeAfterEnd : e,
             name === "timeAfterStart" ? e : this.state.timeAfterStart
         )
-        this.setState({ [name]: e !== null ? e : "", duration2: duration })
+
+        let durationTotal = HelpFunction.getDurationTotal(duration, duration2);
+
+        this.setState({ [name]: e !== null ? e : "", duration2: duration2, durationTotal: durationTotal })
     }
 
     handleChange = (e) => {
