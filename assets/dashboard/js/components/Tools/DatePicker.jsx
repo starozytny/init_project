@@ -11,7 +11,8 @@ import { ClassiqueStructure }               from "@dashboardComponents/Tools/Fie
 registerLocale('fr', fr)
 
 export function DatePick(props){
-    const { identifiant, valeur, onChange, format="dd/MM/yyyy", children, minDate="", maxDate="", placeholder="DD/MM/YYYY", excludeDates=[]} = props
+    const { identifiant, valeur, onChange, format="dd/MM/yyyy", children, minDate="", maxDate="", placeholder="DD/MM/YYYY",
+            excludeDates=[], includeDates=[]} = props
 
     let content = <DatePicker
         locale="fr"
@@ -25,6 +26,7 @@ export function DatePick(props){
         showYearDropdown
         dropdownMode="select"
         excludeDates={excludeDates}
+        includeDates={includeDates}
         placeholderText={placeholder}
         minDate={minDate}
         maxDate={maxDate}
@@ -34,7 +36,8 @@ export function DatePick(props){
 
 export function DateTimePick(props){
     const { identifiant, valeur, onChange, format="dd/MM/yyyy HH:mm", children, minDate="", maxDate="",
-            placeholder="DD/MM/YYYY HH:MM", timeFormat="HH:mm", timeIntervals=15, excludeDates=[], excludeTimes=[] } = props;
+            placeholder="DD/MM/YYYY HH:MM", timeFormat="HH:mm", timeIntervals=15, excludeDates=[], excludeTimes=[],
+            includeDates=[], includeTimes=[] } = props;
 
     let content = <DatePicker
         locale="fr"
@@ -52,6 +55,8 @@ export function DateTimePick(props){
         dropdownMode="select"
         excludeDates={excludeDates}
         excludeTimes={excludeTimes}
+        includeDates={includeDates}
+        includeTimes={includeTimes}
         placeholderText={placeholder}
         minDate={minDate}
         maxDate={maxDate}
@@ -61,7 +66,7 @@ export function DateTimePick(props){
 
 export function TimePick(props){
     const { identifiant, valeur, onChange, format="HH:mm", children, placeholder="HH:MM", timeFormat="HH:mm",
-            timeIntervals=15, caption="Temps", excludeTimes=[] } = props;
+            timeIntervals=15, caption="Temps", excludeTimes=[], includeTimes=[] } = props;
 
     let content = <DatePicker
         locale="fr"
@@ -76,6 +81,7 @@ export function TimePick(props){
         timeCaption={caption}
         dropdownMode="select"
         excludeTimes={excludeTimes}
+        includeTimes={includeTimes}
         placeholderText={placeholder}
     />
     return (<ClassiqueStructure {...props} content={content} label={children} classForm="form-group-date " />)
