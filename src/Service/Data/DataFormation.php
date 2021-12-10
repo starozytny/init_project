@@ -32,11 +32,21 @@ class DataFormation extends DataConstructor
     {
         $animator = $this->sanitizeData->sanitizeString($data->animator);
 
-        dd($data);
-
         return ($obj)
             ->setAnimator($animator)
             ->setType((int) $data->type)
+            ->setDuration(trim($data->duration))
+            ->setDuration2(trim($data->duration2))
+            ->setDurationTotal(trim($data->durationTotal))
+            ->setDurationByDay(trim($data->durationByDay))
+            ->setPriceHT((float) $data->priceHt)
+            ->setPriceTTC((float) $data->priceTtc)
+            ->setTva((float) $data->tva)
+            ->setMin((int) $data->min)
+            ->setMax((int) $data->max)
+            ->setAddress(trim($data->address))
+            ->setZipcode(trim($data->zipcode))
+            ->setCity(trim($data->city))
             ->setModTrav(trim($data->modTrav->html))
             ->setModEval(trim($data->modEval->html))
             ->setModPeda(trim($data->modPeda->html))

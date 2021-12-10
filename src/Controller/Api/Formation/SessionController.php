@@ -32,7 +32,7 @@ class SessionController extends AbstractController
                                ValidatorService $validator, DataFormation $dataEntity): JsonResponse
     {
         $em = $this->doctrine->getManager();
-        $data = json_decode($request->get('data'));
+        $data = json_decode($request->getContent());
 
         if ($data === null) {
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
@@ -82,7 +82,7 @@ class SessionController extends AbstractController
      *
      * @Security("is_granted('ROLE_ADMIN')")
      *
-     * @Route("/{id}", name="update", options={"expose"=true}, methods={"POST"})
+     * @Route("/{id}", name="update", options={"expose"=true}, methods={"PUT"})
      *
      * @OA\Response(
      *     response=200,

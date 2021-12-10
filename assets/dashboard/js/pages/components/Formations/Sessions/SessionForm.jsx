@@ -20,6 +20,8 @@ const URL_UPDATE_GROUP       = "api_sessions_update";
 const TXT_CREATE_BUTTON_FORM = "Ajouter la session";
 const TXT_UPDATE_BUTTON_FORM = "Modifier la session";
 
+let arrayZipcodes = [];
+
 export function SessionsFormulaire ({ type, onChangeContext, onUpdateList, element })
 {
     let title = "Ajouter une session";
@@ -139,7 +141,7 @@ export class Form extends Component {
     handleChangeZipcodeCity = (e) => {
         const { arrayPostalCode } = this.state;
 
-        Helper.setCityFromZipcode(this, e, arrayPostalCode)
+        Helper.setCityFromZipcode(this, e, arrayPostalCode ? arrayPostalCode : arrayZipcodes)
     }
 
     handleChangeTrumb = (e) => {
@@ -197,6 +199,9 @@ export class Form extends Component {
 
         this.setState({ success: false })
 
+        let method = context === "create" ? "POST" : "PUT";
+
+
         let paramsToValidate = [
             {type: "text",   id: 'animator',  value: animator},
             {type: "text",   id: 'start',     value: start},
@@ -235,11 +240,9 @@ export class Form extends Component {
         }else{
             Formulaire.loader(true);
             let self = this;
-
-            let formData = new FormData();
-            formData.append("data", JSON.stringify(this.state));
-
-            axios({ method: "POST", url: url, data: formData, headers: {'Content-Type': 'multipart/form-data'} })
+            arrayZipcodes = this.state.arrayPostalCode;
+            delete this.state.arrayPostalCode;
+            axios({ method: method, url: url, data: this.state })
                 .then(function (response) {
                     let data = response.data;
                     self.props.onUpdateList(data);
@@ -270,6 +273,7 @@ export class Form extends Component {
                             modEval: { value: "", html: "" },
                             modPeda: { value: "", html: "" },
                             modAssi: { value: "", html: "" },
+                            arrayPostalCode: arrayZipcodes
                         })
                     }
                 })
