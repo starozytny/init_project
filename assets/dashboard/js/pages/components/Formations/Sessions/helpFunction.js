@@ -65,7 +65,39 @@ function getDurationTotal(duration, duration2)
     return setToString(nDuration[0] + nDuration2[0], nDuration[1] + nDuration2[1]);
 }
 
+function extractDateToArray(date){
+    if(date !== "" && date !== null){
+        let string = date.toLocaleString('fr-FR').slice(0,10).replace(/-/g,'');
+        string = string.split('/');
+
+
+        if(string.length !== 3){
+            return "";
+        }
+
+        return [parseInt(string[0]), parseInt(string[1]), parseInt(string[2])];
+    }
+
+    return "";
+}
+
+function getDurationByDay(duration, duration2, start, end)
+{
+    if(start !== null && start !== "" && end !== null && end !== ""){
+        let nDuration = getHoursMinutes(duration);
+        let nDuration2 = getHoursMinutes(duration2);
+
+        let startArray = extractDateToArray(start);
+        let endArray = extractDateToArray(end);
+
+        return setToString(nDuration[0] + nDuration2[0], nDuration[1] + nDuration2[1]);
+    }
+
+    return "";
+}
+
 module.exports = {
     getIntervalTime,
-    getDurationTotal
+    getDurationTotal,
+    getDurationByDay
 }

@@ -116,7 +116,7 @@ export class Form extends Component {
     handleChangeDate = (name, e) => { this.setState({ [name]: e !== null ? e : "" }) }
 
     handleChangeTimeMorning = (name, e) => {
-        const { duration2 } = this.state;
+        const { duration2, start, end } = this.state;
 
         let duration = HelpFunction.getIntervalTime(
             name === "timeMorningStart" ? this.state.timeMorningEnd : e,
@@ -124,12 +124,13 @@ export class Form extends Component {
         )
 
         let durationTotal = HelpFunction.getDurationTotal(duration, duration2);
+        let durationByDay = HelpFunction.getDurationByDay(duration, duration2, start, end);
 
-        this.setState({ [name]: e !== null ? e : "", duration: duration, durationTotal: durationTotal })
+        this.setState({ [name]: e !== null ? e : "", duration: duration, durationTotal: durationTotal, durationByDay: durationByDay })
     }
 
     handleChangeTimeAfter = (name, e) => {
-        const { duration } = this.state;
+        const { duration, start, end } = this.state;
 
         let duration2 = HelpFunction.getIntervalTime(
             name === "timeAfterStart" ? this.state.timeAfterEnd : e,
@@ -137,8 +138,9 @@ export class Form extends Component {
         )
 
         let durationTotal = HelpFunction.getDurationTotal(duration, duration2);
+        let durationByDay = HelpFunction.getDurationByDay(duration, duration2, start, end);
 
-        this.setState({ [name]: e !== null ? e : "", duration2: duration2, durationTotal: durationTotal })
+        this.setState({ [name]: e !== null ? e : "", duration2: duration2, durationTotal: durationTotal, durationByDay: durationByDay })
     }
 
     handleChange = (e) => {
