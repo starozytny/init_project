@@ -46,7 +46,7 @@ class FoSession extends DataEntity
     private $time;
 
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=50)
      * @Groups({"admin:read"})
      */
     private $time2;
@@ -241,7 +241,7 @@ class FoSession extends DataEntity
         return $this->time2;
     }
 
-    public function setTime2(?string $time2): self
+    public function setTime2(string $time2): self
     {
         $this->time2 = $time2;
 

@@ -9,10 +9,10 @@ import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { Trumb }               from "@dashboardComponents/Tools/Trumb";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
+import { DatePick, TimePick }  from "@dashboardComponents/Tools/DatePicker";
 
 import Validateur              from "@commonComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
-import {DatePick} from "@dashboardComponents/Tools/DatePicker";
 
 const URL_CREATE_ELEMENT     = "api_formations_create";
 const URL_UPDATE_GROUP       = "api_formations_update";
@@ -101,6 +101,8 @@ export class Form extends Component {
 
         this.handleChangeDateStart = this.handleChangeDateStart.bind(this);
         this.handleChangeDateEnd = this.handleChangeDateEnd.bind(this);
+        this.handleChangeTime = this.handleChangeTime.bind(this);
+        this.handleChangeTime2 = this.handleChangeTime2.bind(this);
     }
 
     componentDidMount() {
@@ -110,6 +112,8 @@ export class Form extends Component {
 
     handleChangeDateStart = (e) => { this.setState({ start: e }) }
     handleChangeDateEnd = (e) => { this.setState({ end: e }) }
+    handleChangeTime = (e) => { this.setState({ time: e }) }
+    handleChangeTime2 = (e) => { this.setState({ time2: e }) }
 
     handleChange = (e) => {
         let name = e.currentTarget.name;
@@ -193,14 +197,29 @@ export class Form extends Component {
         const { context } = this.props;
         const { errors, success, start, end, time, time2, modTrav, modEval, modPeda, modAssi } = this.state;
 
+        let excludeTimesMorning = [];
+
         return <>
             <form onSubmit={this.handleSubmit}>
 
                 {success !== false && <Alert type="info">{success}</Alert>}
 
                 <div className="line line-2">
-                    <DatePick identifiant="start" minDate={new Date()} maxDate={end ? end : new Date()} valeur={start} errors={errors} onChange={this.handleChangeDateStart}>Date de début</DatePick>
-                    <DatePick identifiant="end" minDate={start ? start : new Date()} valeur={end} errors={errors} onChange={this.handleChangeDateEnd}>Date de fin</DatePick>
+                    <DatePick identifiant="start" valeur={start} errors={errors} onChange={this.handleChangeDateStart} minDate={new Date()} maxDate={end ? end : new Date()}>
+                        Date de début
+                    </DatePick>
+                    <DatePick identifiant="end"   valeur={end} errors={errors}   onChange={this.handleChangeDateEnd} minDate={start ? start : new Date()}>
+                        Date de fin
+                    </DatePick>
+                </div>
+
+                <div className="line line-2">
+                    <TimePick identifiant="time"  valeur={time}  errors={errors} onChange={this.handleChangeDateStart} timeIntervals={5}>
+                        Horaire matin
+                    </TimePick>
+                    <TimePick identifiant="time2" valeur={time2} errors={errors} onChange={this.handleChangeDateEnd}   timeIntervals={5}>
+                        Horaire après midi
+                    </TimePick>
                 </div>
 
                 <div className="line line-2">
