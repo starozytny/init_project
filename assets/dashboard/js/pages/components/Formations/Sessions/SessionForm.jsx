@@ -206,8 +206,10 @@ export class Form extends Component {
             timeMorningStart, timeMorningEnd, timeAfterStart, timeAfterEnd,
             modTrav, modEval, modPeda, modAssi } = this.state;
 
-        let includeTimesMorning = Helper.setIncludeTimes(6, 12, 0, 55);
-        let includeTimesAfternoon = Helper.setIncludeTimes(12, 22, 0, 55);
+        let minHoursMorning = Helper.createTimeHoursMinutes(6, 0);
+        let maxHoursMorning = Helper.createTimeHoursMinutes(12, 0);
+        let minHoursAfternoon = Helper.createTimeHoursMinutes(12, 0);
+        let maxHoursAfternoon = Helper.createTimeHoursMinutes(22, 0);
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -225,19 +227,19 @@ export class Form extends Component {
 
                 <div className="line line-4">
                     <TimePick identifiant="timeMorningStart"  valeur={timeMorningStart}  errors={errors} onChange={this.handleChangeTimeMorningStart}
-                              timeIntervals={5} includeTimes={includeTimesMorning}>
+                              timeIntervals={5} minTime={minHoursMorning} maxTime={maxHoursMorning}>
                         Horaire matin
                     </TimePick>
                     <TimePick identifiant="timeMorningEnd"  valeur={timeMorningEnd}  errors={errors} onChange={this.handleChangeTimeMorningEnd}
-                              timeIntervals={5} includeTimes={includeTimesMorning}>
+                              timeIntervals={5} minTime={minHoursMorning} maxTime={maxHoursMorning}>
                         Horaire matin
                     </TimePick>
                     <TimePick identifiant="timeAfterStart" valeur={timeAfterStart} errors={errors} onChange={this.handleChangeTimeAfterStart}
-                              timeIntervals={5} includeTimes={includeTimesAfternoon}>
+                              timeIntervals={5} minTime={minHoursAfternoon} maxTime={maxHoursAfternoon}>
                         Horaire après midi
                     </TimePick>
                     <TimePick identifiant="timeAfterEnd" valeur={timeAfterEnd} errors={errors} onChange={this.handleChangeTimeAfterEnd}
-                              timeIntervals={5} includeTimes={includeTimesAfternoon}>
+                              timeIntervals={5} minTime={minHoursAfternoon} maxTime={maxHoursAfternoon}>
                         Horaire après midi
                     </TimePick>
                 </div>
