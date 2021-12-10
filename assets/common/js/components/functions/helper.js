@@ -93,11 +93,67 @@ function extractDateToArray(date){
     return "";
 }
 
+/**
+ * start doit être inférieur à end
+ * @param startArray - array [d,m,y]
+ * @param endArray - array [d,m,y]
+ */
+function getNbDayBetweenDateArray(startArray, endArray)
+{
+    let startYear  = startArray[2];
+    let startMonth = startArray[1];
+    let startDay   = startArray[0];
+    let endYear    = endArray[2];
+    let endMonth   = endArray[1];
+    let endDay     = endArray[0];
+
+    let nbDaysByMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    let nbYears = endYear - startYear
+
+    let days = 0;
+    if(nbYears >= 0){
+        if(nbYears === 0){ // même année
+            if(startMonth === endMonth){ // même mois
+                days = endDay - startDay;
+                days = days === 0 ? 1 : days;
+            }else if(startMonth < endMonth){ // classique date
+                days = days + (nbDaysByMonth[startMonth] - startDay + 1); //calcul en fonction du nb de jours dans le current mois
+                days = days + endDay;
+                for(let i = startMonth + 1 ; i < endMonth ; i++){ //ajout des jours entre les mois exclusion mois start et end
+                    days = days + nbDaysByMonth[i];
+                }
+            }
+        }else{
+            //remplir les jours du current start mois et end mois
+            days = days + (nbDaysByMonth[startMonth] - startDay + 1);
+            days = days + endDay;
+
+            //remplir les mois restants du start jusqu'a la nouvelle année
+            for(let i = startMonth + 1 ; i <= 12 ; i++){
+                days = days + nbDaysByMonth[i];
+            }
+            //remplir les mois avant end mois
+            for(let i = 1 ; i < endMonth ; i++){
+                days = days + nbDaysByMonth[i];
+            }
+
+            //remplir les années restantes exclusion année start et end
+            for(let i = startYear + 1 ; i < endYear ; i++){
+                days = days + 365;
+            }
+        }
+    }
+
+    return days;
+}
+
 module.exports = {
     getPostalCodes,
     setCityFromZipcode,
     setActive,
     setIncludeTimes,
     createTimeHoursMinutes,
-    extractDateToArray
+    extractDateToArray,
+    getNbDayBetweenDateArray
 }
