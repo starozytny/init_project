@@ -1,3 +1,5 @@
+const Helper = require('@commonComponents/functions/helper');
+
 function setToString(hours, minutes){
     return (hours !== 0 ? (hours + "h ") : "") + (minutes !== 0 ? (minutes + "min") : "");
 }
@@ -65,20 +67,59 @@ function getDurationTotal(duration, duration2)
     return setToString(nDuration[0] + nDuration2[0], nDuration[1] + nDuration2[1]);
 }
 
-function extractDateToArray(date){
-    if(date !== "" && date !== null){
-        let string = date.toLocaleString('fr-FR').slice(0,10).replace(/-/g,'');
-        string = string.split('/');
+/**
+ * start doit être inférieur à end
+ * @param startArray - array [d,m,y]
+ * @param endArray - array [d,m,y]
+ */
+function getNbDayBetweenDate(startArray, endArray)
+{
+    let startYear  = startArray[2];
+    let startMonth = startArray[1];
+    let startDay   = startArray[0];
+    let endYear    = endArray[2];
+    let endMonth   = endArray[1];
+    let endDay     = endArray[0];
 
+    let nbDaysByMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-        if(string.length !== 3){
-            return "";
+    let nbYears = endYear - startYear
+
+    let days = 0;
+    if(nbYears >= 0){
+        if(nbYears === 0){ // même année
+            if(startMonth === endMonth){ // même mois
+                days = endDay - startDay;
+                days = days === 0 ? 1 : days;
+            }else if(startMonth < endMonth){ // classique date
+                days = days + (nbDaysByMonth[startMonth] - startDay + 1); //calcul en fonction du nb de jours dans le current mois
+                days = days + endDay;
+                for(let i = startMonth + 1 ; i < endMonth ; i++){ //ajout des jours entre les mois exclusion mois start et end
+                    days = days + nbDaysByMonth[i];
+                }
+            }
+        }else{
+            //remplir les jours du current start mois et end mois
+            days = days + (nbDaysByMonth[startMonth] - startDay + 1);
+            days = days + endDay;
+
+            //remplir les mois restants du start jusqu'a la nouvelle année
+            for(let i = startMonth + 1 ; i <= 12 ; i++){
+                days = days + nbDaysByMonth[i];
+            }
+            //remplir les mois avant end mois
+            for(let i = 1 ; i < endMonth ; i++){
+                days = days + nbDaysByMonth[i];
+            }
+
+            //remplir les années restantes exclusion année start et end
+            for(let i = startYear + 1 ; i < endYear ; i++){
+                days = days + 365;
+            }
         }
-
-        return [parseInt(string[0]), parseInt(string[1]), parseInt(string[2])];
     }
 
-    return "";
+    return days;
 }
 
 function getDurationByDay(duration, duration2, start, end)
@@ -87,10 +128,13 @@ function getDurationByDay(duration, duration2, start, end)
         let nDuration = getHoursMinutes(duration);
         let nDuration2 = getHoursMinutes(duration2);
 
-        let startArray = extractDateToArray(start);
-        let endArray = extractDateToArray(end);
+        let nbHours = nDuration[0] + nDuration2[0];
+        let nbMinutes = nDuration[1] + nDuration2[1];
 
-        return setToString(nDuration[0] + nDuration2[0], nDuration[1] + nDuration2[1]);
+        let startArray = Helper.extractDateToArray(start);
+        let endArray = Helper.extractDateToArray(end);
+
+        return getNbDayBetweenDate(startArray, endArray)
     }
 
     return "";
