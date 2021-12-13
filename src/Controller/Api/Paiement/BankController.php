@@ -50,6 +50,10 @@ class BankController extends AbstractController
             $obj->setUpdatedAt(new DateTime());
         }
 
+        if(count($user->getPaBanks()) <= 0){
+            $obj->setIsMain(true);
+        }
+
         $noErrors = $validator->validate($obj);
         if ($noErrors !== true) {
             return $apiResponse->apiJsonResponseValidationFailed($noErrors);
@@ -58,7 +62,7 @@ class BankController extends AbstractController
         $em->persist($obj);
         $em->flush();
 
-        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+        return $apiResponse->apiJsonResponse($obj, User::USER_READ);
     }
 
     /**
@@ -133,5 +137,36 @@ class BankController extends AbstractController
     public function delete(PaBank $obj, DataService $dataService): JsonResponse
     {
         return $dataService->delete($obj);
+    }
+
+    /**
+     * Switch main bank
+     *
+     * @Route("/switch-main/{id}", name="main", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Return message successful",
+     * )
+     *
+     * @OA\Tag(name="Bank")
+     *
+     * @param PaBank $obj
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     */
+    public function switchArchived(PaBank $obj, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        if(count($obj->getUser()->getPaBanks()) > 1){
+            $obj->setIsMain(!$obj->getIsMain());
+        }else{
+            $obj->setIsMain(true);
+        }
+
+        $em->flush();
+
+        return  $apiResponse->apiJsonResponse($obj, User::USER_READ);
     }
 }
