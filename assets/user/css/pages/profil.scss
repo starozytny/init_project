@@ -63,6 +63,14 @@
       flex-wrap: nowrap;
     }
   }
+
+  #profil-banks{
+    .items-default{
+      .infos{
+        align-items: flex-start;
+      }
+    }
+  }
 }
 
 //                      __   _ ____  ___   ___    __
