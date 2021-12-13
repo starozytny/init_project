@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Formation\FoWorker;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -117,6 +118,11 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
     private $notifications;
 
     /**
+     * @ORM\OneToMany(targetEntity=FoWorker::class, mappedBy="user")
+     */
+    private $foWorkers;
+
+    /**
      * @throws Exception
      */
     public function __construct()
@@ -124,6 +130,7 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
         $this->createdAt = $this->initNewDate();
         $this->token = $this->initToken();
         $this->notifications = new ArrayCollection();
+        $this->foWorkers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -425,5 +432,35 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
     public function getUserIdentifier(): string
     {
         return (string) $this->username;
+    }
+
+    /**
+     * @return Collection|FoWorker[]
+     */
+    public function getFoWorkers(): Collection
+    {
+        return $this->foWorkers;
+    }
+
+    public function addFoWorker(FoWorker $foWorker): self
+    {
+        if (!$this->foWorkers->contains($foWorker)) {
+            $this->foWorkers[] = $foWorker;
+            $foWorker->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFoWorker(FoWorker $foWorker): self
+    {
+        if ($this->foWorkers->removeElement($foWorker)) {
+            // set the owning side to null (unless already changed)
+            if ($foWorker->getUser() === $this) {
+                $foWorker->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
