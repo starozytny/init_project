@@ -138,12 +138,15 @@ export class Form extends Component {
     }
 
     handleChange = (e) => {
-        const { priceHt, tva, priceTtc } = this.state;
+        const { priceHt, tva, priceTtc, address } = this.state;
+
         let name = e.currentTarget.name;
         let value = e.currentTarget.value;
 
         let nPriceTtc = priceTtc;
         let nPriceHt = priceHt;
+        let nAddress = address;
+
         if(name === "priceHt"){
             nPriceHt = value;
             nPriceTtc = tva !== "" ? ((parseFloat(value) * parseFloat(tva)) / 100) + parseFloat(value) : ""
@@ -154,7 +157,16 @@ export class Form extends Component {
             nPriceHt = tva !== "" ? parseFloat(value) / (1 + (parseFloat(tva) / 100)) : "";
         }
 
-        this.setState({[name]: value, priceTtc: nPriceTtc, priceHt: nPriceHt});
+        if(name === "type") {
+            if(parseInt(value) === 1){
+                nAddress = "En ligne";
+            }else if(address === "En ligne" && parseInt(value) === 0){
+                nAddress = "";
+            }
+
+        }
+
+        this.setState({[name]: value, priceTtc: nPriceTtc, priceHt: nPriceHt, address: nAddress});
     }
 
     handleChangeZipcodeCity = (e) => {
