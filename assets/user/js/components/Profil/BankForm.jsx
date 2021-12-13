@@ -10,8 +10,8 @@ import { Input }            from "@dashboardComponents/Tools/Fields";
 import Formulaire           from "@dashboardComponents/functions/Formulaire";
 import Validateur           from "@commonComponents/functions/validateur";
 
-const URL_CREATE_ELEMENT     = "api_users_create";
-const URL_UPDATE_GROUP       = "api_users_update";
+const URL_CREATE_ELEMENT     = "api_banks_create";
+const URL_UPDATE_GROUP       = "api_banks_update";
 const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
@@ -75,7 +75,7 @@ class Form extends Component {
         let name = e.currentTarget.name;
         let value = e.currentTarget.value;
 
-        this.setState({[name]: value})
+        this.setState({[name]: value.toUpperCase()})
     }
 
     handleSubmit = (e) => {

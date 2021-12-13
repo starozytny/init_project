@@ -38,7 +38,7 @@ class BankController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        if (!isset($data->username) || !isset($data->email) || !isset($data->firstname) || !isset($data->lastname)) {
+        if (!isset($data->titulaire) || !isset($data->iban) || !isset($data->bic)) {
             return $apiResponse->apiJsonResponseBadRequest('Il manque des données.');
         }
 

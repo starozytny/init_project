@@ -29,16 +29,12 @@ class PaBank extends DataEntity
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Assert\Iban(
-     *     message="Veuillez saisir un IBAN valide."
-     * )
      */
     private $iban;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Assert\Bic
      */
     private $bic;
 
