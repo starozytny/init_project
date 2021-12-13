@@ -8,12 +8,12 @@ import Sanitaze         from "@commonComponents/functions/sanitaze";
 
 export class BanksItem extends Component {
     render () {
-        const { elem, onDelete } = this.props
+        const { elem, onDelete, onSwitchMain } = this.props
 
         return <div className="item">
             <div className="item-content">
                 <div className="item-body">
-                    <div className="infos infos-col-3">
+                    <div className="infos infos-col-4">
                         <div className="col-1">
                             <div className="name">
                                 <span>{Sanitaze.toFormatIbanHidden(elem.iban)}</span>
@@ -23,7 +23,10 @@ export class BanksItem extends Component {
                             <div className="sub">{elem.titulaire}</div>
                             <div className="sub">{elem.bic}</div>
                         </div>
-                        <div className="col-3 actions">
+                        <div className="col-4">
+                            {elem.isMain && <div onClick={() => onSwitchMain(elem)}><span className="icon-check" /></div>}
+                        </div>
+                        <div className="col-4 actions">
                             <ButtonIcon icon="pencil" element="a" onClick={Routing.generate('user_bank_update', {'id': elem.id})}>Modifier</ButtonIcon>
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
                         </div>

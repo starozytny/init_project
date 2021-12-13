@@ -28,6 +28,7 @@ export class Banks extends Component {
 
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
+        this.handleSwitchMain = this.handleSwitchMain.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
     }
@@ -36,9 +37,13 @@ export class Banks extends Component {
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
+    handleSwitchMain = (element) => {
+    }
+
     handleContentList = (currentData, changeContext) => {
         return <BanksList onChangeContext={changeContext}
                           onDelete={this.layout.current.handleDelete}
+                          onSwitchMain={this.handleSwitchMain}
                           data={currentData} />
     }
 
