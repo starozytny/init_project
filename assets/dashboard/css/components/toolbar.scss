@@ -27,6 +27,9 @@
     .btn{
       width: 100%;
     }
+    a.btn{
+      width: calc(100% - 48px);
+    }
   }
 
   .filter-search{
@@ -113,7 +116,7 @@
     }
 
     .create{
-      .btn{
+      a.btn, .btn{
         width: auto;
       }
     }
