@@ -10,7 +10,7 @@ import { Input }            from "@dashboardComponents/Tools/Fields";
 import Formulaire           from "@dashboardComponents/functions/Formulaire";
 import Validateur           from "@commonComponents/functions/validateur";
 import Sanitaze             from "@commonComponents/functions/sanitaze";
-import Helper from "@commonComponents/functions/helper";
+import Helper               from "@commonComponents/functions/helper";
 
 const URL_CREATE_ELEMENT     = "api_banks_create";
 const URL_UPDATE_GROUP       = "api_banks_update";
