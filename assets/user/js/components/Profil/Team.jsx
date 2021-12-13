@@ -41,7 +41,7 @@ export class Team extends Component {
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
     handleSwitchArchived = (element) => {
-        this.layout.current.handleSwitchArchived(this, element, Routing.generate(URL_SWITCH_PUBLISHED, {'id': element.id}), MSG_SWITCH_PUBLISHED);
+        this.layout.current.handleSwitchArchived(this, element.isArchived, Routing.generate(URL_SWITCH_PUBLISHED, {'id': element.id}), MSG_SWITCH_PUBLISHED);
     }
 
     handleContentList = (currentData, changeContext) => {
