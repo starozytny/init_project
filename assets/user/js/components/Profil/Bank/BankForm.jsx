@@ -116,6 +116,10 @@ class Form extends Component {
         }else{
             Formulaire.loader(true);
             let self = this;
+
+            arrayBicSave = this.state.arrayBic;
+            delete this.state.arrayBic;
+
             axios({ method: method, url: url, data: this.state })
                 .then(function (response) {
                     let data = response.data;
