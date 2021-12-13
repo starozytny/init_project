@@ -65,6 +65,17 @@ function toFormatCurrency(number)
     return  num.replaceAll('.', ' ');
 }
 
+function toFormatIban(elem)
+{
+    if(elem !== "" && elem !== undefined && elem !== null){
+        elem = elem.replaceAll(" ", "");
+        return elem.toString().replace(/[0-9A-Za-z]{4}(?=.)/g, '$& ');
+    }else{
+        return "";
+    }
+}
+
+
 module.exports = {
     sanitizeString,
     toFormatTime,
@@ -72,4 +83,5 @@ module.exports = {
     toFormatDateTime,
     toFormatPhone,
     toFormatCurrency,
+    toFormatIban
 }

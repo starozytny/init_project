@@ -9,6 +9,7 @@ import { Input }            from "@dashboardComponents/Tools/Fields";
 
 import Formulaire           from "@dashboardComponents/functions/Formulaire";
 import Validateur           from "@commonComponents/functions/validateur";
+import Sanitaze             from "@commonComponents/functions/sanitaze";
 
 const URL_CREATE_ELEMENT     = "api_banks_create";
 const URL_UPDATE_GROUP       = "api_banks_update";
@@ -75,6 +76,10 @@ class Form extends Component {
         let name = e.currentTarget.name;
         let value = e.currentTarget.value;
 
+        if(name === "iban"){
+            value = Sanitaze.toFormatIban(value)
+        }
+
         this.setState({[name]: value.toUpperCase()})
     }
 
@@ -90,7 +95,7 @@ class Form extends Component {
 
         let paramsToValidate = [
             {type: "text", id: 'titulaire',  value: titulaire},
-            {type: "text", id: 'iban',       value: iban},
+            {type: "iban", id: 'iban',       value: iban},
             {type: "text", id: 'bic',        value: bic},
         ];
 

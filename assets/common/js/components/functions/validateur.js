@@ -108,6 +108,10 @@ function validateMinMax($value, $valueCheck) {
     return {'code': true};
 }
 
+function validateIban($value) {
+    return {'code': true};
+}
+
 function switchCase(element){
     let validate;
     switch (element.type) {
@@ -134,6 +138,9 @@ function switchCase(element){
             break;
         case 'minMax':
             validate = validateMinMax(element.value, element.valueCheck);
+            break;
+        case 'iban':
+            validate = validateIban(element.value);
             break;
     }
 
