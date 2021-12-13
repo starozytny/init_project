@@ -4,5 +4,7 @@
 {% set submenuActive = "Formations" %}
 
 {% block main_content %}
-    <div id="formations" data-donnees="{{ donnees }}"></div>
+    <div id="formations" data-donnees="{{ donnees }}">
+        {% include "dashboard/layout/components/spinner.html.twig" %}
+    </div>
 {% endblock %}
