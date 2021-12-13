@@ -1,6 +1,12 @@
 const axios = require("axios");
 
-function processData(allText)
+function addProcessZipcode(lines, data)
+{
+    lines.push({"cp": data[2], "city": data[1]});
+    return lines;
+}
+
+function processData(allText, type = "zipcode")
 {
     let allTextLines = allText.split(/\r\n|\n/);
     let headers = allTextLines[0].split(';');
@@ -9,7 +15,9 @@ function processData(allText)
     for (let i=1; i<allTextLines.length; i++) {
         let data = allTextLines[i].split(';');
 
-        lines.push({"cp": data[2], "city": data[1]});
+        if(type === "zipcode"){
+            lines = addProcessZipcode(lines, data)
+        }
     }
 
     return lines;
