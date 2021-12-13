@@ -43,6 +43,11 @@ class PaBank extends DataEntity
     private $bic;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isMain = false;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $ip;
@@ -158,6 +163,18 @@ class PaBank extends DataEntity
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getIsMain(): ?bool
+    {
+        return $this->isMain;
+    }
+
+    public function setIsMain(bool $isMain): self
+    {
+        $this->isMain = $isMain;
 
         return $this;
     }

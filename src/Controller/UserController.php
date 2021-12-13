@@ -44,4 +44,12 @@ class UserController extends AbstractController
         $data = $serializer->serialize($data, 'json', ['groups' => User::ADMIN_READ]);
         return $this->render('user/pages/profil/update.html.twig',  ['donnees' => $data]);
     }
+
+    /**
+     * @Route("/ajouter-banque", name="bank_create")
+     */
+    public function bankCreate(): Response
+    {
+        return $this->render('user/pages/profil/bank/create.html.twig');
+    }
 }
