@@ -205,6 +205,21 @@ function switchPublished (self, element, url, nameEntity=""){
     ;
 }
 
+function switchFunction (self, elementValue, url, nameEntity="", txtOff=" hors ligne", txtOn=" en ligne"){
+    axios({ method: "POST", url: url })
+        .then(function (response) {
+            let data = response.data;
+            if(self.handleUpdateList){
+                self.handleUpdateList(data, "update");
+            }
+            toastr.info(nameEntity + (elementValue ? txtOff : txtOn));
+        })
+        .catch(function (error) {
+            displayErrors(self, error);
+        })
+    ;
+}
+
 function updateValueCheckbox(e, items, value){
     return (e.currentTarget.checked) ? [...items, ...[value]] : items.filter(v => v !== value)
 }
@@ -223,5 +238,6 @@ module.exports = {
     switchPublished,
     updateValueCheckbox,
     updatePerPage,
-    showErrors
+    showErrors,
+    switchFunction
 }
