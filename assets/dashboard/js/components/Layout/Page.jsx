@@ -210,7 +210,7 @@ export class Layout extends Component {
 
     render () {
         const { onContentList, onContentCreate, onContentUpdate, onContentRead, onContentCustomOne, onContentCustomTwo,
-            onChangeCurrentPage} = this.props;
+            onChangeCurrentPage, classes } = this.props;
         const { perPage, loadPageError, context, loadData, data, currentData, element, sessionName, filters } = this.state;
 
         let content, havePagination = false;
