@@ -20,6 +20,6 @@ if(el){
 el = document.getElementById("team-create");
 if(el){
     render(<div className="main-content">
-        <TeamFormulaire type="create" element={JSON.parse(el.dataset.donnees)} />
+        <TeamFormulaire type="create" />
     </div>, el)
 }

@@ -5,6 +5,7 @@ import Routing          from '@publicFolder/bundles/fosjsrouting/js/router.min.j
 import { Button }       from "@dashboardComponents/Tools/Button";
 
 import { Form }         from "@dashboardPages/components/User/UserForm";
+import {FormLayout} from "@dashboardComponents/Layout/Elements";
 
 const URL_UPDATE_GROUP  = "api_users_update";
 
@@ -26,16 +27,5 @@ export function UserFormulaire ({ type, element })
         messageSuccess={msg}
     />
 
-    return <>
-        <div className="toolbar">
-            <div className="item">
-                <Button element="a" outline={true} icon="left-arrow" type="primary" onClick={Routing.generate('user_profil')}>Retour à mon profil</Button>
-            </div>
-        </div>
-
-        <div className="form">
-            <h2>{title}</h2>
-            {form}
-        </div>
-    </>
+    return <FormLayout url={Routing.generate('user_profil')} form={form} text="Retour à mon profil">{title}</FormLayout>
 }
