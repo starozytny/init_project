@@ -23,6 +23,9 @@
             </div>
 
             <div class="col-2">
+                <div id="team" data-donnees="{{ donnees }}">
+                    {% include "dashboard/layout/components/spinner.html.twig" %}
+                </div>
                 <div class="profil-card">
                     <a href="{{ path('user_team_add') }}" class="btn btn-primary">Ajouter un membre</a>
                 </div>

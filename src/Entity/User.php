@@ -119,6 +119,7 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
 
     /**
      * @ORM\OneToMany(targetEntity=FoWorker::class, mappedBy="user")
+     * @Groups({"admin:read"})
      */
     private $foWorkers;
 

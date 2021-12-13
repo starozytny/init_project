@@ -7,6 +7,7 @@ import React from "react";
 import { render } from "react-dom";
 import { UserFormulaire } from "@userComponents/Profil/UserForm";
 import { TeamFormulaire } from "@userComponents/Profil/TeamForm";
+import { Team }           from "@userComponents/Profil/Team";
 
 Routing.setRoutingData(routes);
 
@@ -23,3 +24,9 @@ if(el){
         <TeamFormulaire type="create" />
     </div>, el)
 }
+
+el = document.getElementById("team");
+if(el){
+    render(<Team {...el.dataset}/>, el)
+}
+

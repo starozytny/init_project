@@ -24,13 +24,15 @@ class UserController extends AbstractController
     /**
      * @Route("/profil", options={"expose"=true}, name="profil")
      */
-    public function profil(): Response
+    public function profil(SerializerInterface $serializer): Response
     {
         /** @var User $obj */
         $obj = $this->getUser();
+        $data = $serializer->serialize($obj->getFoWorkers(), 'json', ['groups' => User::ADMIN_READ]);
 
         return $this->render('user/pages/profil/index.html.twig',  [
-            'obj' => $obj
+            'obj' => $obj,
+            'donnees' => $data
         ]);
     }
 

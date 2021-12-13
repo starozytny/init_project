@@ -6,6 +6,7 @@ use App\Entity\DataEntity;
 use App\Entity\User;
 use App\Repository\Formation\FoWorkerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=FoWorkerRepository::class)
@@ -16,6 +17,7 @@ class FoWorker extends DataEntity
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $id;
 
