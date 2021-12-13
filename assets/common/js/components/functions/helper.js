@@ -1,5 +1,11 @@
 const axios = require("axios");
 
+function addBic(lines, data)
+{
+    lines.push({"code": data[2], "bic": data[1]});
+    return lines;
+}
+
 function addZipcode(lines, data)
 {
     lines.push({"cp": data[2], "city": data[1]});
@@ -17,6 +23,8 @@ function processData(allText, type)
 
         if(type === "zipcode"){
             lines = addZipcode(lines, data)
+        }else if(type === "bic"){
+            lines = addBic(lines, data)
         }
     }
 
