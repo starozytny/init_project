@@ -51,6 +51,7 @@ export class Layout extends Component {
             currentData: null,
             element: null,
             filters: [],
+            classes: props.classes ? props.classes : "main-content",
             sorter: props.sorter ? props.sorter : null,
             perPage: props.perPage,
             sessionName: props.sessionName,
@@ -240,7 +241,7 @@ export class Layout extends Component {
         }
 
         return <>
-            <Page ref={this.page} haveLoadPageError={loadPageError} sessionName={sessionName} perPage={perPage}
+            <Page ref={this.page} classes={classes} haveLoadPageError={loadPageError} sessionName={sessionName} perPage={perPage}
                   havePagination={havePagination} taille={data && data.length} data={data} onUpdate={this.handleUpdateData}
                   onChangeCurrentPage={onChangeCurrentPage}
             >
