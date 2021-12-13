@@ -80,4 +80,25 @@ class DataEntity
         date_default_timezone_set('Europe/Paris');
         return $date != null ? date_format($date, 'F d, Y H:i:s') : null;
     }
+
+    /**
+     * encrypt or decrypt iban or bic
+     *
+     * @param $action
+     * @param $bankAccount
+     * @return false|string|void
+     */
+    function cryptBank($action, $bankAccount)
+    {
+        $method = 'aes-256-cbc';
+        $passBank = "shanboBrume89*ù^@rt.569!4*+(=)";
+        $passBank = substr(hash('sha256', $passBank, true), 0, 32);
+        $iv = chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0);
+
+        if ($action == 'encrypt') {
+            return base64_encode(openssl_encrypt($bankAccount, $method, $passBank, OPENSSL_RAW_DATA, $iv));
+        } elseif ($action == 'decrypt') {
+            return openssl_decrypt(base64_decode($bankAccount), $method, $passBank, OPENSSL_RAW_DATA, $iv);
+        }
+    }
 }
