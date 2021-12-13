@@ -10,11 +10,14 @@ import { Input }            from "@dashboardComponents/Tools/Fields";
 import Formulaire           from "@dashboardComponents/functions/Formulaire";
 import Validateur           from "@commonComponents/functions/validateur";
 import Sanitaze             from "@commonComponents/functions/sanitaze";
+import Helper from "@commonComponents/functions/helper";
 
 const URL_CREATE_ELEMENT     = "api_banks_create";
 const URL_UPDATE_GROUP       = "api_banks_update";
 const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
+
+let arrayBicSave = [];
 
 export function BankFormulaire ({ type, element })
 {
@@ -60,6 +63,7 @@ class Form extends Component {
             iban: props.iban,
             bic: props.bic,
             errors: [],
+            arrayBic: [],
             success: false
         }
 
@@ -70,14 +74,20 @@ class Form extends Component {
     componentDidMount() {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+        Helper.getBicCodes(this);
     }
 
     handleChange = (e) => {
+        const { arrayBic } = this.state;
+
         let name = e.currentTarget.name;
         let value = e.currentTarget.value;
 
         if(name === "iban"){
-            value = Sanitaze.toFormatIban(value)
+            value = Sanitaze.toFormatIban(value);
+
+            Helper.setBicFromIban(this, value, arrayBic ? arrayBic : arrayBicSave)
         }
 
         this.setState({[name]: value.toUpperCase()})
