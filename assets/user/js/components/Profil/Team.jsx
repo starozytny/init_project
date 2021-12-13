@@ -19,7 +19,8 @@ export class Team extends Component {
             sorter: SORTER,
             pathDeleteElement: URL_DELETE_ELEMENT,
             msgDeleteElement: MSG_DELETE_ELEMENT,
-            sessionName: "user.team.pagination"
+            sessionName: "user.team.pagination",
+            classes: ""
         }
 
         this.layout = React.createRef();
