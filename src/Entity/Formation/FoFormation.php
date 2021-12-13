@@ -113,10 +113,16 @@ class FoFormation extends DataEntity
      */
     private $sessions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=FoRegistration::class, mappedBy="formation")
+     */
+    private $registrations;
+
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
         $this->sessions = new ArrayCollection();
+        $this->registrations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -328,6 +334,36 @@ class FoFormation extends DataEntity
             // set the owning side to null (unless already changed)
             if ($session->getFormation() === $this) {
                 $session->setFormation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FoRegistration[]
+     */
+    public function getRegistrations(): Collection
+    {
+        return $this->registrations;
+    }
+
+    public function addRegistration(FoRegistration $registration): self
+    {
+        if (!$this->registrations->contains($registration)) {
+            $this->registrations[] = $registration;
+            $registration->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRegistration(FoRegistration $registration): self
+    {
+        if ($this->registrations->removeElement($registration)) {
+            // set the owning side to null (unless already changed)
+            if ($registration->getFormation() === $this) {
+                $registration->setFormation(null);
             }
         }
 

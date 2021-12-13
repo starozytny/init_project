@@ -5,7 +5,9 @@ namespace App\Service\Data;
 
 
 use App\Entity\Formation\FoFormation;
+use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoSession;
+use App\Entity\User;
 use App\Service\SanitizeData;
 
 class DataFormation extends DataConstructor

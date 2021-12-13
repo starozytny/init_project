@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoWorker;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -123,6 +124,11 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
     private $foWorkers;
 
     /**
+     * @ORM\OneToMany(targetEntity=FoRegistration::class, mappedBy="user")
+     */
+    private $foRegistrations;
+
+    /**
      * @throws Exception
      */
     public function __construct()
@@ -131,6 +137,7 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
         $this->token = $this->initToken();
         $this->notifications = new ArrayCollection();
         $this->foWorkers = new ArrayCollection();
+        $this->foRegistrations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -458,6 +465,36 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
             // set the owning side to null (unless already changed)
             if ($foWorker->getUser() === $this) {
                 $foWorker->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FoRegistration[]
+     */
+    public function getFoRegistrations(): Collection
+    {
+        return $this->foRegistrations;
+    }
+
+    public function addFoRegistration(FoRegistration $foRegistration): self
+    {
+        if (!$this->foRegistrations->contains($foRegistration)) {
+            $this->foRegistrations[] = $foRegistration;
+            $foRegistration->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFoRegistration(FoRegistration $foRegistration): self
+    {
+        if ($this->foRegistrations->removeElement($foRegistration)) {
+            // set the owning side to null (unless already changed)
+            if ($foRegistration->getUser() === $this) {
+                $foRegistration->setUser(null);
             }
         }
 
