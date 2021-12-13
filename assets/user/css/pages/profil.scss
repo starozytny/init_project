@@ -26,6 +26,13 @@
 
 #profil-banks{
   margin-top: 24px;
+  
+  .role{
+    [class^="icon-"]{
+      cursor: pointer;
+      margin-left: 6px;
+    }
+  }
 }
 
 //                      __   _____ __    ___    __

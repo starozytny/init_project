@@ -42,6 +42,7 @@ export class Banks extends Component {
 
     handleSwitchMain = (element) => {
         this.layout.current.handleSwitchData(this, element.isMain, Routing.generate(URL_SWITCH_PUBLISHED, {'id': element.id}), MSG_SWITCH_PUBLISHED, " secondaire", " principale");
+        location.reload();
     }
 
     handleContentList = (currentData, changeContext) => {

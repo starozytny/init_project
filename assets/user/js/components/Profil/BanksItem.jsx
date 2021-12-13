@@ -18,9 +18,11 @@ export class BanksItem extends Component {
                             <div className="name">
                                 <span>{Sanitaze.toFormatIbanHidden(elem.iban)}</span>
                             </div>
-                            <div className="role" onClick={() => onSwitchMain(elem)}>
+                            <div className="role">
                                 <span>{elem.isMain ? "Principal" : "Secondaire" }</span>
+                                {!elem.isMain && <span className="icon-star-2" onClick={() => onSwitchMain(elem)}/>}
                             </div>
+
                         </div>
                         <div className="col-2">
                             <div className="sub">{elem.titulaire}</div>

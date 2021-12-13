@@ -155,15 +155,18 @@ class BankController extends AbstractController
      * @param ApiResponse $apiResponse
      * @return JsonResponse
      */
-    public function switchArchived(PaBank $obj, ApiResponse $apiResponse): JsonResponse
+    public function switchMain(PaBank $obj, ApiResponse $apiResponse): JsonResponse
     {
         $em = $this->doctrine->getManager();
 
-        if(count($obj->getUser()->getPaBanks()) > 1){
-            $obj->setIsMain(!$obj->getIsMain());
-        }else{
-            $obj->setIsMain(true);
+        $banks = $obj->getUser()->getPaBanks();
+        if(count($banks) > 1){
+            foreach($banks as $bank){
+                $bank->setIsMain(false);
+            }
         }
+
+        $obj->setIsMain(true);
 
         $em->flush();
 
