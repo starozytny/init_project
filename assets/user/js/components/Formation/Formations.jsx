@@ -5,7 +5,7 @@ import Sort              from "@commonComponents/functions/sort";
 
 import { FormationsList }       from "./FormationsList";
 
-const SORTER = Sort.compareCreatedAt;
+const SORTER = Sort.compareName;
 
 export class Formations extends Component {
     constructor(props) {
