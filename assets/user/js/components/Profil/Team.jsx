@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@commonComponents/functions/sort";
 
@@ -7,6 +9,8 @@ import { TeamList }      from "./TeamList";
 
 const URL_DELETE_ELEMENT    = 'api_team_delete';
 const MSG_DELETE_ELEMENT    = 'Supprimer ce membre ?';
+const URL_SWITCH_PUBLISHED  = 'api_team_archived';
+const MSG_SWITCH_PUBLISHED  = 'Membre';
 const SORTER = Sort.compareLastname;
 
 export class Team extends Component {
@@ -27,7 +31,7 @@ export class Team extends Component {
 
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
-        this.handleSwitchArchive = this.handleSwitchArchive.bind(this);
+        this.handleSwitchArchived = this.handleSwitchArchived.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
     }
@@ -36,10 +40,14 @@ export class Team extends Component {
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
+    handleSwitchArchived = (element) => {
+        this.layout.current.handleSwitchArchived(this, element, Routing.generate(URL_SWITCH_PUBLISHED, {'id': element.id}), MSG_SWITCH_PUBLISHED);
+    }
+
     handleContentList = (currentData, changeContext) => {
         return <TeamList onChangeContext={changeContext}
                          onDelete={this.layout.current.handleDelete}
-                         onSwitchArchive={this.handleSwitchArchive}
+                         onSwitchArchived={this.handleSwitchArchived}
                          data={currentData} />
     }
 

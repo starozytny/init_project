@@ -48,7 +48,7 @@ class FoWorker extends DataEntity
      * @ORM\Column(type="boolean")
      * @Groups({"user:read"})
      */
-    private $isArchive = false;
+    private $isArchived = false;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="foWorkers")
@@ -123,14 +123,14 @@ class FoWorker extends DataEntity
         return $this;
     }
 
-    public function getIsArchive(): ?bool
+    public function getIsArchived(): ?bool
     {
-        return $this->isArchive;
+        return $this->isArchived;
     }
 
-    public function setIsArchive(bool $isArchive): self
+    public function setIsArchived(bool $isArchived): self
     {
-        $this->isArchive = $isArchive;
+        $this->isArchived = $isArchived;
 
         return $this;
     }
