@@ -6,10 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/espace-membre", name=""user_")
+ */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/espace-membre", options={"expose"=true}, name="user_homepage")
+     * @Route("/", options={"expose"=true}, name=homepage")
      */
     public function index(): Response
     {
