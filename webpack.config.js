@@ -68,6 +68,7 @@ Encore
     .addEntry('dashboard_formations', './assets/dashboard/js/pages/formations.js')
 
     .addEntry('user_profil', './assets/user/js/pages/profil.js')
+    .addEntry('user_formations', './assets/user/js/pages/formations.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     //.enableStimulusBridge('./assets/controllers.json')

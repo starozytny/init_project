@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Formation\FoFormation;
 use App\Entity\Formation\FoWorker;
 use App\Entity\Paiement\PaBank;
 use App\Entity\User;
@@ -22,6 +23,15 @@ class UserController extends AbstractController
     {
         $this->doctrine = $doctrine;
     }
+
+    private function getAllData($classe, SerializerInterface $serializer, $groups = User::USER_READ): string
+    {
+        $em = $this->doctrine->getManager();
+        $objs = $em->getRepository($classe)->findAll();
+
+        return $serializer->serialize($objs, 'json', ['groups' => $groups]);
+    }
+
     /**
      * @Route("/", options={"expose"=true}, name="homepage")
      */
@@ -96,4 +106,17 @@ class UserController extends AbstractController
         $obj = $serializer->serialize($obj, 'json', ['groups' => User::USER_READ]);
         return $this->render('user/pages/profil/bank/update.html.twig', ['donnees' => $obj]);
     }
+
+    /**
+     * @Route("/formations", name="formations")
+     */
+    public function formations(SerializerInterface $serializer): Response
+    {
+        $objs = $this->getAllData(FoFormation::class, $serializer, User::ADMIN_READ);
+
+        return $this->render('user/pages/formations/index.html.twig', [
+            'donnees' => $objs
+        ]);
+    }
+
 }
