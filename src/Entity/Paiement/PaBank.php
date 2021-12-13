@@ -48,11 +48,6 @@ class PaBank extends DataEntity
     private $isMain = false;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $ip;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -114,18 +109,6 @@ class PaBank extends DataEntity
         $bic = trim($bic);
         $bic = preg_replace('/\s+/', '', $bic);
         $this->bic = $this->cryptBank('encrypt', $bic);
-
-        return $this;
-    }
-
-    public function getIp(): ?string
-    {
-        return $this->ip;
-    }
-
-    public function setIp(?string $ip): self
-    {
-        $this->ip = $ip;
 
         return $this;
     }
