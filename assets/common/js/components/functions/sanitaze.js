@@ -75,6 +75,17 @@ function toFormatIban(elem)
     }
 }
 
+function toFormatIbanHidden(elem) {
+    elem = elem.replaceAll(' ', '');
+
+    let a = elem.substring(0,4);
+    let b = elem.substring(4,8);
+    let c = elem.substring(8,12);
+    let d = elem.substring(12,16);
+    let g = elem.substring(24,27);
+
+    return a + ' ' + b + ' ' + c + ' ' + d + ' XXXX XXXX ' + g;
+}
 
 module.exports = {
     sanitizeString,
@@ -83,5 +94,6 @@ module.exports = {
     toFormatDateTime,
     toFormatPhone,
     toFormatCurrency,
-    toFormatIban
+    toFormatIban,
+    toFormatIbanHidden
 }
