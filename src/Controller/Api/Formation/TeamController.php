@@ -133,7 +133,7 @@ class TeamController extends AbstractController
         $obj->setIsArchived(!$obj->getIsArchived());
         $em->flush();
 
-        return $apiResponse->apiJsonResponseSuccessful("Mise à jour réussie !");
+        return  $apiResponse->apiJsonResponse($obj, User::USER_READ);
     }
 
     /**
