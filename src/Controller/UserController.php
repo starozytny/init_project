@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Formation\FoWorker;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,10 +49,19 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/equipe/ajouter", name="team_add")
+     * @Route("/equipe/ajouter", name="team_create")
      */
-    public function team(): Response
+    public function teamCreate(): Response
     {
         return $this->render('user/pages/profil/team/create.html.twig');
+    }
+
+    /**
+     * @Route("/equipe/modifier/{id}", options={"expose"=true}, name="team_update")
+     */
+    public function teamUpdate(FoWorker $worker, SerializerInterface $serializer): Response
+    {
+        $data = $serializer->serialize($worker, 'json', ['groups' => User::USER_READ]);
+        return $this->render('user/pages/profil/team/update.html.twig',  ['elem' => $worker, 'donnees' => $data]);
     }
 }

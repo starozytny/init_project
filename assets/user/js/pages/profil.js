@@ -18,6 +18,11 @@ if(el){
     </div>, el)
 }
 
+el = document.getElementById("team");
+if(el){
+    render(<Team {...el.dataset}/>, el)
+}
+
 el = document.getElementById("team-create");
 if(el){
     render(<div className="main-content">
@@ -25,8 +30,9 @@ if(el){
     </div>, el)
 }
 
-el = document.getElementById("team");
+el = document.getElementById("team-update");
 if(el){
-    render(<Team {...el.dataset}/>, el)
+    render(<div className="main-content">
+        <TeamFormulaire type="update" element={JSON.parse(el.dataset.donnees)} />
+    </div>, el)
 }
-
