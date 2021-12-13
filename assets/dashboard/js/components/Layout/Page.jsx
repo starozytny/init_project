@@ -207,7 +207,7 @@ export class Layout extends Component {
         Formulaire.switchPublished(self, element, url, nameEntity);
     }
 
-    handleSwitchArchived = (self, elementValue, url, nameEntity, txtOff=" archivé", txtOn=" en ligne") => {
+    handleSwitchArchived = (self, elementValue, url, nameEntity, txtOff=" en ligne", txtOn=" archivé") => {
         Formulaire.switchFunction(self, elementValue, url, nameEntity, txtOff, txtOn);
     }
 
