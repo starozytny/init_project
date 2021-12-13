@@ -70,7 +70,7 @@ export class Layout extends Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
         this.handleSwitchPublished = this.handleSwitchPublished.bind(this);
-        this.handleSwitchArchived = this.handleSwitchArchived.bind(this);
+        this.handleSwitchData = this.handleSwitchData.bind(this);
         this.handleUpdatePerPage = this.handleUpdatePerPage.bind(this);
         this.handleGetPaginationClick = this.handleGetPaginationClick.bind(this);
     }
@@ -207,7 +207,7 @@ export class Layout extends Component {
         Formulaire.switchPublished(self, element, url, nameEntity);
     }
 
-    handleSwitchArchived = (self, elementValue, url, nameEntity, txtOff=" en ligne", txtOn=" archivé") => {
+    handleSwitchData = (self, elementValue, url, nameEntity, txtOff=" en ligne", txtOn=" archivé") => {
         Formulaire.switchFunction(self, elementValue, url, nameEntity, txtOff, txtOn);
     }
 
