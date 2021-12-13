@@ -53,7 +53,7 @@ class TeamController extends AbstractController
         $em->persist($obj);
         $em->flush();
 
-        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+        return $apiResponse->apiJsonResponse($obj, User::USER_READ);
     }
 
     /**

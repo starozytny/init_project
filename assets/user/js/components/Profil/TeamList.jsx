@@ -16,8 +16,8 @@ export class TeamList extends Component {
                             <div className="item-content">
                                 <div className="item-body">
                                     <div className="infos infos-col-3">
-                                        <div className="col-1">Contact</div>
-                                        <div className="col-2">Quand ?</div>
+                                        <div className="col-1">Equipe</div>
+                                        <div className="col-2">Type</div>
                                         <div className="col-3 actions">Actions</div>
                                     </div>
                                 </div>

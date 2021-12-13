@@ -28,7 +28,7 @@ class UserController extends AbstractController
     {
         /** @var User $obj */
         $obj = $this->getUser();
-        $data = $serializer->serialize($obj->getFoWorkers(), 'json', ['groups' => User::ADMIN_READ]);
+        $data = $serializer->serialize($obj->getFoWorkers(), 'json', ['groups' => User::USER_READ]);
 
         return $this->render('user/pages/profil/index.html.twig',  [
             'obj' => $obj,

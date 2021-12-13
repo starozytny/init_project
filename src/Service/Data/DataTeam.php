@@ -15,8 +15,8 @@ class DataTeam extends DataConstructor
     public function setData(FoWorker $obj, $data, User $user): FoWorker
     {
         return ($obj)
-            ->setFirstname(trim($data->firstname))
-            ->setLastname(trim($data->lastname))
+            ->setFirstname(ucfirst(trim($data->firstname)))
+            ->setLastname(mb_strtoupper(trim($data->lastname)))
             ->setType((int) $data->type)
             ->setUser($user)
         ;

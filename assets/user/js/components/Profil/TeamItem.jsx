@@ -12,11 +12,11 @@ export class TeamItem extends Component {
                     <div className="infos infos-col-3">
                         <div className="col-1">
                             <div className="name">
-                                <span>{elem.id}</span>
+                                <span>{elem.lastname} {elem.firstname}</span>
                             </div>
                         </div>
                         <div className="col-2">
-                            <div className="sub" />
+                            <div className="sub"><div className="role">{elem.typeString}</div></div>
                         </div>
                         <div className="col-3 actions">
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>

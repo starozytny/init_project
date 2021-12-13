@@ -5,7 +5,7 @@ import Sort              from "@commonComponents/functions/sort";
 
 import { TeamList }      from "./TeamList";
 
-const URL_DELETE_ELEMENT    = 'api_contact_delete';
+const URL_DELETE_ELEMENT    = 'api_team_delete';
 const MSG_DELETE_ELEMENT    = 'Supprimer ce membre ?';
 const SORTER = Sort.compareLastname;
 

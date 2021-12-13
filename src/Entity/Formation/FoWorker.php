@@ -13,31 +13,40 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class FoWorker extends DataEntity
 {
+    const TYPE_SALARIE = 0;
+    const TYPE_NO_SALARIE = 1;
+    const TYPE_AGENT_CO = 2;
+    const TYPE_RESPONSABLE = 3;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"admin:read"})
+     * @Groups({"user:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user:read"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user:read"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"user:read"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"user:read"})
      */
     private $isArchive = false;
 
@@ -89,6 +98,17 @@ class FoWorker extends DataEntity
         $this->lastname = $lastname;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     * @Groups({"user:read"})
+     */
+    public function getTypeString(): string
+    {
+        $types = ['Salarié', 'Non salarié', 'Agent commercial', 'Responsable'];
+
+        return $types[$this->type];
     }
 
     public function getType(): ?int
