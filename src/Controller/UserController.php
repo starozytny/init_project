@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Formation\FoWorker;
 use App\Entity\User;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,6 +15,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class UserController extends AbstractController
 {
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
     /**
      * @Route("/", options={"expose"=true}, name="homepage")
      */
@@ -27,9 +34,11 @@ class UserController extends AbstractController
      */
     public function profil(SerializerInterface $serializer): Response
     {
+        $em = $this->doctrine->getManager();
         /** @var User $obj */
         $obj = $this->getUser();
-        $data = $serializer->serialize($obj->getFoWorkers(), 'json', ['groups' => User::USER_READ]);
+        $data = $em->getRepository(FoWorker::class)->findBy(['user' => $obj, 'isArchived' => false]);
+        $data = $serializer->serialize($data, 'json', ['groups' => User::USER_READ]);
 
         return $this->render('user/pages/profil/index.html.twig',  [
             'obj' => $obj,
