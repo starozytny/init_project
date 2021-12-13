@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoWorker;
+use App\Entity\Paiement\PaBank;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -129,6 +130,11 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
     private $foRegistrations;
 
     /**
+     * @ORM\OneToMany(targetEntity=PaBank::class, mappedBy="user")
+     */
+    private $paBanks;
+
+    /**
      * @throws Exception
      */
     public function __construct()
@@ -138,6 +144,7 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
         $this->notifications = new ArrayCollection();
         $this->foWorkers = new ArrayCollection();
         $this->foRegistrations = new ArrayCollection();
+        $this->paBanks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -495,6 +502,37 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
             // set the owning side to null (unless already changed)
             if ($foRegistration->getUser() === $this) {
                 $foRegistration->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|PaBank[]
+     */
+    public function getPaBanks(): Collection
+    {
+        return $this->paBanks;
+    }
+
+    public function addPaBank(PaBank $paBank): self
+    {
+        if (!$this->paBanks->contains($paBank)) {
+            $this->paBanks[] = $paBank;
+            $paBank->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaBank(PaBank $paBank): self
+    {
+        if ($this->paBanks->removeElement($paBank)) {
+            // set the owning side to null (unless already changed)
+            if ($paBank->getUser() === $this) {
+                $paBank->setUser(null);
             }
         }
 

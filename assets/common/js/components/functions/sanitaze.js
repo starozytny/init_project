@@ -65,6 +65,28 @@ function toFormatCurrency(number)
     return  num.replaceAll('.', ' ');
 }
 
+function toFormatIban(elem)
+{
+    if(elem !== "" && elem !== undefined && elem !== null){
+        elem = elem.replaceAll(" ", "");
+        return elem.toString().replace(/[0-9A-Za-z]{4}(?=.)/g, '$& ');
+    }else{
+        return "";
+    }
+}
+
+function toFormatIbanHidden(elem) {
+    elem = elem.replaceAll(' ', '');
+
+    let a = elem.substring(0,4);
+    let b = elem.substring(4,8);
+    let c = elem.substring(8,12);
+    let d = elem.substring(12,16);
+    let g = elem.substring(24,27);
+
+    return a + ' ' + b + ' ' + c + ' ' + d + ' XXXX XXXX ' + g;
+}
+
 module.exports = {
     sanitizeString,
     toFormatTime,
@@ -72,4 +94,6 @@ module.exports = {
     toFormatDateTime,
     toFormatPhone,
     toFormatCurrency,
+    toFormatIban,
+    toFormatIbanHidden
 }

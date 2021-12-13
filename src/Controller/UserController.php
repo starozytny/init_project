@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Formation\FoWorker;
+use App\Entity\Paiement\PaBank;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,12 +38,17 @@ class UserController extends AbstractController
         $em = $this->doctrine->getManager();
         /** @var User $obj */
         $obj = $this->getUser();
-        $data = $em->getRepository(FoWorker::class)->findBy(['user' => $obj, 'isArchived' => false]);
-        $data = $serializer->serialize($data, 'json', ['groups' => User::USER_READ]);
+        $teams = $em->getRepository(FoWorker::class)->findBy(['user' => $obj, 'isArchived' => false]);
+        $teams = $serializer->serialize($teams, 'json', ['groups' => User::USER_READ]);
+
+        $banks = $obj->getPaBanks();
+
+        $banks = $serializer->serialize($banks, 'json', ['groups' => User::USER_READ]);
 
         return $this->render('user/pages/profil/index.html.twig',  [
             'obj' => $obj,
-            'donnees' => $data
+            'teams' => $teams,
+            'banks' => $banks
         ]);
     }
 
@@ -71,6 +77,23 @@ class UserController extends AbstractController
     public function teamUpdate(FoWorker $worker, SerializerInterface $serializer): Response
     {
         $data = $serializer->serialize($worker, 'json', ['groups' => User::USER_READ]);
-        return $this->render('user/pages/profil/team/update.html.twig',  ['elem' => $worker, 'donnees' => $data]);
+        return $this->render('user/pages/profil/team/update.html.twig', ['elem' => $worker, 'donnees' => $data]);
+    }
+
+    /**
+     * @Route("/ajouter-banque", options={"expose"=true}, name="bank_create")
+     */
+    public function bankCreate(): Response
+    {
+        return $this->render('user/pages/profil/bank/create.html.twig');
+    }
+
+    /**
+     * @Route("/modifier-banque/{id}", options={"expose"=true}, name="bank_update")
+     */
+    public function bankUpdate(PaBank $obj, SerializerInterface $serializer): Response
+    {
+        $obj = $serializer->serialize($obj, 'json', ['groups' => User::USER_READ]);
+        return $this->render('user/pages/profil/bank/update.html.twig', ['donnees' => $obj]);
     }
 }

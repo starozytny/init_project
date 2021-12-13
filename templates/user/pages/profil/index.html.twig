@@ -23,9 +23,13 @@
             </div>
 
             <div class="col-2">
-                <div id="team" data-donnees="{{ donnees }}">
+                <div id="profil-banks" data-donnees="{{ banks }}">
                     {% include "dashboard/layout/components/spinner.html.twig" %}
                 </div>
+                <div id="profil-teams" data-donnees="{{ teams }}">
+                    {% include "dashboard/layout/components/spinner.html.twig" %}
+                </div>
+
             </div>
         </div>
     </div>
