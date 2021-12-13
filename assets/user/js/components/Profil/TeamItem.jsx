@@ -6,7 +6,7 @@ import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
 
 export class TeamItem extends Component {
     render () {
-        const { elem, onDelete } = this.props
+        const { elem, onDelete, onSwitchArchive } = this.props
 
         return <div className="item">
             <div className="item-content">
@@ -21,6 +21,7 @@ export class TeamItem extends Component {
                             <div className="sub"><div className="role">{elem.typeString}</div></div>
                         </div>
                         <div className="col-3 actions">
+                            {!elem.isArchive && <ButtonIcon icon="file" onClick={() => onSwitchArchive(elem)}>Archiver ?</ButtonIcon>}
                             <ButtonIcon icon="pencil" element="a" onClick={Routing.generate('user_team_update', {'id': elem.id})}>Modifier</ButtonIcon>
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
                         </div>

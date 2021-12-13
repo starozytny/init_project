@@ -111,6 +111,32 @@ class TeamController extends AbstractController
     }
 
     /**
+     * Switch archive a worker
+     *
+     * @Route("/archive/{id}", name="archive", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Return message successful",
+     * )
+     *
+     * @OA\Tag(name="Team")
+     *
+     * @param FoWorker $obj
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     */
+    public function switchArchive(FoWorker $obj, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        $obj->setIsArchive(!$obj->getIsArchive());
+        $em->flush();
+
+        return $apiResponse->apiJsonResponseSuccessful("Mise à jour réussie !");
+    }
+
+    /**
      * Delete a worker
      *
      * @Route("/{id}", name="delete", options={"expose"=true}, methods={"DELETE"})

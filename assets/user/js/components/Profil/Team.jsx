@@ -27,6 +27,7 @@ export class Team extends Component {
 
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
+        this.handleSwitchArchive = this.handleSwitchArchive.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
     }
@@ -38,6 +39,7 @@ export class Team extends Component {
     handleContentList = (currentData, changeContext) => {
         return <TeamList onChangeContext={changeContext}
                          onDelete={this.layout.current.handleDelete}
+                         onSwitchArchive={this.handleSwitchArchive}
                          data={currentData} />
     }
 
