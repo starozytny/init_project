@@ -13,6 +13,24 @@ const URL_SWITCH_PUBLISHED  = 'api_team_archived';
 const MSG_SWITCH_PUBLISHED  = 'Membre';
 const SORTER = Sort.compareLastname;
 
+function filterFunction(dataImmuable, filters){
+    let newData = [];
+    if(filters.length === 0) {
+        newData = dataImmuable
+    }else{
+        dataImmuable.forEach(el => {
+            filters.forEach(filter => {
+                if(filter === el.type){
+                    newData.filter(elem => elem.id !== el.id)
+                    newData.push(el);
+                }
+            })
+        })
+    }
+
+    return newData;
+}
+
 export class Team extends Component {
     constructor(props) {
         super(props);
@@ -32,6 +50,8 @@ export class Team extends Component {
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleSwitchArchived = this.handleSwitchArchived.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+        this.handleGetFilters = this.handleGetFilters.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
     }
@@ -40,14 +60,21 @@ export class Team extends Component {
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
+    handleGetFilters = (filters) => { this.layout.current.handleGetFilters(filters, filterFunction); }
+
+    handleSearch = (search) => { this.layout.current.handleSearch(search, "team", true, filterFunction); }
+
     handleSwitchArchived = (element) => {
         this.layout.current.handleSwitchArchived(this, element.isArchived, Routing.generate(URL_SWITCH_PUBLISHED, {'id': element.id}), MSG_SWITCH_PUBLISHED);
     }
 
-    handleContentList = (currentData, changeContext) => {
+    handleContentList = (currentData, changeContext, getFilters, filters) => {
         return <TeamList onChangeContext={changeContext}
                          onDelete={this.layout.current.handleDelete}
                          onSwitchArchived={this.handleSwitchArchived}
+                         onSearch={this.handleSearch}
+                         filters={filters}
+                         onGetFilters={this.handleGetFilters}
                          data={currentData} />
     }
 

@@ -24,6 +24,10 @@
   text-align: center;
 }
 
+#team{
+  margin-top: 24px;
+}
+
 //                      __   _____ __    ___    __
 //                     | _| |___  / /_  ( _ )  |_ |
 //    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
@@ -38,6 +42,14 @@
     & > *{
       width: calc(50% - 12px);
       margin-right: 12px;
+    }
+  }
+
+  #team{
+    margin-top: 0;
+
+    .toolbar{
+      flex-wrap: nowrap;
     }
   }
 }
@@ -64,5 +76,13 @@
   }
   .profil-card{
     padding: 24px;
+  }
+
+  #team{
+    .toolbar{
+      .filter-search{
+        width: calc(100% - 200px);
+      }
+    }
   }
 }

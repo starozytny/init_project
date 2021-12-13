@@ -49,7 +49,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/equipe/ajouter", name="team_create")
+     * @Route("/equipe/ajouter", options={"expose"=true}, name="team_create")
      */
     public function teamCreate(): Response
     {
