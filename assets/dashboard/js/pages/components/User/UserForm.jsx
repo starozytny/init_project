@@ -24,7 +24,7 @@ export function UserFormulaire ({ type, onChangeContext, onUpdateList, element }
     let url = Routing.generate(URL_CREATE_ELEMENT);
     let msg = "Félicitation ! Vous avez ajouté un nouveau utilisateur !"
 
-    if(type === "update"){
+    if(type === "update" || type === "profil"){
         title = "Modifier " + element.username;
         url = Routing.generate(URL_UPDATE_GROUP, {'id': element.id});
         msg = "Félicitation ! La mise à jour s'est réalisée avec succès !";
@@ -47,7 +47,7 @@ export function UserFormulaire ({ type, onChangeContext, onUpdateList, element }
     return <FormLayout onChangeContext={onChangeContext} form={form}>{title}</FormLayout>
 }
 
-class Form extends Component {
+export class Form extends Component {
     constructor(props) {
         super(props);
 
@@ -73,14 +73,16 @@ class Form extends Component {
     componentDidMount() {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        document.getElementById("username").focus()
+        let username = document.getElementById("username");
+        if(username){ username.focus(); }
     }
 
     handleChange = (e) => {
+        const { roles } = this.state
+
         let name = e.currentTarget.name;
         let value = e.currentTarget.value;
 
-        const {roles} = this.state
         if(name === "roles"){
             value = Formulaire.updateValueCheckbox(e, roles, value);
         }
@@ -103,7 +105,7 @@ class Form extends Component {
             {type: "email", id: 'email',    value: email},
             {type: "array", id: 'roles',    value: roles}
         ];
-        if(context === "create"){
+        if(context === "create" || context === "profil"){
             if(password !== ""){
                 paramsToValidate = [...paramsToValidate,
                     ...[{type: "password", id: 'password', value: password, idCheck: 'passwordConfirm', valueCheck: passwordConfirm}]
@@ -111,7 +113,8 @@ class Form extends Component {
             }
         }
 
-        let avatar = this.inputAvatar.current.drop.current.files;
+        let inputAvatar = this.inputAvatar.current;
+        let avatar = inputAvatar ? inputAvatar.drop.current.files : [];
 
         // validate global
         let validate = Validateur.validateur(paramsToValidate)
@@ -132,7 +135,9 @@ class Form extends Component {
             axios({ method: "POST", url: url, data: formData, headers: {'Content-Type': 'multipart/form-data'} })
                 .then(function (response) {
                     let data = response.data;
-                    self.props.onUpdateList(data);
+                    if(self.props.onUpdateList){
+                        self.props.onUpdateList(data);
+                    }
                     self.setState({ success: messageSuccess, errors: [] });
                     if(context === "create"){
                         self.setState( {
@@ -173,8 +178,8 @@ class Form extends Component {
 
                 {success !== false && <Alert type="info">{success}</Alert>}
 
-                <div className="line line-2">
-                    <Input valeur={username} identifiant="username" errors={errors} onChange={this.handleChange} >Nom utilisateur</Input>
+                <div className={"line" + (context !== "profil" ? " line-2" : "")}>
+                    {context !== "profil" && <Input valeur={username} identifiant="username" errors={errors} onChange={this.handleChange}>Nom utilisateur</Input>}
                     <Input valeur={email} identifiant="email" errors={errors} onChange={this.handleChange} type="email" >Adresse e-mail</Input>
                 </div>
 
@@ -183,20 +188,20 @@ class Form extends Component {
                     <Input valeur={lastname} identifiant="lastname" errors={errors} onChange={this.handleChange} >Nom</Input>
                 </div>
 
-                <div className="line line-2">
+                {context !== "profil" && <div className="line line-2">
                     <Checkbox items={rolesItems} identifiant="roles" valeur={roles} errors={errors} onChange={this.handleChange}>Roles</Checkbox>
 
                     <Drop ref={this.inputAvatar} identifiant="avatar" file={avatar} folder="avatars" errors={errors} accept={"image/*"} maxFiles={1}
                           label="Téléverser un avatar" labelError="Seules les images sont acceptées.">Fichier</Drop>
-                </div>
+                </div>}
 
-                {context === "create" ? <>
+                {(context === "create" || context === "profil") ? <>
                     <Alert type="reverse">
                         Laisser le champs vide génére un mot de passe aléatoire. L'utilisateur pourra utilise la
                         fonction <u>Mot de passe oublié ?</u> pour créer son mot de passe.
                     </Alert>
                     <div className="line">
-                        {context === "create" && <div className="password-rules">
+                        <div className="password-rules">
                             <p>Règles de création de mot de passe :</p>
                             <ul>
                                 <li>Au moins 12 caractères</li>
@@ -205,7 +210,7 @@ class Form extends Component {
                                 <li>Au moins 1 chiffre</li>
                                 <li>Au moins 1 caractère spécial</li>
                             </ul>
-                        </div>}
+                        </div>
                     </div>
                     <div className="line line-2">
                         <Input type="password" valeur={password} identifiant="password" errors={errors} onChange={this.handleChange} >Mot de passe (facultatif)</Input>
