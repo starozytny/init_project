@@ -24,6 +24,10 @@
   text-align: center;
 }
 
+#profil-banks{
+  margin-top: 24px;
+}
+
 //                      __   _____ __    ___    __
 //                     | _| |___  / /_  ( _ )  |_ |
 //    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
@@ -39,6 +43,10 @@
       width: calc(50% - 12px);
       margin-right: 12px;
     }
+  }
+
+  #profil-banks{
+    margin-top: 0;
   }
 }
 

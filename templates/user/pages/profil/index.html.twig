@@ -23,10 +23,8 @@
             </div>
 
             <div class="col-2">
-                <div class="profil-card">
-                    <div class="profil-card-footer">
-                        <a href="{{ path('user_bank_create') }}" class="btn btn-primary">Ajouter une banque</a>
-                    </div>
+                <div id="profil-banks" data-donnees="{{ banks }}">
+                    {% include "dashboard/layout/components/spinner.html.twig" %}
                 </div>
             </div>
         </div>

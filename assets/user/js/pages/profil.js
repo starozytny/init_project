@@ -7,6 +7,7 @@ import React from "react";
 import { render } from "react-dom";
 import { UserFormulaire } from "@userComponents/Profil/UserForm";
 import { BankFormulaire } from "@userComponents/Profil/BankForm";
+import { Banks }          from "@userComponents/Profil/Banks";
 
 Routing.setRoutingData(routes);
 
@@ -16,6 +17,12 @@ if(el){
         <UserFormulaire type="profil" element={JSON.parse(el.dataset.donnees)} />
     </div>, el)
 }
+
+el = document.getElementById("profil-banks");
+if(el){
+    render(<Banks {...el.dataset} />, el)
+}
+
 
 el = document.getElementById("bank-create");
 if(el){
