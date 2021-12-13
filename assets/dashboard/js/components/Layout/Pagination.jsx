@@ -100,21 +100,25 @@ export class Pagination extends Component {
 }
 
 export function PaginationView ({ pageCount, currentPage, onClick }) {
-    return <ReactPaginate
-        previousLabel={<span className="icon-left-arrow" />}
-        nextLabel={<span className="icon-right-arrow" />}
-        breakLabel={'...'}
-        breakClassName={'break-me'}
-        pageCount={pageCount}
-        marginPagesDisplayed={1}
-        pageRangeDisplayed={3}
-        onPageChange={onClick}
-        containerClassName={'pagination'}
-        subContainerClassName={'pages pagination'}
-        activeClassName={'active'}
-        initialPage={parseInt(currentPage)}
-        forcePage={parseInt(currentPage)}
-    />
+    if(pageCount > 1){
+        return <ReactPaginate
+            previousLabel={<span className="icon-left-arrow" />}
+            nextLabel={<span className="icon-right-arrow" />}
+            breakLabel={'...'}
+            breakClassName={'break-me'}
+            pageCount={pageCount}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={3}
+            onPageChange={onClick}
+            containerClassName={'pagination'}
+            subContainerClassName={'pages pagination'}
+            activeClassName={'active'}
+            initialPage={parseInt(currentPage)}
+            forcePage={parseInt(currentPage)}
+        />
+    }else{
+        return null;
+    }
 }
 
 export class TopSorterPagination extends Component {
@@ -171,7 +175,6 @@ export class TopSorterPagination extends Component {
                 </div>}
             </div>
 
-
             <div className="actions-pagination">
                 {onClick && <div className="line line-2">
                     <Select noEmpty={true} items={selectItems} identifiant="perPage" valeur={perPage} errors={errors} onChange={this.handleChange}>Nombre de résultats par page</Select>
@@ -179,7 +182,6 @@ export class TopSorterPagination extends Component {
                         <PaginationView pageCount={pageCount} currentPage={currentPage} onClick={onClick}/>
                     </div>
                 </div>}
-
             </div>
         </div>
     }
