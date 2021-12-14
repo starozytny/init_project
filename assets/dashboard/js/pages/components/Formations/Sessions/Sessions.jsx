@@ -14,7 +14,7 @@ const MSG_DELETE_ELEMENT    = 'Supprimer cette session de formation ?';
 const MSG_DELETE_GROUP      = 'Aucune session sélectionnée.';
 const URL_SWITCH_PUBLISHED  = 'api_sessions_formation_published';
 const MSG_SWITCH_PUBLISHED  = 'Session';
-const SORTER = Sort.compareCreatedAt;
+const SORTER = Sort.compareCreatedAtInverse;
 
 export class Sessions extends Component {
     constructor(props) {

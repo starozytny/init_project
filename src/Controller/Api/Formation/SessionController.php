@@ -119,6 +119,37 @@ class SessionController extends AbstractController
     }
 
     /**
+     * Duplicate a session
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
+     * @Route("/duplicate/{id}", name="duplicate", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a message",
+     * )
+     *
+     * @OA\Tag(name="Formations")
+     *
+     * @param FoSession $session
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     */
+    public function duplicate(FoSession $session, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        $duplicate = clone $session;
+        $duplicate->setIsPublished(false);
+
+        $em->persist($duplicate);
+        $em->flush();
+
+        return $apiResponse->apiJsonResponseSuccessful("ok");
+    }
+
+    /**
      * Switch is published
      *
      * @Security("is_granted('ROLE_ADMIN')")
