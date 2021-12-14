@@ -57,25 +57,32 @@
                     Intitulé : <span class="text-primary">{{ formation.name }}</span>
                 </li>
                 <li>
-                    Nature de l’action au sens de l’article L.6313-1 du code du travail : <span class="text-primary">Formation professionnelle obligatoire</span>
+                    Nature de l’action au sens de l’article L.6313-1
+                    du code du travail : <span class="text-primary">Formation professionnelle obligatoire</span>
                 </li>
                 <li>
                     Dates de l’action de formation : <span class="text-primary">{{ session.start | date('d/m/Y') }} au {{ session.end | date('d/m/Y') }}</span>
                 </li>
                 <li>
-                    Durée et horaires de l’action de formation : <span class="text-primary">{{ session.durationByDay }} par jour</span> - ({{ session.durationTotal }}) au total de <span class="text-primary">{{ session.time }} {{( session.time and session.time2) ? " - " + session.time2 : ""}}</span>
+                    Durée et horaires de l’action de
+                    formation : <span class="text-primary">{{ session.durationByDay }} par jour</span> - ({{ session.durationTotal }}) au total de <span class="text-primary">{{ session.time }} {{( session.time and session.time2) ? " - " + session.time2 : ""}}</span>
                 </li>
                 <li>
-                    Lieu de l’action de formation (adresse complète) : <span class="text-primary">{{ session.address }} {{ session.zipcode }} {{ session.city }}</span>
+                    Lieu de l’action de formation (adresse complète
+                    ) : <span class="text-primary">{{ session.address }} {{ session.zipcode }} {{ session.city }}</span>
                 </li>
                 <li>
-                    Modalités de déroulement (moyens techniques et pédagogiques mis en œuvre) : <span class="text-primary">{{ session.modPeda }}</span>
+                    Modalités de déroulement (moyens techniques et pédagogiques mis
+                    en œuvre) : <span class="text-primary">{{ session.modPeda }}</span>
                 </li>
                 <li>
-                    Type de formation (formation en présentiel, à distance, mixte…) : <span class="text-primary">{{ session.typeString }}</span>
+                    Type de formation (formation en présentiel, à distance,
+                    mixte…) : <span class="text-primary">{{ session.typeString }}</span>
                 </li>
                 <li>
-                    Nature de la sanction de l’action de formation et modalités d’évaluation jalonnant ou terminant la formation (certificat, examen, quizz, contrôle continu… : <span class="text-primary">{{ session.modEval }}</span>
+                    Nature de la sanction de l’action de formation et modalités d’évaluation jalonnant
+                    ou terminant la formation (certificat, examen, quizz,
+                    contrôle continu… : <span class="text-primary">{{ session.modEval }}</span>
                 </li>
                 <li>
                     Effectif de l’action de formation (nom et prénom du/des stagiaires/s) : <br><span class="text-primary">
@@ -83,7 +90,9 @@
                     </span>
                 </li>
                 <li>
-                    Moyen de contrôle de l’assiduité (attestation d’assiduité + feuilles d’émargement pour les formations en présentiel / attestation d’assiduité + relevé de connexion pour les formations à distance) : <span class="text-primary">{{ session.modAssi }}</span>
+                    Moyen de contrôle de l’assiduité (attestation d’assiduité + feuilles d’émargement pour
+                    les formations en présentiel / attestation d’assiduité + relevé de connexion pour
+                    les formations à distance) : <span class="text-primary">{{ session.modAssi }}</span>
                 </li>
             </ol>
 
