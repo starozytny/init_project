@@ -24,7 +24,7 @@ export class MySessionsItem extends Component {
                         </div>
                         <div className="col-3 actions">
                             <ButtonIcon element="a" icon="download" target="_blank"
-                                        onClick={Routing.generate('api_sessions_convention', {'slug': elem.slug})}
+                                        onClick={Routing.generate('api_sessions_conventions', {'slug': elem.slug})}
                             >
                                 Conventions
                             </ButtonIcon>

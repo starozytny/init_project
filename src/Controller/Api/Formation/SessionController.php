@@ -188,7 +188,7 @@ class SessionController extends AbstractController
     /**
      * Generate convention
      *
-     * @Route("/convention/{slug}", name="convention", options={"expose"=true}, methods={"GET"})
+     * @Route("/conventions/{slug}", name="conventions", options={"expose"=true}, methods={"GET"})
      *
      * @OA\Response(
      *     response=200,
@@ -215,7 +215,43 @@ class SessionController extends AbstractController
             $workers[] = $registration->getWorker();
         }
 
-        $mpdf = $fileCreator->createPDF("test", "test.pdf",
+        $mpdf = $fileCreator->createPDF("Conventions", "conventions.pdf",
+            "user/pdf/convention.html.twig",
+            ['formation' => $session->getFormation(), 'session' => $session, 'workers' => $workers, 'user' => $user]);
+        return $apiResponse->apiJsonResponseSuccessful("ok");
+    }
+
+    /**
+     * Generate attestation
+     *
+     * @Route("/attesations/{slug}", name="attestations", options={"expose"=true}, methods={"GET"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a message",
+     * )
+     *
+     * @OA\Tag(name="Registration")
+     *
+     * @param FoSession $session
+     * @param FileCreator $fileCreator
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     * @throws MpdfException
+     */
+    public function attestations(FoSession $session, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $registrations = $em->getRepository(FoRegistration::class)->findBy(['session' => $session, 'user' => $user]);
+        $workers = [];
+        foreach($registrations as $registration){
+            $workers[] = $registration->getWorker();
+        }
+
+        $mpdf = $fileCreator->createPDF("attestations", "attestations.pdf",
             "user/pdf/convention.html.twig",
             ['formation' => $session->getFormation(), 'session' => $session, 'workers' => $workers, 'user' => $user]);
         return $apiResponse->apiJsonResponseSuccessful("ok");
