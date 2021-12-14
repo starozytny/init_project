@@ -46,9 +46,10 @@ export class Session extends Component {
 
     handleContentList = (currentData, changeContext) => {
         return <SessionList onChangeContext={changeContext}
-                             onDelete={this.layout.current.handleDelete}
-                             onSwitchAttestation={this.handleSwitchAttestation}
-                             data={currentData} />
+                            onDelete={this.layout.current.handleDelete}
+                            onSwitchAttestation={this.handleSwitchAttestation}
+                            sessionId={this.props.sessionId}
+                            data={currentData} />
     }
 
     render () {

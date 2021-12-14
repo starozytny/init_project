@@ -1,15 +1,26 @@
 import React, { Component } from 'react';
 
+import Routing        from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+
 import { Alert }      from "@dashboardComponents/Tools/Alert";
+import { Button }     from "@dashboardComponents/Tools/Button";
 
 import { SessionItem }   from "./SessionItem";
 
 export class SessionList extends Component {
     render () {
-        const { data } = this.props;
+        const { data, sessionId } = this.props;
 
         return <>
             <div>
+                <div className="toolbar">
+                    <div className="item create">
+                        <Button element="a" onClick={Routing.generate('api_registration_enable_attestations', {'session': sessionId})}>
+                            Activer toutes les attestations
+                        </Button>
+                    </div>
+                </div>
+
                 <div className="items-table">
                     <div className="items items-default">
                         <div className="item item-header">

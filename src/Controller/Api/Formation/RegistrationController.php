@@ -10,8 +10,10 @@ use App\Service\ApiResponse;
 use App\Service\ValidatorService;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
@@ -75,6 +77,8 @@ class RegistrationController extends AbstractController
     /**
      * Create registration worker-session
      *
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
      * @Route("/{session}", name="create", options={"expose"=true}, methods={"POST"})
      *
      * @OA\Response(
@@ -98,6 +102,8 @@ class RegistrationController extends AbstractController
     /**
      * Switch attestation
      *
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
      * @Route("/attestation/{id}", name="switch_attestation", options={"expose"=true}, methods={"POST"})
      *
      * @OA\Response(
@@ -119,5 +125,36 @@ class RegistrationController extends AbstractController
         $em->flush();
 
         return  $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+    }
+
+    /**
+     * Enable all attestation
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
+     * @Route("/attestations/{session}", name="enable_attestations", options={"expose"=true}, methods={"GET"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a message",
+     * )
+     *
+     * @OA\Tag(name="Registration")
+     *
+     * @param FoSession $session
+     * @param ApiResponse $apiResponse
+     * @return RedirectResponse
+     */
+    public function enableAttestations(FoSession $session, ApiResponse $apiResponse): RedirectResponse
+    {
+        $em = $this->doctrine->getManager();
+        $registrations = $em->getRepository(FoRegistration::class)->findBy(['session' => $session]);
+        foreach($registrations as $obj){
+            $obj->setHaveAttestation(true);
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('admin_sessions_read', ['slug' => $session->getSlug()]);
     }
 }
