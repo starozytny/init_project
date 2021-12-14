@@ -5,6 +5,10 @@
   background-color: var(--alpha);
   border: 1px solid var(--grey);
   border-radius: 8px;
+
+  & + .profil-card{
+    margin-top: 24px;
+  }
 }
 
 .profil-card-header{
