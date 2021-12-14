@@ -26,7 +26,7 @@ class FileCreator
     /**
      * @throws MpdfException
      */
-    public function initPDF($title, $password): Mpdf
+    public function initPDF($title, $password = 'Pf3zGgig5hy5'): Mpdf
     {
         $mpdf = new Mpdf(['tempDir' => '/tmp']);
 
@@ -44,14 +44,10 @@ class FileCreator
     }
 
     /**
-     * @throws MpdfException
      * @throws Exception
      */
-    public function createPDF($title, $filename, $template, $templateParams = [],
-                              $destination = Destination::INLINE, $password = 'Pf3zGgig5hy5'): Mpdf
+    public function writePDF(Mpdf $mpdf, $template, $templateParams = []): Mpdf
     {
-        $mpdf = $this->initPDF($title, $password);
-
         try {
             $mpdf->WriteHTML(
                 $this->twig->render($template, $templateParams),
@@ -60,6 +56,30 @@ class FileCreator
         } catch (MpdfException|LoaderError|RuntimeError|SyntaxError $e) {
             throw new Exception($e);
         }
+
+        return $mpdf;
+    }
+
+    /**
+     * @throws MpdfException
+     */
+    public function outputPDF(Mpdf $mpdf, $filename, $destination = Destination::INLINE): Mpdf
+    {
+        $mpdf->Output($filename, $destination);
+
+        return $mpdf;
+    }
+
+    /**
+     * @throws MpdfException
+     * @throws Exception
+     */
+    public function createPDF($title, $filename, $template, $templateParams = [],
+                              $destination = Destination::INLINE, $password = 'Pf3zGgig5hy5'): Mpdf
+    {
+        $mpdf = $this->initPDF($title, $password);
+
+        $mpdf = $this->writePDF($mpdf, $template, $templateParams);
 
         $mpdf->Output($filename, $destination);
 
