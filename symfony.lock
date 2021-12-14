@@ -194,6 +194,9 @@
     "monolog/monolog": {
         "version": "2.1.1"
     },
+    "mpdf/mpdf": {
+        "version": "v8.0.15"
+    },
     "myclabs/deep-copy": {
         "version": "1.10.2"
     },
@@ -261,6 +264,9 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.2.3"
+    },
+    "paragonie/random_compat": {
+        "version": "v9.99.100"
     },
     "php": {
         "version": "7.2"
@@ -366,6 +372,9 @@
         "files": [
             "./config/packages/sentry.yaml"
         ]
+    },
+    "setasign/fpdi": {
+        "version": "v2.3.6"
     },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",

@@ -48,5 +48,4 @@ module.exports = {
     compareName,
     compareCreatedAt,
     compareCreatedAtInverse,
-    compareEmail
-}
+    compareEmail}
