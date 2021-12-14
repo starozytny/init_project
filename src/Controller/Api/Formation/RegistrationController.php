@@ -2,12 +2,11 @@
 
 namespace App\Controller\Api\Formation;
 
-use App\Entity\Formation\FoFormation;
 use App\Entity\Formation\FoRegistration;
+use App\Entity\Formation\FoSession;
 use App\Entity\Formation\FoWorker;
 use App\Entity\User;
 use App\Service\ApiResponse;
-use App\Service\Data\DataFormation;
 use App\Service\ValidatorService;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -29,8 +28,8 @@ class RegistrationController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    public function submitForm($type, FoRegistration $obj, FoFormation $formation, Request $request, ApiResponse $apiResponse,
-                               ValidatorService $validator, DataFormation $dataEntity): JsonResponse
+    public function submitForm($type, FoSession $session, Request $request, ApiResponse $apiResponse,
+                               ValidatorService $validator): JsonResponse
     {
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
@@ -44,15 +43,23 @@ class RegistrationController extends AbstractController
         $workers = $em->getRepository(FoWorker::class)->findBy(['id' => $data->workersId]);
 
         foreach($workers as $worker){
+
+            if($type == "create"){
+                $obj = new FoRegistration();
+            }
+
             $obj = ($obj)
                 ->setUser($user)
-                ->setFormation($formation)
+                ->setFormation($session->getFormation())
+                ->setSession($session)
                 ->setWorker($worker)
             ;
-        }
 
-        if($type == "update"){
-            $obj->setUpdatedAt(new DateTime());
+            if($type == "update"){
+                $obj->setUpdatedAt(new DateTime());
+            }
+
+            $em->persist($obj);
         }
 
         $noErrors = $validator->validate($obj);
@@ -60,16 +67,15 @@ class RegistrationController extends AbstractController
             return $apiResponse->apiJsonResponseValidationFailed($noErrors);
         }
 
-        $em->persist($obj);
         $em->flush();
 
         return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }
 
     /**
-     * Create registration worker-formation
+     * Create registration worker-session
      *
-     * @Route("/{formation}", name="create", options={"expose"=true}, methods={"POST"})
+     * @Route("/{session}", name="create", options={"expose"=true}, methods={"POST"})
      *
      * @OA\Response(
      *     response=200,
@@ -79,15 +85,13 @@ class RegistrationController extends AbstractController
      * @OA\Tag(name="Registration")
      *
      * @param Request $request
-     * @param FoFormation $formation
+     * @param FoSession $session
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
-     * @param DataFormation $dataEntity
      * @return JsonResponse
      */
-    public function create(Request $request, FoFormation $formation, ValidatorService $validator, ApiResponse $apiResponse,
-                           DataFormation $dataEntity): JsonResponse
+    public function create(Request $request, FoSession $session, ValidatorService $validator, ApiResponse $apiResponse): JsonResponse
     {
-        return $this->submitForm("create", new FoRegistration(), $formation, $request, $apiResponse, $validator, $dataEntity);
+        return $this->submitForm("create", $session, $request, $apiResponse, $validator);
     }
 }

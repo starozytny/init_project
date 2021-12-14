@@ -4,6 +4,8 @@ namespace App\Entity\Formation;
 
 use App\Entity\DataEntity;
 use App\Repository\Formation\FoSessionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -180,6 +182,16 @@ class FoSession extends DataEntity
      * @Groups({"admin:read"})
      */
     private $formation;
+
+    /**
+     * @ORM\OneToMany(targetEntity=FoRegistration::class, mappedBy="session")
+     */
+    private $registrations;
+
+    public function __construct()
+    {
+        $this->registrations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -501,6 +513,36 @@ class FoSession extends DataEntity
     public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FoRegistration[]
+     */
+    public function getRegistrations(): Collection
+    {
+        return $this->registrations;
+    }
+
+    public function addRegistration(FoRegistration $registration): self
+    {
+        if (!$this->registrations->contains($registration)) {
+            $this->registrations[] = $registration;
+            $registration->setSession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRegistration(FoRegistration $registration): self
+    {
+        if ($this->registrations->removeElement($registration)) {
+            // set the owning side to null (unless already changed)
+            if ($registration->getSession() === $this) {
+                $registration->setSession(null);
+            }
+        }
 
         return $this;
     }

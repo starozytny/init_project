@@ -47,6 +47,12 @@ class FoRegistration extends DataEntity
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=FoSession::class, inversedBy="registrations")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $session;
+
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
@@ -114,6 +120,18 @@ class FoRegistration extends DataEntity
     {
         $updatedAt->setTimezone(new \DateTimeZone("Europe/Paris"));
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getSession(): ?FoSession
+    {
+        return $this->session;
+    }
+
+    public function setSession(?FoSession $session): self
+    {
+        $this->session = $session;
 
         return $this;
     }

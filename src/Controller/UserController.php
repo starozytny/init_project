@@ -127,7 +127,17 @@ class UserController extends AbstractController
      */
     public function registration(FoSession $obj, SerializerInterface $serializer): Response
     {
-        $data = $serializer->serialize($obj, 'json', ['groups' => User::ADMIN_READ]);
-        return $this->render('user/pages/sessions/registration/index.html.twig', ['elem' => $obj, 'donnees' => $data]);
+        $em = $this->doctrine->getManager();
+
+        $workers = $em->getRepository(FoWorker::class)->findBy(['user' => $this->getUser(), 'isArchived' => false]);
+
+        $session = $serializer->serialize($obj, 'json', ['groups' => User::ADMIN_READ]);
+        $workers = $serializer->serialize($workers, 'json', ['groups' => User::USER_READ]);
+
+        return $this->render('user/pages/sessions/registration/index.html.twig', [
+            'elem' => $obj,
+            'session' => $session,
+            'workers' => $workers
+        ]);
     }
 }
