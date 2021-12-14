@@ -180,4 +180,27 @@ class SessionController extends AbstractController
     {
         return $dataService->deleteSelected(FoSession::class, json_decode($request->getContent()));
     }
+
+    /**
+     * Generate convention
+     *
+     * @Route("/convention/{slug}", name="convention", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a message",
+     * )
+     *
+     * @OA\Tag(name="Registration")
+     *
+     * @param Request $request
+     * @param FoSession $session
+     * @param ValidatorService $validator
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     */
+    public function convention(Request $request, FoSession $session, ValidatorService $validator, ApiResponse $apiResponse): JsonResponse
+    {
+        return $apiResponse->apiJsonResponseSuccessful("ok");
+    }
 }

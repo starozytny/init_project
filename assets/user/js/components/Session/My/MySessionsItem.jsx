@@ -23,7 +23,7 @@ export class MySessionsItem extends Component {
                             {elem.startJavascript}
                         </div>
                         <div className="col-3 actions">
-                            <ButtonIcon element="a" onClick={Routing.generate('user_registration', {'slug': elem.slug})} icon="download">S'inscrire</ButtonIcon>
+                            <ButtonIcon element="a" onClick={Routing.generate('user_registration', {'slug': elem.slug})} icon="download">Conventions</ButtonIcon>
                         </div>
                     </div>
                 </div>
