@@ -25,7 +25,7 @@ export class SessionsItem extends Component {
 
             <div className="item-content">
                 <div className="item-body">
-                    <InfosSession elem={elem} showFormation={false}/>
+                    <InfosSession elem={elem} showFormation={false} admin={true}/>
                     <div className="infos infos-col-4">
                         <div className="col-4 actions">
                             <ButtonIcon icon={elem.isPublished ? "vision" : "vision-not"} onClick={() => onSwitchPublished(elem)}>
@@ -60,7 +60,10 @@ export function HeaderSession({ haveSelector = false }) {
     </>
 }
 
-export function InfosSession({ elem, showFormation = true }) {
+export function InfosSession({ elem, showFormation = true, admin = false }) {
+
+    let participants = elem.registrations.length + " / " + elem.max + " pers.";
+
     return <>
         <div className="col-1">
             <div className="name">
@@ -74,7 +77,9 @@ export function InfosSession({ elem, showFormation = true }) {
             <div className="sub">{Sanitaze.toFormatCurrency(elem.priceTTC)} TTC / unité</div>
         </div>
         <div className="col-3">
-            <div className="sub"><a href={Routing.generate('admin_sessions_read', {'slug': elem.slug})}>{elem.registrations.length} pers.</a></div>
+            <div className="sub">
+                {admin ? <a href={Routing.generate('admin_sessions_read', {'slug': elem.slug})}>{participants}</a> : participants}
+            </div>
         </div>
     </>
 }
