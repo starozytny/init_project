@@ -49,6 +49,7 @@ class FoRegistration extends DataEntity
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"admin:read"})
      */
     private $haveAttestation = false;
 
