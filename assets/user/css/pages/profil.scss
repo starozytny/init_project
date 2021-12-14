@@ -1,5 +1,8 @@
 @import "../vars/vars";
 
+.alert + #profil-teams{
+  margin-top: 24px;
+}
 .profil-card{
   padding: 12px;
   background-color: var(--alpha);

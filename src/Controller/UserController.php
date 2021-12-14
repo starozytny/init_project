@@ -9,6 +9,7 @@ use App\Entity\Paiement\PaBank;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -44,7 +45,7 @@ class UserController extends AbstractController
     /**
      * @Route("/profil", options={"expose"=true}, name="profil")
      */
-    public function profil(SerializerInterface $serializer): Response
+    public function profil(Request $request, SerializerInterface $serializer): Response
     {
         $em = $this->doctrine->getManager();
         /** @var User $obj */
@@ -63,7 +64,8 @@ class UserController extends AbstractController
             'obj' => $obj,
             'teams' => $teams,
             'teamsArchived' => $teamsArchived,
-            'banks' => $banks
+            'banks' => $banks,
+            '_error' => $request->query->get('_error')
         ]);
     }
 
@@ -89,10 +91,14 @@ class UserController extends AbstractController
     /**
      * @Route("/equipe/modifier/{id}", options={"expose"=true}, name="team_update")
      */
-    public function teamUpdate(FoWorker $worker, SerializerInterface $serializer): Response
+    public function teamUpdate(FoWorker $obj, SerializerInterface $serializer): Response
     {
-        $data = $serializer->serialize($worker, 'json', ['groups' => User::USER_READ]);
-        return $this->render('user/pages/profil/team/update.html.twig', ['elem' => $worker, 'donnees' => $data]);
+        if(count($obj->getRegistrations()) != 0){
+            return $this->redirectToRoute("user_profil", ['_error' => 1]);
+        }
+
+        $data = $serializer->serialize($obj, 'json', ['groups' => User::USER_READ]);
+        return $this->render('user/pages/profil/team/update.html.twig', ['elem' => $obj, 'donnees' => $data]);
     }
 
     /**

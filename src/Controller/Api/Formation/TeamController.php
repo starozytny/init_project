@@ -157,7 +157,7 @@ class TeamController extends AbstractController
         $em = $this->doctrine->getManager();
 
         if(count($obj->getRegistrations()) != 0){
-            return $apiResponse->apiJsonResponseBadRequest("Cette personne est ou a été inscrit à une formation. Vous ne pouvez pas le supprimer.");
+            return $apiResponse->apiJsonResponseBadRequest($obj->getLastname() . " est ou a été inscrit à une formation. Vous ne pouvez pas le supprimer.");
         }
 
         $em->remove($obj);

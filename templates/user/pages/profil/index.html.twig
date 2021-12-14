@@ -30,6 +30,12 @@
                 <div id="profil-banks" data-donnees="{{ banks }}">
                     {% include "dashboard/layout/components/spinner.html.twig" %}
                 </div>
+                {% if _error is not null and _error == 1 %}
+                    <div class="alert alert-danger">
+                        <span class="icon-warning"></span>
+                        <p>Cette personne est ou a été inscrit à une formation. Vous ne pouvez pas le supprimer.</p>
+                    </div>
+                {% endif %}
                 <div id="profil-teams" data-donnees="{{ teams }}" data-data-archived="{{ teamsArchived }}">
                     {% include "dashboard/layout/components/spinner.html.twig" %}
                 </div>

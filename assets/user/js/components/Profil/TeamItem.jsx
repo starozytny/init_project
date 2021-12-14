@@ -8,8 +8,6 @@ export class TeamItem extends Component {
     render () {
         const { elem, onDelete, onSwitchArchived } = this.props;
 
-        console.log(elem)
-
         return <div className="item">
             <div className="item-content">
                 <div className="item-body">
