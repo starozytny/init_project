@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Paiement\PaBank;
+use App\Entity\Paiement\PaOrder;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -123,6 +124,11 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
     private $paBanks;
 
     /**
+     * @ORM\OneToMany(targetEntity=PaOrder::class, mappedBy="user")
+     */
+    private $paOrders;
+
+    /**
      * @throws Exception
      */
     public function __construct()
@@ -131,6 +137,7 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
         $this->token = $this->initToken();
         $this->notifications = new ArrayCollection();
         $this->paBanks = new ArrayCollection();
+        $this->paOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -458,6 +465,36 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
             // set the owning side to null (unless already changed)
             if ($paBank->getUser() === $this) {
                 $paBank->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PaOrder[]
+     */
+    public function getPaOrders(): Collection
+    {
+        return $this->paOrders;
+    }
+
+    public function addPaOrder(PaOrder $paOrder): self
+    {
+        if (!$this->paOrders->contains($paOrder)) {
+            $this->paOrders[] = $paOrder;
+            $paOrder->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaOrder(PaOrder $paOrder): self
+    {
+        if ($this->paOrders->removeElement($paOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($paOrder->getUser() === $this) {
+                $paOrder->setUser(null);
             }
         }
 
