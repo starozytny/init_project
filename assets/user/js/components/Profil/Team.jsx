@@ -65,7 +65,7 @@ export class Team extends Component {
     handleSearch = (search) => { this.layout.current.handleSearch(search, "team", true, filterFunction); }
 
     handleSwitchArchived = (element) => {
-        this.layout.current.handleSwitchArchived(this, element.isArchived, Routing.generate(URL_SWITCH_PUBLISHED, {'id': element.id}), MSG_SWITCH_PUBLISHED);
+        this.layout.current.handleSwitchData(this, element.isArchived, Routing.generate(URL_SWITCH_PUBLISHED, {'id': element.id}), MSG_SWITCH_PUBLISHED);
     }
 
     handleContentList = (currentData, changeContext, getFilters, filters) => {
@@ -75,6 +75,7 @@ export class Team extends Component {
                          onSearch={this.handleSearch}
                          filters={filters}
                          onGetFilters={this.handleGetFilters}
+                         dataArchived={JSON.parse(this.props.dataArchived)}
                          data={currentData} />
     }
 

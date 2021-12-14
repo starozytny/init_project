@@ -50,7 +50,10 @@ class UserController extends AbstractController
         /** @var User $obj */
         $obj = $this->getUser();
         $teams = $em->getRepository(FoWorker::class)->findBy(['user' => $obj, 'isArchived' => false]);
+        $teamsArchived = $em->getRepository(FoWorker::class)->findBy(['user' => $obj, 'isArchived' => true]);
+
         $teams = $serializer->serialize($teams, 'json', ['groups' => User::USER_READ]);
+        $teamsArchived = $serializer->serialize($teamsArchived, 'json', ['groups' => User::USER_READ]);
 
         $banks = $obj->getPaBanks();
 
@@ -59,6 +62,7 @@ class UserController extends AbstractController
         return $this->render('user/pages/profil/index.html.twig',  [
             'obj' => $obj,
             'teams' => $teams,
+            'teamsArchived' => $teamsArchived,
             'banks' => $banks
         ]);
     }

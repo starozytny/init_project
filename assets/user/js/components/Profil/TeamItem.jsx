@@ -21,9 +21,9 @@ export class TeamItem extends Component {
                             <div className="sub"><div className="role">{elem.typeString}</div></div>
                         </div>
                         <div className="col-3 actions">
+                            <ButtonIcon icon={elem.isArchived ? "like" : "briefcase"} onClick={() => onSwitchArchived(elem)}>{elem.isArchived ? "Réaffecter" : "Archiver"}</ButtonIcon>
                             {elem.isArchived === false &&
                                 <>
-                                    <ButtonIcon icon="briefcase" onClick={() => onSwitchArchived(elem)}>Archiver</ButtonIcon>
                                     <ButtonIcon icon="pencil" element="a" onClick={Routing.generate('user_team_update', {'id': elem.id})}>Modifier</ButtonIcon>
                                     <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
                                 </>
