@@ -29,6 +29,7 @@ class FoSession extends DataEntity
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"admin:read"})
      */
     private $start;
 

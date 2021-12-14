@@ -30,9 +30,14 @@ function compareEmail(a, b){
     return comparison(a.email, b.email);
 }
 
-function compareStartJavascript(a, b){
-    return comparison(a.startJavascript, b.startJavascript);
+function compareStart(a, b){
+    return comparison(a.start, b.start);
 }
+
+function compareStartInverse(a, b){
+    return comparison(b.start, a.start);
+}
+
 
 function comparison (objA, objB){
     let comparison = 0;
@@ -53,5 +58,6 @@ module.exports = {
     compareCreatedAt,
     compareCreatedAtInverse,
     compareEmail,
-    compareStartJavascript
+    compareStart,
+    compareStartInverse
 }

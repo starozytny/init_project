@@ -5,7 +5,7 @@ import Sort              from "@commonComponents/functions/sort";
 
 import { SessionsList }       from "./SessionsList";
 
-const SORTER = Sort.compareStartJavascript;
+const SORTER = Sort.compareStartInverse;
 
 export class Sessions extends Component {
     constructor(props) {
