@@ -25,16 +25,39 @@ class FileCreator
 
     /**
      * @throws MpdfException
+     * @throws Exception
+     */
+    public function createPDF($title, $filename, $template, $templateParams = [],
+                              $destination = Destination::INLINE, $password = 'Pf3zGgig5hy5'): Mpdf
+    {
+        $mpdf = $this->initPDF($title, $password);
+
+        $mpdf = $this->writePDF($mpdf, $template, $templateParams);
+
+        return $this->outputPDF($mpdf, $filename, $destination);
+    }
+
+    /**
+     * @throws MpdfException
+     */
+    public function addCustomStyle(Mpdf $mpdf, $filename): Mpdf
+    {
+        $stylesheet = file_get_contents($this->getPdfStyleDirectory() . '/' . $filename);
+        $mpdf->WriteHTML($stylesheet,HTMLParserMode::HEADER_CSS);
+
+        return $mpdf;
+    }
+
+    /**
+     * @throws MpdfException
      */
     public function initPDF($title, $password = 'Pf3zGgig5hy5'): Mpdf
     {
         $mpdf = new Mpdf(['tempDir' => '/tmp']);
 
         $mpdf->SetTitle($title);
-        $stylesheet = file_get_contents($this->getPdfStyleDirectory() . '/bootstrap.min.css');
-        $stylesheet2 = file_get_contents($this->getPdfStyleDirectory() . '/custom-pdf.css');
-        $mpdf->WriteHTML($stylesheet,HTMLParserMode::HEADER_CSS);
-        $mpdf->WriteHTML($stylesheet2,HTMLParserMode::HEADER_CSS);
+        $mpdf = $this->addCustomStyle($mpdf, 'bootstrap.min.css');
+        $mpdf = $this->addCustomStyle($mpdf, 'custom-pdf.css');
 
         $mpdf->SetProtection(array(
             'print'
@@ -65,22 +88,6 @@ class FileCreator
      */
     public function outputPDF(Mpdf $mpdf, $filename, $destination = Destination::INLINE): Mpdf
     {
-        $mpdf->Output($filename, $destination);
-
-        return $mpdf;
-    }
-
-    /**
-     * @throws MpdfException
-     * @throws Exception
-     */
-    public function createPDF($title, $filename, $template, $templateParams = [],
-                              $destination = Destination::INLINE, $password = 'Pf3zGgig5hy5'): Mpdf
-    {
-        $mpdf = $this->initPDF($title, $password);
-
-        $mpdf = $this->writePDF($mpdf, $template, $templateParams);
-
         $mpdf->Output($filename, $destination);
 
         return $mpdf;
