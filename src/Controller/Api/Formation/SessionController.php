@@ -13,6 +13,7 @@ use App\Service\FileCreator;
 use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
+use Http\Discovery\Exception\NotFoundException;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -265,18 +266,24 @@ class SessionController extends AbstractController
 
         $i = 0;
         foreach($registrations as $registration){
-            if($i != 0){
-                $mpdf->AddPage();
-            }
-            $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/attestation.html.twig", [
-                'formation' => $session->getFormation(),
-                'session' => $session,
-                'worker' => $registration->getWorker(),
-                'user' => $user,
-                'totalWorkers' => count($registrationsTotal)
-            ]);
+            if($registration->getHaveAttestation()){
+                if($i != 0){
+                    $mpdf->AddPage();
+                }
+                $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/attestation.html.twig", [
+                    'formation' => $session->getFormation(),
+                    'session' => $session,
+                    'worker' => $registration->getWorker(),
+                    'user' => $user,
+                    'totalWorkers' => count($registrationsTotal)
+                ]);
 
-            $i++;
+                $i++;
+            }
+        }
+
+        if($i == 0) {
+            throw new NotFoundException("Aucune attestation disponible.");
         }
 
         $mpdf = $fileCreator->outputPDF($mpdf, 'attestations.pdf');
