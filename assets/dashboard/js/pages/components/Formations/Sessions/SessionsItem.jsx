@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import Routing          from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+
 import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
 import { Selector }     from "@dashboardComponents/Layout/Selector";
 
@@ -22,6 +24,11 @@ export class SessionsItem extends Component {
                             <div className="sub" />
                         </div>
                         <div className="col-3 actions">
+                            <ButtonIcon element="a" icon="download" target="_blank"
+                                        onClick={Routing.generate('api_sessions_emargements', {'slug': elem.slug})}
+                            >
+                                Emargements
+                            </ButtonIcon>
                             <ButtonIcon icon={elem.isPublished ? "vision" : "vision-not"} onClick={() => onSwitchPublished(elem)}>
                                 {elem.isPublished ? "En ligne" : "Hors ligne"}
                             </ButtonIcon>

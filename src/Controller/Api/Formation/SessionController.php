@@ -276,4 +276,52 @@ class SessionController extends AbstractController
 
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
+
+    /**
+     * Generate emargements
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
+     * @Route("/emargements/{slug}", name="emargements", options={"expose"=true}, methods={"GET"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a message",
+     * )
+     *
+     * @OA\Tag(name="Registration")
+     *
+     * @param FoSession $session
+     * @param FileCreator $fileCreator
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     * @throws MpdfException
+     * @throws Exception
+     */
+    public function emargements(FoSession $session, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $registrations = $em->getRepository(FoRegistration::class)->findBy(['session' => $session]);
+
+        $workers = [];
+        foreach($registrations as $registration){
+            $worker = $registration->getWorker();
+            $identifiant = $worker->getLastname() . $worker->getId();
+            $workers[$identifiant] = $worker;
+        }
+
+        ksort($workers);
+
+        $mpdf = $fileCreator->createPDF("Emargements", "emargements.pdf",
+            "user/pdf/emargement.html.twig", [
+                'formation' => $session->getFormation(),
+                'session' => $session,
+                'workers' => $workers,
+                'user' => $user
+            ]);
+        return $apiResponse->apiJsonResponseSuccessful("ok");
+    }
 }
