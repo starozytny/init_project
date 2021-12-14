@@ -3,6 +3,7 @@
 namespace App\Controller\Api\Formation;
 
 use App\Entity\Formation\FoFormation;
+use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoSession;
 use App\Entity\User;
 use App\Service\ApiResponse;
@@ -204,9 +205,19 @@ class SessionController extends AbstractController
      */
     public function convention(FoSession $session, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
     {
+        $em = $this->doctrine->getManager();
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $registrations = $em->getRepository(FoRegistration::class)->findBy(['session' => $session, 'user' => $user]);
+        $workers = [];
+        foreach($registrations as $registration){
+            $workers[] = $registration->getWorker();
+        }
+
         $mpdf = $fileCreator->createPDF("test", "test.pdf",
             "user/pdf/convention.html.twig",
-            ['formation' => $session->getFormation(), 'session' => $session]);
+            ['formation' => $session->getFormation(), 'session' => $session, 'workers' => $workers, 'user' => $user]);
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 }
