@@ -94,4 +94,30 @@ class RegistrationController extends AbstractController
     {
         return $this->submitForm("create", $session, $request, $apiResponse, $validator);
     }
+
+    /**
+     * Switch attestation
+     *
+     * @Route("/attestation/{id}", name="switch_attestation", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a message",
+     * )
+     *
+     * @OA\Tag(name="Registration")
+     *
+     * @param FoRegistration $obj
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     */
+    public function switchAttestation(FoRegistration $obj, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        $obj->setHaveAttestation(!$obj->getHaveAttestation());
+        $em->flush();
+
+        return  $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+    }
 }

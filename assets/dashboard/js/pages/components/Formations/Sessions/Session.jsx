@@ -9,8 +9,8 @@ import { SessionList }       from "./SessionList";
 
 const URL_DELETE_ELEMENT    = 'api_sessions_delete';
 const MSG_DELETE_ELEMENT    = 'Supprimer cette session de formation ?';
-const URL_SWITCH_PUBLISHED  = 'api_sessions_formation_published';
-const MSG_SWITCH_PUBLISHED  = 'Participant';
+const URL_SWITCH_PUBLISHED  = 'api_registration_switch_attestation';
+const MSG_SWITCH_PUBLISHED  = 'Attestation';
 const SORTER = Sort.compareCreatedAt;
 
 export class Session extends Component {
@@ -40,7 +40,8 @@ export class Session extends Component {
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
     handleSwitchAttestation = (element) => {
-        this.layout.current.handleSwitchData(this, element.haveAttestation, Routing.generate(URL_SWITCH_PUBLISHED, {'id': element.id}), MSG_SWITCH_PUBLISHED);
+        this.layout.current.handleSwitchData(this, element.haveAttestation, Routing.generate(URL_SWITCH_PUBLISHED, {'id': element.id}),
+            MSG_SWITCH_PUBLISHED, " désactivée", " autorisée");
     }
 
     handleContentList = (currentData, changeContext) => {
