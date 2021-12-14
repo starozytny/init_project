@@ -6,7 +6,9 @@ import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
 
 export class TeamItem extends Component {
     render () {
-        const { elem, onDelete, onSwitchArchived } = this.props
+        const { elem, onDelete, onSwitchArchived } = this.props;
+
+        console.log(elem)
 
         return <div className="item">
             <div className="item-content">
