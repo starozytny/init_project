@@ -42,6 +42,17 @@ class FoRegistration extends DataEntity
     private $formation;
 
     /**
+     * @ORM\ManyToOne(targetEntity=FoSession::class, inversedBy="registrations")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $session;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $haveAttestation = false;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -50,12 +61,6 @@ class FoRegistration extends DataEntity
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=FoSession::class, inversedBy="registrations")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $session;
 
     public function __construct()
     {
@@ -136,6 +141,18 @@ class FoRegistration extends DataEntity
     public function setSession(?FoSession $session): self
     {
         $this->session = $session;
+
+        return $this;
+    }
+
+    public function getHaveAttestation(): ?bool
+    {
+        return $this->haveAttestation;
+    }
+
+    public function setHaveAttestation(bool $haveAttestation): self
+    {
+        $this->haveAttestation = $haveAttestation;
 
         return $this;
     }
