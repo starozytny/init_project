@@ -28,6 +28,11 @@ export class MySessionsItem extends Component {
                             >
                                 Conventions
                             </ButtonIcon>
+                            <ButtonIcon element="a" icon="download" target="_blank"
+                                        onClick={Routing.generate('api_sessions_attestations', {'slug': elem.slug})}
+                            >
+                                Attestations
+                            </ButtonIcon>
                         </div>
                     </div>
                 </div>

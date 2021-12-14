@@ -12,6 +12,7 @@ use App\Service\Data\DataService;
 use App\Service\FileCreator;
 use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Exception;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -216,15 +217,19 @@ class SessionController extends AbstractController
         }
 
         $mpdf = $fileCreator->createPDF("Conventions", "conventions.pdf",
-            "user/pdf/convention.html.twig",
-            ['formation' => $session->getFormation(), 'session' => $session, 'workers' => $workers, 'user' => $user]);
+            "user/pdf/convention.html.twig", [
+                'formation' => $session->getFormation(),
+                'session' => $session,
+                'workers' => $workers,
+                'user' => $user
+            ]);
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 
     /**
      * Generate attestation
      *
-     * @Route("/attesations/{slug}", name="attestations", options={"expose"=true}, methods={"GET"})
+     * @Route("/attestations/{slug}", name="attestations", options={"expose"=true}, methods={"GET"})
      *
      * @OA\Response(
      *     response=200,
@@ -238,6 +243,7 @@ class SessionController extends AbstractController
      * @param ApiResponse $apiResponse
      * @return JsonResponse
      * @throws MpdfException
+     * @throws Exception
      */
     public function attestations(FoSession $session, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
     {
@@ -245,15 +251,29 @@ class SessionController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
+        $registrationsTotal = $em->getRepository(FoRegistration::class)->findBy(['session' => $session]);
         $registrations = $em->getRepository(FoRegistration::class)->findBy(['session' => $session, 'user' => $user]);
-        $workers = [];
+
+        $mpdf = $fileCreator->initPDF("Attestations");
+
+        $i = 0;
         foreach($registrations as $registration){
-            $workers[] = $registration->getWorker();
+            if($i != 0){
+                $mpdf->AddPage();
+            }
+            $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/attestation.html.twig", [
+                'formation' => $session->getFormation(),
+                'session' => $session,
+                'worker' => $registration->getWorker(),
+                'user' => $user,
+                'totalWorkers' => count($registrationsTotal)
+            ]);
+
+            $i++;
         }
 
-        $mpdf = $fileCreator->createPDF("attestations", "attestations.pdf",
-            "user/pdf/convention.html.twig",
-            ['formation' => $session->getFormation(), 'session' => $session, 'workers' => $workers, 'user' => $user]);
+        $mpdf = $fileCreator->outputPDF($mpdf, 'attestations.pdf');
+
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 }
