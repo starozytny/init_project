@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import { Alert }              from "@dashboardComponents/Tools/Alert";
 
-import { FormationsItem }     from "./FormationsItem";
+import { MySessionsItem }     from "./MySessionsItem";
 
-export class FormationsList extends Component {
+export class MySessionsList extends Component {
     render () {
         const { data } = this.props;
 
@@ -24,7 +24,7 @@ export class FormationsList extends Component {
                             </div>
                         </div>
                         {data && data.length !== 0 ? data.map(elem => {
-                            return <FormationsItem {...this.props} elem={elem} key={elem.id}/>
+                            return <MySessionsItem {...this.props} elem={elem} key={elem.id}/>
                         }) : <Alert>Aucun résultat</Alert>}
                     </div>
                 </div>

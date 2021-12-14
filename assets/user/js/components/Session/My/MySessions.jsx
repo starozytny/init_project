@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@commonComponents/functions/sort";
 
-import { FormationsList }       from "./FormationsList";
+import { MySessionsList }       from "./MySessionsList";
 
-const SORTER = Sort.compareName;
+const SORTER = Sort.compareStartJavascript;
 
-export class Formations extends Component {
+export class MySessions extends Component {
     constructor(props) {
         super(props);
 
@@ -15,7 +15,7 @@ export class Formations extends Component {
             perPage: 10,
             currentPage: 0,
             sorter: SORTER,
-            sessionName: "user.formations.pagination"
+            sessionName: "user.my.sessions.pagination"
         }
 
         this.layout = React.createRef();
@@ -28,7 +28,7 @@ export class Formations extends Component {
     handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees); }
 
     handleContentList = (currentData) => {
-        return <FormationsList data={currentData} />
+        return <MySessionsList data={currentData} />
     }
 
     render () {

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoSession;
 use App\Entity\Formation\FoWorker;
 use App\Entity\Paiement\PaBank;
@@ -138,6 +139,30 @@ class UserController extends AbstractController
             'elem' => $obj,
             'session' => $session,
             'workers' => $workers
+        ]);
+    }
+
+    /**
+     * @Route("/mes-formations", options={"expose"=true}, name="my_formations")
+     */
+    public function myFormations(SerializerInterface $serializer): Response
+    {
+        $em = $this->doctrine->getManager();
+        $objs = $em->getRepository(FoRegistration::class)->findBy(['user' => $this->getUser()]);
+
+        $sessions = []; $noDuplication = [];
+        foreach($objs as $obj){
+            $sessionId = $obj->getSession()->getId();
+            if(!in_array($sessionId, $noDuplication)){
+                $noDuplication[] = $sessionId;
+                $sessions[] = $obj->getSession();
+            }
+        }
+
+        $sessions = $serializer->serialize($sessions, 'json', ['groups' => User::ADMIN_READ]);
+
+        return $this->render('user/pages/sessions/own.html.twig',  [
+            'donnees' => $sessions,
         ]);
     }
 }

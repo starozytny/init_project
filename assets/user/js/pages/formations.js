@@ -7,6 +7,7 @@ import React from "react";
 import { render } from "react-dom";
 import { Sessions }     from "@userComponents/Session/Sessions";
 import { Registration } from "@userComponents/Session/Registration/Registration";
+import { MySessions }   from "@userComponents/Session/My/MySessions";
 
 Routing.setRoutingData(routes);
 
@@ -18,4 +19,9 @@ if(el){
 el = document.getElementById("session-registration");
 if(el){
     render(<Registration {...el.dataset} />, el)
+}
+
+el = document.getElementById("my-formations");
+if(el){
+    render(<MySessions {...el.dataset} />, el)
 }
