@@ -203,6 +203,7 @@ class SessionController extends AbstractController
      * @param ApiResponse $apiResponse
      * @return JsonResponse
      * @throws MpdfException
+     * @throws Exception
      */
     public function convention(FoSession $session, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
     {
@@ -216,13 +217,18 @@ class SessionController extends AbstractController
             $workers[] = $registration->getWorker();
         }
 
-        $mpdf = $fileCreator->createPDF("Conventions", "conventions.pdf",
-            "user/pdf/convention.html.twig", [
-                'formation' => $session->getFormation(),
-                'session' => $session,
-                'workers' => $workers,
-                'user' => $user
-            ]);
+        $mpdf = $fileCreator->initPDF("Conventions");
+        $mpdf = $fileCreator->addCustomStyle($mpdf, "convention.css");
+
+        $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/convention.html.twig", [
+            'formation' => $session->getFormation(),
+            'session' => $session,
+            'workers' => $workers,
+            'user' => $user
+        ]);
+
+        $mpdf = $fileCreator->outputPDF($mpdf, 'conventions.pdf');
+
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 
@@ -255,6 +261,7 @@ class SessionController extends AbstractController
         $registrations = $em->getRepository(FoRegistration::class)->findBy(['session' => $session, 'user' => $user]);
 
         $mpdf = $fileCreator->initPDF("Attestations");
+        $mpdf = $fileCreator->addCustomStyle($mpdf, "attestation.css");
 
         $i = 0;
         foreach($registrations as $registration){

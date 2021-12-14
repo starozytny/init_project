@@ -1,0 +1,57 @@
+.text-primary, .th--animateur{
+    color: #000000;
+}
+
+.strong{
+    font-weight: bold;
+}
+.image--1{
+    width: 100px;
+    height: 100px;
+}
+.image--2{
+    float: right;
+    width: 125px;
+    height: 100px;
+}
+
+.liste-without-puce{
+    list-style: none;
+    margin-left: -10px;
+}
+
+.adresse{
+    font-size: 0.9em;
+}
+
+.header{
+    color: #44546a;
+    font-size: 2em;
+    border-bottom: 1px solid #ed7d31;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.signature{
+    text-align: right;
+    margin-top: 50px;
+}
+
+.th--signature{
+    text-align: center;
+    padding: 15px;
+    font-weight: normal;
+    font-size: 0.8em;
+    color: #a1a1a1;
+}
+
+.th--adherent{
+    padding: 15px;
+    width: 500px;
+}
+
+.tbody--workers tr td{
+    text-align: left;
+    padding: 15px;
+    width: 150px;
+}
