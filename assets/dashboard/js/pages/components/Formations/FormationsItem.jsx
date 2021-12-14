@@ -23,7 +23,7 @@ export class FormationsItem extends Component {
                         </div>
                         <div className="col-2">
                             <div className="sub">
-                                <Button element="a" onClick={Routing.generate('admin_sessions_index', {'slug': elem.slug})} >Ajouter une session</Button>
+                                <Button element="a" onClick={Routing.generate('admin_sessions_index', {'slug': elem.slug})} >Sessions</Button>
                             </div>
                         </div>
                         <div className="col-3 actions">

@@ -44,7 +44,7 @@ class FoSession extends DataEntity
     private $isPublished = false;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"admin:read"})
      */
     private $time;
@@ -185,7 +185,8 @@ class FoSession extends DataEntity
     private $formation;
 
     /**
-     * @ORM\OneToMany(targetEntity=FoRegistration::class, mappedBy="session")
+     * @ORM\OneToMany(targetEntity=FoRegistration::class, fetch="EAGER", mappedBy="session")
+     * @Groups({"admin:read"})
      */
     private $registrations;
 
@@ -197,6 +198,21 @@ class FoSession extends DataEntity
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     * @Groups({"admin:read"})
+     */
+    public function getFullDate(): string
+    {
+        $start = $this->getFullDateString($this->start);
+        $end = "";
+        if($this->start != $this->end){
+            $end = " - " . $this->getFullDateString($this->end);
+        }
+
+        return $start . $end;
     }
 
     /**
@@ -258,7 +274,7 @@ class FoSession extends DataEntity
         return $this->time;
     }
 
-    public function setTime(string $time): self
+    public function setTime(?string $time): self
     {
         $this->time = $time;
 
