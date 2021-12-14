@@ -23,7 +23,11 @@ export class MySessionsItem extends Component {
                             {elem.startJavascript}
                         </div>
                         <div className="col-3 actions">
-                            <ButtonIcon element="a" onClick={Routing.generate('user_registration', {'slug': elem.slug})} icon="download">Conventions</ButtonIcon>
+                            <ButtonIcon element="a" icon="download" target="_blank"
+                                        onClick={Routing.generate('api_sessions_convention', {'slug': elem.slug})}
+                            >
+                                Conventions
+                            </ButtonIcon>
                         </div>
                     </div>
                 </div>

@@ -8,8 +8,11 @@ use App\Entity\User;
 use App\Service\ApiResponse;
 use App\Service\Data\DataFormation;
 use App\Service\Data\DataService;
+use App\Service\FileCreator;
 use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Mpdf\MpdfException;
+use Mpdf\Output\Destination;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -184,7 +187,7 @@ class SessionController extends AbstractController
     /**
      * Generate convention
      *
-     * @Route("/convention/{slug}", name="convention", options={"expose"=true}, methods={"POST"})
+     * @Route("/convention/{slug}", name="convention", options={"expose"=true}, methods={"GET"})
      *
      * @OA\Response(
      *     response=200,
@@ -193,14 +196,17 @@ class SessionController extends AbstractController
      *
      * @OA\Tag(name="Registration")
      *
-     * @param Request $request
      * @param FoSession $session
-     * @param ValidatorService $validator
+     * @param FileCreator $fileCreator
      * @param ApiResponse $apiResponse
      * @return JsonResponse
+     * @throws MpdfException
      */
-    public function convention(Request $request, FoSession $session, ValidatorService $validator, ApiResponse $apiResponse): JsonResponse
+    public function convention(FoSession $session, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
     {
+        $mpdf = $fileCreator->createPDF("test", "test.pdf",
+            "user/pdf/convention.html.twig",
+            ['formation' => $session->getFormation(), 'session' => $session]);
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 }

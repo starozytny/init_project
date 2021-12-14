@@ -48,7 +48,7 @@ class FileCreator
      * @throws Exception
      */
     public function createPDF($title, $filename, $template, $templateParams = [],
-                              $destination = Destination::FILE, $password = 'Pf3zGgig5hy5'): Mpdf
+                              $destination = Destination::INLINE, $password = 'Pf3zGgig5hy5'): Mpdf
     {
         $mpdf = $this->initPDF($title, $password);
 

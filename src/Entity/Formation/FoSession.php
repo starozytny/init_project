@@ -17,6 +17,7 @@ class FoSession extends DataEntity
 {
     const TYPE_PRESENTIEL = 0;
     const TYPE_DISTANCE = 1;
+    const TYPE_MIXTE = 2;
 
     /**
      * @ORM\Id
@@ -382,6 +383,17 @@ class FoSession extends DataEntity
         $this->city = $city;
 
         return $this;
+    }
+
+    /**
+     * @return int|null
+     * @Groups({"admin:read"})
+     */
+    public function getTypeString(): ?string
+    {
+        $types = ["Présentiel", "Distance", "Mixte"];
+
+        return $types[$this->type];
     }
 
     public function getType(): ?int
