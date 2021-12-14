@@ -25,7 +25,7 @@ export class FormationsList extends Component {
                                 <div className="item-body">
                                     <div className="infos infos-col-3">
                                         <div className="col-1">Intitulé</div>
-                                        <div className="col-2">Prix</div>
+                                        <div className="col-2">Sessions</div>
                                         <div className="col-3 actions">Actions</div>
                                     </div>
                                 </div>

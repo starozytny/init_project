@@ -37,7 +37,7 @@ export class SessionsItem extends Component {
                             <div className="sub">{Sanitaze.toFormatCurrency(elem.priceTTC)}</div>
                         </div>
                         <div className="col-3">
-                            <div className="sub">{elem.registrations.length}</div>
+                            <div className="sub"><a href={Routing.generate('admin_sessions_read', {'slug': elem.slug})}>{elem.registrations.length} pers.</a></div>
                         </div>
                         <div className="col-4 actions">
                             <ButtonIcon icon={elem.isPublished ? "vision" : "vision-not"} onClick={() => onSwitchPublished(elem)}>
