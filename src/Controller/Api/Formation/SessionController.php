@@ -315,13 +315,18 @@ class SessionController extends AbstractController
 
         ksort($workers);
 
-        $mpdf = $fileCreator->createPDF("Emargements", "emargements.pdf",
-            "user/pdf/emargement.html.twig", [
-                'formation' => $session->getFormation(),
-                'session' => $session,
-                'workers' => $workers,
-                'user' => $user
-            ]);
+        $mpdf = $fileCreator->initPDF("Emargements");
+        $mpdf = $fileCreator->addCustomStyle($mpdf, "emargement.css");
+
+        $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/emargement.html.twig", [
+            'formation' => $session->getFormation(),
+            'session' => $session,
+            'workers' => $workers,
+            'user' => $user
+        ]);
+
+        $mpdf = $fileCreator->outputPDF($mpdf, 'emargements.pdf');
+
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 }

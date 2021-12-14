@@ -1,0 +1,103 @@
+@page {
+    margin: 18px 24px;
+}
+
+body{
+    font-size: 12px;
+}
+
+.text-primary, .th--animateur{
+    color: #000000;
+}
+
+.strong{
+    font-weight: bold;
+}
+
+.txt-discret{
+    font-size: 0.7em;
+    color: #9f999c;
+}
+
+.liste-without-puce{
+    list-style: none;
+    margin-left: -10px;
+}
+
+.adresse{
+    font-size: 0.9em;
+}
+
+.header{
+    display: block;
+    width: 100%;
+    color: #44546a;
+    font-size: 1em;
+    border-bottom: 1px solid #ed7d31;
+    text-align: left;
+}
+
+.header table{
+    width: 100%;
+}
+
+.image--1{
+    width: 75px;
+    height: 64px;
+}
+.image--2{
+    float: right;
+    width: 80px;
+    height: 64px;
+}
+
+.header-title{
+    width: 65%;
+}
+
+.header-images{
+    width: 25%;
+    text-align: right;
+}
+
+.signature{
+    text-align: center;
+}
+
+.th--signature{
+    text-align: center;
+    padding: 8px;
+    font-weight: normal;
+    font-size: 0.8em;
+    color: #6b6b6b;
+    width: 150px;
+}
+.th--formateur{
+    padding: 8px;
+    width: 250px;
+}
+
+.th--signature-nocenter{
+    text-align: left;
+}
+
+.th--formateur-discret{
+    text-align: center;
+    padding: 8px;
+    font-weight: normal;
+    font-size: 0.8em;
+    color: #6b6b6b;
+    width: 250px;
+}
+
+.th--animateur{
+    color: #a2110b;
+}
+
+.table{
+    margin: 0;
+}
+.worker-user{
+    font-size: 0.9em;
+    color: #6b6b6b;
+}
