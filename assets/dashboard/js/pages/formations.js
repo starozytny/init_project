@@ -7,6 +7,7 @@ import React from "react";
 import { render } from "react-dom";
 import { Formations } from "./components/Formations/Formations";
 import { Sessions }   from "./components/Formations/Sessions/Sessions";
+import { Session }    from "@dashboardPages/components/Formations/Sessions/Session";
 
 Routing.setRoutingData(routes);
 
@@ -18,4 +19,9 @@ if(el){
 el = document.getElementById("formation-sessions");
 if(el){
     render(<Sessions {...el.dataset}/>, el)
+}
+
+el = document.getElementById("session-participants");
+if(el){
+    render(<Session {...el.dataset}/>, el)
 }

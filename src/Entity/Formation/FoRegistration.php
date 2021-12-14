@@ -6,6 +6,7 @@ use App\Entity\DataEntity;
 use App\Entity\User;
 use App\Repository\Formation\FoRegistrationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=FoRegistrationRepository::class)
@@ -16,18 +17,21 @@ class FoRegistration extends DataEntity
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="foRegistrations")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"admin:read"})
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=FoWorker::class, inversedBy="registrations")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"admin:read"})
      */
     private $worker;
 

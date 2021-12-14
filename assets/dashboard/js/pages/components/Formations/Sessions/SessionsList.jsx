@@ -18,7 +18,7 @@ export class SessionsList extends Component {
                 </div>
 
                 <div className="items-table">
-                    <div className="items items-default items-contact">
+                    <div className="items items-default">
                         <div className="item item-header">
                             <div className="item-header-selector" />
                             <div className="item-content">
