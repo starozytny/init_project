@@ -46,7 +46,7 @@ class FoSession extends DataEntity
     private $time;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"admin:read"})
      */
     private $time2;
@@ -160,8 +160,9 @@ class FoSession extends DataEntity
     private $modAssi;
 
     /**
-     * @ORM\ManyToOne(targetEntity=FoFormation::class, inversedBy="sessions")
+     * @ORM\ManyToOne(targetEntity=FoFormation::class, fetch="EAGER", inversedBy="sessions")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"admin:read"})
      */
     private $formation;
 
@@ -241,7 +242,7 @@ class FoSession extends DataEntity
         return $this->time2;
     }
 
-    public function setTime2(string $time2): self
+    public function setTime2(?string $time2): self
     {
         $this->time2 = $time2;
 

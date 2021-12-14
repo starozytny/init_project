@@ -232,7 +232,6 @@ export class Form extends Component {
 
         let method = context === "create" ? "POST" : "PUT";
 
-
         let paramsToValidate = [
             {type: "text",   id: 'animator',  value: animator},
             {type: "text",   id: 'start',     value: start},
@@ -282,6 +281,8 @@ export class Form extends Component {
                     let data = response.data;
                     self.props.onUpdateList(data);
                     self.setState({ success: messageSuccess, errors: [] });
+                    document.body.scrollTop = 0;
+                    document.documentElement.scrollTop = 0;
                     if(context === "create"){
                         self.setState( {
                             start: "",

@@ -123,6 +123,8 @@ export class FormationForm extends Component {
                     let data = response.data;
                     self.props.onUpdateList(data);
                     self.setState({ success: messageSuccess, errors: [] });
+                    document.body.scrollTop = 0;
+                    document.documentElement.scrollTop = 0;
                     if(context === "create"){
                         self.setState( {
                             name: '',

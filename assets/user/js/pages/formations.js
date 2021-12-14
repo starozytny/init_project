@@ -5,13 +5,13 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min';
 
 import React from "react";
 import { render } from "react-dom";
-import { Formations } from "@userComponents/Formation/Formations";
+import { Sessions } from "@userComponents/Session/Sessions";
 
 Routing.setRoutingData(routes);
 
-let el = document.getElementById("formations");
+let el = document.getElementById("sessions");
 if(el){
     render(<div className="main-content">
-        <Formations {...el.dataset} />
+        <Sessions {...el.dataset} />
     </div>, el)
 }
