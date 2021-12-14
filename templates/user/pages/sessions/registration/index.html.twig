@@ -1,6 +1,6 @@
 {% extends 'user/pages/formations/template.html.twig' %}
 
-{% set page_title %}Inscription à {{ elem.name }}{% endset %}
+{% set page_title %}Inscription à {{ elem.formation.name }} {{ elem.start | date('d/m/Y') }} {% endset %}
 
 {% block main_content %}
     <div id="session-registration">

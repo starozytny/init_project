@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Formation\FoFormation;
 use App\Entity\Formation\FoSession;
 use App\Entity\Formation\FoWorker;
 use App\Entity\Paiement\PaBank;
@@ -111,7 +110,7 @@ class UserController extends AbstractController
     /**
      * @Route("/formations/sessions", name="sessions")
      */
-    public function formations(SerializerInterface $serializer): Response
+    public function sessions(SerializerInterface $serializer): Response
     {
         $em = $this->doctrine->getManager();
         $objs = $em->getRepository(FoSession::class)->findBy(['isPublished' => true], ['start' => 'ASC']);
@@ -123,4 +122,12 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/formation/sessions/{slug}", options={"expose"=true}, name="registration")
+     */
+    public function registration(FoSession $obj, SerializerInterface $serializer): Response
+    {
+        $data = $serializer->serialize($obj, 'json', ['groups' => User::ADMIN_READ]);
+        return $this->render('user/pages/sessions/registration/index.html.twig', ['elem' => $obj, 'donnees' => $data]);
+    }
 }

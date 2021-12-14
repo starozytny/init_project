@@ -35,6 +35,7 @@ class DataFormation extends DataConstructor
         $animator = $this->sanitizeData->sanitizeString($data->animator);
 
         return ($obj)
+            ->setSlug(null)
             ->setFormation($formation)
             ->setAnimator($animator)
             ->setType((int) $data->type)

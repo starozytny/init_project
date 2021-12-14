@@ -8,7 +8,6 @@ export class SessionsItem extends Component {
     render () {
         const { elem } = this.props;
 
-        console.log(elem)
         let formation = elem.formation;
 
         return <div className="item">
@@ -24,7 +23,7 @@ export class SessionsItem extends Component {
                             {elem.startJavascript}
                         </div>
                         <div className="col-3 actions">
-                            <ButtonIcon icon="download">S'inscrire</ButtonIcon>
+                            <ButtonIcon element="a" onClick={Routing.generate('user_registration', {'slug': elem.slug})} icon="download">S'inscrire</ButtonIcon>
                         </div>
                     </div>
                 </div>

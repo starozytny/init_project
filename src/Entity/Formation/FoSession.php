@@ -6,6 +6,7 @@ use App\Entity\DataEntity;
 use App\Repository\Formation\FoSessionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=FoSessionRepository::class)
@@ -158,6 +159,20 @@ class FoSession extends DataEntity
      * @Groups({"admin:read"})
      */
     private $modAssi;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Gedmo\Slug(handlers={
+     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
+     *          @Gedmo\SlugHandlerOption(name="relationField", value="formation"),
+     *          @Gedmo\SlugHandlerOption(name="relationSlugField", value="slug"),
+     *          @Gedmo\SlugHandlerOption(name="separator", value="-"),
+     *          @Gedmo\SlugHandlerOption(name="urilize", value="true"),
+     *      })
+     * }, updatable=true, fields={"animator"})
+     * @Groups({"admin:read"})
+     */
+    private $slug;
 
     /**
      * @ORM\ManyToOne(targetEntity=FoFormation::class, fetch="EAGER", inversedBy="sessions")
@@ -473,6 +488,19 @@ class FoSession extends DataEntity
     public function setDurationByDay(string $durationByDay): self
     {
         $this->durationByDay = $durationByDay;
+
+        return $this;
+    }
+
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
