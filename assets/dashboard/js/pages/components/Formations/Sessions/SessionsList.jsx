@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
 import { Alert }      from "@dashboardComponents/Tools/Alert";
 
-import { SessionsItem }   from "./SessionsItem";
+import {HeaderSession, SessionsItem} from "./SessionsItem";
 
 export class SessionsList extends Component {
     render () {
@@ -19,19 +19,7 @@ export class SessionsList extends Component {
 
                 <div className="items-table">
                     <div className="items items-default">
-                        <div className="item item-header">
-                            <div className="item-header-selector" />
-                            <div className="item-content">
-                                <div className="item-body">
-                                    <div className="infos infos-col-4">
-                                        <div className="col-1">Session</div>
-                                        <div className="col-2">Prix</div>
-                                        <div className="col-3">Participants</div>
-                                        <div className="col-4 actions">Actions</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <HeaderSession haveSelector={true}/>
                         {data && data.length !== 0 ? data.map(elem => {
                             return <SessionsItem {...this.props} elem={elem} key={elem.id}/>
                         }) : <Alert>Aucun résultat</Alert>}
