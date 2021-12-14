@@ -1,0 +1,10 @@
+{% extends 'admin/pages/formations/template.html.twig' %}
+
+{% set page_title %}Liste des participants de {{ session.formation.name }} pour le {{ session.start | date('d/m/Y') }}{% endset %}
+{% set submenuActive = "" %}
+
+{% block main_content %}
+    <div id="session-participants" data-donnees="{{ donnees }}">
+        {% include "dashboard/layout/components/spinner.html.twig" %}
+    </div>
+{% endblock %}

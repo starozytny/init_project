@@ -156,4 +156,17 @@ class AdminController extends AbstractController
             'formation' => $formation
         ]);
     }
+
+    /**
+     * @Route("/session/{slug}", options={"expose"=true}, name="sessions_read")
+     */
+    public function session(FoSession $session, SerializerInterface $serializer): Response
+    {
+        $obj = $serializer->serialize($session, 'json', ['groups' => User::ADMIN_READ]);
+
+        return $this->render('admin/pages/formations/participants.html.twig', [
+            'donnees' => $obj,
+            'session' => $session
+        ]);
+    }
 }

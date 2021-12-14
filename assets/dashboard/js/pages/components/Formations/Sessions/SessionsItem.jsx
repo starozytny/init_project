@@ -14,7 +14,7 @@ export class SessionsItem extends Component {
                                onClick={Routing.generate('api_sessions_emargements', {'slug': elem.slug})}
                                text="Emargements" />},
             {data: <ButtonIcon element="a" icon="user"
-                               onClick={Routing.generate('api_sessions_emargements', {'slug': elem.slug})}
+                               onClick={Routing.generate('admin_sessions_read', {'slug': elem.slug})}
                                text="Participants" />},
         ]
 
