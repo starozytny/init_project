@@ -1,0 +1,1 @@
+import "../../css/pages/paiements.scss";

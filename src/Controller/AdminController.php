@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Entity\Notification;
+use App\Entity\Paiement\PaOrder;
 use App\Entity\Settings;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -123,6 +124,18 @@ class AdminController extends AbstractController
         $objs = $this->getAllData(Notification::class, $serializer);
 
         return $this->render('admin/pages/notifications/index.html.twig', [
+            'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/paiements", name="paiements_index")
+     */
+    public function paiements(SerializerInterface $serializer): Response
+    {
+        $objs = $this->getAllData(PaOrder::class, $serializer);
+
+        return $this->render('admin/pages/paiement/order/index.html.twig', [
             'donnees' => $objs
         ]);
     }
