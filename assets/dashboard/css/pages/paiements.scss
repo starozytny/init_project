@@ -14,4 +14,13 @@
   .items-default .infos{
     align-items: flex-start;
   }
+
+  .toolbar{
+    .create{
+      width: 202px;
+    }
+    .filter-search{
+      width: calc(100% - 202px - 24px);
+    }
+  }
 }
