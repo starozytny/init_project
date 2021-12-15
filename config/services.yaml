@@ -7,6 +7,10 @@ parameters:
     public_directory: '%kernel.project_dir%/public/'
     private_directory: '%kernel.project_dir%/documents/'
     pdf_style_directory: '%kernel.project_dir%/public/pdf/css/'
+    creancier.titulaire: '%env(CREANCIER_TITULAIRE)%'
+    creancier.iban: '%env(CREANCIER_IBAN)%'
+    creancier.bic: '%env(CREANCIER_BIC)%'
+    creancier.schmedid: '%env(CREANCIER_SCHMED_ID)%'
 
 services:
     # default configuration for services in *this* file

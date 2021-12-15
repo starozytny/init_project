@@ -59,6 +59,7 @@ export class Orders extends Component {
         this.handleGetFilters = this.handleGetFilters.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.handleRefresh = this.handleRefresh.bind(this);
+        this.handleProcess = this.handleProcess.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
     }
@@ -111,6 +112,21 @@ export class Orders extends Component {
         ;
     }
 
+    handleProcess = (id) => { // id or "all"
+        let self = this;
+        Formulaire.loader(true);
+        axios.post(Routing.generate('api_orders_process'), {'id': id})
+            .then(function (response) {
+            })
+            .catch(function (error) {
+                Formulaire.displayErrors(self, error, "Une erreur est survenue, veuillez contacter le support.")
+            })
+            .then(() => {
+                Formulaire.loader(false);
+            })
+        ;
+    }
+
     handleContentList = (currentData, changeContext, getFilters, filters) => {
         return <OrdersList onChangeContext={changeContext}
                            onDelete={this.layout.current.handleDelete}
@@ -121,6 +137,7 @@ export class Orders extends Component {
                            isDeveloper={this.props.isDeveloper === "true"}
                            onCancel={this.handleCancel}
                            onRefresh={this.handleRefresh}
+                           onProcess={this.handleProcess}
                            data={currentData} />
     }
 

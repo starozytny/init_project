@@ -21,7 +21,7 @@ export class OrdersList extends Component {
     }
 
     render () {
-        const { isDeveloper, data, onDeleteAll, onGetFilters, filters, onSearch } = this.props;
+        const { isDeveloper, data, onDeleteAll, onGetFilters, filters, onSearch, onProcess } = this.props;
 
         let filtersLabel = ["Attente", "Validé", "Traité", "Expiré", "Annulé"];
         let filtersId    = ["f-attente", "f-valider", "f-traiter", "f-expirer", "f-annuler"];
@@ -38,7 +38,7 @@ export class OrdersList extends Component {
             <div>
                 <div className="toolbar">
                     <div className="item create">
-                        <Button>Traiter tous les ordres</Button>
+                        <Button onClick={() => onProcess("all")}>Traiter tous les ordres</Button>
                     </div>
                     <div className="item filter-search">
                         <Filter ref={this.filter} items={itemsFilter} onGetFilters={onGetFilters} />
