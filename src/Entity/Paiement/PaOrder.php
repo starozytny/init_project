@@ -3,8 +3,11 @@
 namespace App\Entity\Paiement;
 
 use App\Entity\DataEntity;
+use App\Entity\Formation\FoRegistration;
 use App\Entity\User;
 use App\Repository\Paiement\PaOrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -139,6 +142,11 @@ class PaOrder extends DataEntity
     private $lot;
 
     /**
+     * @ORM\OneToMany(targetEntity=FoRegistration::class, mappedBy="paOrder")
+     */
+    private $registrations;
+
+    /**
      * @throws Exception
      */
     public function __construct()
@@ -146,6 +154,7 @@ class PaOrder extends DataEntity
         $this->createdAt = $this->initNewDate();
         $this->codeAt = $this->initNewDate();
         $this->token = $this->initToken();
+        $this->registrations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -418,6 +427,36 @@ class PaOrder extends DataEntity
     public function setLot(?PaLot $lot): self
     {
         $this->lot = $lot;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FoRegistration[]
+     */
+    public function getRegistrations(): Collection
+    {
+        return $this->registrations;
+    }
+
+    public function addRegistration(FoRegistration $registration): self
+    {
+        if (!$this->registrations->contains($registration)) {
+            $this->registrations[] = $registration;
+            $registration->setPaOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRegistration(FoRegistration $registration): self
+    {
+        if ($this->registrations->removeElement($registration)) {
+            // set the owning side to null (unless already changed)
+            if ($registration->getPaOrder() === $this) {
+                $registration->setPaOrder(null);
+            }
+        }
 
         return $this;
     }

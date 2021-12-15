@@ -3,6 +3,7 @@
 namespace App\Entity\Formation;
 
 use App\Entity\DataEntity;
+use App\Entity\Paiement\PaOrder;
 use App\Entity\User;
 use App\Repository\Formation\FoRegistrationRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -62,6 +63,12 @@ class FoRegistration extends DataEntity
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=PaOrder::class, inversedBy="registrations")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $paOrder;
 
     public function __construct()
     {
@@ -154,6 +161,18 @@ class FoRegistration extends DataEntity
     public function setHaveAttestation(bool $haveAttestation): self
     {
         $this->haveAttestation = $haveAttestation;
+
+        return $this;
+    }
+
+    public function getPaOrder(): ?PaOrder
+    {
+        return $this->paOrder;
+    }
+
+    public function setPaOrder(?PaOrder $paOrder): self
+    {
+        $this->paOrder = $paOrder;
 
         return $this;
     }
