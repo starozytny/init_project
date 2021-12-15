@@ -65,7 +65,7 @@ class UserController extends AbstractController
         return $this->render('user/pages/profil/index.html.twig',  [
             'obj' => $obj,
             'banks' => $banks,
-            'orders' => $orders
+            'orders' => $orders,
             'teams' => $teams,
             'teamsArchived' => $teamsArchived,
             '_error' => $request->query->get('_error')
