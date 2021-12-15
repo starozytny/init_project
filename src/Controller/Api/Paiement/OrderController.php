@@ -10,9 +10,12 @@ use App\Service\ApiResponse;
 use App\Service\Data\DataPaiement;
 use App\Service\Data\DataService;
 use App\Service\Data\Paiement\DataBank;
+use App\Service\FileCreator;
 use App\Service\ValidatorService;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Exception;
+use Mpdf\MpdfException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -255,5 +258,37 @@ class OrderController extends AbstractController
         }
 
         return new BinaryFileResponse($new_file_path);
+    }
+
+    /**
+     * Generate mandat de prélèvement
+     *
+     * @Route("/mandat-prelevement/{id}", name="mandat", options={"expose"=true}, methods={"GET"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a message",
+     * )
+     *
+     * @OA\Tag(name="Lots")
+     *
+     * @param PaOrder $obj
+     * @param FileCreator $fileCreator
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     * @throws MpdfException
+     * @throws Exception
+     */
+    public function mandat(PaOrder $obj, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
+    {
+        $mpdf = $fileCreator->initPDF("Mandat de prélèvement SEPA -" . $obj->getRum());
+
+        $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/mandat.html.twig", [
+            'elem' => $obj,
+        ]);
+
+        $mpdf = $fileCreator->outputPDF($mpdf, "mandat-prelevement-sepa-" . $obj->getRum() . '.pdf');
+
+        return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 }

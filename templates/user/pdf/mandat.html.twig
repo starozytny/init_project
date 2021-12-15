@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+<div class="main">
+    <div class="center">
+        <h1>Mandat de prélèvement SEPA</h1>
+        <p>
+            Référence unique du Mandat : <span class="strong">{{ elem.rum }}</span>
+        </p>
+    </div>
+
+
+    <p>
+        En signant ce formulaire de mandat, vous autorisez <span class="strong">FNAIM FORMATION</span> à envoyer des instructions à votre
+        banque pour débiter votre compte, et votre banque à débiter votre compte conformément aux instructions de
+        <span class="strong">FNAIM FORMATION</span>.
+    </p>
+    <p>
+        Vous bénéficiez du droit d'être remboursé par votre banque selon les conditions décrites dans la convention
+        que vous avez passée avec elle. Une demande de remboursement doit être présentée dans les 8 semaines
+        suivant la date de débit de votre compte pour un prélèvement autorisé.
+    </p>
+
+    <hr>
+
+    <table class="table table-1">
+        <tbody>
+        <tr>
+            <th scope="row">Montant du paiement</th>
+            <td>{{ elem.price }} €</td>
+            <td></td><td></td><td></td>
+        </tr>
+        <tr>
+            <th scope="row">Type de paiement</th>
+            <td>Unique</td>
+            <td></td><td></td><td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2 class="h4">Compte bancaire à débiter</h2>
+
+    <table class="table table-1">
+        <tbody>
+        <tr>
+            <th scope="row">Titulaire</th>
+            <td>{{ elem.titulaire }}</td>
+            <td></td><td></td><td></td>
+        </tr>
+        <tr>
+            <th scope="row">IBAN</th>
+            <td>{{ elem.iban }}</td>
+            <td></td><td></td><td></td>
+        </tr>
+        <tr>
+            <th scope="row">BIC</th>
+            <td>{{ elem.bic }}</td>
+            <td></td><td></td><td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>
+        <br><br>
+        Paiement ordonné par le débiteur le {{ elem.createdAt | date('d/m/Y') }} à {{ elem.createdAt | date("H:i:s") }}
+    </p>
+
+    <p>
+        Lien de confirmation envoyé à l'adresse <span class="strong">{{ elem.email }}</span>
+    </p>
+
+</div>
+</body>
+</html>
