@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Paiement\PaLot;
 use App\Entity\Paiement\PaOrder;
 use App\Entity\User;
 use App\Service\DatabaseService;
@@ -38,7 +39,7 @@ class FakeOrderCreateCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Reset des tables');
-        $this->databaseService->resetTable($io, [PaOrder::class]);
+        $this->databaseService->resetTable($io, [PaOrder::class, PaLot::class]);
 
         $user = $this->em->getRepository(User::class)->findOneBy(['username' => "shanbo"]);
 
