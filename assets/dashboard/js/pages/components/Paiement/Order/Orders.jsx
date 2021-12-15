@@ -8,6 +8,7 @@ import Routing      from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@commonComponents/functions/sort";
+import Helper            from "@commonComponents/functions/helper";
 import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { OrdersList }      from "./OrdersList";
@@ -117,16 +118,10 @@ export class Orders extends Component {
         Formulaire.loader(true);
         axios.post(Routing.generate('api_orders_process'), {'id': id})
             .then(function (response) {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-
                 let filename = (new Date().getTime()).toString();
                 filename = "paiement-" + filename.substr(0, filename.length - 3) + ".xml";
+                Helper.downloadBinaryFile(response.data, filename);
 
-                link.setAttribute('download', filename); //or any other extension
-                document.body.appendChild(link);
-                link.click();
                 Formulaire.loader(false);
             })
             .catch(function (error) {
