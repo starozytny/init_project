@@ -40,9 +40,9 @@ class FakeFormationCreateCommand extends Command
         $io->title('Reset des tables');
         $this->databaseService->resetTable($io, [FoSession::class, FoFormation::class]);
 
-        $io->title('Création de 5 formations et x sessions');
+        $io->title('Création de 10 formations et x sessions');
         $fake = Factory::create();
-        for($i=0; $i<5 ; $i++) {
+        for($i=0; $i<10 ; $i++) {
             $name = $fake->name;
             $formation = (new FoFormation())
                 ->setName($name)
@@ -54,6 +54,7 @@ class FakeFormationCreateCommand extends Command
                 ->setTarget($fake->text)
                 ->setCat($fake->text)
                 ->setAccessibility($fake->numberBetween(0,1))
+                ->setIsPublished($fake->numberBetween(0, 1))
             ;
 
             $this->em->persist($formation);
@@ -84,6 +85,7 @@ class FakeFormationCreateCommand extends Command
                     ->setModEval($fake->text)
                     ->setModPeda($fake->text)
                     ->setModAssi($fake->text)
+                    ->setIsPublished($fake->numberBetween(0, 1))
                 ;
 
                 $this->em->persist($session);
