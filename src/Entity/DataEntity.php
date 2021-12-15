@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Service\SanitizeData;
 use Carbon\Carbon;
 use Carbon\Factory;
 use Exception;
@@ -88,7 +89,7 @@ class DataEntity
      * @param $data
      * @return false|string|void
      */
-    function cryptBank($action, $data)
+    public function cryptBank($action, $data)
     {
         $data = trim($data);
         $data = preg_replace('/\s+/', '', $data);
@@ -103,5 +104,23 @@ class DataEntity
         } elseif ($action == 'decrypt') {
             return openssl_decrypt(base64_decode($data), $method, $passBank, OPENSSL_RAW_DATA, $iv);
         }
+    }
+
+    public function toFormatIbanHidden($value): ?string
+    {
+        if($value != "" && $value != null){
+            $value = trim($value);
+            $value = str_replace(" ", "", $value);
+
+            $a = substr($value,0,4);
+            $b = substr($value,4,4);
+            $c = substr($value,8,4);
+            $d = substr($value,12,4);
+            $g = substr($value,24,3);
+
+            return $a . ' ' . $b . ' ' . $c . ' ' . $d . ' XXXX XXXX ' . $g;
+        }
+
+        return null;
     }
 }

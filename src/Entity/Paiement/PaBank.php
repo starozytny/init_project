@@ -87,6 +87,15 @@ class PaBank extends DataEntity
         return $this;
     }
 
+    /**
+     * @return string
+     * @Groups({"admin:read"})
+     */
+    public function getIbanHidden(): string
+    {
+        return $this->toFormatIbanHidden($this->iban);
+    }
+
     public function getIban(): ?string
     {
         return $this->cryptBank('decrypt', $this->iban);

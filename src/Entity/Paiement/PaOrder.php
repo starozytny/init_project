@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Repository\Paiement\PaOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=PaOrderRepository::class)
@@ -23,36 +24,43 @@ class PaOrder extends DataEntity
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $rum;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"admin:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $status = self::STATUS_ATTENTE;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"admin:read"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $email;
 
@@ -63,6 +71,7 @@ class PaOrder extends DataEntity
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $participants = 1;
 
@@ -83,6 +92,7 @@ class PaOrder extends DataEntity
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $titulaire;
 
@@ -93,6 +103,7 @@ class PaOrder extends DataEntity
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $bic;
 
@@ -143,6 +154,15 @@ class PaOrder extends DataEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getCreatedAtString(): ?string
+    {
+        return $this->getFullDateString($this->createdAt);
+    }
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -179,6 +199,17 @@ class PaOrder extends DataEntity
         return $this;
     }
 
+    /**
+     * @return string
+     * @Groups({"admin:read"})
+     */
+    public function getStatusString(): string
+    {
+        $items = ["Attente", "Validé", "Traité", "Expiré", "Annulé"];
+
+        return $items[$this->status];
+    }
+
     public function getStatus(): ?int
     {
         return $this->status;
@@ -201,6 +232,15 @@ class PaOrder extends DataEntity
         $this->titulaire = $titulaire;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     * @Groups({"admin:read"})
+     */
+    public function getIbanHidden(): string
+    {
+        return $this->toFormatIbanHidden($this->iban);
     }
 
     public function getIban(): ?string
