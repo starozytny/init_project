@@ -90,13 +90,15 @@ class OrderController extends AbstractController
      *
      * @param PaOrder $obj
      * @param ApiResponse $apiResponse
+     * @param DataService $dataService
      * @return JsonResponse
      */
-    public function cancel(PaOrder $obj, ApiResponse $apiResponse): JsonResponse
+    public function cancel(PaOrder $obj, ApiResponse $apiResponse, DataService $dataService): JsonResponse
     {
         $em = $this->doctrine->getManager();
 
         $obj->setStatus(PaOrder::STATUS_ANNULER);
+        $obj->setUpdatedAt($dataService->createDate());
         $em->flush();
 
         return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
@@ -116,15 +118,15 @@ class OrderController extends AbstractController
      *
      * @param PaOrder $obj
      * @param ApiResponse $apiResponse
+     * @param DataService $dataService
      * @return JsonResponse
      */
-    public function refresh(PaOrder $obj, ApiResponse $apiResponse): JsonResponse
+    public function refresh(PaOrder $obj, ApiResponse $apiResponse, DataService $dataService): JsonResponse
     {
         $em = $this->doctrine->getManager();
 
-        $codeAt = new DateTime();
-        $codeAt->setTimezone(new \DateTimeZone("Europe/Paris"));
-        $obj->setCodeAt($codeAt);
+        $obj->setCodeAt($dataService->createDate());
+        $obj->setUpdatedAt($dataService->createDate());
         $em->flush();
 
         return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
