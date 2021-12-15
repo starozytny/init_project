@@ -1,16 +1,52 @@
 import React, { Component } from 'react';
 
-import { ButtonIcon } from "@dashboardComponents/Tools/Button";
+import {Button, ButtonIcon} from "@dashboardComponents/Tools/Button";
 import { Alert }      from "@dashboardComponents/Tools/Alert";
 
 import { OrdersItem }   from "./OrdersItem";
+import {Filter, FilterSelected} from "@dashboardComponents/Layout/Filter";
+import {Search} from "@dashboardComponents/Layout/Search";
 
 export class OrdersList extends Component {
+    constructor(props) {
+        super(props);
+
+        this.filter = React.createRef();
+
+        this.handleFilter = this.handleFilter.bind(this);
+    }
+
+    handleFilter = (e) => {
+        this.filter.current.handleChange(e, true);
+    }
+
     render () {
-        const { data, onDeleteAll } = this.props;
+        const { data, onDeleteAll, onGetFilters, filters, onSearch } = this.props;
+
+        let filtersLabel = ["Attente", "Validé", "Traité", "Expiré", "Annulé"];
+        let filtersId    = ["f-attente", "f-valider", "f-traiter", "f-expirer", "f-annuler"];
+
+        let itemsFilter = [
+            { value: 0, id: filtersId[0], label: filtersLabel[0] },
+            { value: 1, id: filtersId[1], label: filtersLabel[1] },
+            { value: 2, id: filtersId[2], label: filtersLabel[2] },
+            { value: 3, id: filtersId[3], label: filtersLabel[3] },
+            { value: 4, id: filtersId[4], label: filtersLabel[4] }
+        ];
 
         return <>
             <div>
+                <div className="toolbar">
+                    <div className="item create">
+                        <Button>Traiter tous les ordres</Button>
+                    </div>
+                    <div className="item filter-search">
+                        <Filter ref={this.filter} items={itemsFilter} onGetFilters={onGetFilters} />
+                        <Search onSearch={onSearch} placeholder="Recherche par libelle, titulaire, montant ou email.."/>
+                        <FilterSelected filters={filters} itemsFiltersLabel={filtersLabel} itemsFiltersId={filtersId} onChange={this.handleFilter}/>
+                    </div>
+                </div>
+
                 <div className="items-table">
                     <div className="items items-default">
                         <div className="item item-header">
