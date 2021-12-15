@@ -160,7 +160,7 @@ class PaOrder extends DataEntity
      */
     public function getCreatedAtString(): ?string
     {
-        return $this->getFullDateString($this->createdAt);
+        return $this->getFullDateString($this->createdAt, 'lll');
     }
 
     public function getCreatedAt(): ?\DateTimeInterface

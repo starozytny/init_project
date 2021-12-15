@@ -31,9 +31,11 @@ export class OrdersItem extends Component {
 
                         <div className="col-3">
                             <div className="role">{elem.statusString}</div>
+                            <div className="sub">{elem.createdAtString}</div>
                         </div>
                         <div className="col-4 actions">
-                            <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
+                            <ButtonIcon icon="upload" >Traiter</ButtonIcon>
+                            <ButtonIcon icon="cancel" onClick={() => onDelete(elem)}>Annuler</ButtonIcon>
                         </div>
                     </div>
                 </div>
