@@ -10,6 +10,7 @@ import { TeamFormulaire } from "@userComponents/Profil/TeamForm";
 import { Team }           from "@userComponents/Profil/Team";
 import { BankFormulaire } from "@userComponents/Profil/Bank/BankForm";
 import { Banks }          from "@userComponents/Profil/Bank/Banks";
+import { Orders }         from "@userComponents/Profil/Order/Orders";
 
 Routing.setRoutingData(routes);
 
@@ -49,4 +50,9 @@ if(el){
     render(<div className="main-content">
         <BankFormulaire type="create" />
     </div>, el)
+}
+
+el = document.getElementById("profil-orders");
+if(el){
+    render(<Orders {...el.dataset} />, el)
 }

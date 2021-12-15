@@ -19,6 +19,15 @@ function switchFunction(type, search, v) {
                 return v;
             }
             break;
+        case "orders":
+            if(v.name.toLowerCase().startsWith(search)
+                || v.titulaire.toLowerCase().startsWith(search)
+                || v.price === parseFloat(search)
+                || v.email.toLowerCase().startsWith(search)
+            ){
+                return v;
+            }
+            break;
         case "team":
             if(v.firstname.toLowerCase().startsWith(search)
                 || v.lastname.toLowerCase().startsWith(search)

@@ -7,6 +7,8 @@ use App\Entity\Formation\FoFormation;
 use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoSession;
 use App\Entity\Notification;
+use App\Entity\Paiement\PaLot;
+use App\Entity\Paiement\PaOrder;
 use App\Entity\Settings;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -126,6 +128,46 @@ class AdminController extends AbstractController
         $objs = $this->getAllData(Notification::class, $serializer);
 
         return $this->render('admin/pages/notifications/index.html.twig', [
+            'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/paiements", name="paiements_index")
+     */
+    public function paiements(SerializerInterface $serializer): Response
+    {
+        $objs = $this->getAllData(PaOrder::class, $serializer);
+
+        return $this->render('admin/pages/paiement/order/index.html.twig', [
+            'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/paiements/historiques", name="lots_index")
+     */
+    public function lots(SerializerInterface $serializer): Response
+    {
+        $objs = $this->getAllData(PaLot::class, $serializer);
+
+        return $this->render('admin/pages/paiement/lot/index.html.twig', [
+            'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/paiements/historiques/{id}", options={"expose"=true}, name="lots_read")
+     */
+    public function lot(PaLot $obj, SerializerInterface $serializer): Response
+    {
+        $em = $this->doctrine->getManager();
+        $objs = $em->getRepository(PaOrder::class)->findby(['lot' => $obj]);
+
+        $objs = $serializer->serialize($objs, 'json', ['groups' => User::ADMIN_READ]);
+
+        return $this->render('admin/pages/paiement/lot/read.html.twig', [
+            'elem' => $obj,
             'donnees' => $objs
         ]);
     }

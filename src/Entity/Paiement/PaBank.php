@@ -87,6 +87,15 @@ class PaBank extends DataEntity
         return $this;
     }
 
+    /**
+     * @return string
+     * @Groups({"admin:read"})
+     */
+    public function getIbanHidden(): string
+    {
+        return $this->toFormatIbanHidden($this->iban);
+    }
+
     public function getIban(): ?string
     {
         return $this->cryptBank('decrypt', $this->iban);
@@ -94,8 +103,6 @@ class PaBank extends DataEntity
 
     public function setIban(string $iban): self
     {
-        $iban = trim($iban);
-        $iban = preg_replace('/\s+/', '', $iban);
         $this->iban = $this->cryptBank('encrypt', $iban);
 
         return $this;
@@ -108,8 +115,6 @@ class PaBank extends DataEntity
 
     public function setBic(string $bic): self
     {
-        $bic = trim($bic);
-        $bic = preg_replace('/\s+/', '', $bic);
         $this->bic = $this->cryptBank('encrypt', $bic);
 
         return $this;

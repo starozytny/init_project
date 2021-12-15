@@ -1,0 +1,10 @@
+{% extends 'admin/pages/paiement/template.html.twig' %}
+
+{% set page_title %}Liste des paiements{% endset %}
+{% set submenuActive = "Paiements" %}
+
+{% block main_content %}
+    <div id="orders" data-donnees="{{ donnees }}" data-is-developer="{{ app.user.highRoleCode == 1 ? "true" : "false" }}">
+        {% include "dashboard/layout/components/spinner.html.twig" %}
+    </div>
+{% endblock %}

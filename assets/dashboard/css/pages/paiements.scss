@@ -1,0 +1,26 @@
+@import "../vars/vars";
+
+.role + .sub{
+  margin-top: 4px;
+}
+
+//                      __   _____ __    ___    __
+//                     | _| |___  / /_  ( _ )  |_ |
+//    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
+//   |_____|_____|_____| |    / /| (_) | (_) |  | |_____|_____|_____|
+//                     | |   /_/  \___/ \___/   | |
+//                     |__|                    |__|
+@media (min-width:768px) {
+  .items-default .infos{
+    align-items: flex-start;
+  }
+
+  .toolbar{
+    .create{
+      width: 202px;
+    }
+    .filter-search{
+      width: calc(100% - 202px - 24px);
+    }
+  }
+}

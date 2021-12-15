@@ -1,0 +1,10 @@
+{% extends 'admin/pages/paiement/template.html.twig' %}
+
+{% set page_title %}Détails du lot {{ elem.msgId }}{% endset %}
+{% set submenuActive = "" %}
+
+{% block main_content %}
+    <div id="lot" data-donnees="{{ donnees }}">
+        {% include "dashboard/layout/components/spinner.html.twig" %}
+    </div>
+{% endblock %}

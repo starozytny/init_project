@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.02"
+          xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.008.001.02 H:/Desktop/pain.008.001.02.xsd">
+    <CstmrDrctDbtInitn>
+        <GrpHdr>
+            <MsgId>FNAIM {{ msgId }}</MsgId>
+            <CreDtTm>{{ createdAt | date("Y-m-d\\TH:m:s") }}</CreDtTm>
+            <NbOfTxs>{{ NbOfTxs }}</NbOfTxs>
+            <CtrlSum>{{ total }}</CtrlSum>
+            <InitgPty>
+                <Nm>FNAIM FORMATION AIX-MARS</Nm>
+            </InitgPty>
+        </GrpHdr>
+
+        <PmtInf>
+            <PmtInfId>FNAIM {{ createdAt |date('Y-m-d') }}</PmtInfId>
+            <PmtMtd>DD</PmtMtd>
+            <BtchBookg>false</BtchBookg>
+            <NbOfTxs>{{ NbOfTxs }}</NbOfTxs>
+            <CtrlSum>{{ total }}</CtrlSum>
+            <PmtTpInf>
+                <SvcLvl>
+                    <Cd>SEPA</Cd>
+                </SvcLvl>
+                <LclInstrm>
+                    <Cd>CORE</Cd>
+                </LclInstrm>
+                <SeqTp>OOFF</SeqTp>
+            </PmtTpInf>
+            <ReqdColltnDt>{{ dateEcheance | date('Y-m-d') }}</ReqdColltnDt>
+            <Cdtr>
+                <Nm>{{ creancier_titulaire }}</Nm>
+            </Cdtr>
+            <CdtrAcct>
+                <Id>
+                    <IBAN>{{ creancier_iban }}</IBAN>
+                </Id>
+            </CdtrAcct>
+            <CdtrAgt>
+                <FinInstnId>
+                    <BIC>{{ creancier_bic }}</BIC>
+                </FinInstnId>
+            </CdtrAgt>
+            <ChrgBr>SLEV</ChrgBr>
+            <CdtrSchmeId>
+                <Id>
+                    <PrvtId>
+                        <Othr>
+                            <Id>{{ creancier_schmeId }}</Id>
+                            <SchmeNm>
+                                <Prtry>SEPA</Prtry>
+                            </SchmeNm>
+                        </Othr>
+                    </PrvtId>
+                </Id>
+            </CdtrSchmeId>
+            {# ---------------------- DEBUT DES TRANSACTIONS ----------------------- #}
+            {%- for order in orders -%}
+            <DrctDbtTxInf>
+                <PmtId>
+                    <InstrId>{{ order.user.username }} - {{ createdAt | date('d/m/Y') }}</InstrId>
+                    <EndToEndId>FNAIM AMP - {{ createdAt | date('d/m/Y') }}</EndToEndId>
+                </PmtId>
+                <InstdAmt Ccy="EUR">{{ order.price }}</InstdAmt>
+                <DrctDbtTx>
+                    <MndtRltdInf>
+                        <MndtId>{{ order.rum }}</MndtId>
+                        <DtOfSgntr>{{ order.createdAt | date('Y-m-d') }}</DtOfSgntr>
+                    </MndtRltdInf>
+                </DrctDbtTx>
+                <DbtrAgt>
+                    <FinInstnId>
+                        <BIC>{{ order.bic | upper }}</BIC>
+                    </FinInstnId>
+                </DbtrAgt>
+                <Dbtr>
+                    <Nm>{{ order.titulaire | upper }}</Nm>
+                </Dbtr>
+                <DbtrAcct>
+                    <Id>
+                        <IBAN>{{ order.iban | upper }}</IBAN>
+                    </Id>
+                </DbtrAcct>
+            </DrctDbtTxInf>
+            {% endfor %}
+        </PmtInf>
+    </CstmrDrctDbtInitn>
+</Document>

@@ -1,0 +1,53 @@
+table.table-val tr th{
+    height: 35px;
+    padding: 10px 15px 10px 10px;
+    border-top: 1px solid #dfdfdf;
+    border-bottom: 1px solid #dfdfdf;
+    border-right: 1px solid #dfdfdf;
+}
+table.table-val{
+    border-bottom: 1px solid #dfdfdf;
+}
+.table-one{
+    border-left: 1px solid #dfdfdf;
+}
+.table-total tr td,
+.table-total tr th{
+    height: 35px;
+    padding: 10px 15px 10px 10px;
+}
+table.table-val tr td{
+    border-right: 1px solid #dfdfdf;
+}
+table.table tr td {
+    padding: 10px 15px 10px 10px;
+}
+table.table{
+    border-spacing: 5px;
+    font-size: 0.8em;
+}
+
+.center{
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.strong{
+    font-weight: bold;
+}
+
+h1{
+    font-size: 18px;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.h4{
+    margin-top: 50px;
+    margin-bottom: 25px;
+}
+.space{
+    display: block;
+    opacity: 0;
+    color: #FFF;
+}

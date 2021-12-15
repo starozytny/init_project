@@ -188,6 +188,18 @@ function getNbDayBetweenDateArray(startArray, endArray)
     return days;
 }
 
+function downloadBinaryFile(data, filename, targetBlank=false) {
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement('a');
+    link.href = url;
+    if(targetBlank){
+        link.setAttribute("target", "_blank");
+    }
+    link.setAttribute('download', filename); //or any other extension
+    document.body.appendChild(link);
+    link.click();
+}
+
 module.exports = {
     getPostalCodes,
     setCityFromZipcode,
@@ -197,5 +209,6 @@ module.exports = {
     extractDateToArray,
     getNbDayBetweenDateArray,
     getBicCodes,
-    setBicFromIban
+    setBicFromIban,
+    downloadBinaryFile
 }
