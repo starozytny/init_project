@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Cron;
 
-use App\Entity\Formation\FoFormation;
 use App\Entity\Formation\FoSession;
 use App\Service\Data\DataService;
 use Doctrine\ORM\EntityManagerInterface;
-use Phalcon\Forms\Element\Date;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
