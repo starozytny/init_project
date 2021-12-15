@@ -20,13 +20,13 @@ export class OrdersItem extends Component {
                                 <span>{elem.name}</span>
                             </div>
                             <div className="sub">{elem.email}</div>
-                            <div className="sub">{elem.participants} pers.</div>
-                        </div>
-                        <div className="col-2">
-                            <div>{Sanitaze.toFormatCurrency(elem.price)}</div>
                             <div className="sub">{elem.ibanHidden}</div>
                             <div className="sub">{elem.bic}</div>
                             <div className="sub">{elem.titulaire}</div>
+                        </div>
+                        <div className="col-2">
+                            <div>{Sanitaze.toFormatCurrency(elem.price)}</div>
+                            <div className="sub">{elem.participants} pers.</div>
                         </div>
 
                         <div className="col-3">
