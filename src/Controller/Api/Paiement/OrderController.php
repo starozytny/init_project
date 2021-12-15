@@ -112,6 +112,8 @@ class OrderController extends AbstractController
     /**
      * Refresh codeAt of an order for validation
      *
+     * @Security("is_granted('ROLE_ADMIN')")
+     *
      * @Route("/refresh/{id}", name="refresh", options={"expose"=true}, methods={"POST"})
      *
      * @OA\Response(
@@ -139,6 +141,8 @@ class OrderController extends AbstractController
 
     /**
      * Process an order
+     *
+     * @Security("is_granted('ROLE_ADMIN')")
      *
      * @Route("/process", name="process", options={"expose"=true}, methods={"POST"})
      *
