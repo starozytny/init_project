@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -149,9 +150,9 @@ class OrderController extends AbstractController
      * @param Request $request
      * @param ApiResponse $apiResponse
      * @param DataService $dataService
-     * @return JsonResponse
+     * @return BinaryFileResponse
      */
-    public function process(Request $request, ApiResponse $apiResponse, DataService $dataService): JsonResponse
+    public function process(Request $request, ApiResponse $apiResponse, DataService $dataService): BinaryFileResponse
     {
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
@@ -178,6 +179,7 @@ class OrderController extends AbstractController
         $filename = "paiement-" . $code .".xml";
 
         $path = $this->getParameter('private_directory') . "/paiements";
+        $new_file_path = $path . "/" . $filename;
 
         try {
             if (!$fsObject->exists($path)){
@@ -190,8 +192,6 @@ class OrderController extends AbstractController
         }
 
         try {
-            $new_file_path = $path . "/" . $filename;
-
             if(file_exists($new_file_path)){
                 unlink($new_file_path);
             }
@@ -219,6 +219,6 @@ class OrderController extends AbstractController
             echo "Error creating file at ". $exception->getPath();
         }
 
-        return $apiResponse->apiJsonResponseSuccessful("success");
+        return new BinaryFileResponse($new_file_path);
     }
 }

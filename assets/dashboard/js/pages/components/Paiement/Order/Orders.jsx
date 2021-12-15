@@ -117,12 +117,21 @@ export class Orders extends Component {
         Formulaire.loader(true);
         axios.post(Routing.generate('api_orders_process'), {'id': id})
             .then(function (response) {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+
+                let filename = (new Date().getTime()).toString();
+                filename = "paiement-" + filename.substr(0, filename.length - 3) + ".xml";
+
+                link.setAttribute('download', filename); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+                Formulaire.loader(false);
             })
             .catch(function (error) {
-                Formulaire.displayErrors(self, error, "Une erreur est survenue, veuillez contacter le support.")
-            })
-            .then(() => {
                 Formulaire.loader(false);
+                Formulaire.displayErrors(self, error, "Une erreur est survenue, veuillez contacter le support.")
             })
         ;
     }
