@@ -1,5 +1,11 @@
 {% extends 'admin/layout/layout.html.twig' %}
 
+{% set submenu = [
+    { 'label': "Paiements", 'path': path('admin_paiements_index') },
+    { 'label': "Historique", 'path': path('admin_lots_index') }
+] %}
+
+
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('dashboard_paiements') }}

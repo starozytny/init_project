@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Entity\Notification;
+use App\Entity\Paiement\PaLot;
 use App\Entity\Paiement\PaOrder;
 use App\Entity\Settings;
 use App\Entity\User;
@@ -136,6 +137,18 @@ class AdminController extends AbstractController
         $objs = $this->getAllData(PaOrder::class, $serializer);
 
         return $this->render('admin/pages/paiement/order/index.html.twig', [
+            'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/paiements/historiques", name="lots_index")
+     */
+    public function lots(SerializerInterface $serializer): Response
+    {
+        $objs = $this->getAllData(PaLot::class, $serializer);
+
+        return $this->render('admin/pages/paiement/lot/index.html.twig', [
             'donnees' => $objs
         ]);
     }
