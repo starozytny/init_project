@@ -207,6 +207,6 @@ module.exports = {
     extractDateToArray,
     getNbDayBetweenDateArray,
     getBicCodes,
-    setBicFromIban
+    setBicFromIban,
     downloadBinaryFile
 }
