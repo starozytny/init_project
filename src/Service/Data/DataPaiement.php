@@ -13,13 +13,13 @@ class DataPaiement
 
     public function getFile($filename): string
     {
-        $path = $this->getPrivateDirectory() . "/paiements";
+        $path = $this->getPrivateDirectory() . "paiements";
         return $path . "/" .$filename;
     }
 
     public function getPaiementDirectory(): string
     {
-        return $this->getPrivateDirectory() . "/paiements";
+        return $this->getPrivateDirectory() . "paiements";
     }
 
     protected function getPrivateDirectory()

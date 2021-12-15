@@ -28,7 +28,11 @@ export class LotsItem extends Component {
                         </div>
 
                         <div className="col-3">
-                            <div className="sub">{elem.filename}</div>
+                            <div className="sub">
+                                <a target="_blank" download={elem.filename} href={Routing.generate('api_lots_file', {'id': elem.id})}>
+                                    {elem.filename}
+                                </a>
+                            </div>
                         </div>
                         <div className="col-4 actions">
                             {isDeveloper && <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>}

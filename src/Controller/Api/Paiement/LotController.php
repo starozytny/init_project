@@ -5,7 +5,7 @@ namespace App\Controller\Api\Paiement;
 use App\Entity\Paiement\PaLot;
 use App\Service\Data\DataPaiement;
 use App\Service\Data\DataService;
-use Doctrine\Common\Persistence\ManagerRegistry;
+//use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -19,12 +19,12 @@ use OpenApi\Annotations as OA;
  */
 class LotController extends AbstractController
 {
-    private $doctrine;
-
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        $this->doctrine = $doctrine;
-    }
+//    private $doctrine;
+//
+//    public function __construct(ManagerRegistry $doctrine)
+//    {
+//        $this->doctrine = $doctrine;
+//    }
 
     /**
      * Developer - Delete a lot
@@ -77,7 +77,7 @@ class LotController extends AbstractController
      *
      * @Security("is_granted('ROLE_ADMIN')")
      *
-     * @Route("/{id}", name="file", options={"expose"=true}, methods={"DELETE"})
+     * @Route("/{id}", name="file", options={"expose"=true}, methods={"GET"})
      *
      * @OA\Response(
      *     response=200,
