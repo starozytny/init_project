@@ -101,4 +101,32 @@ class OrderController extends AbstractController
 
         return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }
+
+    /**
+     * Refresh codeAt of an order for validation
+     *
+     * @Route("/refresh/{id}", name="refresh", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Return message successful",
+     * )
+     *
+     * @OA\Tag(name="Orders")
+     *
+     * @param PaOrder $obj
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     */
+    public function refresh(PaOrder $obj, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        $codeAt = new DateTime();
+        $codeAt->setTimezone(new \DateTimeZone("Europe/Paris"));
+        $obj->setCodeAt($codeAt);
+        $em->flush();
+
+        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+    }
 }

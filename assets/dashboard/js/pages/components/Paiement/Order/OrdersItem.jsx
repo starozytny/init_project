@@ -7,7 +7,7 @@ import Sanitaze      from "@commonComponents/functions/sanitaze";
 
 export class OrdersItem extends Component {
     render () {
-        const { isDeveloper, elem, onDelete, onSelectors, onCancel } = this.props
+        const { isDeveloper, elem, onDelete, onSelectors, onCancel, onRefresh } = this.props
 
         return <div className="item">
             {isDeveloper && <Selector id={elem.id} onSelectors={onSelectors} />}
@@ -34,6 +34,7 @@ export class OrdersItem extends Component {
                             <div className="sub">{elem.createdAtString}</div>
                         </div>
                         <div className="col-4 actions">
+                            {elem.status === 0 && <ButtonIcon icon="refresh" onClick={() => onRefresh(elem)}>Rafraichir</ButtonIcon>}
                             {elem.status === 1 && <ButtonIcon icon="upload">Traiter</ButtonIcon>}
                             {(elem.status === 0 || elem.status === 1) && <ButtonIcon icon="cancel" onClick={() => onCancel(elem)}>Annuler</ButtonIcon>}
                             {isDeveloper && <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Annuler</ButtonIcon>}

@@ -58,6 +58,7 @@ export class Orders extends Component {
         this.handleSearch = this.handleSearch.bind(this);
         this.handleGetFilters = this.handleGetFilters.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.handleRefresh = this.handleRefresh.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
     }
@@ -93,6 +94,23 @@ export class Orders extends Component {
         ;
     }
 
+    handleRefresh = (element) => {
+        let self = this;
+        Formulaire.loader(true);
+        axios.post(Routing.generate('api_orders_refresh', {'id': element.id}), {})
+            .then(function (response) {
+                self.handleUpdateList(response.data, "update");
+                toastr.info("Order rafraîchi.")
+            })
+            .catch(function (error) {
+                Formulaire.displayErrors(self, error, "Une erreur est survenue, veuillez contacter le support.")
+            })
+            .then(() => {
+                Formulaire.loader(false);
+            })
+        ;
+    }
+
     handleContentList = (currentData, changeContext, getFilters, filters) => {
         return <OrdersList onChangeContext={changeContext}
                            onDelete={this.layout.current.handleDelete}
@@ -102,6 +120,7 @@ export class Orders extends Component {
                            onGetFilters={this.handleGetFilters}
                            isDeveloper={this.props.isDeveloper === "true"}
                            onCancel={this.handleCancel}
+                           onRefresh={this.handleRefresh}
                            data={currentData} />
     }
 

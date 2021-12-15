@@ -70,6 +70,11 @@ class PaOrder extends DataEntity
     private $code;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $codeAt;
+
+    /**
      * @ORM\Column(type="integer")
      * @Groups({"admin:read"})
      */
@@ -134,6 +139,7 @@ class PaOrder extends DataEntity
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
+        $this->codeAt = $this->initNewDate();
         $this->token = $this->initToken();
     }
 
@@ -384,6 +390,18 @@ class PaOrder extends DataEntity
     {
         $updatedAt->setTimezone(new \DateTimeZone("Europe/Paris"));
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getCodeAt(): ?\DateTimeInterface
+    {
+        return $this->codeAt;
+    }
+
+    public function setCodeAt(\DateTimeInterface $codeAt): self
+    {
+        $this->codeAt = $codeAt;
 
         return $this;
     }
