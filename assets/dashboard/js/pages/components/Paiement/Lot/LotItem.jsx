@@ -19,7 +19,7 @@ export class LotItem extends Component {
                             <div className="sub">{elem.createdAtString}</div>
                         </div>
                         <div className="col-4 actions">
-                            <ButtonIcon icon="email">Relancer</ButtonIcon>
+                            {/*<ButtonIcon icon="email">Relancer</ButtonIcon>*/}
                         </div>
                     </div>
                 </div>
