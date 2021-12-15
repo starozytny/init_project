@@ -1,5 +1,4 @@
 const axios = require("axios");
-const Formulaire = require("@dashboardComponents/functions/Formulaire");
 
 function addProcessBic(lines, data)
 {
