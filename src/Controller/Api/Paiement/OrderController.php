@@ -7,6 +7,7 @@ use App\Entity\Paiement\PaLot;
 use App\Entity\Paiement\PaOrder;
 use App\Entity\User;
 use App\Service\ApiResponse;
+use App\Service\Data\DataPaiement;
 use App\Service\Data\DataService;
 use App\Service\Data\Paiement\DataBank;
 use App\Service\ValidatorService;
@@ -151,9 +152,10 @@ class OrderController extends AbstractController
      * @param Request $request
      * @param ApiResponse $apiResponse
      * @param DataService $dataService
+     * @param DataPaiement $dataEntity
      * @return BinaryFileResponse|JsonResponse
      */
-    public function process(Request $request, ApiResponse $apiResponse, DataService $dataService)
+    public function process(Request $request, ApiResponse $apiResponse, DataService $dataService, DataPaiement $dataEntity)
     {
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
@@ -179,8 +181,8 @@ class OrderController extends AbstractController
         $fsObject = new Filesystem();
         $filename = "paiement-" . $code .".xml";
 
-        $path = $this->getParameter('private_directory') . "/paiements";
-        $new_file_path = $path . "/" . $filename;
+        $path = $dataEntity->getPaiementDirectory();
+        $new_file_path = $dataEntity->getFile($filename);
 
         try {
             if (!$fsObject->exists($path)){

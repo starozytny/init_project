@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import Routing          from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+
 import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
 import { Selector }     from "@dashboardComponents/Layout/Selector";
 
