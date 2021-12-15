@@ -123,7 +123,7 @@ class FoSession extends DataEntity
     private $address;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"admin:read"})
      */
     private $zipcode;
@@ -378,12 +378,12 @@ class FoSession extends DataEntity
         return $this;
     }
 
-    public function getZipcode(): ?int
+    public function getZipcode(): ?string
     {
         return $this->zipcode;
     }
 
-    public function setZipcode(?int $zipcode): self
+    public function setZipcode(?string $zipcode): self
     {
         $this->zipcode = $zipcode;
 

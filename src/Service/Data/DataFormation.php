@@ -53,7 +53,7 @@ class DataFormation extends DataConstructor
             ->setMin((int) $data->min)
             ->setMax((int) $data->max)
             ->setAddress(trim($data->address))
-            ->setZipcode($data->zipcode ? (int) trim($data->zipcode) : null)
+            ->setZipcode($data->zipcode ? trim($data->zipcode) : null)
             ->setCity($data->city ? trim($data->city) : null)
             ->setModTrav($data->modTrav->html ? trim($data->modTrav->html) : null)
             ->setModEval($data->modEval->html ? trim($data->modEval->html) : null)

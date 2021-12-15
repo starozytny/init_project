@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class FoFormation extends DataEntity
 {
+    const ACCESSIBILITY_NO_HANDI = 0;
     const ACCESSIBILITY_HANDI = 1;
 
     /**
