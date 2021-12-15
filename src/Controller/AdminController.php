@@ -152,4 +152,20 @@ class AdminController extends AbstractController
             'donnees' => $objs
         ]);
     }
+
+    /**
+     * @Route("/paiements/historiques/{id}", options={"expose"=true}, name="lots_read")
+     */
+    public function lot(PaLot $obj, SerializerInterface $serializer): Response
+    {
+        $em = $this->doctrine->getManager();
+        $objs = $em->getRepository(PaOrder::class)->findby(['lot' => $obj]);
+
+        $objs = $serializer->serialize($objs, 'json', ['groups' => User::ADMIN_READ]);
+
+        return $this->render('admin/pages/paiement/lot/read.html.twig', [
+            'elem' => $obj,
+            'donnees' => $objs
+        ]);
+    }
 }

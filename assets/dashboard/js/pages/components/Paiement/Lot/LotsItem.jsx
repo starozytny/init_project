@@ -26,7 +26,6 @@ export class LotsItem extends Component {
                             <div>{Sanitaze.toFormatCurrency(elem.total)}</div>
                             <div className="sub">{elem.nbOfTxs} transac.</div>
                         </div>
-
                         <div className="col-3">
                             <div className="sub">
                                 <a target="_blank" download={elem.filename} href={Routing.generate('api_lots_file', {'id': elem.id})}>
@@ -35,6 +34,7 @@ export class LotsItem extends Component {
                             </div>
                         </div>
                         <div className="col-4 actions">
+                            <ButtonIcon element="a" icon="play" onClick={Routing.generate('admin_lots_read', {'id': elem.id})}>Détails</ButtonIcon>
                             <ButtonIcon element="a" target="_blank" icon="file" onClick={Routing.generate('api_lots_bordereau', {'id': elem.id})}>Bordereau</ButtonIcon>
                             {isDeveloper && <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>}
                         </div>

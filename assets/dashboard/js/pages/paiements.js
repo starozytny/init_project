@@ -7,6 +7,7 @@ import React from "react";
 import { render } from "react-dom";
 import { Orders } from "@dashboardPages/components/Paiement/Order/Orders";
 import { Lots }   from "@dashboardPages/components/Paiement/Lot/Lots";
+import { Lot }    from "@dashboardPages/components/Paiement/Lot/Lot";
 
 Routing.setRoutingData(routes);
 
@@ -18,4 +19,9 @@ if(el){
 el = document.getElementById("lots");
 if(el){
     render(<Lots {...el.dataset} />, el)
+}
+
+el = document.getElementById("lot");
+if(el){
+    render(<Lot {...el.dataset} />, el)
 }
