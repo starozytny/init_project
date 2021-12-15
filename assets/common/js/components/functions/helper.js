@@ -1,4 +1,5 @@
 const axios = require("axios");
+const Formulaire = require("@dashboardComponents/functions/Formulaire");
 
 function addProcessBic(lines, data)
 {
@@ -188,6 +189,15 @@ function getNbDayBetweenDateArray(startArray, endArray)
     return days;
 }
 
+function downloadBinaryFile(data, filename) {
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename); //or any other extension
+    document.body.appendChild(link);
+    link.click();
+}
+
 module.exports = {
     getPostalCodes,
     setCityFromZipcode,
@@ -198,4 +208,5 @@ module.exports = {
     getNbDayBetweenDateArray,
     getBicCodes,
     setBicFromIban
+    downloadBinaryFile
 }
