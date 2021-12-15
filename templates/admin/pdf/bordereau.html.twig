@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+<div class="main">
+    <div class="space">-</div>
+    <div class="center">
+        <h1>Bordereau {{ elem.msgId }}</h1>
+        <p>
+            Création du fichier XML le {{ elem.datePaiement | date('d/m/Y H:m:s') }}. <br>
+            Nombre de prélèvements : {{ elem.nbOfTxs }}
+        </p>
+    </div>
+    <table class="table table-creancier">
+        <tbody>
+        <tr>
+            <td>Iban</td>
+            <td>{{ elem.iban }}</td>
+            <td>Bic</td>
+            <td>{{ elem.bic }}</td>
+            <td>Titulaire</td>
+            <td>{{ elem.titulaire }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-val">
+        <thead>
+        <tr>
+            <th scope="row" class="table-one">Adhérent</th>
+            <th>Raison sociale</th>
+            <th>Titulaire</th>
+            <th>Iban</th>
+            <th>Bic</th>
+            <th>Libellé</th>
+            <th>Parti- <br>cipants</th>
+            <th>Montant TTC</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in elem.orders %}
+            <tr>
+                <td class="table-one">{{ order.user.username }}</td>
+                <td>{{ order.user.lastname }} {{ order.user.firstname }}</td>
+                <td>{{ order.titulaire }}</td>
+                <td>{{ order.iban }}</td>
+                <td>{{ order.bic }}</td>
+                <td>{{ order.name }}</td>
+                <td>{{ order.participants }}</td>
+                <td>{{ order.price }} €</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <table class="table-total">
+        <tr>
+            <th>Total</th>
+            <td colspan="5"><span class="strong">{{ elem.total }} € TTC</span></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

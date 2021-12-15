@@ -35,6 +35,7 @@ export class LotsItem extends Component {
                             </div>
                         </div>
                         <div className="col-4 actions">
+                            <ButtonIcon element="a" target="_blank" icon="file" onClick={Routing.generate('api_lots_bordereau', {'id': elem.id})}>Bordereau</ButtonIcon>
                             {isDeveloper && <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>}
                         </div>
                     </div>

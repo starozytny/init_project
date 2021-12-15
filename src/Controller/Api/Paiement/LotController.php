@@ -3,9 +3,13 @@
 namespace App\Controller\Api\Paiement;
 
 use App\Entity\Paiement\PaLot;
+use App\Service\ApiResponse;
 use App\Service\Data\DataPaiement;
 use App\Service\Data\DataService;
-//use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use App\Service\FileCreator;
+use Exception;
+use Mpdf\MpdfException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -19,12 +23,12 @@ use OpenApi\Annotations as OA;
  */
 class LotController extends AbstractController
 {
-//    private $doctrine;
-//
-//    public function __construct(ManagerRegistry $doctrine)
-//    {
-//        $this->doctrine = $doctrine;
-//    }
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
 
     /**
      * Developer - Delete a lot
@@ -93,5 +97,38 @@ class LotController extends AbstractController
     public function getFile(PaLot $obj, DataPaiement $dataEntity): BinaryFileResponse
     {
         return new BinaryFileResponse($dataEntity->getFile($obj->getFilename()));
+    }
+
+    /**
+     * Generate bordereau
+     *
+     * @Route("/bordereau/{id}", name="bordereau", options={"expose"=true}, methods={"GET"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a message",
+     * )
+     *
+     * @OA\Tag(name="Lots")
+     *
+     * @param PaLot $obj
+     * @param FileCreator $fileCreator
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     * @throws MpdfException
+     * @throws Exception
+     */
+    public function bordereau(PaLot $obj, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
+    {
+        $mpdf = $fileCreator->initPDF("Bordereau-" . $obj->getMsgId());
+        $mpdf = $fileCreator->addCustomStyle($mpdf, "bordereau.css");
+
+        $mpdf = $fileCreator->writePDF($mpdf, "admin/pdf/bordereau.html.twig", [
+            'elem' => $obj,
+        ]);
+
+        $mpdf = $fileCreator->outputPDF($mpdf, "bordereau-" . $obj->getMsgId() . '.pdf');
+
+        return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 }
