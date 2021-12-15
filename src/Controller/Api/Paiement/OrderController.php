@@ -149,10 +149,11 @@ class OrderController extends AbstractController
      * @OA\Tag(name="Orders")
      *
      * @param Request $request
+     * @param ApiResponse $apiResponse
      * @param DataService $dataService
-     * @return BinaryFileResponse
+     * @return BinaryFileResponse|JsonResponse
      */
-    public function process(Request $request, DataService $dataService): BinaryFileResponse
+    public function process(Request $request, ApiResponse $apiResponse, DataService $dataService)
     {
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
@@ -192,6 +193,10 @@ class OrderController extends AbstractController
         }
 
         try {
+            if(count($orders) <= 0){
+                return $apiResponse->apiJsonResponseBadRequest("Il n'y a pas d'ordres à traiter.");
+            }
+
             if(file_exists($new_file_path)){
                 unlink($new_file_path);
             }

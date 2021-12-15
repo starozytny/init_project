@@ -120,9 +120,8 @@ export class Orders extends Component {
             .then(function (response) {
                 let filename = (new Date().getTime()).toString();
                 filename = "paiement-" + filename.substr(0, filename.length - 3) + ".xml";
-                Helper.downloadBinaryFile(response.data, filename);
-
-                Formulaire.loader(false);
+                Helper.downloadBinaryFile(response.data, filename, true);
+                location.reload();
             })
             .catch(function (error) {
                 Formulaire.loader(false);
