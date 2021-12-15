@@ -45,7 +45,7 @@ class FakeFormationCreateCommand extends Command
         for($i=0; $i<10 ; $i++) {
             $name = $fake->name;
             $formation = (new FoFormation())
-                ->setName($name)
+                ->setName("Formation : " . $name)
                 ->setContent($fake->text)
                 ->setPrerequis($fake->text)
                 ->setGoals($fake->text)
@@ -64,7 +64,7 @@ class FakeFormationCreateCommand extends Command
                 $session = (new FoSession())
                     ->setFormation($formation)
                     ->setAnimator($fake->lastName . " " . $fake->firstName)
-                    ->setType($fake->numberBetween(0, 3))
+                    ->setType($fake->numberBetween(0, 2))
                     ->setStart($fake->dateTimeBetween('-1 week', '+3 week'))
                     ->setEnd($fake->dateTimeBetween('+3 week', '+5 week'))
                     ->setTime("9h00 - 10h00")

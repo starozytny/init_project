@@ -96,6 +96,7 @@ export function InfosSession({ elem, showFormation = true, admin = false }) {
         <div className="col-1">
             <div className="name">
                 <span>{admin && "#" + elem.id + " : "} {elem.fullDate}</span>
+                <div className="role">{elem.typeString}</div>
             </div>
             {showFormation && <div className="sub">{elem.formation.name}</div>}
             <div className="sub">{elem.animator}</div>
