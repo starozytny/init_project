@@ -30,12 +30,15 @@ class UserController extends AbstractController
         /** @var User $obj */
         $obj = $this->getUser();
         $banks = $obj->getPaBanks();
+        $orders = $obj->getPaOrders();
 
         $banks = $serializer->serialize($banks, 'json', ['groups' => User::USER_READ]);
+        $orders = $serializer->serialize($orders, 'json', ['groups' => User::ADMIN_READ]);
 
         return $this->render('user/pages/profil/index.html.twig',  [
             'obj' => $obj,
-            'banks' => $banks
+            'banks' => $banks,
+            'orders' => $orders
         ]);
     }
 

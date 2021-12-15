@@ -8,6 +8,7 @@ import { render } from "react-dom";
 import { UserFormulaire } from "@userComponents/Profil/UserForm";
 import { BankFormulaire } from "@userComponents/Profil/Bank/BankForm";
 import { Banks }          from "@userComponents/Profil/Bank/Banks";
+import { Orders }         from "@userComponents/Profil/Order/Orders";
 
 Routing.setRoutingData(routes);
 
@@ -23,10 +24,14 @@ if(el){
     render(<Banks {...el.dataset} />, el)
 }
 
-
 el = document.getElementById("bank-create");
 if(el){
     render(<div className="main-content">
         <BankFormulaire type="create" />
     </div>, el)
+}
+
+el = document.getElementById("profil-orders");
+if(el){
+    render(<Orders {...el.dataset} />, el)
 }

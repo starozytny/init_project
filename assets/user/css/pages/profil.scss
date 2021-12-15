@@ -42,6 +42,10 @@
 //                     | |   /_/  \___/ \___/   | |
 //                     |__|                    |__|
 @media (min-width:768px) {
+  .items-default .infos{
+    align-items: flex-start;
+  }
+
   .profil-page{
     @include flex(row, flex-start, flex-start);
     width: calc(100% + 12px);
