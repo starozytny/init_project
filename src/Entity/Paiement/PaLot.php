@@ -21,7 +21,12 @@ class PaLot extends DataEntity
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
+     */
+    private $filename;
+
+    /**
+     * @ORM\Column(type="string", length=255)
      */
     private $msgId;
 
@@ -34,11 +39,6 @@ class PaLot extends DataEntity
      * @ORM\Column(type="integer")
      */
     private $total;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $price;
 
     /**
      * @ORM\Column(type="datetime")
@@ -61,6 +61,11 @@ class PaLot extends DataEntity
     private $bic;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $schmedId;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -81,12 +86,12 @@ class PaLot extends DataEntity
         return $this->id;
     }
 
-    public function getMsgId(): ?int
+    public function getMsgId(): ?string
     {
         return $this->msgId;
     }
 
-    public function setMsgId(int $msgId): self
+    public function setMsgId(string $msgId): self
     {
         $this->msgId = $msgId;
 
@@ -117,18 +122,6 @@ class PaLot extends DataEntity
         return $this;
     }
 
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): self
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
     public function getDatePaiement(): ?\DateTimeInterface
     {
         return $this->datePaiement;
@@ -151,15 +144,6 @@ class PaLot extends DataEntity
         $this->titulaire = $titulaire;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     * @Groups({"admin:read"})
-     */
-    public function getIbanHidden(): string
-    {
-        return $this->toFormatIbanHidden($this->iban);
     }
 
     public function getIban(): ?string
@@ -224,6 +208,30 @@ class PaLot extends DataEntity
                 $order->setLot(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSchmedId(): ?string
+    {
+        return $this->schmedId;
+    }
+
+    public function setSchmedId(string $schmedId): self
+    {
+        $this->schmedId = $schmedId;
+
+        return $this;
+    }
+
+    public function getFilename(): ?string
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): self
+    {
+        $this->filename = $filename;
 
         return $this;
     }

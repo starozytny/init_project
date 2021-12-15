@@ -3,6 +3,7 @@
 namespace App\Controller\Api\Paiement;
 
 use App\Entity\Paiement\PaBank;
+use App\Entity\Paiement\PaLot;
 use App\Entity\Paiement\PaOrder;
 use App\Entity\User;
 use App\Service\ApiResponse;
@@ -148,11 +149,10 @@ class OrderController extends AbstractController
      * @OA\Tag(name="Orders")
      *
      * @param Request $request
-     * @param ApiResponse $apiResponse
      * @param DataService $dataService
      * @return BinaryFileResponse
      */
-    public function process(Request $request, ApiResponse $apiResponse, DataService $dataService): BinaryFileResponse
+    public function process(Request $request, DataService $dataService): BinaryFileResponse
     {
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
@@ -196,24 +196,48 @@ class OrderController extends AbstractController
                 unlink($new_file_path);
             }
 
-            if (!$fsObject->exists($new_file_path)){
-                $fsObject->touch($new_file_path);
-                $fsObject->chmod($new_file_path, 0777);
+            $fsObject->touch($new_file_path);
+            $fsObject->chmod($new_file_path, 0777);
 
-                $fsObject->dumpFile($new_file_path, $this->renderView('admin/xml/paiements.xml.twig', array(
-                    'orders' => $orders,
-                    'msgId' => time() . '000' . mt_rand(10000, 99999),
-                    'NbOfTxs' => $nbOrders,
-                    'total' => $total,
-                    'createdAt' => $dataService->createDate(),
-                    'dateEcheance' => $dataService->createDate(),
-                    'creancier_titulaire' => $this->getParameter('creancier.titulaire'),
-                    'creancier_iban' => $this->getParameter('creancier.iban'),
-                    'creancier_bic' => $this->getParameter('creancier.bic'),
-                    'creancier_schmeId' => $this->getParameter('creancier.schmedid')
-                )));
+            $msgId = time() . '000' . mt_rand(10000, 99999);
+            $dateNow = $dataService->createDate();
+            $titulaire = $this->getParameter('creancier.titulaire');
+            $iban = $this->getParameter('creancier.iban');
+            $bic = $this->getParameter('creancier.bic');
+            $schmedId = $this->getParameter('creancier.schmedid');
+
+            $fsObject->dumpFile($new_file_path, $this->renderView('admin/xml/paiements.xml.twig', array(
+                'orders' => $orders,
+                'msgId' => $msgId,
+                'NbOfTxs' => $nbOrders,
+                'total' => $total,
+                'createdAt' => $dateNow,
+                'dateEcheance' => $dateNow,
+                'creancier_titulaire' => $titulaire,
+                'creancier_iban' => $iban,
+                'creancier_bic' => $bic,
+                'creancier_schmeId' => $schmedId
+            )));
+
+            $lot = (new PaLot())
+                ->setMsgId($msgId)
+                ->setNbOfTxs($nbOrders)
+                ->setTotal($total)
+                ->setDatePaiement($dateNow)
+                ->setTitulaire($titulaire)
+                ->setIban($iban)
+                ->setBic($bic)
+                ->setSchmedId($schmedId)
+                ->setFilename($filename)
+            ;
+
+            foreach($orders as $order){
+                $order->setStatus(PaOrder::STATUS_TRAITER);
+                $order->setUpdatedAt($dateNow);
+                $lot->addOrder($order);
             }
 
+            $em->persist($lot);
             $em->flush();
         } catch (IOExceptionInterface $exception) {
             echo "Error creating file at ". $exception->getPath();
