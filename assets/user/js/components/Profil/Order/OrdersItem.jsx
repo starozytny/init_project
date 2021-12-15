@@ -28,6 +28,12 @@ export class OrdersItem extends Component {
                             <div className="role">{elem.statusString}</div>
                         </div>
                         <div className="col-4 actions">
+                            {(elem.status === 1 || elem.status === 2) &&
+                                <ButtonIcon icon="file" element="a" target="_blank"
+                                            onClick={Routing.generate('api_orders_mandat', {'id': elem.id})}>
+                                    Mandat de prélèvement
+                                </ButtonIcon>
+                            }
                             {(elem.status === 0 || elem.status === 1) && <ButtonIcon icon="cancel" onClick={() => onCancel(elem)}>Annuler</ButtonIcon>}
                         </div>
                     </div>
