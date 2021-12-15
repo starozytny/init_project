@@ -4,6 +4,7 @@ namespace App\Command\Cron;
 
 use App\Entity\Paiement\PaOrder;
 use App\Service\Data\DataService;
+use App\Service\Expiration;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,15 +14,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class AdminOrderRefreshCommand extends Command
 {
     protected static $defaultName = 'admin:order:refresh';
-    protected $em;
+    private $em;
     private $dataService;
+    private $expiration;
 
-    public function __construct(EntityManagerInterface $entityManager, DataService $dataService)
+    public function __construct(EntityManagerInterface $entityManager, DataService $dataService, Expiration $expiration)
     {
         parent::__construct();
 
         $this->em = $entityManager;
         $this->dataService = $dataService;
+        $this->expiration = $expiration;
     }
 
     protected function configure()
@@ -40,9 +43,7 @@ class AdminOrderRefreshCommand extends Command
         $total = 0;
         $now = $this->dataService->createDate();
         foreach($objs as $obj){
-            $interval = date_diff($obj->getCodeAt(), $now);
-
-            if($interval->i > 0 || $interval->h > 2 || $interval->d > 0 || $interval->m > 0 || $interval->y > 0){
+            if($this->expiration->isExpiredByHours($obj->getCodeAt(), $now, 2)){
                $obj->setStatus(PaOrder::STATUS_EXPIRER);
                $obj->setUpdatedAt($this->dataService->createDate());
                $total++;
