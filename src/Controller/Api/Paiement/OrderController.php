@@ -31,7 +31,7 @@ class OrderController extends AbstractController
     }
 
     /**
-     * Developer - Delete a order
+     * Developer - Delete an order
      *
      * @Security("is_granted('ROLE_DEVELOPER')")
      *
@@ -74,5 +74,31 @@ class OrderController extends AbstractController
     public function deleteSelected(Request $request, DataService $dataService): JsonResponse
     {
         return $dataService->deleteSelected(PaOrder::class, json_decode($request->getContent()));
+    }
+
+    /**
+     * Cancel an order
+     *
+     * @Route("/cancel/{id}", name="cancel", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Return message successful",
+     * )
+     *
+     * @OA\Tag(name="Orders")
+     *
+     * @param PaOrder $obj
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     */
+    public function cancel(PaOrder $obj, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        $obj->setStatus(PaOrder::STATUS_ANNULER);
+        $em->flush();
+
+        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }
 }

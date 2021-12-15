@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 
+import axios        from "axios";
+import Swal         from "sweetalert2";
+import toastr       from "toastr";
+import SwalOptions  from "@commonComponents/functions/swalOptions";
+import Routing      from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@commonComponents/functions/sort";
+import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { OrdersList }      from "./OrdersList";
 
@@ -50,6 +57,7 @@ export class Orders extends Component {
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleGetFilters = this.handleGetFilters.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
     }
@@ -62,6 +70,29 @@ export class Orders extends Component {
 
     handleSearch = (search) => { this.layout.current.handleSearch(search, "orders", true, filterFunction); }
 
+    handleCancel = (element) => {
+        let self = this;
+        Swal.fire(SwalOptions.options("Annuler cet ordre ?", "Action irréversible"))
+            .then((result) => {
+                if (result.isConfirmed) {
+                    Formulaire.loader(true);
+                    axios.post(Routing.generate('api_orders_cancel', {'id': element.id}), {})
+                        .then(function (response) {
+                            self.handleUpdateList(response.data, "update");
+                            toastr.info("Order annulé.")
+                        })
+                        .catch(function (error) {
+                            Formulaire.displayErrors(self, error, "Une erreur est survenue, veuillez contacter le support.")
+                        })
+                        .then(() => {
+                            Formulaire.loader(false);
+                        })
+                    ;
+                }
+            })
+        ;
+    }
+
     handleContentList = (currentData, changeContext, getFilters, filters) => {
         return <OrdersList onChangeContext={changeContext}
                            onDelete={this.layout.current.handleDelete}
@@ -70,6 +101,7 @@ export class Orders extends Component {
                            filters={filters}
                            onGetFilters={this.handleGetFilters}
                            isDeveloper={this.props.isDeveloper === "true"}
+                           onCancel={this.handleCancel}
                            data={currentData} />
     }
 
