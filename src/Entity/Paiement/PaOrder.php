@@ -134,6 +134,11 @@ class PaOrder extends DataEntity
     private $updatedAt;
 
     /**
+     * @ORM\ManyToOne(targetEntity=PaLot::class, inversedBy="orders")
+     */
+    private $lot;
+
+    /**
      * @throws Exception
      */
     public function __construct()
@@ -401,6 +406,18 @@ class PaOrder extends DataEntity
     public function setCodeAt(\DateTimeInterface $codeAt): self
     {
         $this->codeAt = $codeAt;
+
+        return $this;
+    }
+
+    public function getLot(): ?PaLot
+    {
+        return $this->lot;
+    }
+
+    public function setLot(?PaLot $lot): self
+    {
+        $this->lot = $lot;
 
         return $this;
     }
