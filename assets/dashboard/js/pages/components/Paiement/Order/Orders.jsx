@@ -5,9 +5,9 @@ import Sort              from "@commonComponents/functions/sort";
 
 import { OrdersList }      from "./OrdersList";
 
-const URL_DELETE_ELEMENT    = 'api_contact_delete';
-const URL_DELETE_GROUP      = 'api_contact_delete_group';
-const MSG_DELETE_ELEMENT    = 'Supprimer ce message ?';
+const URL_DELETE_ELEMENT    = 'api_orders_delete';
+const URL_DELETE_GROUP      = 'api_orders_delete_group';
+const MSG_DELETE_ELEMENT    = 'Supprimer cet ordre ?';
 const MSG_DELETE_GROUP      = 'Aucun message sélectionné.';
 const SORTER = Sort.compareCreatedAt;
 
@@ -69,6 +69,7 @@ export class Orders extends Component {
                            onSearch={this.handleSearch}
                            filters={filters}
                            onGetFilters={this.handleGetFilters}
+                           isDeveloper={this.props.isDeveloper === "true"}
                            data={currentData} />
     }
 

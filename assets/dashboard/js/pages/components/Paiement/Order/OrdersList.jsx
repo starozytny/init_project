@@ -21,7 +21,7 @@ export class OrdersList extends Component {
     }
 
     render () {
-        const { data, onDeleteAll, onGetFilters, filters, onSearch } = this.props;
+        const { isDeveloper, data, onDeleteAll, onGetFilters, filters, onSearch } = this.props;
 
         let filtersLabel = ["Attente", "Validé", "Traité", "Expiré", "Annulé"];
         let filtersId    = ["f-attente", "f-valider", "f-traiter", "f-expirer", "f-annuler"];
@@ -50,7 +50,7 @@ export class OrdersList extends Component {
                 <div className="items-table">
                     <div className="items items-default">
                         <div className="item item-header">
-                            <div className="item-header-selector" />
+                            {isDeveloper && <div className="item-header-selector" />}
                             <div className="item-content">
                                 <div className="item-body">
                                     <div className="infos infos-col-4">
@@ -68,7 +68,7 @@ export class OrdersList extends Component {
                     </div>
                 </div>
 
-                {(data && data.length !== 0) && <div className="page-actions">
+                {(data && data.length !== 0 && isDeveloper) && <div className="page-actions">
                     <div className="selectors-actions">
                         <div className="item" onClick={onDeleteAll}>
                             <ButtonIcon icon="trash" text="Supprimer la sélection" />
