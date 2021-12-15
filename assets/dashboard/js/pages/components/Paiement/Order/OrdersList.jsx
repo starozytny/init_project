@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-import {Button, ButtonIcon} from "@dashboardComponents/Tools/Button";
-import { Alert }      from "@dashboardComponents/Tools/Alert";
+import { Alert }              from "@dashboardComponents/Tools/Alert";
+import { Search }             from "@dashboardComponents/Layout/Search";
+import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
+import { Filter, FilterSelected } from "@dashboardComponents/Layout/Filter";
 
 import { OrdersItem }   from "./OrdersItem";
-import {Filter, FilterSelected} from "@dashboardComponents/Layout/Filter";
-import {Search} from "@dashboardComponents/Layout/Search";
 
 export class OrdersList extends Component {
     constructor(props) {

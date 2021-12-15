@@ -7,6 +7,7 @@ use App\Repository\Paiement\PaLotRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=PaLotRepository::class)
@@ -17,11 +18,13 @@ class PaLot extends DataEntity
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
      */
     private $filename;
 
@@ -32,11 +35,13 @@ class PaLot extends DataEntity
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $nbOfTxs;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $total;
 
@@ -67,6 +72,7 @@ class PaLot extends DataEntity
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"admin:read"})
      */
     private $createdAt;
 
@@ -120,6 +126,15 @@ class PaLot extends DataEntity
         $this->total = $total;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getDatePaiementString(): ?string
+    {
+        return $this->getFullDateString($this->createdAt, 'lll');
     }
 
     public function getDatePaiement(): ?\DateTimeInterface

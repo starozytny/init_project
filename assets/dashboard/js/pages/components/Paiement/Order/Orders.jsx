@@ -16,7 +16,7 @@ import { OrdersList }      from "./OrdersList";
 const URL_DELETE_ELEMENT    = 'api_orders_delete';
 const URL_DELETE_GROUP      = 'api_orders_delete_group';
 const MSG_DELETE_ELEMENT    = 'Supprimer cet ordre ?';
-const MSG_DELETE_GROUP      = 'Aucun message sélectionné.';
+const MSG_DELETE_GROUP      = 'Aucun ordre sélectionné.';
 const SORTER = Sort.compareCreatedAt;
 
 function filterFunction(dataImmuable, filters){
