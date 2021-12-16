@@ -8,6 +8,7 @@ use App\Repository\SettingsRepository;
 use App\Service\ApiResponse;
 use App\Service\FileUploader;
 use App\Service\ValidatorService;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,6 +22,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class SettingsController extends AbstractController
 {
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     /**
      * Get settings data
      *
@@ -68,7 +76,7 @@ class SettingsController extends AbstractController
      */
     public function update(Request $request, ApiResponse $apiResponse, SettingsRepository $repository, ValidatorService $validatorService): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $settings = $repository->findAll();
         $settings = (count($settings) == 0) ? new Settings() : $settings[0];
 

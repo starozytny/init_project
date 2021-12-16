@@ -16,7 +16,7 @@ export class UserItem extends Component {
 
         let url = Routing.generate(routeName, {'_switch_user' : elem.username})
 
-        let avatar = (elem.avatar) ? avatar = "/avatars/" + elem.avatar : `https://robohash.org/${elem.username}?size=64x64`;
+        let avatar = (elem.avatar) ? "/avatars/" + elem.avatar : `https://robohash.org/${elem.username}?size=64x64`;
 
         return <div className="item">
             <Selector id={elem.id} onSelectors={onSelectors} />

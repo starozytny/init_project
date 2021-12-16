@@ -69,7 +69,7 @@ class DataService
         return $this->apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
     }
 
-    public function createDateTimezoneEurope($timezone="Europe/Paris"): \DateTime
+    public function createDate($timezone="Europe/Paris"): \DateTime
     {
         $date = new \DateTime();
         $date->setTimezone(new \DateTimeZone($timezone));

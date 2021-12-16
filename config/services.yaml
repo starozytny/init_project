@@ -6,6 +6,7 @@
 parameters:
     public_directory: '%kernel.project_dir%/public/'
     private_directory: '%kernel.project_dir%/documents/'
+    pdf_style_directory: '%kernel.project_dir%/public/pdf/css/'
     images_directory: '%kernel.project_dir%/public/annonces/images/'
     thumbs_directory: '%kernel.project_dir%/public/annonces/thumbs/'
 
@@ -17,6 +18,7 @@ services:
         bind:
             $publicDirectory: '%public_directory%'
             $privateDirectory: '%private_directory%'
+            $pdfStyleDirectory: '%pdf_style_directory%'
             $imagesDirectory: '%images_directory%'
             $thumbsDirectory: '%thumbs_directory%'
 

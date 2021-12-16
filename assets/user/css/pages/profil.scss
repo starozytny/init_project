@@ -1,0 +1,68 @@
+@import "../vars/vars";
+
+.profil-card{
+  padding: 12px;
+  background-color: var(--alpha);
+  border: 1px solid var(--grey);
+  border-radius: 8px;
+}
+
+.profil-card-header{
+  .title{
+    @include fontSemibold();
+  }
+}
+
+.profil-card-body{
+  border-top: 1px solid var(--grey);
+  border-bottom: 1px solid var(--grey);
+  padding: 12px 0;
+  margin: 12px 0;
+}
+
+.profil-card-footer{
+  text-align: center;
+}
+
+//                      __   _____ __    ___    __
+//                     | _| |___  / /_  ( _ )  |_ |
+//    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
+//   |_____|_____|_____| |    / /| (_) | (_) |  | |_____|_____|_____|
+//                     | |   /_/  \___/ \___/   | |
+//                     |__|                    |__|
+@media (min-width:768px) {
+  .profil-page{
+    @include flex(row, flex-start, flex-start);
+    width: calc(100% + 12px);
+
+    & > *{
+      width: calc(50% - 12px);
+      margin-right: 12px;
+    }
+  }
+}
+
+//                      __   _ ____  ___   ___    __
+//                     | _| / |___ \( _ ) / _ \  |_ |
+//    _____ _____ _____| |  | | __) / _ \| | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | |/ __/ (_) | |_| |  | |_____|_____|_____|
+//                     | |  |_|_____\___/ \___/   | |
+//                     |__|                      |__|
+@media (min-width:1280px) {
+  .profil-page{
+    width: 100%;
+
+    & > .col-1{
+      width: calc(36% - 24px);
+      margin-right: 24px;
+    }
+
+    & > .col-2{
+      width: 64%;
+      margin-right: 0;
+    }
+  }
+  .profil-card{
+    padding: 24px;
+  }
+}

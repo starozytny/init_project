@@ -27,6 +27,24 @@
   }
 }
 
+.dark-mode{
+  .swal2-popup,
+  .swal2-popup.swal2-modal.swal2-icon-warning.swal2-show{
+    background-color: var(--fond);
+  }
+  .swal2-title, .swal2-content{
+    color: var(--txt);
+  }
+
+  .nav-mobile{
+    color: var(--alpha);
+  }
+
+  a{
+    color:var(--txt);
+  }
+}
+
 //                      __   _____ __    ___    __
 //                     | _| |___  / /_  ( _ )  |_ |
 //    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____

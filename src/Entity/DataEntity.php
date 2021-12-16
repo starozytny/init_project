@@ -68,4 +68,16 @@ class DataEntity
 
         return null;
     }
+
+    /**
+     * return format for new Date JS
+     *
+     * @param $date
+     * @return string|null
+     */
+    public function setDateJavascript($date): ?string
+    {
+        date_default_timezone_set('Europe/Paris');
+        return $date != null ? date_format($date, 'F d, Y H:i:s') : null;
+    }
 }
