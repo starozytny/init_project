@@ -32,6 +32,20 @@ h2{
   text-align: center;
 }
 
+.step-workers{
+  .col-1{
+    cursor: pointer;
+  }
+}
+
+.step-section{
+  display: none;
+
+  &.active{
+    display: block;
+  }
+}
+
 .line-buttons{
   @include flex(row, center, space-between);
   margin-top: 24px;

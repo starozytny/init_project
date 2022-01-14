@@ -138,8 +138,7 @@ export class Registration extends Component {
 
             <form onSubmit={this.handleSubmit}>
 
-                <Step1 {...this.state} onSelectWorker={this.handleSelectWorker} />
-
+                <Step1 {...this.state} onNext={this.handleNext} onSelectWorker={this.handleSelectWorker} />
 
             </form>
         </div>
