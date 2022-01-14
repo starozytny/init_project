@@ -8,7 +8,9 @@ import { Alert }  from "@dashboardComponents/Tools/Alert";
 
 import Validateur from "@commonComponents/functions/validateur";
 import Formulaire from "@dashboardComponents/functions/Formulaire";
-import {TeamList} from "@userPages/components/Profil/Team/TeamList";
+import helper     from "@userComponents/functions/helper";
+
+import { TeamList } from "@userPages/components/Profil/Team/TeamList";
 
 const URL_CREATE_REGISTRATION = 'api_registration_create';
 
@@ -18,10 +20,20 @@ export class Registration extends Component {
 
         this.state = {
             session: JSON.parse(props.session),
-            workers: JSON.parse(props.workers),
+            allWorkers: JSON.parse(props.workers),
+            workers: []
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSelectWorker = this.handleSelectWorker.bind(this);
+    }
+
+    handleSelectWorker = (worker) => {
+        const { workers } = this.state;
+
+        let nWorkers = helper.addOrRemove(workers, worker, "Membre sélectionné.", "Membre enlevé.");
+
+        this.setState({ workers: nWorkers });
     }
 
     handleSubmit = (e) => {
@@ -64,21 +76,14 @@ export class Registration extends Component {
     }
 
     render () {
-        const { workers } = this.state;
+        const { allWorkers, workers } = this.state;
 
         return <div className="main-content">
             <form onSubmit={this.handleSubmit}>
 
                 <div className="step step-1">
-                    <TeamList isRegistration={true}
-                              data={workers} />
-
-                    {workers.length !== 0 ? workers.map(worker => {
-                        return <div key={worker.id}>
-                            <div>{worker.lastname} {worker.firstname}</div>
-                            <div className="sub">{worker.typeString}</div>
-                        </div>
-                    }) : <Alert>Vous n'avez aucun membre dans votre équipe.</Alert>}
+                    <TeamList isRegistration={true} onSelectWorker={this.handleSelectWorker}
+                              data={allWorkers} workers={workers} />
                 </div>
 
                 <div className="line line-buttons">

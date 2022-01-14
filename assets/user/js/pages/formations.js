@@ -6,7 +6,7 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min';
 import React from "react";
 import { render } from "react-dom";
 import { Sessions }     from "@userPages/components/Session/Sessions";
-import { Registration } from "@userPages/components/Session/Registration/Registration";
+import { Registration } from "@userPages/components/Registration/Registration";
 import { MySessions }   from "@userPages/components/Session/My/MySessions";
 
 Routing.setRoutingData(routes);

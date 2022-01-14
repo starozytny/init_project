@@ -30,7 +30,7 @@ export class TeamList extends Component {
     }
 
     render () {
-        const { isRegistration=false, dataArchived, data, onSearch, filters, onGetFilters } = this.props;
+        const { isRegistration=false, workers=[], dataArchived, data, onSearch, filters, onGetFilters } = this.props;
 
         let filtersLabel = ["Salarié", "Non salarié", "Agent commercial", "Responsable"];
         let filtersId    = ["f-salarie", "f-no-salarie", "f-agent-co", "f-resp"];
@@ -82,6 +82,7 @@ export class TeamList extends Component {
                 <div className="items-table">
                     <div className="items items-default">
                         <div className="item item-header">
+                            {isRegistration && <div className="item-header-selector" />}
                             <div className="item-content">
                                 <div className="item-body">
                                     {!isRegistration ? <div className="infos infos-col-3">
@@ -90,7 +91,7 @@ export class TeamList extends Component {
                                         <div className="col-3 actions">Actions</div>
                                     </div> : <div className="infos infos-col-2">
                                         <div className="col-1">Equipe</div>
-                                        <div className="col-2 actions">Actions</div>
+                                        <div className="col-2 actions" />
                                     </div>}
                                 </div>
                             </div>
