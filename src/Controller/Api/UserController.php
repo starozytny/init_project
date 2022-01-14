@@ -13,6 +13,7 @@ use App\Service\NotificationService;
 use App\Service\SettingsService;
 use App\Service\ValidatorService;
 use DateTime;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -28,9 +29,16 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class UserController extends AbstractController
 {
-    const FOLDER_AVATARS = "avatars";
+    const FOLDER_AVATARS = User::FOLDER_AVATARS;
     const ICON = "user";
 
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     /**
      * Admin - Get array of users
      *
@@ -75,15 +83,16 @@ class UserController extends AbstractController
      * @param Request $request
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
+     * @param UserPasswordHasherInterface $passwordHasher
      * @param FileUploader $fileUploader
      * @param NotificationService $notificationService
      * @param DataUser $dataEntity
      * @return JsonResponse
      */
-    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
+    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, UserPasswordHasherInterface $passwordHasher,
                            FileUploader $fileUploader, NotificationService $notificationService, DataUser $dataEntity): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->get('data'));
 
         if ($data === null) {
@@ -95,6 +104,7 @@ class UserController extends AbstractController
         }
 
         $obj = $dataEntity->setData(new User(), $data);
+        $obj->setPassword($passwordHasher->hashPassword($obj, $data->password));
 
         $file = $request->files->get('avatar');
         if ($file) {
@@ -138,6 +148,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @param ValidatorService $validator
      * @param NotificationService $notificationService
+     * @param UserPasswordHasherInterface $passwordHasher
      * @param ApiResponse $apiResponse
      * @param User $obj
      * @param FileUploader $fileUploader
@@ -145,13 +156,14 @@ class UserController extends AbstractController
      * @return JsonResponse
      */
     public function update(Request $request, ValidatorService $validator, NotificationService $notificationService,
-                           ApiResponse $apiResponse, User $obj, FileUploader $fileUploader, DataUser $dataEntity): JsonResponse
+                           UserPasswordHasherInterface $passwordHasher, ApiResponse $apiResponse, User $obj,
+                           FileUploader $fileUploader, DataUser $dataEntity): JsonResponse
     {
-        if ($this->getUser() != $obj && !$this->isGranted("ROLE_ADMIN")) {
+        if ($this->getUser() !== $obj) {
             return $apiResponse->apiJsonResponseForbidden();
         }
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->get('data'));
 
         if($data === null){
@@ -159,6 +171,10 @@ class UserController extends AbstractController
         }
 
         $obj = $dataEntity->setData($obj, $data);
+
+        if($data->password != ""){
+            $obj->setPassword($passwordHasher->hashPassword($obj, $data->password));
+        }
 
         $file = $request->files->get('avatar');
         if ($file) {
@@ -216,7 +232,7 @@ class UserController extends AbstractController
      */
     public function delete(ApiResponse $apiResponse, User $obj, FileUploader $fileUploader): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         if ($obj->getHighRoleCode() === User::CODE_ROLE_DEVELOPER) {
             return $apiResponse->apiJsonResponseForbidden();
@@ -263,7 +279,7 @@ class UserController extends AbstractController
      */
     public function deleteGroup(Request $request, ApiResponse $apiResponse, FileUploader $fileUploader): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
 
         $objs = $em->getRepository(User::class)->findBy(['id' => $data]);
@@ -279,7 +295,7 @@ class UserController extends AbstractController
                     return $apiResponse->apiJsonResponseBadRequest('Vous ne pouvez pas vous supprimer.');
                 }
 
-                array_push($avatars, $obj->getAvatar());
+                $avatars[] = $obj->getAvatar();
 
                 $em->remove($obj);
             }
@@ -314,7 +330,7 @@ class UserController extends AbstractController
      */
     public function passwordForget(Request $request, ApiResponse $apiResponse, MailerService $mailerService, SettingsService $settingsService): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
 
         if ($data === null) {
@@ -386,7 +402,7 @@ class UserController extends AbstractController
     public function passwordUpdate(Request $request, $token, ValidatorService $validator, UserPasswordHasherInterface $passwordHasher,
                                    ApiResponse $apiResponse): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
 
         if ($data === null) {
@@ -428,7 +444,7 @@ class UserController extends AbstractController
     public function passwordReinit($token, ValidatorService $validator, UserPasswordHasherInterface $passwordHasher,
                                    ApiResponse $apiResponse): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $user = $em->getRepository(User::class)->findOneBy(['token' => $token]);
 
@@ -465,7 +481,7 @@ class UserController extends AbstractController
      */
     public function export(Export $export, $format): BinaryFileResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $objs = $em->getRepository(User::class)->findBy([], ['username' => 'ASC']);
         $data = [];
 

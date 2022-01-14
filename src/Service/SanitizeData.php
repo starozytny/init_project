@@ -16,10 +16,10 @@ class SanitizeData
         $value = mb_strtolower($value);
         $value = str_replace(" ", "", $value);
 
-        return $this->reformatCara($value);
+        return $this->slugString($value);
     }
 
-    public function reformatCara($data): AbstractUnicodeString
+    public function slugString($data): AbstractUnicodeString
     {
         $slug = new AsciiSlugger();
         return $slug->slug($data);
@@ -51,6 +51,16 @@ class SanitizeData
         if($value != "" && $value != null){
             $value = trim($value);
             return htmlspecialchars($value);
+        }
+
+        return null;
+    }
+
+
+    public function trimData($value): ?string
+    {
+        if($value != "" && $value != null){
+            return trim($value);
         }
 
         return null;

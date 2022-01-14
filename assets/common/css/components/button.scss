@@ -64,8 +64,8 @@ $icons:
 }
 
 $icons:
-        "confirm" var(--primary) var(--alpha) var(--primaryShadow),
-        "cancel" var(--danger) var(--alpha) var(--dangerShadow)
+        "confirm" var(--primary) var(--alpha) var(--primaryShadow2),
+        "cancel" var(--danger) var(--alpha) var(--dangerShadow2)
 ;
 
 @each $name, $bg, $txt, $shadow in $icons {
@@ -73,7 +73,7 @@ $icons:
     background: $bg;
     color: $txt;
     border: 1px solid transparent;
-    box-shadow: 0 5px 10px $shadow;
+    box-shadow: 0 4px 12px $shadow;
 
     &:hover{
       box-shadow: 0 8px 10px $shadow;
@@ -104,6 +104,11 @@ $icons:
     .btn-#{$name} {
       color: $txt;
     }
+  }
+
+  button.swal2-confirm.swal2-styled,
+  button.swal2-cancel.swal2-styled{
+    color: var(--txt);
   }
 }
 

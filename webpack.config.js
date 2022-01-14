@@ -18,8 +18,11 @@ Encore
     .addAliases({
         '@publicFolder': path.resolve(__dirname, './public'),
         '@dashboardComponents': path.resolve(__dirname, './assets/dashboard/js/components'),
+        '@dashboardPages': path.resolve(__dirname, './assets/dashboard/js/pages'),
         '@commonComponents': path.resolve(__dirname, './assets/common/js/components'),
         '@appComponents': path.resolve(__dirname, './assets/app/js/components'),
+        '@userComponents': path.resolve(__dirname, './assets/user/js/components'),
+        '@userPages': path.resolve(__dirname, './assets/user/js/pages'),
         '@nodeModulesFolder': path.resolve(__dirname, './node_modules'),
     })
 
@@ -64,6 +67,8 @@ Encore
     .addEntry('dashboard_blog', './assets/dashboard/js/pages/blog.js')
     .addEntry('dashboard_contact', './assets/dashboard/js/pages/contact.js')
     .addEntry('dashboard_notifications', './assets/dashboard/js/pages/notifications.js')
+
+    .addEntry('user_profil', './assets/user/js/pages/profil.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     //.enableStimulusBridge('./assets/controllers.json')

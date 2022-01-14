@@ -43,7 +43,9 @@ function axiosGetDataPagination(self, url, sorter = null, perPage=10){
 function updateData(self, sorter, newContext, context, data, element){
     let nContext = (newContext !== null) ? newContext : context;
     let newData = UpdateList.update(nContext, data, element);
-    newData.sort(sorter)
+    if(sorter){
+        newData.sort(sorter)
+    }
 
     self.setState({
         data: newData,
@@ -51,7 +53,7 @@ function updateData(self, sorter, newContext, context, data, element){
     })
 }
 
-function updateDataPagination(self, sorter, newContext, context, data, element){
+function updateDataPagination(sorter, newContext, context, data, element){
     let nContext = (newContext !== null) ? newContext : context;
     let newData = UpdateList.update(nContext, data, element);
     if(sorter){
@@ -159,6 +161,16 @@ function axiosDeleteGroupElement(self, checked, url,
     }
 }
 
+function showErrors(self, validate, text="Veuillez vérifier les informations transmises.", toTop = true)
+{
+    if(toTop){
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+    toastr.warning(text);
+    self.setState({ errors: validate.errors });
+}
+
 function loader(status){
     let loader = document.querySelector('#loader');
     if(status){
@@ -195,8 +207,31 @@ function switchPublished (self, element, url, nameEntity=""){
     ;
 }
 
+function switchFunction (self, elementValue, url, nameEntity="", txtOff=" hors ligne", txtOn=" en ligne"){
+    axios({ method: "POST", url: url })
+        .then(function (response) {
+            let data = response.data;
+            if(self.handleUpdateList){
+                self.handleUpdateList(data, "update");
+            }
+            toastr.info(nameEntity + (elementValue ? txtOff : txtOn));
+        })
+        .catch(function (error) {
+            displayErrors(self, error);
+        })
+    ;
+}
+
 function updateValueCheckbox(e, items, value){
     return (e.currentTarget.checked) ? [...items, ...[value]] : items.filter(v => v !== value)
+}
+
+function setValueEmptyIfNull (value, defaultValue = "") {
+    return value === null ? defaultValue : value;
+}
+
+function setDateOrEmptyIfNull (value, defaultValue = "") {
+    return value ? new Date(value) : defaultValue;
 }
 
 module.exports = {
@@ -212,5 +247,9 @@ module.exports = {
     isSeen,
     switchPublished,
     updateValueCheckbox,
-    updatePerPage
+    updatePerPage,
+    showErrors,
+    switchFunction,
+    setValueEmptyIfNull,
+    setDateOrEmptyIfNull
 }

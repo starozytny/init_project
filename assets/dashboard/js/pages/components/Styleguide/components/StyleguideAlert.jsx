@@ -12,6 +12,7 @@ export function StyleguideAlert () {
                 <Alert type="info">Info</Alert>
                 <Alert type="danger">Danger</Alert>
                 <Alert type="warning">Warning</Alert>
+                <Alert type="reverse">Reverse</Alert>
 
                 <Alert title="Title">Default</Alert>
 
