@@ -4,9 +4,11 @@ import axios      from "axios";
 import Routing    from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Button } from "@dashboardComponents/Tools/Button";
+import { Alert }  from "@dashboardComponents/Tools/Alert";
 
 import Validateur from "@commonComponents/functions/validateur";
 import Formulaire from "@dashboardComponents/functions/Formulaire";
+import {TeamList} from "@userPages/components/Profil/Team/TeamList";
 
 const URL_CREATE_REGISTRATION = 'api_registration_create';
 
@@ -68,15 +70,18 @@ export class Registration extends Component {
             <form onSubmit={this.handleSubmit}>
 
                 <div className="step step-1">
-                    {workers.map(worker => {
+                    <TeamList isRegistration={true}
+                              data={workers} />
+
+                    {workers.length !== 0 ? workers.map(worker => {
                         return <div key={worker.id}>
                             <div>{worker.lastname} {worker.firstname}</div>
                             <div className="sub">{worker.typeString}</div>
                         </div>
-                    })}
+                    }) : <Alert>Vous n'avez aucun membre dans votre équipe.</Alert>}
                 </div>
 
-                <div className="line">
+                <div className="line line-buttons">
                     <div className="form-button">
                         <Button isSubmit={true}>Valider</Button>
                     </div>
