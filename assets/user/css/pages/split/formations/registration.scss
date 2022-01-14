@@ -1,5 +1,58 @@
 @import "../../../vars/vars";
 
-.step + .line-buttons{
+.steps{
+  @include flex(column, center, flex-start);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+
+  .item{
+    @include flex(row, flex-start, flex-start);
+    border-radius: 30px;
+    padding: 4px 12px;
+    @include fontSemibold();
+    color: var(--grey2);
+
+    &.active{
+      background-color: var(--primary);
+      color: var(--txt);
+    }
+
+    span:first-child{
+      margin-right: 4px;
+    }
+
+    &:not(:last-child){
+      margin-bottom: 4px;
+    }
+  }
+}
+
+h2{
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.line-buttons{
+  @include flex(row, center, space-between);
   margin-top: 24px;
+}
+
+//                      __   _____ __    ___    __
+//                     | _| |___  / /_  ( _ )  |_ |
+//    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
+//   |_____|_____|_____| |    / /| (_) | (_) |  | |_____|_____|_____|
+//                     | |   /_/  \___/ \___/   | |
+//                     |__|                    |__|
+@media (min-width:768px) {
+  .steps{
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    .item{
+      &:not(:last-child){
+        margin-bottom: 0;
+      }
+    }
+  }
 }

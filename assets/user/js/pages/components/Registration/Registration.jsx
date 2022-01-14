@@ -109,7 +109,7 @@ export class Registration extends Component {
 
         let steps = [
             {id: 1, label: "Participants"},
-            {id: 2, label: "Compte(s) bancaire"},
+            {id: 2, label: "Compte(s) bancaire(s)"},
             {id: 3, label: "Récapitulatif"},
             {id: 4, label: "Validation"},
         ];
@@ -124,7 +124,7 @@ export class Registration extends Component {
             }
 
             stepsItems.push(<div className={"item" + active} key={el.id} onClick={() => this.handleNext(el.id, step, true)}>
-                <span className="number">{el.id}</span>
+                <span className="number">{el.id} - </span>
                 <span className="label">{el.label}</span>
             </div>)
         })}
