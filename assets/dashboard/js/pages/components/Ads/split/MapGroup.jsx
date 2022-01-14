@@ -13,7 +13,7 @@ function reinitMap(self, mymap, elems, mapId, mapUrl, urlAd)
         mymap.remove();
     }
 
-    let newMap = Map.createMap(12, 10, mapId, mapUrl);
+    let newMap = Map.createMap(12, 10, 15, 13, 18, mapId, mapUrl);
     setMarkers(newMap, elems, urlAd)
 
     self.setState({ mymap: newMap, elems: elems })

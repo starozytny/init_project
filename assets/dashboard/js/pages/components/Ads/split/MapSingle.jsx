@@ -36,6 +36,19 @@ export class MapSingle extends Component {
         this.handleChoice = this.handleChoice.bind(this);
     }
 
+    componentDidMount = () => {
+        const { elem } = this.props;
+
+        let mymap = Map.createMap();
+
+        if(elem.address.lat && elem.address.lon){
+            L.marker([elem.address.lat, elem.address.lon], {icon: Map.getLeafletMarkerIcon()}).addTo(mymap);
+            mymap.fitBounds([[elem.address.lat, elem.address.lon]]);
+        }
+
+        this.setState({ mymap })
+    }
+
     handleChoice = (elem) => {
         const { choices, mymap, dataLoaded } = this.state;
 
@@ -65,19 +78,6 @@ export class MapSingle extends Component {
         })
 
         this.setState({choices: newChoices, dataLoaded: dataLoad })
-    }
-
-    componentDidMount = () => {
-        const { elem } = this.props;
-
-        let mymap = Map.createMap();
-
-        if(elem.address.lat && elem.address.lon){
-            L.marker([elem.address.lat, elem.address.lon], {icon: Map.getLeafletMarkerIcon()}).addTo(mymap);
-            mymap.fitBounds([[elem.address.lat, elem.address.lon]]);
-        }
-
-        this.setState({ mymap })
     }
 
     render () {
