@@ -13,7 +13,7 @@ const URL_DELETE_ELEMENT    = 'api_blog_categories_delete';
 const URL_DELETE_GROUP      = 'api_blog_categories_delete_group';
 const MSG_DELETE_ELEMENT    = 'Supprimer cette catégorie ?';
 const MSG_DELETE_GROUP      = 'Aucun catégorie sélectionnée.';
-let SORTER = Sort.compareLastname;
+let SORTER = Sort.compareName;
 
 function searchFunction(dataImmuable, search){
     let newData = [];
