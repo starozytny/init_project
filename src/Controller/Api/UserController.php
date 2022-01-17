@@ -62,9 +62,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * Admin - Create a user
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
+     * Create a user
      *
      * @Route("/", name="create", options={"expose"=true}, methods={"POST"})
      *

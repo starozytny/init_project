@@ -119,6 +119,7 @@ export class Form extends Component {
         // validate global
         let validate = Validateur.validateur(paramsToValidate)
         if(!validate.code){
+            console.log(validate)
             Formulaire.showErrors(this, validate);
         }else{
             Formulaire.loader(true);

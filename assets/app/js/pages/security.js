@@ -23,7 +23,7 @@ if(el){
 
 el = document.getElementById("user-registration");
 if(el){
-    render(<UserFormulaire type="create" role={["ROLE_USER"]} isRegistration={true} />, el)
+    render(<UserFormulaire type="create" roles={["ROLE_USER"]} isRegistration={true} />, el)
 }
 
 let btnSeePassword = document.querySelector('.btn-see-password');
