@@ -46,7 +46,7 @@ export function UserFormulaire ({ type, onChangeContext, onUpdateList, element, 
         isRegistration={isRegistration}
     />
 
-    return !isRegistration ? <FormLayout onChangeContext={onChangeContext} form={form}>{title}</FormLayout> : form;
+    return !isRegistration ? <FormLayout onChangeContext={onChangeContext} form={form}>{title}</FormLayout> : <div className="form">{form}</div>;
 }
 
 export class Form extends Component {
