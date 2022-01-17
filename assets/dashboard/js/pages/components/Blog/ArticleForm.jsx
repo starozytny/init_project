@@ -4,7 +4,7 @@ import axios                   from "axios";
 import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Input, Select }       from "@dashboardComponents/Tools/Fields";
+import {Input, Radiobox, Select} from "@dashboardComponents/Tools/Fields";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { Trumb }               from "@dashboardComponents/Tools/Trumb";
 import { Drop }                from "@dashboardComponents/Tools/Drop";
@@ -38,6 +38,7 @@ export function ArticleFormulaire ({ type, onChangeContext, onUpdateList, catego
         introduction={element ? element.introduction : ""}
         content={element ? element.content : ""}
         category={element ? element.category : ""}
+        visibleBy={element ? element.visibleBy : 0}
         categories={categories}
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
@@ -56,6 +57,7 @@ export class ArticleForm extends Component {
             introduction: { value: props.introduction ? props.introduction : "", html: props.introduction ? props.introduction : "" },
             content: { value: props.content ? props.content : "", html: props.content ? props.content : "" },
             category: props.category.id ? props.category.id : "",
+            visibleBy: props.visibleBy,
             errors: []
         }
 
@@ -84,7 +86,7 @@ export class ArticleForm extends Component {
         e.preventDefault();
 
         const { url, messageSuccess } = this.props;
-        const { title, category, introduction, content } = this.state;
+        const { title, category } = this.state;
 
         this.setState({ errors: [], success: false })
 
@@ -134,21 +136,31 @@ export class ArticleForm extends Component {
 
     render () {
         const { context, categories } = this.props;
-        const { errors, title, introduction, content, category } = this.state;
+        const { errors, title, introduction, content, category, visibleBy } = this.state;
 
         let selectItems = [];
         categories.forEach(el => {
             selectItems.push({ value: el.id, label: el.name, identifiant: el.slug })
         })
 
+        let visibleItems = [
+            { value: 0, label: "Tout le monde", identifiant: "tlm" },
+            { value: 1, label: "Membres",       identifiant: "members" },
+        ]
+
         return <>
             <form onSubmit={this.handleSubmit}>
-                <div className="line">
+                <div className="line line-2">
                     <Input valeur={title} identifiant="title" errors={errors} onChange={this.handleChange} >Titre de l'article</Input>
+                    <Select items={selectItems} identifiant="category" valeur={category} errors={errors} onChange={this.handleChange}>A quelle catégorie appartient cet article ?</Select>
                 </div>
 
-                <div className="line">
-                    <Select items={selectItems} identifiant="category" valeur={category} errors={errors} onChange={this.handleChange}>A quelle catégorie appartient cet article ?</Select>
+
+                <div className="line line-2">
+                    <Radiobox items={visibleItems} identifiant="visibleBy" valeur={visibleBy} errors={errors} onChange={this.handleChange}>
+                        Visible par
+                    </Radiobox>
+                    <div className="form-group" />
                 </div>
 
                 <div className="line">
