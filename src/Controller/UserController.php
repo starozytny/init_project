@@ -47,7 +47,6 @@ class UserController extends AbstractController
         return $this->render('user/pages/profil/update.html.twig',  ['donnees' => $data]);
     }
 
-
     /**
      * @Route("/actualites", name="blog")
      */
