@@ -147,7 +147,7 @@ export class Form extends Component {
                             firstname: '',
                             lastname: '',
                             email: '',
-                            roles: [],
+                            roles: !isRegistration ? [] : ["ROLE_USER"],
                             password: '',
                             passwordConfirm: '',
                         })
