@@ -4,6 +4,7 @@ namespace App\Command\Fake;
 
 use App\Entity\Blog\BoArticle;
 use App\Entity\Blog\BoCategory;
+use App\Service\Data\Blog\DataBlog;
 use App\Service\DatabaseService;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
@@ -18,13 +19,15 @@ class FakeArticlesCreateCommand extends Command
     protected static $defaultDescription = 'Create fake articles';
     private $em;
     private $databaseService;
+    private $dataEntity;
 
-    public function __construct(EntityManagerInterface $entityManager, DatabaseService $databaseService)
+    public function __construct(EntityManagerInterface $entityManager, DatabaseService $databaseService, DataBlog $dataEntity)
     {
         parent::__construct();
 
         $this->em = $entityManager;
         $this->databaseService = $databaseService;
+        $this->dataEntity = $dataEntity;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -59,7 +62,7 @@ class FakeArticlesCreateCommand extends Command
 
             $data = json_decode(json_encode($data));
 
-            $new = $this->dataImmo->setDataProspect(new BoArticle(), $data);
+            $new = $this->dataEntity->setDataArticle(new BoArticle(), $data);
 
             $this->em->persist($new);
         }

@@ -2,9 +2,11 @@
 
 namespace App\Entity\Blog;
 
+use App\Entity\DataEntity;
 use App\Repository\Blog\BoArticleRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -13,8 +15,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @UniqueEntity(fields={"title"})
  * @UniqueEntity(fields={"slug"})
  */
-class BoArticle
+class BoArticle extends DataEntity
 {
+    const FOLDER_ARTICLES = "articles";
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -28,17 +32,6 @@ class BoArticle
      * @Groups({"visitor:read", "admin:write"})
      */
     private $title;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"visitor:write"})
-     */
-    private $updatedAt;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -59,14 +52,15 @@ class BoArticle
     private $file;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Gedmo\Slug(updatable=true, fields={"identifiant"})
      * @Groups({"visitor:read", "admin:write"})
      */
     private $slug;
 
     /**
      * @ORM\Column(type="boolean")
-     *  @Groups({"visitor:read"})
+     * @Groups({"visitor:read"})
      */
     private $isPublished;
 
@@ -76,6 +70,17 @@ class BoArticle
      * @Groups({"visitor:read"})
      */
     private $category;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"visitor:write"})
+     */
+    private $updatedAt;
 
     public function __construct()
     {
@@ -132,11 +137,7 @@ class BoArticle
      */
     public function getCreateAtStringLong(): ?string
     {
-        if($this->createdAt == null){
-            return null;
-        }
-        Carbon::setLocale('fr');
-        return Carbon::instance($this->getCreatedAt())->isoFormat('ll');
+        return $this->getFullDateString($this->createdAt);
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -146,6 +147,7 @@ class BoArticle
 
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
+        $updatedAt->setTimezone(new \DateTimeZone("Europe/Paris"));
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -158,10 +160,7 @@ class BoArticle
      */
     public function getUpdatedAtAgo(): ?string
     {
-        if($this->updatedAt == null){
-            return null;
-        }
-        return Carbon::instance($this->updatedAt)->diffForHumans();
+        return $this->getHowLongAgo($this->updatedAt);
     }
 
     public function getIntroduction(): ?string
@@ -205,7 +204,7 @@ class BoArticle
         return $this->slug;
     }
 
-    public function setSlug(string $slug): self
+    public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
 

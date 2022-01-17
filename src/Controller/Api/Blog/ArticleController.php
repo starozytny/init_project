@@ -5,12 +5,14 @@ namespace App\Controller\Api\Blog;
 use App\Entity\Blog\BoArticle;
 use App\Entity\Blog\BoCategory;
 use App\Entity\User;
-use App\Repository\Blog\BoArticleRepository;
 use App\Service\ApiResponse;
+use App\Service\Data\Blog\DataBlog;
 use App\Service\Data\DataService;
 use App\Service\FileUploader;
-use App\Service\SanitizeData;
 use App\Service\ValidatorService;
+use DateTime;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,15 +21,18 @@ use Symfony\Component\Routing\Annotation\Route;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
  * @Route("/api/blog", name="api_articles_")
  */
 class ArticleController extends AbstractController
 {
-    const FOLDER = "articles";
+    private $doctrine;
 
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
     /**
      * Get array of articles
      *
@@ -45,7 +50,7 @@ class ArticleController extends AbstractController
      */
     public function index(Request $request, SerializerInterface $serializer): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $order = $request->query->get('order') ?: 'ASC';
         $articles = $em->getRepository(BoArticle::class)->findBy([], ['createdAt' => $order]);
         $categories = $em->getRepository(BoCategory::class)->findAll();
@@ -59,34 +64,43 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    public function setArticle($em, $apiResponse, BoArticle $article, $request, $fileName)
+    /**
+     * @throws Exception
+     */
+    public function submitForm($type, BoArticle $obj, Request $request, ApiResponse $apiResponse,
+                               ValidatorService $validator, DataBlog $dataEntity, FileUploader $fileUploader): JsonResponse
     {
-        $title = $request->get('title');
-        $introduction = $request->get('introduction');
-        $content = $request->get('content');
-        $category = $request->get('category');
+        $em = $this->doctrine->getManager();
+        $data = json_decode($request->get('data'));
 
-        $category = $em->getRepository(BoCategory::class)->find($category);
-        if(!$category){
-            return $apiResponse->apiJsonResponseValidationFailed([[
-                'name' => 'category',
-                'message' => "Cette catégorie n'existe pas."
-            ]]);
+        if ($data === null) {
+            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $article->setTitle(trim($title));
-        $article->setIntroduction($introduction ?: null);
-        $article->setContent($content ?: null);
-        $article->setCategory($category);
+        $obj = $dataEntity->setDataArticle($obj, $data);
 
-        if($fileName){
-            $article->setFile($fileName);
+        $file = $request->files->get('file');
+        if($type === "create"){
+            $fileName = ($file) ? $fileUploader->upload($file, BoArticle::FOLDER_ARTICLES, true) : null;
+            $obj->setFile($fileName);
+        }else{
+            if($file){
+                $fileName = $fileUploader->replaceFile($file, $obj->getFile(),BoArticle::FOLDER_ARTICLES);
+                $obj->setFile($fileName);
+            }
+
+            $obj->setUpdatedAt(new DateTime());
         }
 
-        $slug = new AsciiSlugger();
-        $article->setSlug($slug->slug(trim($title)));
+        $noErrors = $validator->validate($obj);
+        if ($noErrors !== true) {
+            return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+        }
 
-        return $article;
+        $em->persist($obj);
+        $em->flush();
+
+        return $apiResponse->apiJsonResponse($obj, User::VISITOR_READ);
     }
 
     /**
@@ -116,30 +130,15 @@ class ArticleController extends AbstractController
      * @param Request $request
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
+     * @param DataBlog $dataEntity
      * @param FileUploader $fileUploader
      * @return JsonResponse
+     * @throws Exception
      */
-    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, FileUploader $fileUploader): JsonResponse
+    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
+                           DataBlog $dataEntity, FileUploader $fileUploader): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-        $file = $request->files->get('file');
-
-        $fileName = ($file) ? $fileUploader->upload($file, "articles", true) : null;
-
-        $article = $this->setArticle($em, $apiResponse, new BoArticle(), $request, $fileName);
-
-        if($article instanceof BoArticle){
-            $noErrors = $validator->validate($article);
-            if ($noErrors !== true) {
-                return $apiResponse->apiJsonResponseValidationFailed($noErrors);
-            }
-
-            $em->persist($article);
-            $em->flush();
-            return $apiResponse->apiJsonResponse($article, User::VISITOR_READ);
-        }else{
-            return $article;
-        }
+        return $this->submitForm("create", new BoArticle(), $request, $apiResponse, $validator, $dataEntity, $fileUploader);
     }
 
     /**
@@ -169,36 +168,19 @@ class ArticleController extends AbstractController
      *
      * @OA\Tag(name="Blog")
      *
+     * @param BoArticle $obj
      * @param Request $request
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
-     * @param BoArticle $article
+     * @param DataBlog $dataEntity
      * @param FileUploader $fileUploader
      * @return JsonResponse
+     * @throws Exception
      */
-    public function update(Request $request, ValidatorService $validator, ApiResponse $apiResponse, BoArticle $article, FileUploader $fileUploader): JsonResponse
+    public function update(BoArticle $obj, Request $request, ValidatorService $validator, ApiResponse $apiResponse,
+                           DataBlog $dataEntity, FileUploader $fileUploader): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-        $file = $request->files->get('file');
-
-        $fileName = $fileUploader->replaceFile($file, $article->getFile(), 'articles');
-        $article = $this->setArticle($em, $apiResponse, $article, $request, $fileName);
-
-        if($article instanceof BoArticle){
-            $updatedAt = new \DateTime();
-            $updatedAt->setTimezone(new \DateTimeZone("Europe/Paris"));
-            $article->setUpdatedAt($updatedAt);
-
-            $noErrors = $validator->validate($article);
-            if ($noErrors !== true) {
-                return $apiResponse->apiJsonResponseValidationFailed($noErrors);
-            }
-
-            $em->flush();
-            return $apiResponse->apiJsonResponse($article, User::VISITOR_READ);
-        }else{
-            return $article;
-        }
+        return $this->submitForm("update", $obj, $request, $apiResponse, $validator, $dataEntity, $fileUploader);
     }
 
     /**
@@ -246,20 +228,14 @@ class ArticleController extends AbstractController
      *
      * @OA\Tag(name="Blog")
      *
-     * @param ApiResponse $apiResponse
      * @param BoArticle $obj
+     * @param DataService $dataService
      * @param FileUploader $fileUploader
      * @return JsonResponse
      */
-    public function delete(ApiResponse $apiResponse, BoArticle $obj, FileUploader $fileUploader): JsonResponse
+    public function delete(BoArticle $obj, DataService $dataService, FileUploader $fileUploader): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $fileUploader->deleteFile($obj->getFile(), self::FOLDER);
-        $em->remove($obj);
-        $em->flush();
-
-        return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+        return $dataService->deleteWithImg($obj, $obj->getFile(), $fileUploader, BoArticle::FOLDER_ARTICLES);
     }
 
     /**
@@ -287,19 +263,25 @@ class ArticleController extends AbstractController
      */
     public function deleteGroup(Request $request, ApiResponse $apiResponse, FileUploader $fileUploader): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
 
         $objs = $em->getRepository(BoArticle::class)->findBy(['id' => $data]);
 
+        $files = [];
         if ($objs) {
             foreach ($objs as $obj) {
-                $fileUploader->deleteFile($obj->getFile(), self::FOLDER);
+                $files[] = $obj->getFile();
                 $em->remove($obj);
             }
         }
 
         $em->flush();
+
+        foreach($files as $file){
+            $fileUploader->deleteFile($file, BoArticle::FOLDER_ARTICLES);
+        }
+
         return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
     }
 }

@@ -5,6 +5,7 @@ namespace App\Service\Data\Blog;
 use App\Entity\Blog\BoArticle;
 use App\Entity\Blog\BoCategory;
 use App\Service\Data\DataConstructor;
+use Exception;
 
 class DataBlog extends DataConstructor
 {
@@ -16,10 +17,22 @@ class DataBlog extends DataConstructor
         ;
     }
 
+    /**
+     * @throws Exception
+     */
     public function setDataArticle(BoArticle $obj, $data): BoArticle
     {
-        return ($obj)
+        $category = $this->em->getRepository(BoCategory::class)->find($data->category);
+        if(!$category){
+            throw new Exception("Catégorie introuvable.");
+        }
 
+        return ($obj)
+            ->setSlug(null)
+            ->setTitle($this->sanitizeData->trimData($data->title))
+            ->setIntroduction($this->sanitizeData->trimData($data->introduction))
+            ->setContent($this->sanitizeData->trimData($data->content))
+            ->setCategory($category)
         ;
     }
 }
