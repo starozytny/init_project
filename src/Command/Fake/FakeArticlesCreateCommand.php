@@ -57,7 +57,7 @@ class FakeArticlesCreateCommand extends Command
 
             $data = [
                 "category" => $category,
-                "title" => $fake->title,
+                "title" => $fake->streetName,
                 "introduction" => $fake->sentence,
                 "content" => $fake->text,
             ];

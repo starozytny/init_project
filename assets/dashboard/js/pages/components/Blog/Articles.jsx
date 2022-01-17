@@ -66,7 +66,7 @@ export class Articles extends Component {
         return <ArticleFormulaire type="create" categories={this.state.categories} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
-    handleContentUpdate = (changeContext, updateList, element) => {
+    handleContentUpdate = (changeContext, element) => {
         return <ArticleFormulaire type="update" categories={this.state.categories} element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 

@@ -69,7 +69,7 @@ export class Categories extends Component {
         return <CategoryFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
-    handleContentUpdate = (changeContext, updateList, element) => {
+    handleContentUpdate = (changeContext, element) => {
         return <CategoryFormulaire type="update" element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
