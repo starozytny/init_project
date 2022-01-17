@@ -5,10 +5,11 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min';
 
 import React from "react";
 import { render } from "react-dom";
+import { Blog } from "@userPages/components/Blog/Blog";
 
 Routing.setRoutingData(routes);
 
 let el = document.getElementById("blog");
 if(el){
-    render(<div className="main-content">Hello</div>, el)
+    render(<Blog {...el.dataset} />, el)
 }
