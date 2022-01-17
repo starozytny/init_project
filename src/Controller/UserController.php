@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\Blog\BoArticleRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,5 +45,19 @@ class UserController extends AbstractController
         $data = $this->getUser();
         $data = $serializer->serialize($data, 'json', ['groups' => User::ADMIN_READ]);
         return $this->render('user/pages/profil/update.html.twig',  ['donnees' => $data]);
+    }
+
+
+    /**
+     * @Route("/actualites", name="blog")
+     */
+    public function blog(BoArticleRepository $repository, SerializerInterface $serializer): Response
+    {
+        $objs = $repository->findBy(['isPublished' => true], ["createdAt" => "ASC", "updatedAt" => "ASC"]);
+        $objs = $serializer->serialize($objs, 'json', ['groups' => User::VISITOR_READ]);
+
+        return $this->render('user/pages/blog/index.html.twig',  [
+            'donnees' => $objs
+        ]);
     }
 }
