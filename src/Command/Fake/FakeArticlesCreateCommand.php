@@ -7,6 +7,7 @@ use App\Entity\Blog\BoCategory;
 use App\Service\Data\Blog\DataBlog;
 use App\Service\DatabaseService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Faker\Factory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,6 +31,9 @@ class FakeArticlesCreateCommand extends Command
         $this->dataEntity = $dataEntity;
     }
 
+    /**
+     * @throws Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -48,16 +52,14 @@ class FakeArticlesCreateCommand extends Command
         $io->title('Création de 30 articles fake');
         $fake = Factory::create();
         for($i=0; $i<30 ; $i++) {
-            $category = "";
-            if($fake->numberBetween(0,1) == 1){
-                $n = $categories[$fake->numberBetween(0,$nbCategories - 1)];
-                if($n){
-                    $category = $n->getId();
-                }
-            }
+            $n = $categories[$fake->numberBetween(0,$nbCategories - 1)];
+            $category = $n->getId();
 
             $data = [
                 "category" => $category,
+                "title" => $fake->title,
+                "introduction" => $fake->sentence,
+                "content" => $fake->text,
             ];
 
             $data = json_decode(json_encode($data));

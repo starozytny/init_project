@@ -4,7 +4,6 @@ namespace App\Entity\Blog;
 
 use App\Entity\DataEntity;
 use App\Repository\Blog\BoArticleRepository;
-use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -53,7 +52,7 @@ class BoArticle extends DataEntity
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Gedmo\Slug(updatable=true, fields={"identifiant"})
+     * @Gedmo\Slug(updatable=true, fields={"title"})
      * @Groups({"visitor:read", "admin:write"})
      */
     private $slug;

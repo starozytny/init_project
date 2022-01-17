@@ -27,7 +27,7 @@ export class Articles extends Component {
             msgDeleteElement: MSG_DELETE_ELEMENT,
             pathDeleteGroup: URL_DELETE_GROUP,
             msgDeleteGroup: MSG_DELETE_GROUP,
-            categories: prosp.categories ? JSON.parse(props.categories) : [],
+            categories: props.categories ? JSON.parse(props.categories) : [],
             sessionName: "blog.articles.pagination"
         }
 
