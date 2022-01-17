@@ -85,12 +85,16 @@ class UserController extends AbstractController
      * @param FileUploader $fileUploader
      * @param NotificationService $notificationService
      * @param DataUser $dataEntity
+     * @param SettingsService $settingsService
+     * @param MailerService $mailerService
      * @return JsonResponse
      */
     public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, UserPasswordHasherInterface $passwordHasher,
-                           FileUploader $fileUploader, NotificationService $notificationService, DataUser $dataEntity): JsonResponse
+                           FileUploader $fileUploader, NotificationService $notificationService, DataUser $dataEntity,
+                           SettingsService $settingsService, MailerService $mailerService): JsonResponse
     {
         $em = $this->doctrine->getManager();
+        $isRegistration = $request->query->get('n');
         $data = json_decode($request->get('data'));
 
         if ($data === null) {
@@ -119,6 +123,22 @@ class UserController extends AbstractController
         $em->flush();
 
         $notificationService->createNotification("Création d'un utilisateur", self::ICON, $this->getUser());
+
+        if($isRegistration !== null){
+            //send mail
+            if($mailerService->sendMail(
+                "chanbora.chhun@outlook.fr",
+                "[" . $settingsService->getWebsiteName() ."] Bienvenue",
+                "Bienvenue sur " . $settingsService->getWebsiteName(),
+                "app/email/security/registration.html.twig",
+                ["elem" => $obj, "settings" => $settingsService->getSettings()]
+            ) != true) {
+                return $apiResponse->apiJsonResponseValidationFailed([[
+                    'name' => 'message',
+                    'message' => "L'email de bienvenu n\'a pas pu être délivré mais votre compte a bien été créé."
+                ]]);
+            }
+        }
 
         return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
     }

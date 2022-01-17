@@ -21,8 +21,9 @@ const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 export function UserFormulaire ({ type, onChangeContext, onUpdateList, element, isRegistration=false, roles=[] })
 {
     let title = "Ajouter un utilisateur";
-    let url = Routing.generate(URL_CREATE_ELEMENT);
-    let msg = "Félicitations ! Vous avez ajouté un nouveau utilisateur !"
+    let url = !isRegistration ? Routing.generate(URL_CREATE_ELEMENT) : Routing.generate(URL_CREATE_ELEMENT, {"n" : 1});
+    let msg = !isRegistration ? "Félicitations ! Vous avez ajouté un nouveau utilisateur !"
+        : "Félicitations, votre compte a été créé. Vous pouvez vous connecter à votre espace."
 
     if(type === "update" || type === "profil"){
         title = "Modifier " + element.username;
@@ -178,7 +179,11 @@ export class Form extends Component {
             </p>}
             <form onSubmit={this.handleSubmit}>
 
-                {success !== false && <Alert type="info">{success}</Alert>}
+                {success !== false && <div className="line">
+                    <div className="form-group">
+                        <Alert type="info">{success}</Alert>
+                    </div>
+                </div>}
 
                 <div className={"line" + (context !== "profil" ? " line-2" : "")}>
                     {context !== "profil" && <Input valeur={username} identifiant="username" errors={errors} onChange={this.handleChange}>Nom utilisateur</Input>}
