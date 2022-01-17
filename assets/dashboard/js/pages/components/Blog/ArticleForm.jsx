@@ -8,36 +8,41 @@ import { Input, Select }       from "@dashboardComponents/Tools/Fields";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { Trumb }               from "@dashboardComponents/Tools/Trumb";
 import { Drop }                from "@dashboardComponents/Tools/Drop";
+import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@commonComponents/functions/validateur";
+import Helper                  from "@commonComponents/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
-import { FormLayout }          from "@dashboardComponents/Layout/Elements";
+const URL_CREATE_ELEMENT     = "api_articles_create";
+const URL_UPDATE_GROUP       = "api_articles_update";
+const TXT_CREATE_BUTTON_FORM = "Enregistrer";
+const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
 export function ArticleFormulaire ({ type, onChangeContext, onUpdateList, categories, element })
 {
     let title = "Ajouter un article";
-    let url = Routing.generate('api_articles_create');
+    let url = Routing.generate(URL_CREATE_ELEMENT);
     let msg = "Félicitation ! Vous avez ajouté un nouveau article !";
 
     if(type === "update"){
         title = "Modifier " + element.title;
-        url = Routing.generate('api_articles_update', {'id': element.id});
+        url = Routing.generate(URL_UPDATE_GROUP, {'id': element.id});
         msg = "Félicitation ! La mise à jour s'est réalisé avec succès !";
     }
 
     let form = <ArticleForm
-                    context={type}
-                    url={url}
-                    title={element ? element.title : ""}
-                    introduction={element ? element.introduction : ""}
-                    content={element ? element.content : ""}
-                    category={element ? element.category : ""}
-                    categories={categories}
-                    onUpdateList={onUpdateList}
-                    onChangeContext={onChangeContext}
-                    messageSuccess={msg}
-                />
+        context={type}
+        url={url}
+        title={element ? element.title : ""}
+        introduction={element ? element.introduction : ""}
+        content={element ? element.content : ""}
+        category={element ? element.category : ""}
+        categories={categories}
+        onUpdateList={onUpdateList}
+        onChangeContext={onChangeContext}
+        messageSuccess={msg}
+    />
 
     return <FormLayout onChangeContext={onChangeContext} form={form}>{title}</FormLayout>
 }
@@ -62,19 +67,17 @@ export class ArticleForm extends Component {
     }
 
     componentDidMount() {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        Helper.toTop();
         document.getElementById("title").focus()
     }
 
     handleChange = (e) => { this.setState({[e.currentTarget.name]: e.currentTarget.value}) }
 
     handleChangeTrumb = (e) => {
-        let val = this.state.introduction.value;
-        if(e.currentTarget.id === "content"){
-            val = this.state.content.value;
-        }
-        this.setState({ [e.currentTarget.id]: { value: val, html: e.currentTarget.innerHTML } })
+        let name = e.currentTarget.id;
+        let text = e.currentTarget.innerHTML;
+
+        this.setState({[name]: {value: [name].value, html: text}})
     }
 
     handleSubmit = (e) => {
@@ -83,12 +86,13 @@ export class ArticleForm extends Component {
         const { url, messageSuccess } = this.props;
         const { title, category, introduction, content } = this.state;
 
-        this.setState({ success: false})
+        this.setState({ errors: [], success: false })
 
         let file = this.inputFile.current.drop.current.files;
+
         let paramsToValidate = [
-            {type: "text", id: 'title', value: title},
-            {type: "text", id: 'category', value: category},
+            {type: "text", id: 'title',     value: title},
+            {type: "text", id: 'category',  value: category},
         ];
 
         // validate global
@@ -99,15 +103,10 @@ export class ArticleForm extends Component {
             this.setState({ errors: validate.errors });
         }else{
             let formData = new FormData();
-            formData.append('title', title);
-            formData.append('category', category);
-            formData.append('introduction', introduction.html);
-            formData.append('content', content.html);
+            formData.append("data", JSON.stringify(this.state));
 
-            if(file !== ""){
-                if(file[0]){
-                    formData.append('file', file[0].file);
-                }
+            if(file[0]){
+                formData.append('file', file[0].file);
             }
 
             Formulaire.loader(true);
@@ -115,8 +114,12 @@ export class ArticleForm extends Component {
             axios({ method: "POST", url: url, data: formData, headers: {'Content-Type': 'multipart/form-data'} })
                 .then(function (response) {
                     let data = response.data;
-                    self.props.onUpdateList(data);
-                    self.props.onChangeContext("list");
+                    if(self.props.onUpdateList){
+                        self.props.onUpdateList(data);
+                    }
+                    if(self.props.onChangeContext){
+                        self.props.onChangeContext("list");
+                    }
                     toastr.info(messageSuccess);
                 })
                 .catch(function (error) {
@@ -150,7 +153,7 @@ export class ArticleForm extends Component {
 
                 <div className="line">
                     <Drop ref={this.inputFile} identifiant="file" errors={errors} accept={"image/*"} maxFiles={1}
-                          label="Téléverser une image" labelError="Seules les images sont acceptées.">Image de garde</Drop>
+                          label="Téléverser une image" labelError="Seules les images sont acceptées.">Illustration</Drop>
                 </div>
 
                 <div className="line">
@@ -163,7 +166,7 @@ export class ArticleForm extends Component {
 
                 <div className="line">
                     <div className="form-button">
-                        <Button isSubmit={true}>{context === "create" ? "Ajouter l'article" : 'Modifier l\'article'}</Button>
+                        <Button isSubmit={true}>{context === "create" ? TXT_CREATE_BUTTON_FORM : TXT_UPDATE_BUTTON_FORM}</Button>
                     </div>
                 </div>
             </form>

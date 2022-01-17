@@ -8,24 +8,13 @@ import Sort              from "@commonComponents/functions/sort";
 import { ArticlesList }      from "./ArticlesList";
 import { ArticleFormulaire } from "./ArticleForm";
 
-const URL_DELETE_ELEMENT = 'api_articles_delete';
-const URL_DELETE_GROUP = 'api_articles_delete_group';
-const MSG_DELETE_ELEMENT = 'Supprimer cet article ?';
-const MSG_DELETE_GROUP = 'Aucun article sélectionné.';
-const URL_SWITCH_ELEMENT = 'api_articles_article_published';
-const MSG_SWITCH_ELEMENT = 'Article';
+const URL_DELETE_ELEMENT    = 'api_articles_delete';
+const URL_DELETE_GROUP      = 'api_articles_delete_group';
+const MSG_DELETE_ELEMENT    = 'Supprimer cet article ?';
+const MSG_DELETE_GROUP      = 'Aucun article sélectionné.';
+const URL_SWITCH_ELEMENT    = 'api_articles_article_published';
+const MSG_SWITCH_ELEMENT    = 'Article';
 const SORTER = Sort.compareCreatedAt;
-
-function searchFunction(dataImmuable, search){
-    let newData = [];
-    newData = dataImmuable.filter(function(v) {
-        if(v.title.toLowerCase().includes(search)){
-            return v;
-        }
-    })
-
-    return newData;
-}
 
 export class Articles extends Component {
     constructor(props) {
@@ -38,8 +27,8 @@ export class Articles extends Component {
             msgDeleteElement: MSG_DELETE_ELEMENT,
             pathDeleteGroup: URL_DELETE_GROUP,
             msgDeleteGroup: MSG_DELETE_GROUP,
-            categories: JSON.parse(props.categories),
-            sessionName: "blog.pagination"
+            categories: prosp.categories ? JSON.parse(props.categories) : [],
+            sessionName: "blog.articles.pagination"
         }
 
         this.layout = React.createRef();
@@ -58,7 +47,7 @@ export class Articles extends Component {
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
-    handleSearch = (search) => { this.layout.current.handleSearch(search, searchFunction) }
+    handleSearch = (search) => { this.layout.current.handleSearch(search, "article"); }
 
     handleSwitchPublished = (element) => {
         this.layout.current.handleSwitchPublished(this, element, Routing.generate(URL_SWITCH_ELEMENT, {'id': element.id}), MSG_SWITCH_ELEMENT);
