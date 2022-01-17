@@ -184,7 +184,7 @@ export class ArticleForm extends Component {
                 </div>
 
                 <div className="line line-3">
-                    <Drop ref={this.inputFile} identifiant="file1" errors={errors} accept={"*"} maxFiles={1}
+                    <Drop ref={this.inputFile1} identifiant="file1" errors={errors} accept={"*"} maxFiles={1}
                           label="Téléverser un document" labelError="Erreur.">Document 1</Drop>
                     <Drop ref={this.inputFile2} identifiant="file2" errors={errors} accept={"*"} maxFiles={1}
                           label="Téléverser un document" labelError="Erreur.">Document 2</Drop>
