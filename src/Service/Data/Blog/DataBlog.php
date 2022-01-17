@@ -30,8 +30,8 @@ class DataBlog extends DataConstructor
         return ($obj)
             ->setSlug(null)
             ->setTitle($this->sanitizeData->trimData($data->title))
-            ->setIntroduction($this->sanitizeData->trimData($data->introduction))
-            ->setContent($this->sanitizeData->trimData($data->content))
+            ->setIntroduction($this->sanitizeData->trimData($data->introduction->html))
+            ->setContent($this->sanitizeData->trimData($data->content->html))
             ->setCategory($category)
         ;
     }

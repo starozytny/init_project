@@ -58,7 +58,7 @@ class CategoryController extends AbstractController
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
 
-        $category = $dataEntity->setDataCategory(new BoCategory(), $data);
+        $category = $dataEntity->setDataCategory($category, $data);
 
         $noErrors = $validator->validate($category);
         if ($noErrors !== true) {
@@ -111,7 +111,7 @@ class CategoryController extends AbstractController
      *
      * @Security("is_granted('ROLE_ADMIN')")
      *
-     * @Route("/categories/{id}", name="update", options={"expose"=true}, methods={"POST"})
+     * @Route("/categories/{id}", name="update", options={"expose"=true}, methods={"PUT"})
      *
      * @OA\Response(
      *     response=200,

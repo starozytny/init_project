@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import axios             from "axios";
+import toastr            from "toastr";
 import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Input }         from "@dashboardComponents/Tools/Fields";
@@ -97,7 +98,7 @@ export class CategoryForm extends Component {
                         self.props.onChangeContext("list");
                     }
 
-                    self.setState({ success: messageSuccess, errors: [] });
+                    toastr.info(messageSuccess);
                 })
                 .catch(function (error) {
                     Formulaire.displayErrors(self, error);
@@ -111,13 +112,10 @@ export class CategoryForm extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, name } = this.state;
+        const { errors, name } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
-
-                {success !== false && <Alert type="info">{success}</Alert>}
-
                 <div className="line">
                     <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange} >Nom de la catégorie</Input>
                 </div>
