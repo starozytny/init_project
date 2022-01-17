@@ -4,7 +4,7 @@ import axios                   from "axios";
 import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import {Input, Radiobox, Select} from "@dashboardComponents/Tools/Fields";
+import { Input, Radiobox, Select } from "@dashboardComponents/Tools/Fields";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { Trumb }               from "@dashboardComponents/Tools/Trumb";
 import { Drop }                from "@dashboardComponents/Tools/Drop";
@@ -62,6 +62,9 @@ export class ArticleForm extends Component {
         }
 
         this.inputFile = React.createRef();
+        this.inputFile1 = React.createRef();
+        this.inputFile2 = React.createRef();
+        this.inputFile3 = React.createRef();
 
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeTrumb = this.handleChangeTrumb.bind(this);
@@ -91,6 +94,9 @@ export class ArticleForm extends Component {
         this.setState({ errors: [], success: false })
 
         let file = this.inputFile.current.drop.current.files;
+        let file1 = this.inputFile1.current.drop.current.files;
+        let file2 = this.inputFile2.current.drop.current.files;
+        let file3 = this.inputFile3.current.drop.current.files;
 
         let paramsToValidate = [
             {type: "text", id: 'title',     value: title},
@@ -107,9 +113,10 @@ export class ArticleForm extends Component {
             let formData = new FormData();
             formData.append("data", JSON.stringify(this.state));
 
-            if(file[0]){
-                formData.append('file', file[0].file);
-            }
+            if(file[0]){ formData.append('file', file[0].file);}
+            if(file1[0]){ formData.append('file1', file1[0].file);}
+            if(file2[0]){ formData.append('file2', file2[0].file);}
+            if(file3[0]){ formData.append('file3', file3[0].file);}
 
             Formulaire.loader(true);
             let self = this;
@@ -174,6 +181,15 @@ export class ArticleForm extends Component {
 
                 <div className="line">
                     <Trumb valeur={content.value} identifiant="content" errors={errors} onChange={this.handleChangeTrumb} >Contenu de l'article</Trumb>
+                </div>
+
+                <div className="line line-3">
+                    <Drop ref={this.inputFile} identifiant="file1" errors={errors} accept={"*"} maxFiles={1}
+                          label="Téléverser un document" labelError="Erreur.">Document 1</Drop>
+                    <Drop ref={this.inputFile2} identifiant="file2" errors={errors} accept={"*"} maxFiles={1}
+                          label="Téléverser un document" labelError="Erreur.">Document 2</Drop>
+                    <Drop ref={this.inputFile3} identifiant="file3" errors={errors} accept={"*"} maxFiles={1}
+                          label="Téléverser un document" labelError="Erreur.">Document 3</Drop>
                 </div>
 
                 <div className="line">
