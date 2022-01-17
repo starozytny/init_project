@@ -7,6 +7,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Forget } from './components/Security/Forget';
 import { Reinit } from './components/Security/Reinit';
+import {UserFormulaire} from "@dashboardPages/components/User/UserForm";
 
 Routing.setRoutingData(routes);
 
@@ -18,6 +19,11 @@ if(el){
 el = document.getElementById("reinit");
 if(el){
     render(<Reinit {...el.dataset} />, el)
+}
+
+el = document.getElementById("user-registration");
+if(el){
+    render(<UserFormulaire type="create" role={["ROLE_USER"]} isRegistration={true} />, el)
 }
 
 let btnSeePassword = document.querySelector('.btn-see-password');
