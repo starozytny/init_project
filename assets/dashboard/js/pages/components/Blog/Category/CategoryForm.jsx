@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
 
 import axios             from "axios";
-import toastr            from "toastr";
 import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Input }         from "@dashboardComponents/Tools/Fields";
 import { Button }        from "@dashboardComponents/Tools/Button";
+import { Alert }         from "@dashboardComponents/Tools/Alert";
+import { FormLayout }    from "@dashboardComponents/Layout/Elements";
 
 import Validateur        from "@commonComponents/functions/validateur";
+import Helper            from "@commonComponents/functions/helper";
 import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
-import { FormLayout }    from "@dashboardComponents/Layout/Elements";
+const URL_CREATE_ELEMENT     = "api_blog_categories_create";
+const URL_UPDATE_GROUP       = "api_blog_categories_update";
+const TXT_CREATE_BUTTON_FORM = "Enregistrer";
+const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
 export function CategoryFormulaire ({ type, onChangeContext, onUpdateList, element })
 {
     let title = "Ajouter une categorie";
-    let url = Routing.generate('api_blog_categories_create')
+    let url = Routing.generate(URL_CREATE_ELEMENT)
     let msg = "Félicitation ! Vous avez ajouté une nouvelle catégorie !";
 
     if(type === "update"){
         title = "Modifier " + element.name;
-        url = Routing.generate('api_blog_categories_update', {'id': element.id});
+        url = Routing.generate(URL_UPDATE_GROUP, {'id': element.id});
         msg = "Félicitation ! La mise à jour s'est réalisé avec succès !";
     }
 
@@ -52,8 +57,7 @@ export class CategoryForm extends Component {
     }
 
     componentDidMount() {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        Helper.toTop();
         document.getElementById("name").focus()
     }
 
@@ -62,10 +66,10 @@ export class CategoryForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const { url, messageSuccess } = this.props;
+        const { url, context, messageSuccess } = this.props;
         const { name } = this.state;
 
-        this.setState({ success: false})
+        this.setState({ errors: [], success: false })
 
         let paramsToValidate = [
             {type: "text", id: 'name', value: name}
@@ -76,19 +80,24 @@ export class CategoryForm extends Component {
 
         // check validate success
         if(!validate.code){
-            this.setState({ errors: validate.errors });
+            Formulaire.showErrors(this, validate)
         }else{
-            let formData = new FormData();
-            formData.append('name', name);
-
+            let method = context === "create" ? "POST" : "PUT";
             Formulaire.loader(true);
             let self = this;
-            axios({ method: "POST", url: url, data: formData })
+            axios({ method: method, url: url, data: this.state })
                 .then(function (response) {
                     let data = response.data;
-                    self.props.onUpdateList(data);
-                    self.props.onChangeContext("list");
-                    toastr.info(messageSuccess);
+                    Helper.toTop();
+
+                    if(self.props.onUpdateList){
+                        self.props.onUpdateList(data);
+                    }
+                    if(self.props.onChangeContext){
+                        self.props.onChangeContext("list");
+                    }
+
+                    self.setState({ success: messageSuccess, errors: [] });
                 })
                 .catch(function (error) {
                     Formulaire.displayErrors(self, error);
@@ -102,17 +111,20 @@ export class CategoryForm extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, name } = this.state;
+        const { errors, success, name } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
+
+                {success !== false && <Alert type="info">{success}</Alert>}
+
                 <div className="line">
                     <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange} >Nom de la catégorie</Input>
                 </div>
 
                 <div className="line">
                     <div className="form-button">
-                        <Button isSubmit={true}>{context === "create" ? "Ajouter la catégorie" : 'Modifier la catégorie'}</Button>
+                        <Button isSubmit={true}>{context === "create" ? TXT_CREATE_BUTTON_FORM : TXT_UPDATE_BUTTON_FORM}</Button>
                     </div>
                 </div>
             </form>
