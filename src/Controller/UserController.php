@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Blog\BoArticle;
 use App\Entity\User;
 use App\Repository\Blog\BoArticleRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -57,6 +58,16 @@ class UserController extends AbstractController
 
         return $this->render('user/pages/blog/index.html.twig',  [
             'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/actualites/{slug}", options={"expose"=true}, name="blog_read")
+     */
+    public function readBlog(BoArticle $obj): Response
+    {
+        return $this->render('user/pages/blog/read.html.twig',  [
+            'elem' => $obj
         ]);
     }
 }

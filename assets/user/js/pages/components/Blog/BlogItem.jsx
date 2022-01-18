@@ -4,10 +4,12 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 export class BlogItem extends Component {
     render () {
-        const { elem } = this.props
+        const { isFromApp=false, elem } = this.props
+
+        let url = isFromApp ? "app_blog_read" : "user_blog_read";
 
         return <div className="item">
-            {elem.title}
+            <a href={Routing.generate(url, {"slug": elem.slug})}>{elem.title}</a>
         </div>
     }
 }
