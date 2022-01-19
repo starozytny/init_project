@@ -17,7 +17,7 @@ export class OrdersItem extends Component {
                     <div className="infos infos-col-4">
                         <InfosOrder elem={elem} />
                         <div className="col-3">
-                            <div className="role">{elem.statusString}</div>
+                            <div className={"badge badge-" + elem.status}>{elem.statusString}</div>
                             <div className="sub">{elem.createdAtString}</div>
                         </div>
                         <div className="col-4 actions">
