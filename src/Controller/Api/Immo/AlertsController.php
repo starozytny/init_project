@@ -11,6 +11,7 @@ use App\Service\Export;
 use App\Service\MailerService;
 use App\Service\SettingsService;
 use App\Service\ValidatorService;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -24,6 +25,13 @@ use OpenApi\Annotations as OA;
  */
 class AlertsController extends AbstractController
 {
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+
     /**
      * Admin - Get array of alerts
      *
@@ -69,7 +77,7 @@ class AlertsController extends AbstractController
     public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, MailerService $mailerService,
                            SettingsService $settingsService): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
 
         if ($data === null) {
@@ -140,7 +148,7 @@ class AlertsController extends AbstractController
      */
     public function delete(ApiResponse $apiResponse, $token): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $alert = $em->getRepository(ImAlert::class)->findOneBy(['token' => $token]);
         if(!$alert){
@@ -171,7 +179,7 @@ class AlertsController extends AbstractController
      */
     public function deleteWithEmail(Request $request, ApiResponse $apiResponse): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
 
         $alerts = $em->getRepository(ImAlert::class)->findBy(['email' => $data->email]);
@@ -224,7 +232,7 @@ class AlertsController extends AbstractController
      */
     public function export(Export $export, $format): BinaryFileResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $alerts = $em->getRepository(ImAlert::class)->findAll();
         $data = [];
 

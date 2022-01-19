@@ -10,6 +10,7 @@ use App\Service\Export;
 use App\Service\FileUploader;
 use App\Service\Immo\ImmoService;
 use App\Service\ValidatorService;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -25,6 +26,13 @@ class AgencyController extends AbstractController
 {
     const FOLDER_LOGO = "immo/logos";
     const FOLDER_TARIF = "immo/tarifs";
+
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
 
     /**
      * Admin - Create an agency
@@ -55,7 +63,7 @@ class AgencyController extends AbstractController
     public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
                            FileUploader $fileUploader, CreateAgency $dataEntity): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->get('data'));
 
         if ($data === null) {
@@ -122,7 +130,7 @@ class AgencyController extends AbstractController
             return $apiResponse->apiJsonResponseForbidden();
         }
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $data = json_decode($request->get('data'));
 
         if($data === null){
@@ -175,7 +183,7 @@ class AgencyController extends AbstractController
      */
     public function delete(ApiResponse $apiResponse, ImAgency $obj, ImmoService $immoService): JsonResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
 
         $immoService->deleteAgency($obj);
 
@@ -201,7 +209,7 @@ class AgencyController extends AbstractController
      */
     public function export(Export $export, $format): BinaryFileResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->doctrine->getManager();
         $objs = $em->getRepository(ImAgency::class)->findAll();
         $data = [];
 
