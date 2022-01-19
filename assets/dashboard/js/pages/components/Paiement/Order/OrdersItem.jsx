@@ -22,7 +22,7 @@ export class OrdersItem extends Component {
                         </div>
                         <div className="col-4 actions">
                             {elem.status === 0 && <ButtonIcon icon="refresh" onClick={() => onRefresh(elem)}>Rafraichir</ButtonIcon>}
-                            {elem.status === 1 && <ButtonIcon icon="upload" onClick={() => onProcess(elem.id)}>Traiter</ButtonIcon>}
+                            {elem.status === 1 && <ButtonIcon icon="upload" onClick={() => onProcess(elem.id, elem.name)}>Traiter</ButtonIcon>}
                             {(elem.status === 0 || elem.status === 1) && <ButtonIcon icon="cancel" onClick={() => onCancel(elem)}>Annuler</ButtonIcon>}
                             {(isDeveloper && (elem.status === 3 || elem.status === 4)) && <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>}
                         </div>
