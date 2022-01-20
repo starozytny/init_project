@@ -46,6 +46,9 @@ export class SessionsItem extends Component {
             {data: <ButtonIcon icon="file"
                                onClick={() => this.handleDuplicate(elem)}
                                text="Dupliquer" />},
+            {data: <ButtonIcon icon="email" element="a"
+                               onClick={Routing.generate('admin_mails_send', {'dest': [elem.email]})}
+                               text="Envoyer un mail" />},
         ];
 
         return <div className="item">
