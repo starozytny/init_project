@@ -5,7 +5,7 @@ namespace App\Command\Fake;
 use App\Entity\Paiement\PaLot;
 use App\Entity\Paiement\PaOrder;
 use App\Entity\User;
-use App\Service\Data\DataPaiement;
+use App\Service\Data\Paiement\DataPaiement;
 use App\Service\DatabaseService;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
@@ -17,6 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class FakeOrderCreateCommand extends Command
 {
     protected static $defaultName = 'fake:order:create';
+    protected static $defaultDescription = 'Create fake orders.';
     private $em;
     private $databaseService;
     private $dataPaiement;
@@ -29,13 +30,6 @@ class FakeOrderCreateCommand extends Command
         $this->em = $entityManager;
         $this->databaseService = $databaseService;
         $this->dataPaiement = $dataPaiement;
-    }
-
-    protected function configure()
-    {
-        $this
-            ->setDescription('Create fake orders.')
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -69,13 +63,13 @@ class FakeOrderCreateCommand extends Command
             $order->setStatus($fake->numberBetween(0, 4));
 
             $this->em->persist($order);
-//            $io->text('ORDER : ' . $name . ' créé' );
         }
+        $io->text('ORDER : Orders fake créés' );
 
         $this->em->flush();
 
         $io->newLine();
         $io->comment('--- [FIN DE LA COMMANDE] ---');
-        return 0;
+        return self::SUCCESS;
     }
 }
