@@ -7,21 +7,20 @@ use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoSession;
 use App\Entity\User;
 use App\Service\ApiResponse;
-use App\Service\Data\DataFormation;
 use App\Service\Data\DataService;
+use App\Service\Data\Paiement\DataFormation;
 use App\Service\FileCreator;
 use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
 use Http\Discovery\Exception\NotFoundException;
 use Mpdf\MpdfException;
-use Mpdf\Output\Destination;
+use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 
 /**
  * @Route("/api/sessions", name="api_sessions_")
