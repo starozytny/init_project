@@ -34,7 +34,9 @@
 
 .items-table{
   .badge + .sub,
-  .role + .sub{
+  .role + .sub,
+  .badge + .name,
+  .role + .name{
     margin-top: 8px;
   }
 }
@@ -84,7 +86,8 @@
   .badges{
     & > .badge:not(:last-child),
     & > .role:not(:last-child){
-      margin-right: 12px;
+      margin-right: 8px;
+      margin-bottom: 8px;
     }
   }
 
@@ -263,8 +266,8 @@
         }
 
         .item-header-selector{
-          width: 12px;
-          margin-right: 12px;
+          width: 14px;
+          margin-right: 14px;
         }
 
         &:hover{
@@ -286,7 +289,6 @@
 
     .infos{
       flex-direction: row;
-      align-items: center;
     }
 
     .infos-2{
