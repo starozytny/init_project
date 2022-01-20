@@ -187,7 +187,7 @@ class UserController extends AbstractController
                            UserPasswordHasherInterface $passwordHasher, ApiResponse $apiResponse, User $obj,
                            FileUploader $fileUploader, DataUser $dataEntity): JsonResponse
     {
-        if ($this->getUser() !== $obj) {
+        if ($this->getUser() !== $obj && !$this->isGranted("ROLE_ADMIN")) {
             return $apiResponse->apiJsonResponseForbidden();
         }
 
