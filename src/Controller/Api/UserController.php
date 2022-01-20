@@ -210,7 +210,7 @@ class UserController extends AbstractController
                            FileUploader $fileUploader, DataUser $dataEntity,
                            MailerService $mailerService, SettingsService $settingsService): JsonResponse
     {
-        if ($this->getUser() !== $obj) {
+        if ($this->getUser() !== $obj && !$this->isGranted("ROLE_ADMIN")) {
             return $apiResponse->apiJsonResponseForbidden();
         }
 
