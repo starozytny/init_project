@@ -2,13 +2,11 @@
 
 namespace App\Command\Fake;
 
-use App\Entity\Contact;
 use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoSession;
 use App\Entity\Formation\FoWorker;
-use App\Entity\Notification;
 use App\Entity\Paiement\PaOrder;
-use App\Service\Data\DataPaiement;
+use App\Service\Data\Paiement\DataPaiement;
 use App\Service\DatabaseService;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
