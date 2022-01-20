@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Data;
+namespace App\Service\Data\Paiement;
 
 use App\Entity\Paiement\PaOrder;
 use App\Entity\User;

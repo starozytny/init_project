@@ -55,7 +55,7 @@
     }
 
     .actions{
-      a{
+      a, .btn-icon{
         color: var(--grey2);
 
         &:hover{
@@ -63,6 +63,19 @@
         }
       }
     }
+  }
+
+  .items-table{
+    & > .items{
+      & > .item:not(:last-child){
+        border-color: var(--greyShadow);
+      }
+    }
+  }
+
+  .notif-card .notif-body,
+  .notif-cancel{
+    border-color: var(--greyShadow);
   }
 
   .react-selectize,
@@ -113,6 +126,14 @@
 
       .status{
         opacity: 0.9;
+      }
+    }
+  }
+
+  .pagination{
+    & > li{
+      & > a:hover{
+        color: var(--txt);
       }
     }
   }

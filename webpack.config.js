@@ -66,6 +66,7 @@ Encore
     .addEntry('dashboard_settings', './assets/dashboard/js/pages/settings.js')
     .addEntry('dashboard_contact', './assets/dashboard/js/pages/contact.js')
     .addEntry('dashboard_notifications', './assets/dashboard/js/pages/notifications.js')
+    .addEntry('dashboard_mails', './assets/dashboard/js/pages/mails.js')
     .addEntry('dashboard_paiements', './assets/dashboard/js/pages/paiements.js')
     .addEntry('dashboard_formations', './assets/dashboard/js/pages/formations.js')
 

@@ -40,13 +40,26 @@ export class SessionsItem extends Component {
             {data: <ButtonIcon element="a" icon="download" target="_blank"
                                onClick={Routing.generate('api_sessions_emargements', {'slug': elem.slug})}
                                text="Emargements" />},
-            {data: <ButtonIcon element="a" icon="user"
+            {data: <ButtonIcon element="a" icon="group"
                                onClick={Routing.generate('admin_sessions_read', {'slug': elem.slug})}
-                               text="Participants" />},
+                               text="Attestations" />},
             {data: <ButtonIcon icon="file"
                                onClick={() => this.handleDuplicate(elem)}
                                text="Dupliquer" />},
         ];
+
+        if(elem.registrations.length !== 0){
+            let dest = [];
+            elem.registrations.forEach(el => {
+                if(!dest.includes(el.user.email)){
+                    dest.push(el.user.email)
+                }
+            })
+
+            actions = [...actions, ...[{data: <ButtonIcon icon="email" element="a"
+                                                          onClick={Routing.generate('admin_mails_send', {'dest': dest})}
+                                                          text="Envoyer un mail" />}]]
+        }
 
         return <div className="item">
             <Selector id={elem.id} onSelectors={onSelectors} />

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import axios                   from "axios";
-import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Input, Select }       from "@dashboardComponents/Tools/Fields";
@@ -11,6 +10,7 @@ import { Trumb }               from "@dashboardComponents/Tools/Trumb";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@commonComponents/functions/validateur";
+import Helper                  from "@commonComponents/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
 const URL_CREATE_ELEMENT     = "api_formations_create";
@@ -33,15 +33,15 @@ export function FormationsFormulaire ({ type, onChangeContext, onUpdateList, ele
     let form = <FormationForm
         context={type}
         url={url}
-        name={element ? element.name : ""}
-        content={element ? element.content : ""}
-        prerequis={element ? element.prerequis : ""}
-        goals={element ? element.goals : ""}
-        aptitudes={element ? element.aptitudes : ""}
-        skills={element ? element.skills : ""}
-        target={element ? element.target : ""}
-        cat={element ? element.cat : ""}
-        accessibility={element ? element.accessibility : 0}
+        name={element ? Formulaire.setValueEmptyIfNull(element.name) : ""}
+        content={element ? Formulaire.setValueEmptyIfNull(element.content) : ""}
+        prerequis={element ? Formulaire.setValueEmptyIfNull(element.prerequis) : ""}
+        goals={element ? Formulaire.setValueEmptyIfNull(element.goals) : ""}
+        aptitudes={element ? Formulaire.setValueEmptyIfNull(element.aptitudes) : ""}
+        skills={element ? Formulaire.setValueEmptyIfNull(element.skills) : ""}
+        target={element ? Formulaire.setValueEmptyIfNull(element.target) : ""}
+        cat={element ? Formulaire.setValueEmptyIfNull(element.cat) : ""}
+        accessibility={element ? Formulaire.setValueEmptyIfNull(element.accessibility, 0) : 0}
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
         messageSuccess={msg}
@@ -75,8 +75,7 @@ export class FormationForm extends Component {
     }
 
     componentDidMount() {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        Helper.toTop();
         document.getElementById("name").focus()
     }
 
@@ -100,7 +99,7 @@ export class FormationForm extends Component {
         const { context, url, messageSuccess } = this.props;
         const { name } = this.state;
 
-        this.setState({ success: false })
+        this.setState({ errors: [], success: false })
 
         let paramsToValidate = [
             {type: "text", id: 'name',  value: name}
@@ -109,8 +108,7 @@ export class FormationForm extends Component {
         // validate global
         let validate = Validateur.validateur(paramsToValidate)
         if(!validate.code){
-            toastr.warning("Veuillez vérifier les informations transmises.");
-            this.setState({ errors: validate.errors });
+            Formulaire.showErrors(this, validate);
         }else{
             Formulaire.loader(true);
             let self = this;
@@ -121,15 +119,22 @@ export class FormationForm extends Component {
             axios({ method: "POST", url: url, data: formData, headers: {'Content-Type': 'multipart/form-data'} })
                 .then(function (response) {
                     let data = response.data;
-                    self.props.onUpdateList(data);
+                    Helper.toTop();
+                    if(self.props.onUpdateList){
+                        self.props.onUpdateList(data);
+                    }
                     self.setState({ success: messageSuccess, errors: [] });
-                    document.body.scrollTop = 0;
-                    document.documentElement.scrollTop = 0;
                     if(context === "create"){
                         self.setState( {
                             name: '',
                             content: { value: "", html: "" },
-                            price: '',
+                            prerequis: { value: "", html: ""},
+                            goals: { value: "", html: ""},
+                            aptitudes: { value: "", html: ""},
+                            skills: { value: "", html: ""},
+                            target: { value: "", html: ""},
+                            cat: { value: "", html: ""},
+                            accessibility: 0,
                         })
                     }
                 })
