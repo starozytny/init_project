@@ -7,19 +7,8 @@ import Sanitaze        from "@commonComponents/functions/sanitaze"
 
 const CURRENT_STEP = 3;
 
-export function Step3 ({ step, errors, onNext, onSubmit, email, session, workers, bank }) {
-    let error = null;
-    errors.length !== 0 && errors.forEach(err => {
-        if(err.name === "bank"){
-            error = <Alert type="danger">Veuillez sélectionner au moins 1 banque.</Alert>
-        }
-    })
-
-    console.log(session)
-    console.log(workers)
-    console.log(bank)
-
-    let total = 0, totalDefault = 0;
+export function Step3 ({ step, onNext, onSubmit, email, session, workers, bank }) {
+    let totalDefault = 0;
     let participants = 0;
 
     return <div className={"step-section step-workers" + (step === CURRENT_STEP ? " active" : "")}>

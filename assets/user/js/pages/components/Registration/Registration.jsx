@@ -14,9 +14,10 @@ import UpdateList from "@dashboardComponents/functions/updateList";
 
 import { Step1 } from "@userPages/components/Registration/Steps/Step1";
 import { Step2 } from "@userPages/components/Registration/Steps/Step2";
+import { Step3 } from "@userPages/components/Registration/Steps/Step3";
+import { Step4 } from "@userPages/components/Registration/Steps/Step4";
 
 import { BankFormulaire } from "@userPages/components/Profil/Bank/BankForm";
-import {Step3} from "@userPages/components/Registration/Steps/Step3";
 
 const URL_CREATE_REGISTRATION = 'api_registration_create';
 const URL_DELETE_BANK         = 'api_banks_delete';
@@ -24,8 +25,6 @@ const URL_DELETE_BANK         = 'api_banks_delete';
 export class Registration extends Component {
     constructor(props) {
         super(props);
-
-        console.log(props)
 
         this.state = {
             contextBank: "create",
@@ -137,6 +136,7 @@ export class Registration extends Component {
                 .then(function (response) {
                     let data = response.data;
                     Helper.toTop();
+                    self.setState({ step: 4 })
                 })
                 .catch(function (error) {
                     Formulaire.displayErrors(self, error);
@@ -191,6 +191,8 @@ export class Registration extends Component {
                        onOpenAside={this.handleOpenAsideBank} onDelete={this.handleDeleteBank}/>
 
                 {step === 3 && <Step3 {...this.state} onNext={this.handleNext} onSubmit={this.handleSubmit}/>}
+
+                <Step4 {...this.state} onNext={this.handleNext} onSubmit={this.handleSubmit}/>
 
             </form>
 
