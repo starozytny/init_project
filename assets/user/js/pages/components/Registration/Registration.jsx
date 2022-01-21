@@ -10,8 +10,8 @@ import Validateur from "@commonComponents/functions/validateur";
 import Formulaire from "@dashboardComponents/functions/Formulaire";
 import helper     from "@userComponents/functions/helper";
 
-import { TeamList } from "@userPages/components/Profil/Team/TeamList";
-import {Step1} from "@userPages/components/Registration/Steps/Step1";
+import { Step1 } from "@userPages/components/Registration/Steps/Step1";
+import { Step2 } from "@userPages/components/Registration/Steps/Step2";
 
 const URL_CREATE_REGISTRATION = 'api_registration_create';
 
@@ -139,6 +139,8 @@ export class Registration extends Component {
             <form onSubmit={this.handleSubmit}>
 
                 <Step1 {...this.state} onNext={this.handleNext} onSelectWorker={this.handleSelectWorker} />
+
+                <Step2 {...this.state} onNext={this.handleNext} onSelectWorker={this.handleSelectWorker} />
 
             </form>
         </div>
