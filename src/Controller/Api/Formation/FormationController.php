@@ -6,7 +6,7 @@ use App\Entity\Formation\FoFormation;
 use App\Entity\User;
 use App\Service\ApiResponse;
 use App\Service\Data\DataService;
-use App\Service\Data\Paiement\DataFormation;
+use App\Service\Data\Formation\DataFormation;
 use App\Service\ValidatorService;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -76,7 +76,7 @@ class FormationController extends AbstractController
      * @param DataFormation $dataEntity
      * @return JsonResponse
      */
-    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
+    public function create(Request          $request, ValidatorService $validator, ApiResponse $apiResponse,
                            DataFormation $dataEntity): JsonResponse
     {
         return $this->submitForm("create", new FoFormation(), $request, $apiResponse, $validator, $dataEntity);
@@ -108,7 +108,7 @@ class FormationController extends AbstractController
      * @param DataFormation $dataEntity
      * @return JsonResponse
      */
-    public function update(Request $request, FoFormation $obj, ValidatorService $validator,
+    public function update(Request     $request, FoFormation $obj, ValidatorService $validator,
                            ApiResponse $apiResponse, DataFormation $dataEntity): JsonResponse
     {
         return $this->submitForm("update", $obj, $request, $apiResponse, $validator, $dataEntity);

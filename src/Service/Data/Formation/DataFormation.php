@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Service\Data\Paiement;
+namespace App\Service\Data\Formation;
 
 
 use App\Entity\Formation\FoFormation;
