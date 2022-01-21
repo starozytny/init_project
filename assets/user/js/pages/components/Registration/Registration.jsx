@@ -39,23 +39,22 @@ export class Registration extends Component {
         this.handleNext = this.handleNext.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleSelectWorker = this.handleSelectWorker.bind(this);
+        this.handleSelectBank = this.handleSelectBank.bind(this);
         this.handleOpenAsideBank = this.handleOpenAsideBank.bind(this);
 
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleUpdateList = (type, element, context) => {
-        console.log(type)
         switch (type){
             case "bank":
                 let newData = UpdateList.update(context, this.state.allBanks, element);
                 this.setState({ allBanks: newData, bank: element })
+                if(this.asideBank.current) this.asideBank.current.handleClose();
                 break;
             default:
                 break;
         }
-
-
     }
 
     handleSelectWorker = (worker) => {
@@ -64,6 +63,8 @@ export class Registration extends Component {
         let nWorkers = helper.addOrRemove(workers, worker, "Membre sélectionné.", "Membre enlevé.");
         this.setState({ workers: nWorkers });
     }
+
+    handleSelectBank = (bank) => { this.setState({ bank }) }
 
     handleOpenAsideBank = (contextBank, bank= null) => {
         this.setState({ contextBank, bank })
@@ -172,7 +173,7 @@ export class Registration extends Component {
 
                 <Step1 {...this.state} onNext={this.handleNext} onSelectWorker={this.handleSelectWorker} />
 
-                <Step2 {...this.state} onNext={this.handleNext} onSelectWorker={this.handleSelectWorker}
+                <Step2 {...this.state} onNext={this.handleNext} onSelectBank={this.handleSelectBank}
                        onOpenAside={this.handleOpenAsideBank} />
 
             </form>
