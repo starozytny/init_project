@@ -6,8 +6,8 @@ export function Step4 ({ step, email }) {
     return <div className={"step-section step-workers" + (step === CURRENT_STEP ? " active" : "")}>
 
         <div className="validation">
-            <div className="validation-infos">
-                <h2>Inscription validée</h2>
+            <div className="review-infos">
+                <h2 className="txt-danger">Inscription validée</h2>
                 <div className="content">
                     <p>
                         Un mail de confirmation vous sera envoyé à l'adresse suivante : <b>{email}</b>

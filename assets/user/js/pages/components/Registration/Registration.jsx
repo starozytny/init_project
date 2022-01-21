@@ -136,7 +136,7 @@ export class Registration extends Component {
                 .then(function (response) {
                     let data = response.data;
                     Helper.toTop();
-                    self.setState({ step: 4 })
+                    // self.setState({ step: 4 })
                 })
                 .catch(function (error) {
                     Formulaire.displayErrors(self, error);

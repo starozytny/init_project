@@ -92,10 +92,8 @@ export function Step3 ({ step, onNext, onSubmit, email, session, workers, bank }
                     <b className="total">Total de {Sanitaze.toFormatCurrency(totalDefault)} € TTC pour {participants} participant{participants > 1 ? "s" : ""}.</b>
                 </Alert>
             </div>
-
         </div>
 
-        {error}
 
         <div className="line line-buttons">
             <Button type="default" outline={true} onClick={() => onNext(CURRENT_STEP - 1, CURRENT_STEP)}>Etape précédente</Button>

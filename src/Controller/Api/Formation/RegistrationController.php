@@ -5,8 +5,10 @@ namespace App\Controller\Api\Formation;
 use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoSession;
 use App\Entity\Formation\FoWorker;
+use App\Entity\Paiement\PaOrder;
 use App\Entity\User;
 use App\Service\ApiResponse;
+use App\Service\Data\Paiement\DataPaiement;
 use App\Service\ValidatorService;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -30,8 +32,27 @@ class RegistrationController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    public function submitForm($type, FoSession $session, Request $request, ApiResponse $apiResponse,
-                               ValidatorService $validator): JsonResponse
+    /**
+     * Create registration worker-session
+     *
+     * @Route("/{session}", name="create", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a message",
+     * )
+     *
+     * @OA\Tag(name="Registration")
+     *
+     * @param Request $request
+     * @param FoSession $session
+     * @param ValidatorService $validator
+     * @param ApiResponse $apiResponse
+     * @param DataPaiement $dataPaiement
+     * @return JsonResponse
+     */
+    public function create(Request $request, FoSession $session, ValidatorService $validator, ApiResponse $apiResponse,
+                           DataPaiement $dataPaiement): JsonResponse
     {
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
@@ -61,32 +82,39 @@ class RegistrationController extends AbstractController
             }
         }
 
-        $em->flush();
+        $nameOrder = $session->getFormation()->getName() . " " . $session->getFullDateHuman();
+        $nameOrder = strlen($nameOrder) < 255 ? $nameOrder : $session->getFormation()->getName() . " #" . $session->getId();
+
+        $bank = $data->bank;
+
+        $dataOrder = [
+            "price" => $session->getPriceTTC() * count($workers),
+            "name" => $nameOrder,
+            "titulaire" => $bank->titulaire,
+            "iban" => $bank->iban,
+            "bic" => $bank->bic,
+            "email" => $user->getEmail(),
+            "participants" => 1,
+            "address" => "ADRESSE A COMPLETER",
+            "zipcode" => "ADRESSE A COMPLETER",
+            "city" => "ADRESSE A COMPLETER"
+        ];
+        $dataOrder = json_decode(json_encode($dataOrder));
+
+        $code = uniqid();
+        $order = $dataPaiement->setDataOrder(new PaOrder(), $dataOrder, $user, $user->getId().time(), $code, $request->getClientIp());
+
+        $noErrors = $validator->validate($order);
+        if ($noErrors !== true) {
+            return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+        }
+
+        // send mail
+
+        $em->persist($order);
+//        $em->flush();
 
         return $apiResponse->apiJsonResponseSuccessful("Success");
-    }
-
-    /**
-     * Create registration worker-session
-     *
-     * @Route("/{session}", name="create", options={"expose"=true}, methods={"POST"})
-     *
-     * @OA\Response(
-     *     response=200,
-     *     description="Returns a message",
-     * )
-     *
-     * @OA\Tag(name="Registration")
-     *
-     * @param Request $request
-     * @param FoSession $session
-     * @param ValidatorService $validator
-     * @param ApiResponse $apiResponse
-     * @return JsonResponse
-     */
-    public function create(Request $request, FoSession $session, ValidatorService $validator, ApiResponse $apiResponse): JsonResponse
-    {
-        return $this->submitForm("create", $session, $request, $apiResponse, $validator);
     }
 
     /**
