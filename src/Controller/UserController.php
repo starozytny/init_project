@@ -146,6 +146,10 @@ class UserController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
+        $order = $em->getRepository(PaOrder::class)->findOneBy(['status' => PaOrder::STATUS_ATTENTE, 'user' => $user, 'session' => $obj]);
+        if($order){
+            return $this->render('user/pages/sessions/registration/index.html.twig', ['elem' => $obj, 'error' => true]);
+        }
 
         $workers = $em->getRepository(FoWorker::class)->findBy(['user' => $user, 'isArchived' => false]);
         $banks = $em->getRepository(PaBank::class)->findBy(['user' => $user]);
