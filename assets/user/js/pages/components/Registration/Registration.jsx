@@ -72,11 +72,16 @@ export class Registration extends Component {
     }
 
     handleNext = (stepClicked, stepInitial = null) => {
-        const { workers } = this.state;
+        const { workers, bank } = this.state;
 
         let paramsToValidate = [];
         if(stepInitial === null){
             switch (stepClicked){
+                case 3:
+                    paramsToValidate = [
+                        {type: "text",  id: 'bank', value: bank},
+                    ];
+                    break;
                 default:
                     paramsToValidate = [
                         {type: "array",  id: 'workers', value: workers},
@@ -153,7 +158,7 @@ export class Registration extends Component {
                 stepTitle = "Etape " + el.id + " : " + el.label;
             }
 
-            stepsItems.push(<div className={"item" + active} key={el.id} onClick={() => this.handleNext(el.id, step, true)}>
+            stepsItems.push(<div className={"item" + active} key={el.id}>
                 <span className="number">{el.id} - </span>
                 <span className="label">{el.label}</span>
             </div>)
