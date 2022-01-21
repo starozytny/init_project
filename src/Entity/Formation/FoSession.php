@@ -205,11 +205,26 @@ class FoSession extends DataEntity
      * @return string
      * @Groups({"admin:read"})
      */
+    public function getFullDateHuman(): string
+    {
+        $start = $this->getFullDateString($this->start);
+        $end = "";
+        if($this->start && $this->end && $this->start != $this->end){
+            return "du " . $start . " au " . $this->getFullDateString($this->end);
+        }
+
+        return $start . $end;
+    }
+
+    /**
+     * @return string
+     * @Groups({"admin:read"})
+     */
     public function getFullDate(): string
     {
         $start = $this->getFullDateString($this->start);
         $end = "";
-        if($this->start != $this->end){
+        if($this->end && $this->start != $this->end){
             $end = " - " . $this->getFullDateString($this->end);
         }
 
@@ -574,5 +589,27 @@ class FoSession extends DataEntity
         }
 
         return $this;
+    }
+
+    public function getFullTime(): ?string
+    {
+        if($this->time && $this->time2){
+            return "de " . $this->time . " à " . $this->time2;
+        }
+
+        if(!$this->time && !$this->time2){
+            return null;
+        }
+
+        return $this->time ?: $this->time2;
+    }
+
+    /**
+     * @return string
+     * @Groups({"admin:read"})
+     */
+    public function getFullAddress(): string
+    {
+        return $this->getFullAddressString($this->address, $this->zipcode, $this->city);
     }
 }
