@@ -9,6 +9,9 @@ use App\Entity\Paiement\PaOrder;
 use App\Entity\User;
 use App\Service\ApiResponse;
 use App\Service\Data\Paiement\DataPaiement;
+use App\Service\MailerService;
+use App\Service\NotificationService;
+use App\Service\SettingsService;
 use App\Service\ValidatorService;
 use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -25,6 +28,8 @@ use OpenApi\Annotations as OA;
  */
 class RegistrationController extends AbstractController
 {
+    const ICON = "book";
+
     private $doctrine;
 
     public function __construct(ManagerRegistry $doctrine)
@@ -49,10 +54,14 @@ class RegistrationController extends AbstractController
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
      * @param DataPaiement $dataPaiement
+     * @param MailerService $mailerService
+     * @param SettingsService $settingsService
+     * @param NotificationService $notificationService
      * @return JsonResponse
      */
     public function create(Request $request, FoSession $session, ValidatorService $validator, ApiResponse $apiResponse,
-                           DataPaiement $dataPaiement): JsonResponse
+                           DataPaiement $dataPaiement, MailerService $mailerService, SettingsService $settingsService,
+                           NotificationService $notificationService): JsonResponse
     {
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
@@ -65,25 +74,10 @@ class RegistrationController extends AbstractController
         $user = $this->getUser();
         $workers = $em->getRepository(FoWorker::class)->findBy(['id' => $data->workersId]);
 
-        foreach($workers as $worker){
-
-            $obj = (new FoRegistration())
-                ->setUser($user)
-                ->setFormation($session->getFormation())
-                ->setSession($session)
-                ->setWorker($worker)
-            ;
-
-            $em->persist($obj);
-
-            $noErrors = $validator->validate($obj);
-            if ($noErrors !== true) {
-                return $apiResponse->apiJsonResponseValidationFailed($noErrors);
-            }
-        }
-
-        $nameOrder = $session->getFormation()->getName() . " " . $session->getFullDateHuman();
-        $nameOrder = strlen($nameOrder) < 255 ? $nameOrder : $session->getFormation()->getName() . " #" . $session->getId();
+        $nameFormation = $session->getFormation()->getName();
+        $dateFormation = $session->getFullDateHuman();
+        $fullNameFormation = $nameFormation . " " . $dateFormation;
+        $nameOrder = strlen($fullNameFormation) < 255 ? $fullNameFormation : $nameFormation . " #" . $session->getId();
 
         $bank = $data->bank;
 
@@ -109,10 +103,47 @@ class RegistrationController extends AbstractController
             return $apiResponse->apiJsonResponseValidationFailed($noErrors);
         }
 
-        // send mail
+        foreach($workers as $worker){
+
+            $obj = (new FoRegistration())
+                ->setUser($user)
+                ->setFormation($session->getFormation())
+                ->setSession($session)
+                ->setWorker($worker)
+                ->setPaOrder($order)
+            ;
+
+            $em->persist($obj);
+
+            $noErrors = $validator->validate($obj);
+            if ($noErrors !== true) {
+                return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+            }
+        }
+
+        if($mailerService->sendMail(
+                $settingsService->getEmailContact(),
+                "[" . $settingsService->getWebsiteName() ."] Inscription à " . $fullNameFormation,
+                "Inscription à " . $fullNameFormation . " chez " . $settingsService->getWebsiteName(),
+                'user/email/formation/registration.html.twig',
+                ['title' => $nameFormation, 'session' => $session, 'settings' => $settingsService->getSettings()]
+            ) != true)
+        {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'message',
+                'message' => "Le message n\'a pas pu être délivré. Veuillez contacter le support."
+            ]]);
+        }
 
         $em->persist($order);
-//        $em->flush();
+        $em->flush();
+
+        $notificationService->createNotification(
+            "Inscription - " . $fullNameFormation,
+            self::ICON,
+            $this->getUser(),
+            $this->generateUrl('admin_sessions_read', ['slug' => $session->getSlug()])
+        );
 
         return $apiResponse->apiJsonResponseSuccessful("Success");
     }
