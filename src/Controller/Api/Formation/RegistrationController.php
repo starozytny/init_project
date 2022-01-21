@@ -96,7 +96,7 @@ class RegistrationController extends AbstractController
         $dataOrder = json_decode(json_encode($dataOrder));
 
         $code = uniqid();
-        $order = $dataPaiement->setDataOrder(new PaOrder(), $dataOrder, $user, $user->getId().time(), $code, $request->getClientIp());
+        $order = $dataPaiement->setDataOrder(new PaOrder(), $dataOrder, $user, $session, $user->getId().time(), $code, $request->getClientIp());
 
         $noErrors = $validator->validate($order);
         if ($noErrors !== true) {

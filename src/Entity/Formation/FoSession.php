@@ -3,6 +3,7 @@
 namespace App\Entity\Formation;
 
 use App\Entity\DataEntity;
+use App\Entity\Paiement\PaOrder;
 use App\Repository\Formation\FoSessionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -191,9 +192,15 @@ class FoSession extends DataEntity
      */
     private $registrations;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PaOrder::class, mappedBy="session")
+     */
+    private $paOrders;
+
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
+        $this->paOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -611,5 +618,35 @@ class FoSession extends DataEntity
     public function getFullAddress(): string
     {
         return $this->getFullAddressString($this->address, $this->zipcode, $this->city);
+    }
+
+    /**
+     * @return Collection|PaOrder[]
+     */
+    public function getPaOrders(): Collection
+    {
+        return $this->paOrders;
+    }
+
+    public function addPaOrder(PaOrder $paOrder): self
+    {
+        if (!$this->paOrders->contains($paOrder)) {
+            $this->paOrders[] = $paOrder;
+            $paOrder->setSession($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaOrder(PaOrder $paOrder): self
+    {
+        if ($this->paOrders->removeElement($paOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($paOrder->getSession() === $this) {
+                $paOrder->setSession(null);
+            }
+        }
+
+        return $this;
     }
 }

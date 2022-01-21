@@ -6,6 +6,7 @@ use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoSession;
 use App\Entity\Formation\FoWorker;
 use App\Entity\Paiement\PaBank;
+use App\Entity\Paiement\PaOrder;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -143,8 +144,11 @@ class UserController extends AbstractController
     {
         $em = $this->doctrine->getManager();
 
-        $workers = $em->getRepository(FoWorker::class)->findBy(['user' => $this->getUser(), 'isArchived' => false]);
-        $banks = $em->getRepository(PaBank::class)->findBy(['user' => $this->getUser()]);
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $workers = $em->getRepository(FoWorker::class)->findBy(['user' => $user, 'isArchived' => false]);
+        $banks = $em->getRepository(PaBank::class)->findBy(['user' => $user]);
 
         $session = $serializer->serialize($obj, 'json', ['groups' => User::ADMIN_READ]);
         $workers = $serializer->serialize($workers, 'json', ['groups' => User::USER_READ]);

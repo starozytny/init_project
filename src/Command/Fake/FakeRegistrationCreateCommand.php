@@ -72,7 +72,7 @@ class FakeRegistrationCreateCommand extends Command
             ];
             $dataOrder = json_decode(json_encode($dataOrder));
 
-            $order = $this->dataPaiement->setDataOrder(new PaOrder(), $dataOrder, $worker->getUser(), $i . time(), uniqid(), $fake->ipv4);
+            $order = $this->dataPaiement->setDataOrder(new PaOrder(), $dataOrder, $worker->getUser(), $session, $i . time(), uniqid(), $fake->ipv4);
             $this->em->persist($order);
 
             $new = (new FoRegistration())
