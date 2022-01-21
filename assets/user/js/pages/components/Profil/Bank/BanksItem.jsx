@@ -17,16 +17,16 @@ export class BanksItem extends Component {
             <div className="item-content">
                 <div className="item-body">
                     <div className="infos infos-col-3">
-                        <div className="col-1">
+                        <div className="col-1" onClick={onSelectBank ? () => onSelectBank(elem) : null}>
                             <div className="name">
                                 <span>{Sanitaze.toFormatIbanHidden(elem.iban)}</span>
                             </div>
-                            <div className="role">
+                            {!isRegistration && <div className="role">
                                 <span>{elem.isMain ? "Principal" : "Secondaire" }</span>
-                                {(!elem.isMain && !isRegistration) && <span className="icon-star-2" onClick={() => onSwitchMain(elem)}/>}
-                            </div>
+                                {!elem.isMain && <span className="icon-star-2" onClick={() => onSwitchMain(elem)}/>}
+                            </div>}
                         </div>
-                        <div className="col-2">
+                        <div className="col-2" onClick={onSelectBank ? () => onSelectBank(elem) : null}>
                             <div className="sub">{elem.titulaire}</div>
                             <div className="sub">{elem.bic}</div>
                         </div>
