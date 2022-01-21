@@ -190,7 +190,7 @@ export class Registration extends Component {
                 <Step2 {...this.state} onNext={this.handleNext} onSelectBank={this.handleSelectBank}
                        onOpenAside={this.handleOpenAsideBank} onDelete={this.handleDeleteBank}/>
 
-                <Step3 {...this.state} onNext={this.handleNext} />
+                {step === 3 && <Step3 {...this.state} onNext={this.handleNext} onSubmit={this.handleSubmit}/>}
 
             </form>
 
