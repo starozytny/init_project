@@ -4,6 +4,7 @@ import axios      from "axios";
 import Routing    from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Button } from "@dashboardComponents/Tools/Button";
+import { Aside }  from "@dashboardComponents/Tools/Aside";
 
 import Helper     from "@commonComponents/functions/helper";
 import Validateur from "@commonComponents/functions/validateur";
@@ -12,6 +13,7 @@ import helper     from "@userComponents/functions/helper";
 
 import { Step1 } from "@userPages/components/Registration/Steps/Step1";
 import { Step2 } from "@userPages/components/Registration/Steps/Step2";
+import {BankFormulaire} from "@userPages/components/Profil/Bank/BankForm";
 
 const URL_CREATE_REGISTRATION = 'api_registration_create';
 
@@ -20,16 +22,22 @@ export class Registration extends Component {
         super(props);
 
         this.state = {
+            contextBank: "create",
             session: JSON.parse(props.session),
             allWorkers: JSON.parse(props.workers),
+            allBanks: JSON.parse(props.banks),
+            bank: null,
             workers: [],
             errors: [],
             step: 1
         }
 
+        this.asideBank = React.createRef();
 
         this.handleNext = this.handleNext.bind(this);
         this.handleSelectWorker = this.handleSelectWorker.bind(this);
+
+        this.handleOpenAsideBank = this.handleOpenAsideBank.bind(this);
 
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -39,6 +47,11 @@ export class Registration extends Component {
 
         let nWorkers = helper.addOrRemove(workers, worker, "Membre sélectionné.", "Membre enlevé.");
         this.setState({ workers: nWorkers });
+    }
+
+    handleOpenAsideBank = (contextBank, bank= null) => {
+        this.setState({ contextBank, bank })
+        this.asideBank.current.handleOpen();
     }
 
     handleNext = (stepClicked, stepInitial = null) => {
@@ -105,7 +118,7 @@ export class Registration extends Component {
     }
 
     render () {
-        const { step } = this.state;
+        const { step, contextBank, bank } = this.state;
 
         let steps = [
             {id: 1, label: "Participants"},
@@ -116,7 +129,7 @@ export class Registration extends Component {
 
         let stepTitle = "Etape 1 : Participants";
         let stepsItems = [];
-        {steps.forEach(el => {
+        steps.forEach(el => {
             let active = "";
             if(el.id === step){
                 active = " active";
@@ -127,7 +140,10 @@ export class Registration extends Component {
                 <span className="number">{el.id} - </span>
                 <span className="label">{el.label}</span>
             </div>)
-        })}
+        })
+
+        let contentBank = contextBank === "create" ? <BankFormulaire type="create" isRegistration={true} />
+            : <BankFormulaire type="update" element={bank} isRegistration={true} />
 
         return <div className="main-content">
             <div className="steps">
@@ -140,9 +156,12 @@ export class Registration extends Component {
 
                 <Step1 {...this.state} onNext={this.handleNext} onSelectWorker={this.handleSelectWorker} />
 
-                <Step2 {...this.state} onNext={this.handleNext} onSelectWorker={this.handleSelectWorker} />
+                <Step2 {...this.state} onNext={this.handleNext} onSelectWorker={this.handleSelectWorker}
+                       onOpenAside={this.handleOpenAsideBank} />
 
             </form>
+
+            <Aside ref={this.asideBank} content={contentBank} />
         </div>
     }
 }

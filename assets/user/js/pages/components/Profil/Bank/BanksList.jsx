@@ -9,13 +9,13 @@ import { BanksItem }   from "./BanksItem";
 
 export class BanksList extends Component {
     render () {
-        const { isRegistration=false, data, banks=[] } = this.props;
+        const { isRegistration=false, data, bank, onOpenAside } = this.props;
 
         return <>
             <div className="toolbar">
                 <div className="item create">
                     {!isRegistration ? <Button element="a" onClick={Routing.generate('user_bank_create')}>Ajouter un RIB</Button>
-                        : <Button onClick={Routing.generate('user_bank_create')}>Ajouter un RIB</Button>}
+                        : <Button onClick={() => onOpenAside("create")}>Ajouter un RIB</Button>}
                 </div>
             </div>
             <div>
@@ -34,7 +34,7 @@ export class BanksList extends Component {
                             </div>
                         </div>
                         {data && data.length !== 0 ? data.map(elem => {
-                            return <BanksItem {...this.props} elem={elem} key={elem.id}/>
+                            return <BanksItem {...this.props} bank={bank} elem={elem} key={elem.id}/>
                         }) : <Alert>Aucun résultat</Alert>}
                     </div>
                 </div>

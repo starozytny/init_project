@@ -8,18 +8,11 @@ import Sanitaze         from "@commonComponents/functions/sanitaze";
 
 export class BanksItem extends Component {
     render () {
-        const { isRegistration, elem, onDelete, onSwitchMain, banks, onSelectBank } = this.props
-
-        let active = false;
-        banks.forEach(item => {
-            if(item.id === elem.id){
-                active = true;
-            }
-        })
+        const { isRegistration, elem, onDelete, onSwitchMain, bank, onSelectBank, onOpenAside } = this.props
 
         return <div className="item">
             {isRegistration && <div className="selector" onClick={() => onSelectBank(elem)}>
-                <label className={"item-selector " + active} />
+                <label className={"item-selector " + (bank && bank.id === elem.id)} />
             </div>}
             <div className="item-content">
                 <div className="item-body">
@@ -39,7 +32,7 @@ export class BanksItem extends Component {
                         </div>
                         <div className="col-3 actions">
                             {!isRegistration ? <ButtonIcon icon="pencil" element="a" onClick={Routing.generate('user_bank_update', {'id': elem.id})}>Modifier</ButtonIcon>
-                                : <ButtonIcon icon="pencil" onClick={Routing.generate('user_bank_update', {'id': elem.id})}>Modifier</ButtonIcon>}
+                                : <ButtonIcon icon="pencil" onClick={() => onOpenAside("update", elem)}>Modifier</ButtonIcon>}
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
                         </div>
                     </div>

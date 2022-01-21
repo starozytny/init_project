@@ -19,7 +19,7 @@ const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
 let arrayBicSave = [];
 
-export function BankFormulaire ({ type, element })
+export function BankFormulaire ({ type, element, isRegistration=false })
 {
     let title = "Ajouter un RIB";
     let url = Routing.generate(URL_CREATE_ELEMENT);
@@ -41,11 +41,11 @@ export function BankFormulaire ({ type, element })
     />
 
     return <>
-        <div className="toolbar">
+        {!isRegistration && <div className="toolbar">
             <div className="item">
                 <Button element="a" outline={true} icon="left-arrow" type="primary" onClick={Routing.generate('user_profil')}>Retour à mon profil</Button>
             </div>
-        </div>
+        </div>}
 
         <div className="form">
             <h2>{title}</h2>

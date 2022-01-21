@@ -144,14 +144,17 @@ class UserController extends AbstractController
         $em = $this->doctrine->getManager();
 
         $workers = $em->getRepository(FoWorker::class)->findBy(['user' => $this->getUser(), 'isArchived' => false]);
+        $banks = $em->getRepository(PaBank::class)->findBy(['user' => $this->getUser()]);
 
         $session = $serializer->serialize($obj, 'json', ['groups' => User::ADMIN_READ]);
         $workers = $serializer->serialize($workers, 'json', ['groups' => User::USER_READ]);
+        $banks = $serializer->serialize($banks, 'json', ['groups' => User::USER_READ]);
 
         return $this->render('user/pages/sessions/registration/index.html.twig', [
             'elem' => $obj,
             'session' => $session,
-            'workers' => $workers
+            'workers' => $workers,
+            'banks' => $banks,
         ]);
     }
 
