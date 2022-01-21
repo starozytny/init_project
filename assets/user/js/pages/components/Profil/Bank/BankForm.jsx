@@ -26,7 +26,7 @@ export function BankFormulaire ({ type, element, onUpdateList, isRegistration=fa
     let msg = "Félicitation ! Vous avez ajouté un nouveau RIB !"
 
     if(type === "update" || type === "profil"){
-        title = "Modifier " + element.id;
+        title = "Modifier " + element.iban;
         url = Routing.generate(URL_UPDATE_GROUP, {'id': element.id});
         msg = "Félicitation ! La mise à jour s'est réalisée avec succès !";
     }

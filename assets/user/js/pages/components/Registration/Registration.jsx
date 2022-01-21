@@ -93,8 +93,6 @@ export class Registration extends Component {
         // validate global
         let validate = Validateur.validateur(paramsToValidate);
 
-        console.log(validate)
-
         Helper.toTop();
         if(!validate.code){
             Formulaire.showErrors(this, validate);
@@ -167,7 +165,7 @@ export class Registration extends Component {
         })
 
         let contentBank = contextBank === "create" ? <BankFormulaire type="create" isRegistration={true} onUpdateList={this.handleUpdateList}/>
-            : <BankFormulaire type="update" element={bank} isRegistration={true} onUpdateList={this.handleUpdateList}/>
+            : <BankFormulaire type="update" element={bank} isRegistration={true} onUpdateList={this.handleUpdateList} key={bank.id}/>
 
         return <div className="main-content">
             <div className="steps">
