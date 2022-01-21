@@ -16,6 +16,7 @@ import { Step1 } from "@userPages/components/Registration/Steps/Step1";
 import { Step2 } from "@userPages/components/Registration/Steps/Step2";
 
 import { BankFormulaire } from "@userPages/components/Profil/Bank/BankForm";
+import {Step3} from "@userPages/components/Registration/Steps/Step3";
 
 const URL_CREATE_REGISTRATION = 'api_registration_create';
 const URL_DELETE_BANK         = 'api_banks_delete';
@@ -24,8 +25,11 @@ export class Registration extends Component {
     constructor(props) {
         super(props);
 
+        console.log(props)
+
         this.state = {
             contextBank: "create",
+            email: props.email,
             session: JSON.parse(props.session),
             allWorkers: JSON.parse(props.workers),
             allBanks: JSON.parse(props.banks),
@@ -185,6 +189,8 @@ export class Registration extends Component {
 
                 <Step2 {...this.state} onNext={this.handleNext} onSelectBank={this.handleSelectBank}
                        onOpenAside={this.handleOpenAsideBank} onDelete={this.handleDeleteBank}/>
+
+                <Step3 {...this.state} onNext={this.handleNext} />
 
             </form>
 
