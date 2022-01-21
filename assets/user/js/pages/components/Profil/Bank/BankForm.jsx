@@ -19,7 +19,7 @@ const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
 let arrayBicSave = [];
 
-export function BankFormulaire ({ type, element, isRegistration=false })
+export function BankFormulaire ({ type, element, onUpdateList, isRegistration=false })
 {
     let title = "Ajouter un RIB";
     let url = Routing.generate(URL_CREATE_ELEMENT);
@@ -37,6 +37,7 @@ export function BankFormulaire ({ type, element, isRegistration=false })
         titulaire={element ? element.titulaire : ""}
         iban={element ? element.iban : ""}
         bic={element ? element.bic : ""}
+        onUpdateList={onUpdateList}
         messageSuccess={msg}
     />
 
@@ -123,6 +124,9 @@ class Form extends Component {
             axios({ method: method, url: url, data: this.state })
                 .then(function (response) {
                     let data = response.data;
+                    if(self.props.onUpdateList){
+                        self.props.onUpdateList("bank", data, context);
+                    }
                     self.setState({ success: messageSuccess, errors: [] });
                     if(context === "create"){
                         self.setState( {

@@ -10,10 +10,12 @@ import Helper     from "@commonComponents/functions/helper";
 import Validateur from "@commonComponents/functions/validateur";
 import Formulaire from "@dashboardComponents/functions/Formulaire";
 import helper     from "@userComponents/functions/helper";
+import UpdateList from "@dashboardComponents/functions/updateList";
 
 import { Step1 } from "@userPages/components/Registration/Steps/Step1";
 import { Step2 } from "@userPages/components/Registration/Steps/Step2";
-import {BankFormulaire} from "@userPages/components/Profil/Bank/BankForm";
+
+import { BankFormulaire } from "@userPages/components/Profil/Bank/BankForm";
 
 const URL_CREATE_REGISTRATION = 'api_registration_create';
 
@@ -35,11 +37,25 @@ export class Registration extends Component {
         this.asideBank = React.createRef();
 
         this.handleNext = this.handleNext.bind(this);
+        this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleSelectWorker = this.handleSelectWorker.bind(this);
-
         this.handleOpenAsideBank = this.handleOpenAsideBank.bind(this);
 
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleUpdateList = (type, element, context) => {
+        console.log(type)
+        switch (type){
+            case "bank":
+                let newData = UpdateList.update(context, this.state.allBanks, element);
+                this.setState({ allBanks: newData, bank: element })
+                break;
+            default:
+                break;
+        }
+
+
     }
 
     handleSelectWorker = (worker) => {
@@ -142,8 +158,8 @@ export class Registration extends Component {
             </div>)
         })
 
-        let contentBank = contextBank === "create" ? <BankFormulaire type="create" isRegistration={true} />
-            : <BankFormulaire type="update" element={bank} isRegistration={true} />
+        let contentBank = contextBank === "create" ? <BankFormulaire type="create" isRegistration={true} onUpdateList={this.handleUpdateList}/>
+            : <BankFormulaire type="update" element={bank} isRegistration={true} onUpdateList={this.handleUpdateList}/>
 
         return <div className="main-content">
             <div className="steps">
