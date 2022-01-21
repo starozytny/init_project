@@ -125,7 +125,7 @@ class Form extends Component {
                 .then(function (response) {
                     let data = response.data;
                     if(self.props.onUpdateList){
-                        self.props.onUpdateList("bank", data, context);
+                        self.props.onUpdateList(data, context, "bank");
                     }
                     self.setState({ success: messageSuccess, errors: [] });
                     if(context === "create"){

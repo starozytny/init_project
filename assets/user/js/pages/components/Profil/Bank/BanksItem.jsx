@@ -33,7 +33,7 @@ export class BanksItem extends Component {
                         <div className="col-3 actions">
                             {!isRegistration ? <ButtonIcon icon="pencil" element="a" onClick={Routing.generate('user_bank_update', {'id': elem.id})}>Modifier</ButtonIcon>
                                 : <ButtonIcon icon="pencil" onClick={() => onOpenAside("update", elem)}>Modifier</ButtonIcon>}
-                            <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
+                            {(!bank || bank.id !== elem.id) && <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>}
                         </div>
                     </div>
                 </div>

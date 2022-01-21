@@ -18,6 +18,7 @@ import { Step2 } from "@userPages/components/Registration/Steps/Step2";
 import { BankFormulaire } from "@userPages/components/Profil/Bank/BankForm";
 
 const URL_CREATE_REGISTRATION = 'api_registration_create';
+const URL_DELETE_BANK         = 'api_banks_delete';
 
 export class Registration extends Component {
     constructor(props) {
@@ -37,24 +38,28 @@ export class Registration extends Component {
         this.asideBank = React.createRef();
 
         this.handleNext = this.handleNext.bind(this);
-        this.handleUpdateList = this.handleUpdateList.bind(this);
+        this.handleUpdateList = this.handleUpdateList.bind(this);;
         this.handleSelectWorker = this.handleSelectWorker.bind(this);
         this.handleSelectBank = this.handleSelectBank.bind(this);
+        this.handleDeleteBank = this.handleDeleteBank.bind(this)
         this.handleOpenAsideBank = this.handleOpenAsideBank.bind(this);
 
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleUpdateList = (type, element, context) => {
+    handleUpdateList = (element, context, type) => {
         switch (type){
-            case "bank":
+            default:
                 let newData = UpdateList.update(context, this.state.allBanks, element);
                 this.setState({ allBanks: newData, bank: element })
                 if(this.asideBank.current) this.asideBank.current.handleClose();
                 break;
-            default:
-                break;
         }
+    }
+
+    handleDeleteBank = (element, msg, text='Cette action est irréversible.') => {
+        let url = Routing.generate(URL_DELETE_BANK, {'id': element.id})
+        Formulaire.axiosDeleteElement(this, element, url, "Supprimer ce RIB ?", text);
     }
 
     handleSelectWorker = (worker) => {
@@ -179,7 +184,7 @@ export class Registration extends Component {
                 <Step1 {...this.state} onNext={this.handleNext} onSelectWorker={this.handleSelectWorker} />
 
                 <Step2 {...this.state} onNext={this.handleNext} onSelectBank={this.handleSelectBank}
-                       onOpenAside={this.handleOpenAsideBank} />
+                       onOpenAside={this.handleOpenAsideBank} onDelete={this.handleDeleteBank}/>
 
             </form>
 

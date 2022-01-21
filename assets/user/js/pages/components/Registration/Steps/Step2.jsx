@@ -6,7 +6,7 @@ import { Alert }       from "@dashboardComponents/Tools/Alert";
 
 const CURRENT_STEP = 2;
 
-export function Step2 ({ step, errors, onNext, onSelectBank, onOpenAside, allBanks, bank }) {
+export function Step2 ({ step, errors, onNext, onSelectBank, onDelete, onOpenAside, allBanks, bank }) {
     let error = null;
     errors.length !== 0 && errors.forEach(err => {
         if(err.name === "bank"){
@@ -16,7 +16,8 @@ export function Step2 ({ step, errors, onNext, onSelectBank, onOpenAside, allBan
 
     return <div className={"step-section step-workers" + (step === CURRENT_STEP ? " active" : "")}>
 
-        <BanksList isRegistration={true} data={allBanks} bank={bank} onSelectBank={onSelectBank} onOpenAside={onOpenAside} />
+        <BanksList isRegistration={true} data={allBanks} bank={bank}
+                   onSelectBank={onSelectBank} onOpenAside={onOpenAside} onDelete={onDelete}/>
 
         {error}
 
