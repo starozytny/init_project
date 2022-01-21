@@ -93,6 +93,8 @@ export class Registration extends Component {
         // validate global
         let validate = Validateur.validateur(paramsToValidate);
 
+        console.log(validate)
+
         Helper.toTop();
         if(!validate.code){
             Formulaire.showErrors(this, validate);

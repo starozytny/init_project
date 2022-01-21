@@ -18,6 +18,8 @@ export function Step2 ({ step, errors, onNext, onSelectBank, onOpenAside, allBan
 
         <BanksList isRegistration={true} data={allBanks} bank={bank} onSelectBank={onSelectBank} onOpenAside={onOpenAside} />
 
+        {error}
+
         <FormActions onNext={onNext} currentStep={CURRENT_STEP} />
     </div>
 }
