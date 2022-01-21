@@ -32,6 +32,7 @@ export class Registration extends Component {
             session: JSON.parse(props.session),
             allWorkers: JSON.parse(props.workers),
             allBanks: JSON.parse(props.banks),
+            workersRegistered: JSON.parse(props.workersRegistered),
             bank: null,
             workers: [],
             errors: [],

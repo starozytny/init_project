@@ -33,8 +33,21 @@ h2{
 }
 
 .step-workers{
-  .col-1{
+  .item{
+    cursor: initial;
+  }
+  
+  .col-1, .col-2{
     cursor: pointer;
+  }
+
+  .item-disabled-true{
+    opacity: 0.4;
+    cursor: not-allowed;
+
+    .selector, .col-1, .col-2{
+      cursor: not-allowed;
+    }
   }
 }
 

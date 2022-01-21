@@ -38,7 +38,7 @@ export class TeamItem extends Component {
 
 export class TeamItemRegistration extends Component {
     render () {
-        const { elem, workers, onSelectWorker } = this.props;
+        const { elem, onSelectWorker, workers, workersRegistered } = this.props;
 
         let active = false;
         workers.forEach(item => {
@@ -47,21 +47,28 @@ export class TeamItemRegistration extends Component {
             }
         })
 
-        return <div className="item">
-            <div className="selector" onClick={() => onSelectWorker(elem)}>
+        let disabled = false;
+        workersRegistered.forEach(item => {
+            if(item.id === elem.id){
+                disabled = true;
+            }
+        })
+
+        return <div className={"item item-disabled-" + disabled}>
+            <div className="selector" onClick={disabled ? null : () => onSelectWorker(elem)}>
                 <label className={"item-selector " + active} />
             </div>
 
             <div className="item-content">
                 <div className="item-body">
                     <div className="infos infos-col-2">
-                        <div className="col-1" onClick={() => onSelectWorker(elem)}>
+                        <div className="col-1" onClick={disabled ? null : () => onSelectWorker(elem)}>
                             <div className={"badge badge-" + elem.type}>{elem.typeString}</div>
                             <div className="name">
                                 <span>{elem.lastname} {elem.firstname}</span>
                             </div>
                         </div>
-                        <div className="col-2 actions">
+                        <div className="col-2 actions" onClick={disabled ? null : () => onSelectWorker(elem)}>
                         </div>
                     </div>
                 </div>

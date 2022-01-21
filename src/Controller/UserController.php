@@ -146,23 +146,39 @@ class UserController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        $order = $em->getRepository(PaOrder::class)->findOneBy(['status' => PaOrder::STATUS_ATTENTE, 'user' => $user, 'session' => $obj]);
-        if($order){
-            return $this->render('user/pages/sessions/registration/index.html.twig', ['elem' => $obj, 'error' => true]);
+        $workersRegistered = [];
+
+        $orders = $em->getRepository(PaOrder::class)->findBy(['user' => $user, 'session' => $obj]);
+        if(count($orders) > 0){
+            $ordersId = [];
+            foreach($orders as $order){
+                if($order->getStatus() == PaOrder::STATUS_ATTENTE){
+                    return $this->render('user/pages/sessions/registration/index.html.twig', ['elem' => $obj, 'error' => true]);
+                }elseif($order->getStatus() == PaOrder::STATUS_VALIDER || $order->getStatus() == PaOrder::STATUS_TRAITER){
+                    $ordersId[] = $order->getId();
+                }
+            }
+
+            $registrations = $em->getRepository(FoRegistration::class)->findBy(['paOrder' => $ordersId]);
+            foreach($registrations as $registration){
+                $workersRegistered[] = $registration->getWorker();
+            }
         }
 
         $workers = $em->getRepository(FoWorker::class)->findBy(['user' => $user, 'isArchived' => false]);
         $banks = $em->getRepository(PaBank::class)->findBy(['user' => $user]);
 
-        $session = $serializer->serialize($obj, 'json', ['groups' => User::ADMIN_READ]);
-        $workers = $serializer->serialize($workers, 'json', ['groups' => User::USER_READ]);
-        $banks = $serializer->serialize($banks, 'json', ['groups' => User::USER_READ]);
+        $session            = $serializer->serialize($obj, 'json', ['groups' => User::ADMIN_READ]);
+        $banks              = $serializer->serialize($banks, 'json', ['groups' => User::USER_READ]);
+        $workers            = $serializer->serialize($workers, 'json', ['groups' => User::USER_READ]);
+        $workersRegistered  = $serializer->serialize($workersRegistered, 'json', ['groups' => User::USER_READ]);
 
         return $this->render('user/pages/sessions/registration/index.html.twig', [
             'elem' => $obj,
             'session' => $session,
-            'workers' => $workers,
             'banks' => $banks,
+            'workers' => $workers,
+            'workersRegistered' => $workersRegistered
         ]);
     }
 
