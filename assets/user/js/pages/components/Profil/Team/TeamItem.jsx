@@ -80,7 +80,7 @@ export class TeamItemRegistration extends Component {
 
 export class TeamItemRegistrationUpdate extends Component {
     render () {
-        const { registration, elem, registrations, allWorkers, onChangeSelect, worker, errors, onTrash, workersToDelete } = this.props;
+        const { registration, elem, registrations, allWorkers, onChangeSelect, worker, errors, onTrash, registrationsToDelete } = this.props;
 
         console.log(registrations)
 
@@ -96,9 +96,14 @@ export class TeamItemRegistrationUpdate extends Component {
             }
         })
 
-        let isDeleted = false
+        let isDeleted = false;
+        registrationsToDelete.forEach(el => {
+            if(el.id === registration.id){
+                isDeleted = true;
+            }
+        })
 
-        return <div className="item">
+        return <div className={"item item-deleted-" + isDeleted}>
             <div className="item-content">
                 <div className="item-body">
                     <div className="infos infos-col-3">
@@ -114,8 +119,8 @@ export class TeamItemRegistrationUpdate extends Component {
                             </SelectReactSelectize>}
                         </div>
                         <div className="col-3 actions">
-                            {!isDeleted ? <ButtonIcon icon="trash" onClick={() => onTrash(registration, elem)}>Enlever</ButtonIcon>
-                                : <ButtonIcon icon="refresh" onClick={() => onTrash(registration, elem)}>Restaurer</ButtonIcon>}
+                            {!isDeleted ? <ButtonIcon icon="trash" onClick={() => onTrash(registration)}>Enlever</ButtonIcon>
+                                : <ButtonIcon icon="refresh" onClick={() => onTrash(registration)}>Restaurer</ButtonIcon>}
                         </div>
                     </div>
                 </div>

@@ -23,6 +23,7 @@ export class RegistrationUpdate extends Component {
             sessionId: props.sessionId,
             allWorkers: JSON.parse(props.workers),
             registrations: JSON.parse(props.registrations),
+            registrationsToDelete: [],
             errors: [],
         }
 
@@ -62,14 +63,30 @@ export class RegistrationUpdate extends Component {
         this.setState({ registrations: nRegistrations })
     }
 
-    handleTrashWorker = (registration, elem) => {
+    handleTrashWorker = (registration) => {
+        const { registrationsToDelete } = this.state;
 
+        let nRegistrations = [];
+        let find = false;
+        registrationsToDelete.forEach(el => {
+            if(el.id === registration.id){
+                find = true;
+            }else{
+                nRegistrations.push(el);
+            }
+        })
+
+        if(!find){
+            nRegistrations = [...nRegistrations, ...[registration]];
+        }
+
+        this.setState({ registrationsToDelete: nRegistrations })
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const { sessionId, workers, workersToDelete } = this.state;
+        const { sessionId } = this.state;
 
         let paramsToValidate = [];
 
