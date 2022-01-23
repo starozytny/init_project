@@ -192,11 +192,14 @@ class UserController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        $data = [];
         $registrations = $em->getRepository(FoRegistration::class)->findBy(['user' => $user, 'session' => $obj]);
         if(count($registrations) > 0){
             foreach($registrations as $registration){
                 if($registration->getPaOrder()->getStatus() == PaOrder::STATUS_ATTENTE){
                     return $this->render('user/pages/sessions/registration/update.html.twig', ['elem' => $obj, 'error' => true]);
+                }elseif($registration->getPaOrder()->getStatus() == PaOrder::STATUS_VALIDER){
+                    $data[] = $registration;
                 }
             }
         }
@@ -204,7 +207,7 @@ class UserController extends AbstractController
         $workers = $em->getRepository(FoWorker::class)->findBy(['user' => $user, 'isArchived' => false]);
 
         $workers       = $serializer->serialize($workers, 'json', ['groups' => User::USER_READ]);
-        $registrations = $serializer->serialize($registrations, 'json', ['groups' => User::USER_READ]);
+        $registrations = $serializer->serialize($data, 'json', ['groups' => User::USER_READ]);
 
         return $this->render('user/pages/sessions/registration/update.html.twig', [
             'elem' => $obj,
