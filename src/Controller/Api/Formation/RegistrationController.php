@@ -191,28 +191,28 @@ class RegistrationController extends AbstractController
         }
 
         //delete registration = update order or cancel order
-        foreach($registrations as $registration){
-            foreach($data->registrationsToDelete as $reg){
-                if($reg->id == $registration->getId()){
-                    $registration->setStatus(FoRegistration::STATUS_INACTIVE);
-
-                    $order = $registration->getPaOrder();
-
-                    if($order->getParticipants() == 1){
-                        ($order)
-                            ->setStatus(PaOrder::STATUS_ANNULER)
-                            ->setUpdatedAt(new DateTime())
-                        ;
-                    }else{
-                        ($order)
-                            ->setParticipants($order->getParticipants() - 1)
-                            ->setPrice($order->getPrice() - $session->getPriceTTC())
-                            ->setUpdatedAt(new DateTime())
-                        ;
-                    }
-                }
-            }
-        }
+//        foreach($registrations as $registration){
+//            foreach($data->registrationsToDelete as $reg){
+//                if($reg->id == $registration->getId()){
+//                    $registration->setStatus(FoRegistration::STATUS_INACTIVE);
+//
+//                    $order = $registration->getPaOrder();
+//
+//                    if($order->getParticipants() == 1){
+//                        ($order)
+//                            ->setStatus(PaOrder::STATUS_ANNULER)
+//                            ->setUpdatedAt(new DateTime())
+//                        ;
+//                    }else{
+//                        ($order)
+//                            ->setParticipants($order->getParticipants() - 1)
+//                            ->setPrice($order->getPrice() - $session->getPriceTTC())
+//                            ->setUpdatedAt(new DateTime())
+//                        ;
+//                    }
+//                }
+//            }
+//        }
 
         $em->flush();
 
