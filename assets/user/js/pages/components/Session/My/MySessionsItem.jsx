@@ -15,6 +15,11 @@ export class MySessionsItem extends Component {
                     <div className="infos infos-col-4">
                         <InfosSession elem={elem} />
                         <div className="col-4 actions">
+                            <ButtonIcon element="a" icon="pencil"
+                                        onClick={Routing.generate('api_sessions_conventions', {'slug': elem.slug})}
+                            >
+                                Modifier
+                            </ButtonIcon>
                             <ButtonIcon element="a" icon="download" target="_blank"
                                         onClick={Routing.generate('api_sessions_conventions', {'slug': elem.slug})}
                             >
