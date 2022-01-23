@@ -14,9 +14,8 @@
             </div>
         </div>
     {% else %}
-        <div id="session-registration-update" data-session="{{ session }}"
-             data-workers="{{ workers }}" data-banks="{{ banks }}"
-             data-workers-registered="{{ workersRegistered }}">
+        <div id="session-registration-update" data-session-id="{{ elem.id }}"
+             data-workers="{{ workers }}" data-registrations="{{ registrations }}">
             {% include "dashboard/layout/components/spinner.html.twig" %}
         </div>
     {% endif %}

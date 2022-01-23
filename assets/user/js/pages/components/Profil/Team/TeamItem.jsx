@@ -80,14 +80,13 @@ export class TeamItemRegistration extends Component {
 
 export class TeamItemRegistrationUpdate extends Component {
     render () {
-        const { elem, workers, allWorkers, onChangeSelect, worker, errors, onTrash, workersToDelete } = this.props;
+        const { registration, elem, registrations, allWorkers, onChangeSelect, worker, errors, onTrash, workersToDelete } = this.props;
 
-        let active = false; let alreadySelected = [];
-        workers.forEach(item => {
-            if(item.id === elem.id){
-                active = true;
-            }
-            alreadySelected.push(item.id);
+        console.log(registrations)
+
+        let alreadySelected = [];
+        registrations.forEach(item => {
+            alreadySelected.push(item.worker.id);
         })
 
         let selectWorkers = [];
@@ -97,14 +96,9 @@ export class TeamItemRegistrationUpdate extends Component {
             }
         })
 
-        let isDeleted = false;
-        workersToDelete.forEach(item => {
-            if(item.id === elem.id){
-                isDeleted = true;
-            }
-        })
+        let isDeleted = false
 
-        return <div className={"item item-deleted-" + isDeleted}>
+        return <div className="item">
             <div className="item-content">
                 <div className="item-body">
                     <div className="infos infos-col-3">
@@ -116,12 +110,12 @@ export class TeamItemRegistrationUpdate extends Component {
                         </div>
                         <div className="col-2">
                             {!isDeleted && <SelectReactSelectize items={selectWorkers} identifiant="worker" placeholder={"Sélectionner un remplaçant"}
-                                                                 valeur={worker} errors={errors} onChange={(e) => onChangeSelect(elem, e)}>
+                                                                 valeur={worker} errors={errors} onChange={(e) => onChangeSelect(registration, elem, e)}>
                             </SelectReactSelectize>}
                         </div>
                         <div className="col-3 actions">
-                            {!isDeleted ? <ButtonIcon icon="trash" onClick={() => onTrash(elem)}>Enlever</ButtonIcon>
-                                : <ButtonIcon icon="refresh" onClick={() => onTrash(elem)}>Restaurer</ButtonIcon>}
+                            {!isDeleted ? <ButtonIcon icon="trash" onClick={() => onTrash(registration, elem)}>Enlever</ButtonIcon>
+                                : <ButtonIcon icon="refresh" onClick={() => onTrash(registration, elem)}>Restaurer</ButtonIcon>}
                         </div>
                     </div>
                 </div>

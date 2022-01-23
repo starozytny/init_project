@@ -3,65 +3,39 @@ import React, { Component } from "react";
 import axios      from "axios";
 import Routing    from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Aside }  from "@dashboardComponents/Tools/Aside";
 import { Alert }  from "@dashboardComponents/Tools/Alert";
+import { Button } from "@dashboardComponents/Tools/Button";
 
 import Sort       from "@commonComponents/functions/sort";
+import Helper     from "@commonComponents/functions/helper";
 import Validateur from "@commonComponents/functions/validateur";
 import Formulaire from "@dashboardComponents/functions/Formulaire";
-import UpdateList from "@dashboardComponents/functions/updateList";
 
-import { BankFormulaire } from "@userPages/components/Profil/Bank/BankForm";
 import { TeamItemRegistrationUpdate } from "@userPages/components/Profil/Team/TeamItem";
 
 const URL_UPDATE_REGISTRATION = 'api_registration_create';
-const URL_DELETE_BANK         = 'api_banks_delete';
 
 export class RegistrationUpdate extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            contextBank: "create",
-            session: JSON.parse(props.session),
+            sessionId: props.sessionId,
             allWorkers: JSON.parse(props.workers),
-            allBanks: JSON.parse(props.banks),
-            bank: null,
-            workers: JSON.parse(props.workersRegistered),
-            workersToDelete: [],
+            registrations: JSON.parse(props.registrations),
             errors: [],
         }
 
-        this.asideBank = React.createRef();
-
-        this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleSelectWorker = this.handleSelectWorker.bind(this);
         this.handleTrashWorker = this.handleTrashWorker.bind(this);
-        this.handleSelectBank = this.handleSelectBank.bind(this);
-        this.handleDeleteBank = this.handleDeleteBank.bind(this)
-        this.handleOpenAsideBank = this.handleOpenAsideBank.bind(this);
-
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleUpdateList = (element, context, type) => {
-        switch (type){
-            default:
-                let newData = UpdateList.update(context, this.state.allBanks, element);
-                this.setState({ allBanks: newData, bank: element })
-                if(this.asideBank.current) this.asideBank.current.handleClose();
-                break;
-        }
-    }
-
-    handleSelectWorker = (oldWorker, e) => {
-        const { allWorkers, workers } = this.state;
+    handleSelectWorker = (registration, oldWorker, e) => {
+        const { allWorkers, registrations } = this.state;
 
         //worker to add;
         let value = null;
-
-        //remove oldWorker
-        let nWorkers = workers.filter(el => {return el.id !== oldWorker.id});
 
         //get data of newWorker
         allWorkers.forEach(el => {
@@ -71,50 +45,31 @@ export class RegistrationUpdate extends Component {
         })
 
         if(!e){ //if no one selected
-            nWorkers.push(oldWorker)
+            registration.worker = oldWorker;
         }else{
-            nWorkers.push(value);
+            registration.worker = value;
         }
 
-        this.setState({ workers: nWorkers })
-    }
-
-    handleTrashWorker = (elem) => {
-        const { workersToDelete } = this.state;
-
-        let nWorkers = [];
-        let find = false;
-        workersToDelete.forEach(el => {
-            if(el.id === elem.id){
-                find = true;
+        let nRegistrations = [];
+        registrations.forEach(el => {
+            if(el.id === registration.id){
+                nRegistrations.push(registration)
             }else{
-                nWorkers.push(el)
+                nRegistrations.push(el);
             }
         })
 
-        if(!find){
-            nWorkers = [...nWorkers,...[elem]]
-        }
-
-        this.setState({ workersToDelete: nWorkers })
+        this.setState({ registrations: nRegistrations })
     }
 
-    handleDeleteBank = (element, msg, text='Cette action est irréversible.') => {
-        let url = Routing.generate(URL_DELETE_BANK, {'id': element.id})
-        Formulaire.axiosDeleteElement(this, element, url, "Supprimer ce RIB ?", text);
-    }
+    handleTrashWorker = (registration, elem) => {
 
-    handleSelectBank = (bank) => { this.setState({ bank }) }
-
-    handleOpenAsideBank = (contextBank, bank= null) => {
-        this.setState({ contextBank, bank })
-        this.asideBank.current.handleOpen();
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const { session, workers } = this.state;
+        const { sessionId, workers, workersToDelete } = this.state;
 
         let paramsToValidate = [];
 
@@ -126,40 +81,25 @@ export class RegistrationUpdate extends Component {
             Formulaire.loader(true);
             let self = this;
 
-            // TO ADJUST
-            let workersId = [];
-            workers.forEach(worker => {
-                workersId.push(worker.id)
-            })
-
-            this.state.workersId = workersId;
-
-            // axios({ method: "POST", url: Routing.generate(URL_UPDATE_REGISTRATION, {'session': session.id}), data: this.state })
-            //     .then(function (response) {
-            //         let data = response.data;
-            //         Helper.toTop();
-            //         self.setState({ step: 4 })
-            //     })
-            //     .catch(function (error) {
-            //         Formulaire.displayErrors(self, error);
-            //     })
-            //     .then(() => {
-            //         Formulaire.loader(false);
-            //     })
-            // ;
+            axios({ method: "PUT", url: Routing.generate(URL_UPDATE_REGISTRATION, {'session': sessionId}), data: this.state })
+                .then(function (response) {
+                    let data = response.data;
+                    Helper.toTop();
+                })
+                .catch(function (error) {
+                    Formulaire.displayErrors(self, error);
+                })
+                .then(() => {
+                    Formulaire.loader(false);
+                })
+            ;
         }
     }
 
     render () {
-        const { contextBank, bank, workers, workersToDelete } = this.state;
-
-        let contentBank = contextBank === "create" ? <BankFormulaire type="create" isRegistration={true} onUpdateList={this.handleUpdateList}/>
-            : <BankFormulaire type="update" element={bank} isRegistration={true} onUpdateList={this.handleUpdateList} key={bank.id}/>
-
-        workers.sort(Sort.compareLastname)
+        const { registrations } = this.state;
 
         return <div className="main-content">
-
             <form onSubmit={this.handleSubmit}>
                 <div>
                     <div className="items-table">
@@ -167,23 +107,30 @@ export class RegistrationUpdate extends Component {
                             <div className="item item-header">
                                 <div className="item-content">
                                     <div className="item-body">
-                                        <div className="infos infos-col-2">
+                                        <div className="infos infos-col-3">
                                             <div className="col-1">Equipe</div>
-                                            <div className="col-2 actions" />
+                                            <div className="col-2">Remplacement</div>
+                                            <div className="col-3 actions">Supression</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {workers && workers.length !== 0 ? workers.map(elem => {
-                                return <TeamItemRegistrationUpdate {...this.state} elem={elem} key={elem.id}
+                            {registrations && registrations.length !== 0 ? registrations.map(el => {
+                                return <TeamItemRegistrationUpdate {...this.state} elem={el.worker} registration={el} key={el.id}
                                                                    onChangeSelect={this.handleSelectWorker} onTrash={this.handleTrashWorker}/>
                             }) : <Alert>Aucun résultat</Alert>}
                         </div>
                     </div>
                 </div>
-            </form>
 
-            <Aside ref={this.asideBank} content={contentBank} />
+                <div className="line line-buttons">
+                    <div/>
+                    <div/>
+                    <div className="btns-submit">
+                        <Button onClick={this.handleSubmit}>Enregistrer les modifications</Button>
+                    </div>
+                </div>
+            </form>
         </div>
     }
 }

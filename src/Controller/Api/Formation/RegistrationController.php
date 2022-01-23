@@ -149,6 +149,46 @@ class RegistrationController extends AbstractController
     }
 
     /**
+     * Update registration worker-session
+     *
+     * @Route("/{session}", name="update", options={"expose"=true}, methods={"PUT"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a message",
+     * )
+     *
+     * @OA\Tag(name="Registration")
+     *
+     * @param Request $request
+     * @param FoSession $session
+     * @param ValidatorService $validator
+     * @param ApiResponse $apiResponse
+     * @param DataPaiement $dataPaiement
+     * @param MailerService $mailerService
+     * @param SettingsService $settingsService
+     * @param NotificationService $notificationService
+     * @return JsonResponse
+     */
+    public function update(Request $request, FoSession $session, ValidatorService $validator, ApiResponse $apiResponse,
+                           DataPaiement $dataPaiement, MailerService $mailerService, SettingsService $settingsService,
+                           NotificationService $notificationService): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+        $data = json_decode($request->getContent());
+
+        if ($data === null) {
+            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+
+        return $apiResponse->apiJsonResponseSuccessful("Success");
+    }
+
+    /**
      * Switch attestation
      *
      * @Security("is_granted('ROLE_ADMIN')")

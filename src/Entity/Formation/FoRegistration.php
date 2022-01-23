@@ -18,7 +18,7 @@ class FoRegistration extends DataEntity
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"admin:read"})
+     * @Groups({"user:read", "admin:read"})
      */
     private $id;
 
@@ -32,7 +32,7 @@ class FoRegistration extends DataEntity
     /**
      * @ORM\ManyToOne(targetEntity=FoWorker::class, inversedBy="registrations")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"admin:read"})
+     * @Groups({"user:read", "admin:read"})
      */
     private $worker;
 
