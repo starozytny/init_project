@@ -222,7 +222,7 @@ class UserController extends AbstractController
     public function myFormations(SerializerInterface $serializer): Response
     {
         $em = $this->doctrine->getManager();
-        $objs = $em->getRepository(FoRegistration::class)->findBy(['user' => $this->getUser()]);
+        $objs = $em->getRepository(FoRegistration::class)->findBy(['user' => $this->getUser(), 'status' => FoRegistration::STATUS_ACTIVE]);
 
         $sessions = []; $noDuplication = [];
         foreach($objs as $obj){
