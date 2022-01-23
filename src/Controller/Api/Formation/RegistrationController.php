@@ -88,7 +88,7 @@ class RegistrationController extends AbstractController
             "iban" => $bank->iban,
             "bic" => $bank->bic,
             "email" => $user->getEmail(),
-            "participants" => 1,
+            "participants" => count($workers),
             "address" => "ADRESSE A COMPLETER",
             "zipcode" => "ADRESSE A COMPLETER",
             "city" => "ADRESSE A COMPLETER"
