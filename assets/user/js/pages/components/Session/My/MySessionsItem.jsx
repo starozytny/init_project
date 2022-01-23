@@ -16,7 +16,7 @@ export class MySessionsItem extends Component {
                         <InfosSession elem={elem} />
                         <div className="col-4 actions">
                             <ButtonIcon element="a" icon="pencil"
-                                        onClick={Routing.generate('api_sessions_conventions', {'slug': elem.slug})}
+                                        onClick={Routing.generate('user_registration_update', {'slug': elem.slug})}
                             >
                                 Modifier
                             </ButtonIcon>

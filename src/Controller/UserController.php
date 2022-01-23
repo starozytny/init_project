@@ -137,10 +137,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/formation/sessions/{slug}", options={"expose"=true}, name="registration")
-     */
-    public function registration(FoSession $obj, SerializerInterface $serializer): Response
+    private function registrationData($namePage, FoSession $obj, SerializerInterface $serializer): Response
     {
         $em = $this->doctrine->getManager();
 
@@ -153,7 +150,7 @@ class UserController extends AbstractController
             $ordersId = [];
             foreach($orders as $order){
                 if($order->getStatus() == PaOrder::STATUS_ATTENTE){
-                    return $this->render('user/pages/sessions/registration/index.html.twig', ['elem' => $obj, 'error' => true]);
+                    return $this->render($namePage, ['elem' => $obj, 'error' => true]);
                 }elseif($order->getStatus() == PaOrder::STATUS_VALIDER || $order->getStatus() == PaOrder::STATUS_TRAITER){
                     $ordersId[] = $order->getId();
                 }
@@ -166,20 +163,36 @@ class UserController extends AbstractController
         }
 
         $workers = $em->getRepository(FoWorker::class)->findBy(['user' => $user, 'isArchived' => false]);
-        $banks = $em->getRepository(PaBank::class)->findBy(['user' => $user]);
+        $banks   = $em->getRepository(PaBank::class)->findBy(['user' => $user]);
 
         $session            = $serializer->serialize($obj, 'json', ['groups' => User::ADMIN_READ]);
         $banks              = $serializer->serialize($banks, 'json', ['groups' => User::USER_READ]);
         $workers            = $serializer->serialize($workers, 'json', ['groups' => User::USER_READ]);
         $workersRegistered  = $serializer->serialize($workersRegistered, 'json', ['groups' => User::USER_READ]);
 
-        return $this->render('user/pages/sessions/registration/index.html.twig', [
+        return $this->render($namePage, [
             'elem' => $obj,
             'session' => $session,
             'banks' => $banks,
             'workers' => $workers,
             'workersRegistered' => $workersRegistered
         ]);
+    }
+
+    /**
+     * @Route("/formation/sessions/{slug}", options={"expose"=true}, name="registration")
+     */
+    public function registration(FoSession $obj, SerializerInterface $serializer): Response
+    {
+        return $this->registrationData('user/pages/sessions/registration/index.html.twig', $obj, $serializer);
+    }
+
+    /**
+     * @Route("/formation/sessions/{slug}/modification", options={"expose"=true}, name="registration_update")
+     */
+    public function registrationUpdate(FoSession $obj, SerializerInterface $serializer): Response
+    {
+        return $this->registrationData('user/pages/sessions/registration/update.html.twig', $obj, $serializer);
     }
 
     /**
