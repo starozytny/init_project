@@ -108,7 +108,7 @@ export class TeamItemRegistrationUpdate extends Component {
                         </div>
                         <div className="col-2">
                             <SelectReactSelectize items={selectWorkers} identifiant="worker" placeholder={"Sélectionner un remplaçant"}
-                                                  valeur={worker} errors={errors} onChange={(e) => onChangeSelect('worker', e)}>
+                                                  valeur={worker} errors={errors} onChange={(e) => onChangeSelect(elem, e)}>
                             </SelectReactSelectize>
                         </div>
                         <div className="col-3 actions">

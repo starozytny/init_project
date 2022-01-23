@@ -27,12 +27,14 @@ export class RegistrationUpdate extends Component {
             allBanks: JSON.parse(props.banks),
             bank: null,
             workers: JSON.parse(props.workersRegistered),
+            newWorkers: [],
             errors: [],
         }
 
         this.asideBank = React.createRef();
 
         this.handleUpdateList = this.handleUpdateList.bind(this);
+        this.handleSelectWorker = this.handleSelectWorker.bind(this);
         this.handleSelectBank = this.handleSelectBank.bind(this);
         this.handleDeleteBank = this.handleDeleteBank.bind(this)
         this.handleOpenAsideBank = this.handleOpenAsideBank.bind(this);
@@ -48,6 +50,30 @@ export class RegistrationUpdate extends Component {
                 if(this.asideBank.current) this.asideBank.current.handleClose();
                 break;
         }
+    }
+
+    handleSelectWorker = (oldWorker, newWorker) => {
+        const { newWorkers } = this.state;
+
+        let nNewWorkers = []; let find = false;
+        newWorkers.forEach(el => {
+            if(el[0] === oldWorker.id){
+                find = true;
+            }
+        })
+
+        if(find) {
+            nNewWorkers = newWorkers.filter(el => {return el[0] !== oldWorker.id})
+        }
+
+        if(newWorker){
+            nNewWorkers.push([oldWorker.id, newWorker.value])
+        }
+
+        console.log(nNewWorkers)
+
+
+        this.setState({ newWorkers: nNewWorkers })
     }
 
     handleDeleteBank = (element, msg, text='Cette action est irréversible.') => {
@@ -124,7 +150,7 @@ export class RegistrationUpdate extends Component {
                                 </div>
                             </div>
                             {workers && workers.length !== 0 ? workers.map(elem => {
-                                return <TeamItemRegistrationUpdate {...this.state} elem={elem} key={elem.id}/>
+                                return <TeamItemRegistrationUpdate {...this.state} elem={elem} onChangeSelect={this.handleSelectWorker} key={elem.id}/>
                             }) : <Alert>Aucun résultat</Alert>}
                         </div>
                     </div>
