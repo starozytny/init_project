@@ -6,6 +6,7 @@ import Routing    from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 import { Aside }  from "@dashboardComponents/Tools/Aside";
 import { Alert }  from "@dashboardComponents/Tools/Alert";
 
+import Sort       from "@commonComponents/functions/sort";
 import Validateur from "@commonComponents/functions/validateur";
 import Formulaire from "@dashboardComponents/functions/Formulaire";
 import UpdateList from "@dashboardComponents/functions/updateList";
@@ -27,7 +28,6 @@ export class RegistrationUpdate extends Component {
             allBanks: JSON.parse(props.banks),
             bank: null,
             workers: JSON.parse(props.workersRegistered),
-            newWorkers: [],
             errors: [],
         }
 
@@ -52,28 +52,29 @@ export class RegistrationUpdate extends Component {
         }
     }
 
-    handleSelectWorker = (oldWorker, newWorker) => {
-        const { newWorkers } = this.state;
+    handleSelectWorker = (oldWorker, e) => {
+        const { allWorkers, workers } = this.state;
 
-        let nNewWorkers = []; let find = false;
-        newWorkers.forEach(el => {
-            if(el[0] === oldWorker.id){
-                find = true;
+        //worker to add;
+        let value = null;
+
+        //remove oldWorker
+        let nWorkers = workers.filter(el => {return el.id !== oldWorker.id});
+
+        //get data of newWorker
+        allWorkers.forEach(el => {
+            if(e && el.id === e.value){
+                value = el;
             }
         })
 
-        if(find) {
-            nNewWorkers = newWorkers.filter(el => {return el[0] !== oldWorker.id})
+        if(!e){ //if no one selected
+            nWorkers.push(oldWorker)
+        }else{
+            nWorkers.push(value);
         }
 
-        if(newWorker){
-            nNewWorkers.push([oldWorker.id, newWorker.value])
-        }
-
-        console.log(nNewWorkers)
-
-
-        this.setState({ newWorkers: nNewWorkers })
+        this.setState({ workers: nWorkers })
     }
 
     handleDeleteBank = (element, msg, text='Cette action est irréversible.') => {
@@ -132,6 +133,8 @@ export class RegistrationUpdate extends Component {
 
         let contentBank = contextBank === "create" ? <BankFormulaire type="create" isRegistration={true} onUpdateList={this.handleUpdateList}/>
             : <BankFormulaire type="update" element={bank} isRegistration={true} onUpdateList={this.handleUpdateList} key={bank.id}/>
+
+        workers.sort(Sort.compareLastname)
 
         return <div className="main-content">
 
