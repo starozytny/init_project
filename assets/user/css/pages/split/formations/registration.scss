@@ -51,6 +51,11 @@ h2{
   }
 }
 
+.item-deleted-true{
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
 .step-section{
   display: none;
 

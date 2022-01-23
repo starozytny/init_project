@@ -28,6 +28,7 @@ export class RegistrationUpdate extends Component {
             allBanks: JSON.parse(props.banks),
             bank: null,
             workers: JSON.parse(props.workersRegistered),
+            workersToDelete: [],
             errors: [],
         }
 
@@ -35,6 +36,7 @@ export class RegistrationUpdate extends Component {
 
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleSelectWorker = this.handleSelectWorker.bind(this);
+        this.handleTrashWorker = this.handleTrashWorker.bind(this);
         this.handleSelectBank = this.handleSelectBank.bind(this);
         this.handleDeleteBank = this.handleDeleteBank.bind(this)
         this.handleOpenAsideBank = this.handleOpenAsideBank.bind(this);
@@ -75,6 +77,26 @@ export class RegistrationUpdate extends Component {
         }
 
         this.setState({ workers: nWorkers })
+    }
+
+    handleTrashWorker = (elem) => {
+        const { workersToDelete } = this.state;
+
+        let nWorkers = [];
+        let find = false;
+        workersToDelete.forEach(el => {
+            if(el.id === elem.id){
+                find = true;
+            }else{
+                nWorkers.push(el)
+            }
+        })
+
+        if(!find){
+            nWorkers = [...nWorkers,...[elem]]
+        }
+
+        this.setState({ workersToDelete: nWorkers })
     }
 
     handleDeleteBank = (element, msg, text='Cette action est irréversible.') => {
@@ -129,7 +151,7 @@ export class RegistrationUpdate extends Component {
     }
 
     render () {
-        const { contextBank, bank, workers } = this.state;
+        const { contextBank, bank, workers, workersToDelete } = this.state;
 
         let contentBank = contextBank === "create" ? <BankFormulaire type="create" isRegistration={true} onUpdateList={this.handleUpdateList}/>
             : <BankFormulaire type="update" element={bank} isRegistration={true} onUpdateList={this.handleUpdateList} key={bank.id}/>
@@ -153,7 +175,8 @@ export class RegistrationUpdate extends Component {
                                 </div>
                             </div>
                             {workers && workers.length !== 0 ? workers.map(elem => {
-                                return <TeamItemRegistrationUpdate {...this.state} elem={elem} onChangeSelect={this.handleSelectWorker} key={elem.id}/>
+                                return <TeamItemRegistrationUpdate {...this.state} elem={elem} key={elem.id}
+                                                                   onChangeSelect={this.handleSelectWorker} onTrash={this.handleTrashWorker}/>
                             }) : <Alert>Aucun résultat</Alert>}
                         </div>
                     </div>
