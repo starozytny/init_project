@@ -162,17 +162,10 @@ class RegistrationController extends AbstractController
      *
      * @param Request $request
      * @param FoSession $session
-     * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
-     * @param DataPaiement $dataPaiement
-     * @param MailerService $mailerService
-     * @param SettingsService $settingsService
-     * @param NotificationService $notificationService
      * @return JsonResponse
      */
-    public function update(Request $request, FoSession $session, ValidatorService $validator, ApiResponse $apiResponse,
-                           DataPaiement $dataPaiement, MailerService $mailerService, SettingsService $settingsService,
-                           NotificationService $notificationService): JsonResponse
+    public function update(Request $request, FoSession $session, ApiResponse $apiResponse): JsonResponse
     {
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
@@ -181,9 +174,42 @@ class RegistrationController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        /** @var User $user */
-        $user = $this->getUser();
+        $registrationsId = [];
+        foreach($data->registrations as $registration){
+            $registrationsId[] = $registration->id;
+        }
 
+        //Update worker of registration
+        $registrations = $em->getRepository(FoRegistration::class)->findBy(['id' => $registrationsId]);
+        foreach($registrations as $registration){
+            foreach($data->registrations as $reg){
+                if($reg->worker->id != $registration->getWorker()->getId()){
+                    $worker = $em->getRepository(FoWorker::class)->find($reg->worker->id);
+                    $registration->setWorker($worker);
+                }
+            }
+        }
+
+        //delete registration = update order or cancel order
+//        foreach($registrations as $registration){
+//            foreach($data->registrationsToDelete as $reg){
+//                if($reg->id == $registration->getId()){
+//                    $order = $registration->getPaOrder();
+//
+//                    if($order->getParticipants() == 1){
+//                        $order->setStatus(PaOrder::STATUS_ANNULER);
+//                    }else{
+//                        ($order)
+//                            ->setParticipants($order->getParticipants() - 1)
+//                            ->setPrice($order->getPrice() - $session->getPriceTTC())
+//                            ->setUpdatedAt(new DateTime())
+//                        ;
+//                    }
+//                }
+//            }
+//        }
+
+        $em->flush();
 
         return $apiResponse->apiJsonResponseSuccessful("Success");
     }

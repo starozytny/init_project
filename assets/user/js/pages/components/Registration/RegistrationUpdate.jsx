@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 
 import axios      from "axios";
+import toastr     from "toastr";
 import Routing    from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Alert }  from "@dashboardComponents/Tools/Alert";
 import { Button } from "@dashboardComponents/Tools/Button";
 
-import Sort       from "@commonComponents/functions/sort";
 import Helper     from "@commonComponents/functions/helper";
 import Validateur from "@commonComponents/functions/validateur";
 import Formulaire from "@dashboardComponents/functions/Formulaire";
@@ -100,14 +100,13 @@ export class RegistrationUpdate extends Component {
 
             axios({ method: "PUT", url: Routing.generate(URL_UPDATE_REGISTRATION, {'session': sessionId}), data: this.state })
                 .then(function (response) {
-                    let data = response.data;
                     Helper.toTop();
+                    toastr.info("Inscription mise à jour.")
+                    location.reload();
                 })
                 .catch(function (error) {
-                    Formulaire.displayErrors(self, error);
-                })
-                .then(() => {
                     Formulaire.loader(false);
+                    Formulaire.displayErrors(self, error);
                 })
             ;
         }
