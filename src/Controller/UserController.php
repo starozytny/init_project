@@ -193,7 +193,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         $data = [];
-        $registrations = $em->getRepository(FoRegistration::class)->findBy(['user' => $user, 'session' => $obj]);
+        $registrations = $em->getRepository(FoRegistration::class)->findBy(['user' => $user, 'session' => $obj, "status" => FoRegistration::STATUS_ACTIVE]);
         if(count($registrations) > 0){
             foreach($registrations as $registration){
                 if($registration->getPaOrder()->getStatus() == PaOrder::STATUS_ATTENTE){
