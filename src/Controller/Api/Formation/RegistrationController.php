@@ -181,6 +181,7 @@ class RegistrationController extends AbstractController
         $registrations = $em->getRepository(FoRegistration::class)->findBy(["id" => $registrationsId]);
 
         //delete registration = update order or cancel order
+        $registrationsToDelete = []; $noDuplication = [];
         foreach($registrations as $registration){
             foreach($data->registrationsToDelete as $reg){
                 if($reg->id == $registration->getId()){
@@ -194,16 +195,37 @@ class RegistrationController extends AbstractController
                             ->setUpdatedAt(new DateTime())
                         ;
                     }else{
-                        ($order)
-                            ->setParticipants($order->getParticipants() - 1)
-                            ->setPrice($order->getPrice() - $session->getPriceTTC())
-                            ->setUpdatedAt(new DateTime())
-                        ;
-                    }
 
-                    $em->flush();
+                        if(!in_array($reg->id, $noDuplication)){
+                            $noDuplication[] = $reg->id;
+
+                            $registrationsToDelete[] = [
+                                "id" => $reg->id,
+                                "participants" => $order->getParticipants() - 1,
+                                "order" => $order,
+                            ];
+
+                        }else{
+                            foreach($registrationsToDelete as $r){
+                                if($r["id"] == $reg->id){
+                                    $r["participants"]--;
+                                }
+                            }
+                        }
+
+
+                    }
                 }
             }
+        }
+
+        foreach($registrationsToDelete as $reg){
+            $order = $reg["order"];
+            ($order)
+                ->setParticipants($reg["participants"])
+                ->setPrice($session->getPriceTTC() * $reg["participants"])
+                ->setUpdatedAt(new DateTime())
+            ;
         }
 
         //Update worker of registration
