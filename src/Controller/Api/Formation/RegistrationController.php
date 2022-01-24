@@ -178,41 +178,42 @@ class RegistrationController extends AbstractController
         foreach($data->registrations as $registration){
             $registrationsId[] = $registration->id;
         }
+        $registrations = $em->getRepository(FoRegistration::class)->findBy(["id" => $registrationsId]);
 
-        //Update worker of registration
-        $registrations = $em->getRepository(FoRegistration::class)->findBy(['id' => $registrationsId]);
+        //delete registration = update order or cancel order
         foreach($registrations as $registration){
-            foreach($data->registrations as $reg){
-                if($reg->worker->id != $registration->getWorker()->getId()){
-                    $worker = $em->getRepository(FoWorker::class)->find($reg->worker->id);
-                    $registration->setWorker($worker);
+            foreach($data->registrationsToDelete as $reg){
+                if($reg->id == $registration->getId()){
+                    $registration->setStatus(FoRegistration::STATUS_INACTIVE);
+
+                    $order = $registration->getPaOrder();
+
+                    if($order->getParticipants() == 1){
+                        ($order)
+                            ->setStatus(PaOrder::STATUS_ANNULER)
+                            ->setUpdatedAt(new DateTime())
+                        ;
+                    }else{
+                        ($order)
+                            ->setParticipants($order->getParticipants() - 1)
+                            ->setPrice($order->getPrice() - $session->getPriceTTC())
+                            ->setUpdatedAt(new DateTime())
+                        ;
+                    }
+
+                    $em->flush();
                 }
             }
         }
 
-        //delete registration = update order or cancel order
-//        foreach($registrations as $registration){
-//            foreach($data->registrationsToDelete as $reg){
-//                if($reg->id == $registration->getId()){
-//                    $registration->setStatus(FoRegistration::STATUS_INACTIVE);
-//
-//                    $order = $registration->getPaOrder();
-//
-//                    if($order->getParticipants() == 1){
-//                        ($order)
-//                            ->setStatus(PaOrder::STATUS_ANNULER)
-//                            ->setUpdatedAt(new DateTime())
-//                        ;
-//                    }else{
-//                        ($order)
-//                            ->setParticipants($order->getParticipants() - 1)
-//                            ->setPrice($order->getPrice() - $session->getPriceTTC())
-//                            ->setUpdatedAt(new DateTime())
-//                        ;
-//                    }
-//                }
-//            }
-//        }
+        //Update worker of registration
+        foreach($data->registrations as $reg){
+            $registration = $em->getRepository(FoRegistration::class)->find($reg->id);
+            if($reg->worker->id != $registration->getWorker()->getId()){
+                $worker = $em->getRepository(FoWorker::class)->find($reg->worker->id);
+                $registration->setWorker($worker);
+            }
+        }
 
         $em->flush();
 
