@@ -101,9 +101,20 @@ export function HeaderSession({ haveSelector = false }) {
     </>
 }
 
-export function InfosSession({ elem, showFormation = true, admin = false }) {
+export function InfosSession({ elem, registrations, showFormation = true, admin = false })
+{
 
-    let participants = elem.registrations.length + " / " + elem.max + " pers.";
+    let participants = 0;
+    if(registrations){
+        console.log(registrations)
+        registrations.forEach(el => {
+            if(el.session.id === elem.id && el.status === 1){
+                participants ++;
+            }
+        })
+    }
+
+    participants = participants + " / " + elem.max + " pers.";
 
     return <>
         <div className="col-1">

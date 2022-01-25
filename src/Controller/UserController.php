@@ -128,12 +128,15 @@ class UserController extends AbstractController
     public function sessions(SerializerInterface $serializer): Response
     {
         $em = $this->doctrine->getManager();
-        $objs = $em->getRepository(FoSession::class)->findBy(['isPublished' => true], ['start' => 'ASC']);
+        $objs          = $em->getRepository(FoSession::class)->findBy(['isPublished' => true], ['start' => 'ASC']);
+        $registrations = $em->getRepository(FoRegistration::class)->findBy(['status' => FoRegistration::STATUS_ACTIVE]);
 
-        $objs = $serializer->serialize($objs, 'json', ['groups' => User::ADMIN_READ]);
+        $objs          = $serializer->serialize($objs, 'json', ['groups' => User::ADMIN_READ]);
+        $registrations = $serializer->serialize($registrations, 'json', ['groups' => FoRegistration::COUNT_READ]);
 
         return $this->render('user/pages/sessions/index.html.twig', [
-            'donnees' => $objs
+            'donnees' => $objs,
+            'registrations' => $registrations,
         ]);
     }
 
@@ -234,9 +237,11 @@ class UserController extends AbstractController
         }
 
         $sessions = $serializer->serialize($sessions, 'json', ['groups' => User::ADMIN_READ]);
+        $objs = $serializer->serialize($objs, 'json', ['groups' => FoRegistration::COUNT_READ]);
 
         return $this->render('user/pages/sessions/own.html.twig',  [
             'donnees' => $sessions,
+            'registrations' => $objs
         ]);
     }
 }

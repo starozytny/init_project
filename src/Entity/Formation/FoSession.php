@@ -24,7 +24,7 @@ class FoSession extends DataEntity
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"admin:read"})
+     * @Groups({"admin:read", "count:read"})
      */
     private $id;
 

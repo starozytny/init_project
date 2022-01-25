@@ -8,13 +8,13 @@ import { InfosSession } from "@dashboardPages/components/Formations/Sessions/Ses
 
 export class SessionsItem extends Component {
     render () {
-        const { elem } = this.props;
+        const { registrations, elem } = this.props;
 
         return <div className="item">
             <div className="item-content">
                 <div className="item-body">
                     <div className="infos infos-col-4">
-                        <InfosSession elem={elem} />
+                        <InfosSession elem={elem} registrations={registrations} />
                         <div className="col-4 actions">
                             <ButtonIcon element="a" onClick={Routing.generate('user_registration', {'slug': elem.slug})} icon="download">S'inscrire</ButtonIcon>
                         </div>
