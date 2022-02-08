@@ -25,6 +25,22 @@
     border-radius: 12px 12px 0 0;
   }
 
+  &.item-read-infos-without-img{
+    &:before{
+      height: 60px;
+    }
+
+    .item-read-infos-container{
+      margin-top: 72px; //60px + 12px
+    }
+  }
+
+  &.item-read-infos-without-banner{
+    &:before{
+      display: none;
+    }
+  }
+
   .item-read-infos-container{
     @include flex(column, center, center);
     position: relative;

@@ -17,11 +17,14 @@
           "0" var(--danger),
           "1" var(--primary),
           "2" var(--warning),
-          "3" var(--grey3),
+          "3" var(--success),
+          "4" var(--grey3),
+          "5" var(--grey2),
           "default" var(--grey),
           "danger" var(--danger),
           "warning" var(--warning),
           "primary" var(--primary),
+          "success" var(--success),
 ;
 
   @each $number, $bg in $status {
