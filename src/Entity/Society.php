@@ -102,6 +102,12 @@ class Society extends DataEntity
      */
     private $city;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $complement;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -319,5 +325,17 @@ class Society extends DataEntity
         $values = ["EURL", "SARL", "SA", "SNC", "SAS"];
 
         return $values[$this->forme];
+    }
+
+    public function getComplement(): ?string
+    {
+        return $this->complement;
+    }
+
+    public function setComplement(?string $complement): self
+    {
+        $this->complement = $complement;
+
+        return $this;
     }
 }

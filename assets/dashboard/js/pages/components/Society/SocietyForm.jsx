@@ -45,6 +45,7 @@ export function SocietyFormulaire ({ type, onChangeContext, onUpdateList, elemen
         address={element ? Formulaire.setValueEmptyIfNull(element.address) : ""}
         zipcode={element ? Formulaire.setValueEmptyIfNull(element.zipcode) : ""}
         city={element ? Formulaire.setValueEmptyIfNull(element.city) : ""}
+        complement={element ? Formulaire.setValueEmptyIfNull(element.complement) : ""}
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
         messageSuccess={msg}
@@ -68,6 +69,7 @@ export class Form extends Component {
             address: props.address,
             zipcode: props.zipcode,
             city: props.city,
+            complement: props.complement,
             errors: [],
             success: false
         }
@@ -146,6 +148,7 @@ export class Form extends Component {
                             address: '',
                             zipcode: '',
                             city: '',
+                            complement: ''
                         })
                     }
                 })
@@ -161,7 +164,7 @@ export class Form extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, name, logo, siren, siret, rcs, numeroTva, forme, address, zipcode, city } = this.state;
+        const { errors, success, name, logo, siren, siret, rcs, numeroTva, forme, address, zipcode, city, complement } = this.state;
 
         let formItems = [
             { value: 0, label: "EURL", identifiant: "eurl" },
@@ -211,6 +214,9 @@ export class Form extends Component {
 
                         <div className="line">
                             <Input identifiant="address" valeur={address} errors={errors} onChange={this.handleChange}>Adresse</Input>
+                        </div>
+                        <div className="line">
+                            <Input identifiant="complement" valeur={complement} errors={errors} onChange={this.handleChange}>Complément d'adresse</Input>
                         </div>
                         <div className="line line-2">
                             <Input identifiant="zipcode" valeur={zipcode} errors={errors} onChange={this.handleChangeZipcodeCity} type="number">Code postal</Input>

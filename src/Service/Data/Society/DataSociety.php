@@ -29,6 +29,7 @@ class DataSociety
             ->setAddress($this->sanitizeData->trimData($data->address))
             ->setZipcode($this->sanitizeData->trimData($data->zipcode))
             ->setCity($this->sanitizeData->trimData($data->city))
+            ->setComplement($this->sanitizeData->trimData($data->complement))
         ;
     }
 }
