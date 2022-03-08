@@ -28,7 +28,7 @@ export class UserItem extends Component {
                         <div className="col-1">
                             <div className="name">
                                 <span>{elem.lastname.toUpperCase()} {elem.firstname}</span>
-                                {elem.highRoleCode !== 0 && <span className="role">{elem.highRole}</span>}
+                                {elem.highRoleCode !== 0 && <span className={"badge badge-" + elem.highRoleCode}>{elem.highRole}</span>}
                             </div>
                             {elem.highRoleCode !== 1 && elem.lastLoginAgo && <div className="sub">Connecté {elem.lastLoginAgo}</div>}
                         </div>

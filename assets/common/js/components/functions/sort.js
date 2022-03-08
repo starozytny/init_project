@@ -30,6 +30,14 @@ function compareEmail(a, b){
     return comparison(a.email, b.email);
 }
 
+function compareZipcode(a, b){
+    return comparison(a.zipcode, b.zipcode);
+}
+
+function compareCity(a,b){
+    return comparison(a.city, b.city);
+}
+
 function comparison (objA, objB){
     let comparison = 0;
     if (objA > objB) {
@@ -48,5 +56,7 @@ module.exports = {
     compareName,
     compareCreatedAt,
     compareCreatedAtInverse,
-    compareEmail
+    compareEmail,
+    compareZipcode,
+    compareCity,
 }

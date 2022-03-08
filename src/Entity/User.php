@@ -444,6 +444,6 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
      */
     public function getAvatarFile(): string
     {
-        return $this->avatar ? "/avatars/" . $this->avatar : "https://robohash.org/" . $this->username . "?size=64x64";
+        return $this->getFileOrDefault($this->avatar, self::FOLDER_AVATARS, "https://robohash.org/" . $this->username . "?size=64x64");
     }
 }

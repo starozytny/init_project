@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Changelog;
 use App\Entity\Contact;
 use App\Entity\Notification;
 use App\Entity\Settings;
@@ -123,6 +124,18 @@ class AdminController extends AbstractController
         $objs = $this->getAllData(Notification::class, $serializer);
 
         return $this->render('admin/pages/notifications/index.html.twig', [
+            'donnees' => $objs
+        ]);
+    }
+
+    /**
+     * @Route("/changelogs", options={"expose"=true}, name="changelogs_index")
+     */
+    public function changelogs(SerializerInterface $serializer): Response
+    {
+        $objs = $this->getAllData(Changelog::class, $serializer, User::USER_READ);
+
+        return $this->render('admin/pages/changelog/index.html.twig', [
             'donnees' => $objs
         ]);
     }

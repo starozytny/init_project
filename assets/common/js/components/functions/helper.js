@@ -75,10 +75,10 @@ function setActiveByValue(tab, value)
     return active;
 }
 
-function createTimeHoursMinutes(hours, minutes)
+function createTimeHoursMinutes(hours, minutes = 0, secondes = 0)
 {
     let date = new Date();
-    date.setHours(hours); date.setMinutes(minutes);
+    date.setHours(hours); date.setMinutes(minutes); date.setSeconds(secondes);
 
     return date;
 }
@@ -185,6 +185,19 @@ function toTop() {
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
+function countProgress (number, total) {
+    let progress;
+    let nb = number !== 0 ? (number / total) * 100 : 0;
+    for(let i = 100; i >= 0 ; i--){
+        if(nb >= i){
+            progress = i;
+            break;
+        }
+    }
+
+    return progress;
+}
+
 module.exports = {
     getPostalCodes,
     setCityFromZipcode,
@@ -195,5 +208,6 @@ module.exports = {
     extractDateToArray,
     getNbDayBetweenDateArray,
     downloadBinaryFile,
-    toTop
+    toTop,
+    countProgress
 }
