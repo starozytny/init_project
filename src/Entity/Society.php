@@ -17,6 +17,12 @@ class Society extends DataEntity
 
     const COUNT_READ = ["count-users:read"];
 
+    const FORME_EURL = 0;
+    const FORME_SARL = 1;
+    const FORME_SA = 2;
+    const FORME_SNC = 3;
+    const FORME_SAS = 4;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -47,6 +53,54 @@ class Society extends DataEntity
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="society")
      */
     private $users;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $siren;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $siret;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $rcs;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $numeroTva;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
+     */
+    private $forme;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
+     */
+    private $address;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     * @Groups({"admin:read"})
+     */
+    private $zipcode;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"admin:read"})
+     */
+    private $city;
 
     public function __construct()
     {
@@ -158,5 +212,112 @@ class Society extends DataEntity
     public function getLogoFile(): string
     {
         return $this->getFileOrDefault($this->logo, self::FOLDER_LOGOS, "/placeholders/society.jpg");
+    }
+
+    public function getSiren(): ?string
+    {
+        return $this->siren;
+    }
+
+    public function setSiren(?string $siren): self
+    {
+        $this->siren = $siren;
+
+        return $this;
+    }
+
+    public function getSiret(): ?string
+    {
+        return $this->siret;
+    }
+
+    public function setSiret(?string $siret): self
+    {
+        $this->siret = $siret;
+
+        return $this;
+    }
+
+    public function getRcs(): ?string
+    {
+        return $this->rcs;
+    }
+
+    public function setRcs(?string $rcs): self
+    {
+        $this->rcs = $rcs;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getZipcode(): ?string
+    {
+        return $this->zipcode;
+    }
+
+    public function setZipcode(string $zipcode): self
+    {
+        $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getForme(): ?int
+    {
+        return $this->forme;
+    }
+
+    public function setForme(int $forme): self
+    {
+        $this->forme = $forme;
+
+        return $this;
+    }
+
+    public function getNumeroTva(): ?string
+    {
+        return $this->numeroTva;
+    }
+
+    public function setNumeroTva(?string $numeroTva): self
+    {
+        $this->numeroTva = $numeroTva;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     * @Groups({"admin:read"})
+     */
+    public function getFormeString(): string
+    {
+        $values = ["EURL", "SARL", "SA", "SNC", "SAS"];
+
+        return $values[$this->forme];
     }
 }

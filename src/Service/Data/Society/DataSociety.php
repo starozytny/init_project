@@ -19,8 +19,16 @@ class DataSociety
     public function setData(Society $obj, $data, $code): Society
     {
         return ($obj)
-            ->setName(ucfirst($this->sanitizeData->sanitizeString($data->name)))
             ->setCode($code)
+            ->setName(ucfirst($this->sanitizeData->sanitizeString($data->name)))
+            ->setSiren($this->sanitizeData->trimData($data->siren))
+            ->setSiret($this->sanitizeData->trimData($data->siret))
+            ->setRcs($this->sanitizeData->trimData($data->rcs))
+            ->setNumeroTva($this->sanitizeData->trimData($data->numeroTva))
+            ->setForme($this->sanitizeData->setToZeroIfEmpty($data->forme))
+            ->setAddress($this->sanitizeData->trimData($data->address))
+            ->setZipcode($this->sanitizeData->trimData($data->zipcode))
+            ->setCity($this->sanitizeData->trimData($data->city))
         ;
     }
 }

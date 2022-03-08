@@ -81,10 +81,20 @@ class AdminUsersCreateCommand extends Command
         $password = password_hash("azerty", PASSWORD_ARGON2I);
 
         $io->title('Création de la société Logilink');
-        $society = (new Society())
-            ->setName("Logilink")
-            ->setCode(0)
-        ;
+        $data = [
+            "name" => "Logilink",
+            "siren" => "",
+            "siret" => "",
+            "rcs" => "",
+            "numeroTva" => "",
+            "forme" => 1,
+            "address" => "17 rue de la république",
+            "zipcode" => "13002",
+            "city" => "MARSEILLE 02",
+        ];
+        $data = json_decode(json_encode($data));
+
+        $society = $this->dataSociety->setData(new Society(), $data, 0);
 
         $this->em->persist($society);
         $io->text('SOCIETE : Logilink créé' );
@@ -112,6 +122,14 @@ class AdminUsersCreateCommand extends Command
             for($i=0; $i<10 ; $i++) {
                 $data = [
                     "name" => $fake->name,
+                    "siren" => "",
+                    "siret" => "",
+                    "rcs" => "",
+                    "numeroTva" => "",
+                    "forme" => $fake->numberBetween(0, 4),
+                    "address" => $fake->streetName,
+                    "zipcode" => $fake->postcode,
+                    "city" => $fake->city,
                 ];
 
                 $data = json_decode(json_encode($data));
