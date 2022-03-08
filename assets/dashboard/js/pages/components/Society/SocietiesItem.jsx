@@ -25,7 +25,7 @@ export class SocietiesItem extends Component {
                     <div className="infos infos-col-3">
                         <div className="col-1" onClick={() => onChangeContext('read', elem)}>
                             <div className="name">
-                                <span>{elem.name}</span>
+                                <span>{elem.name} - {elem.formeString}</span>
                             </div>
                             <span className="badge">#{elem.codeString}</span>
                         </div>
