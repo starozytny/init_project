@@ -62,7 +62,7 @@ export class Drop extends Component {
     }
 
     render () {
-        const { previewFile, children, accept, maxFiles, labelError, label, labelFiles="Ajouter" } = this.props;
+        const { previewFile, children, accept, maxFiles, maxSize=5330000, labelError, label, labelFiles="Ajouter" } = this.props;
 
         let content = <div className="form-files">
             {previewFile && <div className="preview-form-oldFile">
@@ -74,6 +74,7 @@ export class Drop extends Component {
                 onChangeStatus={this.handleChangeStatus}
                 accept={accept}
                 maxFiles={maxFiles}
+                maxSizeBytes={maxSize}
                 multiple={maxFiles > 1}
                 canCancel={false}
                 inputContent={(files, extra) => (extra.reject ? labelError : label)}

@@ -55,6 +55,7 @@ export class User extends Component {
         this.handleGetFilters = this.handleGetFilters.bind(this);
         this.handlePerPage = this.handlePerPage.bind(this);
         this.handleChangeCurrentPage = this.handleChangeCurrentPage.bind(this);
+        this.handleSorter = this.handleSorter.bind(this);
         this.handleRegenPassword = this.handleRegenPassword.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);

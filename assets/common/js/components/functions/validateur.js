@@ -1,3 +1,5 @@
+const Sanitaze = require('@commonComponents/functions/sanitaze');
+
 function validateDate($value) {
     if($value === "" || $value === null){
         return {
@@ -137,16 +139,19 @@ function validateDateLimitMinutes($value, $min, $max) {
 }
 
 function validateDateLimitHoursMinutes($value, $minH, $maxH, $minM, $maxM) {
+    let $msg = 'L\'horaire doit être compris entre '
+        + $minH + 'h' + Sanitaze.addZeroToNumber($minM) +'min et ' + $maxH + 'h' + Sanitaze.addZeroToNumber($maxM) + 'min.';
+
     if($value.getHours() < $minH || $value.getHours() > $maxH){
         return {
             'code': false,
-            'message': 'L\'horaire doit être compris entre ' + $minH + 'h' + $minM +'min et ' + $maxH + 'h' + $maxM + 'min.'
+            'message': '[H]' + $msg
         };
     }else{
         if($value.getMinutes() < $minM || $value.getMinutes() > $maxM){
             return {
                 'code': false,
-                'message': 'L\'horaire doit être compris entre ' + $minH + 'h' + $minM +'min et ' + $maxH + 'h' + $maxM + 'min.'
+                'message': '[M]' + $msg
             };
         }
     }

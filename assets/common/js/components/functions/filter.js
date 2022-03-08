@@ -24,8 +24,13 @@ function filterStatus(dataImmuable, filters){
     return filter(dataImmuable, filters, "status");
 }
 
+function filterType(dataImmuable, filters){
+    return filter(dataImmuable, filters, "type");
+}
+
 module.exports = {
     filter,
     filterHighRoleCode,
-    filterStatus
+    filterStatus,
+    filterType,
 }

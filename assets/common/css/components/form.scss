@@ -45,6 +45,17 @@
   }
 }
 
+.alert + .line:nth-child(2),
+.line:first-child{
+  .line-separator{
+    margin-top: 0;
+
+    .title{
+      margin-top: 0;
+    }
+  }
+}
+
 .preview-form-oldFile{
   img{
     width: 42px; height: 42px;
@@ -75,6 +86,17 @@
   .react-selectize.default.root-node{
     width: 100%;
     @include fontRegular();
+
+    &.disabled{
+      pointer-events: initial;
+
+      &:not(.open){
+        .react-selectize-control{
+          background: var(--greyShadow);
+          cursor: not-allowed;
+        }
+      }
+    }
 
     &:not(.open){
       .react-selectize-control{
