@@ -91,6 +91,7 @@ class AdminUsersCreateCommand extends Command
             "address" => "17 rue de la république",
             "zipcode" => "13002",
             "city" => "MARSEILLE 02",
+            "complement" => ""
         ];
         $data = json_decode(json_encode($data));
 
@@ -130,6 +131,7 @@ class AdminUsersCreateCommand extends Command
                     "address" => $fake->streetName,
                     "zipcode" => $fake->postcode,
                     "city" => $fake->city,
+                    "complement" => $fake->lastName
                 ];
 
                 $data = json_decode(json_encode($data));

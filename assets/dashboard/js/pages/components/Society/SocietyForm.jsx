@@ -43,8 +43,12 @@ export function SocietyFormulaire ({ type, onChangeContext, onUpdateList, elemen
         numeroTva={element ? Formulaire.setValueEmptyIfNull(element.numeroTva) : ""}
         forme={element ? Formulaire.setValueEmptyIfNull(element.forme, 0) : 0}
         address={element ? Formulaire.setValueEmptyIfNull(element.address) : ""}
+        email={element ? Formulaire.setValueEmptyIfNull(element.email) : ""}
+        phone1={element ? Formulaire.setValueEmptyIfNull(element.phone1) : ""}
         zipcode={element ? Formulaire.setValueEmptyIfNull(element.zipcode) : ""}
         city={element ? Formulaire.setValueEmptyIfNull(element.city) : ""}
+        complement={element ? Formulaire.setValueEmptyIfNull(element.complement) : ""}
+        country={element ? Formulaire.setValueEmptyIfNull(element.country) : "France"}
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
         messageSuccess={msg}
@@ -68,6 +72,10 @@ export class Form extends Component {
             address: props.address,
             zipcode: props.zipcode,
             city: props.city,
+            complement: props.complement,
+            email: props.email,
+            phone1: props.phone1,
+            country: props.country,
             errors: [],
             success: false
         }
@@ -143,9 +151,13 @@ export class Form extends Component {
                             rcs: '',
                             numeroTva: '',
                             forme: '',
+                            email: '',
+                            phone1: '',
                             address: '',
                             zipcode: '',
                             city: '',
+                            complement: '',
+                            country: '',
                         })
                     }
                 })
@@ -161,7 +173,8 @@ export class Form extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, name, logo, siren, siret, rcs, numeroTva, forme, address, zipcode, city } = this.state;
+        const { errors, success, name, logo, siren, siret, rcs, numeroTva, forme, email, phone1,
+            address, zipcode, city, complement, country } = this.state;
 
         let formItems = [
             { value: 0, label: "EURL", identifiant: "eurl" },
@@ -190,6 +203,11 @@ export class Form extends Component {
                             <Radiobox items={formItems} identifiant="forme" valeur={forme} errors={errors} onChange={this.handleChange}>Forme juridique</Radiobox>
                         </div>
 
+                        <div className="line line-2">
+                            <Input valeur={email} identifiant="email" errors={errors} onChange={this.handleChange} type="email">Email</Input>
+                            <Input valeur={phone1} identifiant="phone1" errors={errors} onChange={this.handleChange}>Téléphone</Input>
+                        </div>
+
                         <div className="line-separator">
                             <div className="title">Details</div>
                         </div>
@@ -212,9 +230,16 @@ export class Form extends Component {
                         <div className="line">
                             <Input identifiant="address" valeur={address} errors={errors} onChange={this.handleChange}>Adresse</Input>
                         </div>
+                        <div className="line">
+                            <Input identifiant="complement" valeur={complement} errors={errors} onChange={this.handleChange}>Complément d'adresse</Input>
+                        </div>
                         <div className="line line-2">
                             <Input identifiant="zipcode" valeur={zipcode} errors={errors} onChange={this.handleChangeZipcodeCity} type="number">Code postal</Input>
                             <Input identifiant="city" valeur={city} errors={errors} onChange={this.handleChange}>Ville</Input>
+                        </div>
+                        <div className="line line-2">
+                            <Input identifiant="country" valeur={country} errors={errors} onChange={this.handleChange}>Pays</Input>
+                            <div className="form-group" />
                         </div>
 
                         <div className="line-separator">

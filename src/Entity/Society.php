@@ -85,6 +85,16 @@ class Society extends DataEntity
     private $forme;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=60, nullable=true)
+     */
+    private $phone1;
+
+    /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"admin:read"})
      */
@@ -101,6 +111,17 @@ class Society extends DataEntity
      * @Groups({"admin:read"})
      */
     private $city;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $complement;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $country = "France";
 
     public function __construct()
     {
@@ -319,5 +340,53 @@ class Society extends DataEntity
         $values = ["EURL", "SARL", "SA", "SNC", "SAS"];
 
         return $values[$this->forme];
+    }
+
+    public function getComplement(): ?string
+    {
+        return $this->complement;
+    }
+
+    public function setComplement(?string $complement): self
+    {
+        $this->complement = $complement;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getPhone1(): ?string
+    {
+        return $this->phone1;
+    }
+
+    public function setPhone1(?string $phone1): self
+    {
+        $this->phone1 = $phone1;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
     }
 }
