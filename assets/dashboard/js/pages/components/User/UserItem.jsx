@@ -7,7 +7,7 @@ import { Selector }     from "@dashboardComponents/Layout/Selector";
 
 export class UserItem extends Component {
     render () {
-        const { developer, elem, onChangeContext, onDelete, onSelectors } = this.props
+        const { isClient, developer, elem, onChangeContext, onDelete, onSelectors } = this.props
 
         let routeName = 'user_homepage'
         if(elem.highRoleCode === 2){
@@ -30,6 +30,7 @@ export class UserItem extends Component {
                                 <span>{elem.lastname.toUpperCase()} {elem.firstname}</span>
                                 {elem.highRoleCode !== 0 && <span className={"badge badge-" + elem.highRoleCode}>{elem.highRole}</span>}
                             </div>
+                            {!isClient && <div className="sub">#{elem.society.codeString} - {elem.society.name}</div>}
                             {elem.highRoleCode !== 1 && elem.lastLoginAgo && <div className="sub">Connecté {elem.lastLoginAgo}</div>}
                         </div>
                         <div className="col-2">
@@ -37,7 +38,7 @@ export class UserItem extends Component {
                             {elem.email !== "undefined@undefined.fr" ? <div className="sub">{elem.email}</div> : <div className="sub txt-danger"><span className="icon-warning" /> {elem.email}</div>}
                         </div>
                         <div className="col-3 actions">
-                            {elem.highRoleCode !== 1 &&
+                            {(!isClient && elem.highRoleCode !== 1) &&
                             <>
                                 <ButtonIcon icon="vision" onClick={() => onChangeContext("read", elem)}>Profil</ButtonIcon>
                                 <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>

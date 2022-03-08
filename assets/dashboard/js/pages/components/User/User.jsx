@@ -42,7 +42,9 @@ export class User extends Component {
             msgDeleteElement: MSG_DELETE_ELEMENT,
             pathDeleteGroup: URL_DELETE_GROUP,
             msgDeleteGroup: MSG_DELETE_GROUP,
-            sessionName: "user.pagination"
+            sessionName: "user.pagination",
+            isClient: props.isClient ? props.isClient : false,
+            societies: props.societies ? JSON.parse(props.societies) : []
         }
 
         this.layout = React.createRef();
@@ -117,15 +119,18 @@ export class User extends Component {
                          sorters={sorters}
                          onSorter={this.handleSorter}
                          //data
+                         isClient={this.state.isClient}
                          data={currentData} />
     }
 
     handleContentCreate = (changeContext) => {
-        return <UserFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        const { societies } = this.state;
+        return <UserFormulaire type="create" societies={societies} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        return <UserFormulaire type="update" element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        const { societies } = this.state;
+        return <UserFormulaire type="update" societies={societies} element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentRead = (changeContext, element) => {

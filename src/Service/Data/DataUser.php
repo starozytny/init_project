@@ -4,8 +4,10 @@
 namespace App\Service\Data;
 
 
+use App\Entity\Society;
 use App\Entity\User;
 use App\Service\SanitizeData;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class DataUser
@@ -22,6 +24,8 @@ class DataUser
         if (isset($data->roles)) {
             $obj->setRoles($data->roles);
         }
+
+        $society = $this->em->getRepository(Society::class)->find($data->society);
 
         $username = isset($data->username) ? $this->sanitizeData->fullSanitize($data->username) : $data->email;
 

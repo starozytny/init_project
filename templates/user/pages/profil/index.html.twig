@@ -3,17 +3,23 @@
 {% set page_title %}Mon profil{% endset %}
 
 {% block main_content %}
+    {% set avatar = obj.society.logo ? "/avatars/" ~ obj.society.logo : "https://robohash.org/${elem.society.name}?size=120x120" %}
     <div class="main-content">
         <div class="profil-page">
             <div class="col-1">
                 <div class="profil-card">
+                    <div class="profil-card-avatar">
+                        <img src="{{ avatar }}" alt="Avatar de l'entreprise">
+                    </div>
                     <div class="profil-card-header">
-                        <div class="title">{{ obj.firstname }} {{ obj.lastname }}</div>
+                        <div class="title">#{{ obj.society.codeString }}</div>
+                        <div class="title">{{ obj.society.name }}</div>
                     </div>
                     <div class="profil-card-body">
                         <div class="items">
-                            <div class="item">{{ obj.username }}</div>
-                            <div class="item">{{ obj.email }}</div>
+                            <div class="item"><span class="icon-padlock"></span> {{ obj.username }}</div>
+                            <div class="item"><span class="icon-email"></span> {{ obj.email }}</div>
+                            <div class="item"><span class="icon-user"></span> {{ obj.firstname }} {{ obj.lastname }}</div>
                         </div>
                     </div>
                     <div class="profil-card-footer">
@@ -22,7 +28,12 @@
                 </div>
             </div>
 
-            <div class="col-2"></div>
+            <div class="col-2">
+                <div id="profil-users" data-donnees="{{ users }}" data-id="{{ obj.id }}"
+                     data-is-user="{{ app.user.highRoleCode == 0 ? true : false }}" >
+                    {% include "dashboard/layout/components/spinner.html.twig" %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

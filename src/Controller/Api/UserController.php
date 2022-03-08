@@ -122,9 +122,9 @@ class UserController extends AbstractController
     }
 
     /**
-     * Admin - Create a user
+     * Manager - Create a user
      *
-     * @Security("is_granted('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_MANAGER')")
      *
      * @Route("/", name="create", options={"expose"=true}, methods={"POST"})
      *
@@ -197,9 +197,9 @@ class UserController extends AbstractController
     }
 
     /**
-     * Admin - Delete an user
+     * Manager - Delete an user
      *
-     * @Security("is_granted('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_MANAGER')")
      *
      * @Route("/{id}", name="delete", options={"expose"=true}, methods={"DELETE"})
      *
