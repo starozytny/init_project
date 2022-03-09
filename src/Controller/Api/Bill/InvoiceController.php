@@ -177,7 +177,7 @@ class InvoiceController extends AbstractController
      */
     public function download(BiInvoice $obj, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
     {
-        $mpdf = $fileCreator->initPDF("Facture -" . $obj->getNumero());
+        $mpdf = $fileCreator->initPDF("Facture - " . $obj->getNumero());
         $mpdf = $fileCreator->addCustomStyle($mpdf, 'custom-facture.css');
 
         $mpdf = $fileCreator->writePDF($mpdf, "admin/pdf/invoice.html.twig", [

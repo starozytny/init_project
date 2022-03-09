@@ -84,7 +84,7 @@ class FakeInvoiceCreateCommand extends Command
             $new = $this->dataEntity->setDataInvoice(new BiInvoice(), $data);
 
             $new = ($new)
-                ->setStatus($fake->numberBetween(0, 7))
+                ->setStatus($fake->numberBetween(0, 6))
                 ->setDateAt(new \DateTime())
                 ->setDueAt(new \DateTime())
                 ->setSociety($society)

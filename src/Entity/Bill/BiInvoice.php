@@ -18,11 +18,10 @@ class BiInvoice extends DataEntity
     const STATUS_DRAFT = 0;
     const STATUS_ACTIVE = 1;
     const STATUS_PAID = 2;
-    const STATUS_SENT = 3;
-    const STATUS_CANCEL = 4;
-    const STATUS_EXPIRED = 5;
-    const STATUS_ARCHIVED = 6;
-    const STATUS_DELETED = 7;
+    const STATUS_CANCEL = 3;
+    const STATUS_EXPIRED = 4;
+    const STATUS_ARCHIVED = 5;
+    const STATUS_DELETED = 6;
 
     /**
      * @ORM\Id
@@ -54,7 +53,7 @@ class BiInvoice extends DataEntity
      * @ORM\Column(type="integer")
      * @Groups({"invoice:read"})
      */
-    private $status = self::STATUS_ACTIVE;
+    private $status = self::STATUS_DRAFT;
 
     /**
      * @ORM\Column(type="float")
@@ -648,7 +647,7 @@ class BiInvoice extends DataEntity
      */
     public function getStatusString(): string
     {
-        $values = ["Brouillon", "Active", "Payée", "Envoyée", "Annulée", "Expirée", "Archivée", "Supprimée"];
+        $values = ["Brouillon", "Active", "Payée", "Annulée", "Expirée", "Archivée", "Supprimée"];
 
         return $values[$this->status];
     }
