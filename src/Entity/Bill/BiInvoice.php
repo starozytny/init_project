@@ -647,7 +647,7 @@ class BiInvoice extends DataEntity
      */
     public function getStatusString(): string
     {
-        $values = ["Brouillon", "Active", "Payée", "Annulée", "Expirée", "Archivée", "Supprimée"];
+        $values = ["Brouillon", "A régler", "Payée", "Annulée", "Expirée", "Archivée", "Supprimée"];
 
         return $values[$this->status];
     }
