@@ -3,6 +3,7 @@
 namespace App\Service\Data\Bill;
 
 use App\Entity\Bill\BiInvoice;
+use App\Entity\Society;
 use App\Service\Data\DataConstructor;
 
 class DataInvoice extends DataConstructor
@@ -36,5 +37,26 @@ class DataInvoice extends DataConstructor
             ->setTotalTtc($this->sanitizeData->setToFloat($data->totalTtc, 0))
             ->setTotal($this->sanitizeData->setToFloat($data->total, 0))
         ;
+    }
+
+    public function getNewNumeroBill(Society $society): string
+    {
+        $counter = $society->getCounterBill() + 1;
+        $society->setCounterBill($counter);
+
+        return $this->createNewNumeroBill($counter);
+    }
+
+    public function createNewNumeroBill($i): string
+    {
+        $year = (new \DateTime())->format('y');
+
+        $tab = array_map('intval', str_split($i));
+        $nbZero = 6 - count($tab);
+
+        $counter = $year . str_repeat("0", $nbZero);
+        $counter .= $i;
+
+        return "FA" . $counter;
     }
 }

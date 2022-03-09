@@ -3,6 +3,7 @@
 namespace App\Entity\Bill;
 
 use App\Entity\DataEntity;
+use App\Entity\Society;
 use App\Repository\Bill\BiInvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -20,6 +21,8 @@ class BiInvoice extends DataEntity
     const STATUS_SENT = 3;
     const STATUS_CANCEL = 4;
     const STATUS_EXPIRED = 5;
+    const STATUS_ARCHIVED = 6;
+    const STATUS_DELETED = 7;
 
     /**
      * @ORM\Id
@@ -213,6 +216,12 @@ class BiInvoice extends DataEntity
      * @Groups({"invoice:read"})
      */
     private $note;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Society::class, inversedBy="biInvoices")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $society;
 
     public function __construct()
     {
@@ -639,7 +648,7 @@ class BiInvoice extends DataEntity
      */
     public function getStatusString(): string
     {
-        $values = ["Brouillon", "Active", "Payée", "Envoyée", "Annulée", "Expirée"];
+        $values = ["Brouillon", "Active", "Payée", "Envoyée", "Annulée", "Expirée", "Archivée", "Supprimée"];
 
         return $values[$this->status];
     }
@@ -660,5 +669,17 @@ class BiInvoice extends DataEntity
     public function getToBankIbanHidden(): string
     {
         return $this->toFormatIbanHidden($this->toBankIban);
+    }
+
+    public function getSociety(): ?Society
+    {
+        return $this->society;
+    }
+
+    public function setSociety(?Society $society): self
+    {
+        $this->society = $society;
+
+        return $this;
     }
 }

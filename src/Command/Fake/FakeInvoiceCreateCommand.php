@@ -35,6 +35,9 @@ class FakeInvoiceCreateCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Reset des tables');
         $this->databaseService->resetTable($io, [BiInvoice::class]);
+        $society = $this->em->getRepository(Society::class)->findOneBy(['name' => 'Logilink']);
+        $society->setCounterBill(0);
+        $this->em->flush();
 
         $society = $this->em->getRepository(Society::class)->findOneBy(['name' => 'Logilink']);
 
@@ -80,14 +83,19 @@ class FakeInvoiceCreateCommand extends Command
 
             $new = $this->dataEntity->setDataInvoice(new BiInvoice(), $data);
 
-            $new->setStatus($fake->numberBetween(0, 5));
-            $new->setDateAt(new \DateTime());
-            $new->setDueAt(new \DateTime());
-            $new->setNumero($i);
-
+            $new = ($new)
+                ->setStatus($fake->numberBetween(0, 7))
+                ->setDateAt(new \DateTime())
+                ->setDueAt(new \DateTime())
+                ->setSociety($society)
+                ->setNumero($this->dataEntity->createNewNumeroBill($i + 1))
+            ;
 
             $this->em->persist($new);
         }
+
+        $society->setCounterBill(60);
+
         $io->text('INVOICES : Invoices fake créés' );
 
         $this->em->flush();

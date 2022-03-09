@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Bill\BiInvoice;
 use App\Repository\SocietyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -126,11 +127,17 @@ class Society extends DataEntity
     /**
      * @ORM\Column(type="integer")
      */
-    private $numeroBill = 0;
+    private $counterBill = 0;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BiInvoice::class, mappedBy="society")
+     */
+    private $biInvoices;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->biInvoices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -395,14 +402,44 @@ class Society extends DataEntity
         return $this;
     }
 
-    public function getNumeroBill(): ?int
+    public function getCounterBill(): ?int
     {
-        return $this->numeroBill;
+        return $this->counterBill;
     }
 
-    public function setNumeroBill(int $numeroBill): self
+    public function setCounterBill(int $counterBill): self
     {
-        $this->numeroBill = $numeroBill;
+        $this->counterBill = $counterBill;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BiInvoice>
+     */
+    public function getBiInvoices(): Collection
+    {
+        return $this->biInvoices;
+    }
+
+    public function addBiInvoice(BiInvoice $biInvoice): self
+    {
+        if (!$this->biInvoices->contains($biInvoice)) {
+            $this->biInvoices[] = $biInvoice;
+            $biInvoice->setSociety($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBiInvoice(BiInvoice $biInvoice): self
+    {
+        if ($this->biInvoices->removeElement($biInvoice)) {
+            // set the owning side to null (unless already changed)
+            if ($biInvoice->getSociety() === $this) {
+                $biInvoice->setSociety(null);
+            }
+        }
 
         return $this;
     }
