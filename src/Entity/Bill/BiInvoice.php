@@ -5,106 +5,128 @@ namespace App\Entity\Bill;
 use App\Entity\DataEntity;
 use App\Repository\Bill\BiInvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=BiInvoiceRepository::class)
  */
 class BiInvoice extends DataEntity
 {
+    const INVOICE_READ = ['invoice:read'];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"invoice:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"invoice:read"})
      */
     private $numero;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"invoice:read"})
      */
     private $dateAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $dueAt;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
      */
     private $fromName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
      */
     private $fromAddress;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $fromComplement;
 
     /**
      * @ORM\Column(type="string", length=40)
+     * @Groups({"invoice:read"})
      */
     private $fromZipcode;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
      */
     private $fromCity;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $fromPhone1;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $fromEmail;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
      */
     private $toName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
      */
     private $toAddress;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $toComplement;
 
     /**
      * @ORM\Column(type="string", length=40)
+     * @Groups({"invoice:read"})
      */
     private $toZipcode;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
      */
     private $toCity;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $toEmail;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $toPhone1;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"invoice:read"})
      */
     private $createdAt;
 
@@ -350,5 +372,41 @@ class BiInvoice extends DataEntity
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"invoice:read"})
+     */
+    public function getDateAtString(): ?string
+    {
+        return $this->getFullDateString($this->dateAt);
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"invoice:read"})
+     */
+    public function getDueAtString(): ?string
+    {
+        return $this->getFullDateString($this->dueAt);
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"invoice:read"})
+     */
+    public function getDateAtJavascript(): ?string
+    {
+        return $this->setDateJavascript($this->dateAt);
+    }
+
+    /**
+     * @return string|null
+     * @Groups({"invoice:read"})
+     */
+    public function getDueAtJavascript(): ?string
+    {
+        return $this->setDateJavascript($this->dueAt);
     }
 }
