@@ -123,6 +123,11 @@ class Society extends DataEntity
      */
     private $country = "France";
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $numeroBill = 0;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -386,6 +391,18 @@ class Society extends DataEntity
     public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getNumeroBill(): ?int
+    {
+        return $this->numeroBill;
+    }
+
+    public function setNumeroBill(int $numeroBill): self
+    {
+        $this->numeroBill = $numeroBill;
 
         return $this;
     }
