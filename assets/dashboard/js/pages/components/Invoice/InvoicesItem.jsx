@@ -29,6 +29,7 @@ export class InvoicesItem extends Component {
                             <div className={"badge badge-" + elem.status}>{elem.statusString}</div>
                         </div>
                         <div className="col-4 actions">
+                            <ButtonIcon icon="download">Télécharger</ButtonIcon>
                             <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
                         </div>

@@ -6,7 +6,7 @@ import Sort              from "@commonComponents/functions/sort";
 import { InvoicesList }      from "@dashboardPages/components/Invoice/InvoicesList";
 import { InvoiceFormulaire } from "@dashboardPages/components/Invoice/InvoiceForm";
 
-const URL_DELETE_ELEMENT    = 'api_societies_delete';
+const URL_DELETE_ELEMENT    = 'api_bill_invoices_delete';
 const MSG_DELETE_ELEMENT    = 'Supprimer cette facture ?';
 let SORTER = Sort.compareCreatedAtInverse;
 
