@@ -42,6 +42,12 @@ class FakeInvoiceCreateCommand extends Command
         $fake = Factory::create();
         for($i=0; $i<60 ; $i++) {
 
+            $toName = $fake->name;
+
+            $totalHt = $fake->randomFloat(2);
+            $totalTva = $totalHt * (20/100);
+            $totalTtc = $totalHt + $totalTva;
+
             $data = [
                 'fromName' => $society->getName(),
                 'fromAddress' => $society->getAddress(),
@@ -50,22 +56,35 @@ class FakeInvoiceCreateCommand extends Command
                 'fromCity' => $society->getCity(),
                 'fromEmail' => $society->getEmail(),
                 'fromPhone1' => $society->getPhone1(),
-                'toName' => $fake->name,
+                'toName' => $toName,
                 'toAddress' => $fake->streetName,
                 'toComplement' => $fake->streetName,
                 'toZipcode' => $fake->postcode,
                 'toCity' => $fake->city,
                 'toEmail' => $fake->email,
                 'toPhone1' => $fake->e164PhoneNumber,
+                'fromBankName' => $society->getName(),
+                'fromBankIban' => $fake->iban("FR"),
+                'fromBankBic' => $fake->swiftBicNumber,
+                'toBankName' => $toName,
+                'toBankIban' => $fake->iban("FR"),
+                'toBankBic' => $fake->swiftBicNumber,
+                'note' => $fake->sentence,
+                'totalHt' => $totalHt,
+                'totalTva' => $totalTva,
+                'totalTtc' => $totalTtc,
+                'total' => $totalTtc,
             ];
 
             $data = json_decode(json_encode($data));
 
             $new = $this->dataEntity->setDataInvoice(new BiInvoice(), $data);
 
+            $new->setStatus($fake->numberBetween(0, 5));
             $new->setDateAt(new \DateTime());
             $new->setDueAt(new \DateTime());
             $new->setNumero($i);
+
 
             $this->em->persist($new);
         }

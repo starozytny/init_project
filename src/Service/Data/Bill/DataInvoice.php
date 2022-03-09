@@ -24,6 +24,17 @@ class DataInvoice extends DataConstructor
             ->setToCity($this->sanitizeData->trimData($data->toCity))
             ->setToEmail($this->sanitizeData->trimData($data->toEmail))
             ->setToPhone1($this->sanitizeData->trimData($data->toPhone1))
+            ->setFromBankName($this->sanitizeData->trimData($data->fromBankName))
+            ->setFromBankIban($this->sanitizeData->trimData($data->fromBankIban))
+            ->setFromBankBic($this->sanitizeData->trimData($data->fromBankBic))
+            ->setToBankName($this->sanitizeData->trimData($data->toBankName))
+            ->setToBankIban($this->sanitizeData->trimData($data->toBankIban))
+            ->setToBankBic($this->sanitizeData->trimData($data->toBankBic))
+            ->setNote($this->sanitizeData->trimData($data->note))
+            ->setTotalHt($this->sanitizeData->setToFloat($data->totalHt, 0))
+            ->setTotalTva($this->sanitizeData->setToFloat($data->totalTva, 0))
+            ->setTotalTtc($this->sanitizeData->setToFloat($data->totalTtc, 0))
+            ->setTotal($this->sanitizeData->setToFloat($data->total, 0))
         ;
     }
 }
