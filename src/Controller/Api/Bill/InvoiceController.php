@@ -36,10 +36,6 @@ class InvoiceController extends AbstractController
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
 
-        /** @var User $user */
-        $user = $this->getUser();
-        $society = $user->getSociety();
-
         if ($data === null) {
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
