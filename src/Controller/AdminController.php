@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Bill\BiInvoice;
 use App\Entity\Changelog;
 use App\Entity\Contact;
 use App\Entity\Notification;
@@ -27,7 +28,7 @@ class AdminController extends AbstractController
     {
         $this->doctrine = $doctrine;
     }
-    
+
     private function getAllData($classe, SerializerInterface $serializer, $groups = User::ADMIN_READ): string
     {
         $em = $this->doctrine->getManager();
@@ -168,6 +169,18 @@ class AdminController extends AbstractController
         return $this->render('admin/pages/society/index.html.twig', [
             'donnees' => $objs,
             'users' => $users
+        ]);
+    }
+
+    /**
+     * @Route("/facturations", name="invoice_index")
+     */
+    public function invoice(SerializerInterface $serializer): Response
+    {
+        $objs = $this->getAllData(BiInvoice::class, $serializer);
+
+        return $this->render('admin/pages/invoice/index.html.twig', [
+            'donnees' => $objs,
         ]);
     }
 }
