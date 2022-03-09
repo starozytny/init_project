@@ -575,12 +575,12 @@ class BiInvoice extends DataEntity
 
     public function getFromBankIban(): ?string
     {
-        return $this->fromBankIban;
+        return $this->cryptBank('decrypt', $this->fromBankIban);
     }
 
     public function setFromBankIban(string $fromBankIban): self
     {
-        $this->fromBankIban = $fromBankIban;
+        $this->fromBankIban = $this->cryptBank('encrypt', $fromBankIban);
 
         return $this;
     }
@@ -611,12 +611,12 @@ class BiInvoice extends DataEntity
 
     public function getToBankIban(): ?string
     {
-        return $this->toBankIban;
+        return $this->cryptBank('decrypt', $this->toBankIban);
     }
 
     public function setToBankIban(string $toBankIban): self
     {
-        $this->toBankIban = $toBankIban;
+        $this->toBankIban = $this->cryptBank('encrypt', $toBankIban);
 
         return $this;
     }
@@ -642,5 +642,23 @@ class BiInvoice extends DataEntity
         $values = ["Brouillon", "Active", "Payée", "Envoyée", "Annulée", "Expirée"];
 
         return $values[$this->status];
+    }
+
+    /**
+     * @return string
+     * @Groups({"invoice:read"})
+     */
+    public function getFromBankIbanHidden(): string
+    {
+        return $this->toFormatIbanHidden($this->fromBankIban);
+    }
+
+    /**
+     * @return string
+     * @Groups({"invoice:read"})
+     */
+    public function getToBankIbanHidden(): string
+    {
+        return $this->toFormatIbanHidden($this->toBankIban);
     }
 }
