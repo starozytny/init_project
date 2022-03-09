@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import Sanitaze from "@commonComponents/functions/sanitaze";
+
 import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
 
 export class InvoicesItem extends Component {
@@ -20,10 +22,11 @@ export class InvoicesItem extends Component {
                             <span className="sub">{elem.toEmail}</span>
                         </div>
                         <div className="col-2">
+                            <div className="sub">{Sanitaze.toFormatCurrency(elem.total)}</div>
                             <div className="sub">{elem.dateAtString}</div>
                         </div>
                         <div className="col-3">
-                            <div className="sub">status</div>
+                            <div className={"badge badge-" + elem.status}>{elem.statusString}</div>
                         </div>
                         <div className="col-4 actions">
                             <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>

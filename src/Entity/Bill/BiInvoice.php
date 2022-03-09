@@ -30,7 +30,7 @@ class BiInvoice extends DataEntity
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
      * @Groups({"invoice:read"})
      */
     private $numero;
@@ -224,12 +224,12 @@ class BiInvoice extends DataEntity
         return $this->id;
     }
 
-    public function getNumero(): ?int
+    public function getNumero(): ?string
     {
         return $this->numero;
     }
 
-    public function setNumero(int $numero): self
+    public function setNumero(string $numero): self
     {
         $this->numero = $numero;
 
