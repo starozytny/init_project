@@ -47,7 +47,7 @@ class DataInvoice extends DataConstructor
         return $this->createNewNumeroBill($counter);
     }
 
-    public function createNewNumeroBill($i): string
+    public function createNewNumeroBill($i, $prefix = "FA"): string
     {
         $year = (new \DateTime())->format('y');
 
@@ -57,6 +57,6 @@ class DataInvoice extends DataConstructor
         $counter = $year . str_repeat("0", $nbZero);
         $counter .= $i;
 
-        return "FA" . $counter;
+        return $prefix . $counter;
     }
 }

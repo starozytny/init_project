@@ -47,7 +47,7 @@ class InvoiceController extends AbstractController
         $obj = $dataEntity->setDataInvoice($obj, $data);
 
         if($type == "create"){
-            $numero = $dataEntity->getNewNumeroBill($society);
+            $numero = $dataEntity->createNewNumeroBill(0, "BR");
             $obj->setNumero($numero);
         }else{
             $obj->setUpdatedAt(new \DateTime());
