@@ -25,6 +25,12 @@ function switchFunction(type, search, v) {
                 return v;
             }
             break;
+        case "invoice":
+            if(v.numero.toString().toLowerCase().startsWith(search)
+                || v.fromName.toLowerCase().startsWith(search)){
+                return v;
+            }
+            break;
         default:
             break;
     }

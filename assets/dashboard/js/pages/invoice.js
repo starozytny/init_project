@@ -5,11 +5,11 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min';
 
 import React from "react";
 import { render } from "react-dom";
-import { Contact } from "./components/Contact/Contact";
+import { Invoices } from "@dashboardPages/components/Invoice/Invoices";
 
 Routing.setRoutingData(routes);
 
-let el = document.getElementById("contact");
+let el = document.getElementById("invoices");
 if(el){
-    render(<Contact {...el.dataset}/>, el)
+    render(<Invoices {...el.dataset}/>, el)
 }
