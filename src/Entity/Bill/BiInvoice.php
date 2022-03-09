@@ -2,13 +2,14 @@
 
 namespace App\Entity\Bill;
 
+use App\Entity\DataEntity;
 use App\Repository\Bill\BiInvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=BiInvoiceRepository::class)
  */
-class BiInvoice
+class BiInvoice extends DataEntity
 {
     /**
      * @ORM\Id
@@ -101,6 +102,21 @@ class BiInvoice
      * @ORM\Column(type="string", length=60, nullable=true)
      */
     private $toPhone1;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+    public function __construct()
+    {
+        $this->createdAt = $this->initNewDate();
+    }
 
     public function getId(): ?int
     {
@@ -307,6 +323,31 @@ class BiInvoice
     public function setToPhone1(?string $toPhone1): self
     {
         $this->toPhone1 = $toPhone1;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $updatedAt->setTimezone(new \DateTimeZone("Europe/Paris"));
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
