@@ -9,15 +9,15 @@ export class InvoicesItem extends Component {
         return <div className="item">
             <div className="item-content">
                 <div className="item-body">
-                    <div className="infos infos-col-3">
+                    <div className="infos infos-col-4">
                         <div className="col-1">
                             <div className="badges">
                                 <div className="badge badge-default">#{elem.numero}</div>
                             </div>
                             <div className="name">
-                                <span>{elem.fromName}</span>
+                                <span>{elem.toName}</span>
                             </div>
-                            <span className="sub">{elem.fromEmail}</span>
+                            <span className="sub">{elem.toEmail}</span>
                         </div>
                         <div className="col-2">
                             <div className="sub">{elem.dateAtString}</div>

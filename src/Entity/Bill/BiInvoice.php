@@ -14,6 +14,13 @@ class BiInvoice extends DataEntity
 {
     const INVOICE_READ = ['invoice:read'];
 
+    const STATUS_DRAFT = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_PAID = 2;
+    const STATUS_SENT = 3;
+    const STATUS_CANCEL = 4;
+    const STATUS_EXPIRED = 5;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -39,6 +46,36 @@ class BiInvoice extends DataEntity
      * @Groups({"invoice:read"})
      */
     private $dueAt;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"invoice:read"})
+     */
+    private $status = self::STATUS_ACTIVE;
+
+    /**
+     * @ORM\Column(type="float")
+     * @Groups({"invoice:read"})
+     */
+    private $totalHt;
+
+    /**
+     * @ORM\Column(type="float")
+     * @Groups({"invoice:read"})
+     */
+    private $totalTva;
+
+    /**
+     * @ORM\Column(type="float")
+     * @Groups({"invoice:read"})
+     */
+    private $totalTtc;
+
+    /**
+     * @ORM\Column(type="float")
+     * @Groups({"invoice:read"})
+     */
+    private $total;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -125,6 +162,42 @@ class BiInvoice extends DataEntity
     private $toPhone1;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
+     */
+    private $fromBankName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
+     */
+    private $fromBankIban;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
+     */
+    private $fromBankBic;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
+     */
+    private $toBankName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
+     */
+    private $toBankIban;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"invoice:read"})
+     */
+    private $toBankBic;
+
+    /**
      * @ORM\Column(type="datetime")
      * @Groups({"invoice:read"})
      */
@@ -134,6 +207,12 @@ class BiInvoice extends DataEntity
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"invoice:read"})
+     */
+    private $note;
 
     public function __construct()
     {
@@ -408,5 +487,160 @@ class BiInvoice extends DataEntity
     public function getDueAtJavascript(): ?string
     {
         return $this->setDateJavascript($this->dueAt);
+    }
+
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getTotalHt(): ?float
+    {
+        return $this->totalHt;
+    }
+
+    public function setTotalHt(float $totalHt): self
+    {
+        $this->totalHt = $totalHt;
+
+        return $this;
+    }
+
+    public function getTotalTva(): ?float
+    {
+        return $this->totalTva;
+    }
+
+    public function setTotalTva(float $totalTva): self
+    {
+        $this->totalTva = $totalTva;
+
+        return $this;
+    }
+
+    public function getTotalTtc(): ?float
+    {
+        return $this->totalTtc;
+    }
+
+    public function setTotalTtc(float $totalTtc): self
+    {
+        $this->totalTtc = $totalTtc;
+
+        return $this;
+    }
+
+    public function getTotal(): ?float
+    {
+        return $this->total;
+    }
+
+    public function setTotal(float $total): self
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): self
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    public function getFromBankName(): ?string
+    {
+        return $this->fromBankName;
+    }
+
+    public function setFromBankName(string $fromBankName): self
+    {
+        $this->fromBankName = $fromBankName;
+
+        return $this;
+    }
+
+    public function getFromBankIban(): ?string
+    {
+        return $this->fromBankIban;
+    }
+
+    public function setFromBankIban(string $fromBankIban): self
+    {
+        $this->fromBankIban = $fromBankIban;
+
+        return $this;
+    }
+
+    public function getFromBankBic(): ?string
+    {
+        return $this->fromBankBic;
+    }
+
+    public function setFromBankBic(string $fromBankBic): self
+    {
+        $this->fromBankBic = $fromBankBic;
+
+        return $this;
+    }
+
+    public function getToBankName(): ?string
+    {
+        return $this->toBankName;
+    }
+
+    public function setToBankName(string $toBankName): self
+    {
+        $this->toBankName = $toBankName;
+
+        return $this;
+    }
+
+    public function getToBankIban(): ?string
+    {
+        return $this->toBankIban;
+    }
+
+    public function setToBankIban(string $toBankIban): self
+    {
+        $this->toBankIban = $toBankIban;
+
+        return $this;
+    }
+
+    public function getToBankBic(): ?string
+    {
+        return $this->toBankBic;
+    }
+
+    public function setToBankBic(string $toBankBic): self
+    {
+        $this->toBankBic = $toBankBic;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     * @Groups({"invoice:read"})
+     */
+    public function getStatusString(): string
+    {
+        $values = ["Brouillon", "Active", "Payée", "Envoyée", "Annulée", "Expirée"];
+
+        return $values[$this->status];
     }
 }
