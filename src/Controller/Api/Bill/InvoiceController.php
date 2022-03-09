@@ -6,8 +6,11 @@ use App\Entity\Bill\BiInvoice;
 use App\Entity\User;
 use App\Service\ApiResponse;
 use App\Service\Data\Bill\DataInvoice;
+use App\Service\FileCreator;
 use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Exception;
+use Mpdf\MpdfException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -149,5 +152,40 @@ class InvoiceController extends AbstractController
         $em->flush();
 
         return $apiResponse->apiJsonResponse($obj, BiInvoice::INVOICE_READ);
+    }
+
+    /**
+     * @Route("/download/{id}", name="download", options={"expose"=true}, methods={"GET"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Return message successful",
+     * )
+     * @OA\Response(
+     *     response=403,
+     *     description="Forbidden for not good role or user",
+     * )
+     *
+     * @OA\Tag(name="Invoices")
+     *
+     * @param BiInvoice $obj
+     * @param FileCreator $fileCreator
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     * @throws MpdfException
+     * @throws Exception
+     */
+    public function download(BiInvoice $obj, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
+    {
+        $mpdf = $fileCreator->initPDF("Facture -" . $obj->getNumero());
+        $mpdf = $fileCreator->addCustomStyle($mpdf, 'custom-facture.css');
+
+        $mpdf = $fileCreator->writePDF($mpdf, "admin/pdf/invoice.html.twig", [
+            'elem' => $obj,
+        ]);
+
+        $mpdf = $fileCreator->outputPDF($mpdf, "facture-" . $obj->getNumero() . '.pdf');
+
+        return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 }

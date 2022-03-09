@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import Routing  from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 import Sanitaze from "@commonComponents/functions/sanitaze";
 
 import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
@@ -29,7 +30,7 @@ export class InvoicesItem extends Component {
                             <div className={"badge badge-" + elem.status}>{elem.statusString}</div>
                         </div>
                         <div className="col-4 actions">
-                            <ButtonIcon icon="download">Télécharger</ButtonIcon>
+                            <ButtonIcon icon="download" element="a" target="_blank" onClick={Routing.generate('api_bill_invoices_download', {'id': elem.id})}>Télécharger</ButtonIcon>
                             <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
                         </div>
