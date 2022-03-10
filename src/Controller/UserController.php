@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Changelog;
 use App\Entity\Formation\FoRegistration;
 use App\Entity\Formation\FoSession;
 use App\Entity\Formation\FoWorker;
@@ -39,7 +40,13 @@ class UserController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('user/pages/index.html.twig');
+        $em = $this->doctrine->getManager();
+
+        $changelogs = $em->getRepository(Changelog::class)->findBy(['isPublished' => true], ['createdAt' => 'DESC'], 5);
+
+        return $this->render('user/pages/index.html.twig', [
+            'changelogs' => $changelogs
+        ]);
     }
 
     /**
