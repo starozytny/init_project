@@ -46,38 +46,28 @@ class RegistrationController extends AbstractController
 
         foreach($workers as $worker){
 
-            if($type == "create"){
-                $obj = new FoRegistration();
-            }
-
-            $obj = ($obj)
+            $obj = (new FoRegistration())
                 ->setUser($user)
                 ->setFormation($session->getFormation())
                 ->setSession($session)
                 ->setWorker($worker)
             ;
 
-            if($type == "update"){
-                $obj->setUpdatedAt(new DateTime());
-            }
-
             $em->persist($obj);
-        }
 
-        $noErrors = $validator->validate($obj);
-        if ($noErrors !== true) {
-            return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+            $noErrors = $validator->validate($obj);
+            if ($noErrors !== true) {
+                return $apiResponse->apiJsonResponseValidationFailed($noErrors);
+            }
         }
 
         $em->flush();
 
-        return $apiResponse->apiJsonResponse($obj, User::ADMIN_READ);
+        return $apiResponse->apiJsonResponseSuccessful("Success");
     }
 
     /**
      * Create registration worker-session
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
      *
      * @Route("/{session}", name="create", options={"expose"=true}, methods={"POST"})
      *

@@ -14,6 +14,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class FoRegistration extends DataEntity
 {
+    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE = 1;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -69,6 +71,12 @@ class FoRegistration extends DataEntity
      * @ORM\JoinColumn(nullable=false)
      */
     private $paOrder;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
+     */
+    private $status = self::STATUS_ACTIVE;
 
     public function __construct()
     {
@@ -173,6 +181,18 @@ class FoRegistration extends DataEntity
     public function setPaOrder(?PaOrder $paOrder): self
     {
         $this->paOrder = $paOrder;
+
+        return $this;
+    }
+
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }
