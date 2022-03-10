@@ -32,7 +32,7 @@ class AdminController extends AbstractController
     {
         $this->doctrine = $doctrine;
     }
-    
+
     private function getAllData($classe, SerializerInterface $serializer, $groups = User::ADMIN_READ): string
     {
         $em = $this->doctrine->getManager();
@@ -234,7 +234,7 @@ class AdminController extends AbstractController
     public function session(FoSession $session, SerializerInterface $serializer): Response
     {
         $em = $this->doctrine->getManager();
-        $obj = $em->getRepository(FoRegistration::class)->findBy(['session' => $session]);
+        $obj = $em->getRepository(FoRegistration::class)->findBy(['session' => $session, 'status' => FoRegistration::STATUS_ACTIVE]);
         $obj = $serializer->serialize($obj, 'json', ['groups' => User::ADMIN_READ]);
 
         return $this->render('admin/pages/formations/participants.html.twig', [

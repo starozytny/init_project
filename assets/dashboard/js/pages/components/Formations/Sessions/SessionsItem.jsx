@@ -67,7 +67,7 @@ export class SessionsItem extends Component {
             <div className="item-content">
                 <div className="item-body">
                     <div className="infos infos-col-4">
-                        <InfosSession elem={elem} showFormation={false} admin={true}/>
+                        <InfosSession elem={elem} registrations={elem.registrations} showFormation={false} admin={true}/>
                         <div className="col-4 actions">
                             <ButtonIcon icon={elem.isPublished ? "vision" : "vision-not"} onClick={() => onSwitchPublished(elem)}>
                                 {elem.isPublished ? "En ligne" : "Hors ligne"}
@@ -103,11 +103,10 @@ export function HeaderSession({ haveSelector = false }) {
 
 export function InfosSession({ elem, registrations, showFormation = true, admin = false })
 {
-
     let participants = 0;
     if(registrations){
         registrations.forEach(el => {
-            if(el.session.id === elem.id && el.status === 1){
+            if(el.status === 1){
                 participants ++;
             }
         })
@@ -126,7 +125,7 @@ export function InfosSession({ elem, registrations, showFormation = true, admin 
             {admin && <div className="sub">{elem.slug}</div>}
         </div>
         <div className="col-2">
-            <div className="sub">{elem.time} {elem.time && elem.time2 ? " - " : ""} {elem.time2}</div>
+            <div className="sub">{elem.time} {elem.time && elem.time2 ? " à " : ""} {elem.time2}</div>
             <div className="sub">{Sanitaze.toFormatCurrency(elem.priceTTC)} TTC / unité</div>
         </div>
         <div className="col-3">
