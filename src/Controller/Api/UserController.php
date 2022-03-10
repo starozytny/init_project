@@ -29,6 +29,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class UserController extends AbstractController
 {
+    const FOLDER_AVATARS = User::FOLDER_AVATARS;
+
     const ICON = "user";
 
     private $doctrine;
@@ -37,7 +39,7 @@ class UserController extends AbstractController
     {
         $this->doctrine = $doctrine;
     }
-    
+
     /**
      * Admin - Get array of users
      *
@@ -47,7 +49,7 @@ class UserController extends AbstractController
      *
      * @OA\Response(
      *     response=200,
-     *     description="Returns array of users"
+     *     description="Returns array"
      * )
      * @OA\Tag(name="Users")
      *
@@ -86,7 +88,7 @@ class UserController extends AbstractController
             $obj->setPassword($passwordHasher->hashPassword($obj, $data->password));
 
             if ($file) {
-                $fileName = $fileUploader->upload($file, User::FOLDER_AVATARS);
+                $fileName = $fileUploader->upload($file, self::FOLDER_AVATARS);
                 $obj->setAvatar($fileName);
             }
         }else{
@@ -95,7 +97,7 @@ class UserController extends AbstractController
             }
 
             if ($file) {
-                $fileName = $fileUploader->replaceFile($file, $obj->getAvatar(),User::FOLDER_AVATARS);
+                $fileName = $fileUploader->replaceFile($file, $obj->getAvatar(),self::FOLDER_AVATARS);
                 $obj->setAvatar($fileName);
             }
 
@@ -144,7 +146,7 @@ class UserController extends AbstractController
      *
      * @OA\Response(
      *     response=200,
-     *     description="Returns a new user object"
+     *     description="Returns a new object"
      * )
      *
      * @OA\Response(
@@ -169,7 +171,7 @@ class UserController extends AbstractController
                            FileUploader $fileUploader, NotificationService $notificationService, DataUser $dataEntity,
                            MailerService $mailerService, SettingsService $settingsService): JsonResponse
     {
-        return $this->submitForm("create", new User(), $request, $apiResponse, $validator, $dataEntity,
+        return $this->submitForm("update", new User(), $request, $apiResponse, $validator, $dataEntity,
             $passwordHasher, $fileUploader, $notificationService, $mailerService, $settingsService);
     }
 
@@ -180,7 +182,7 @@ class UserController extends AbstractController
      *
      * @OA\Response(
      *     response=200,
-     *     description="Returns an user object"
+     *     description="Returns an object"
      * )
      * @OA\Response(
      *     response=403,
@@ -261,7 +263,7 @@ class UserController extends AbstractController
         $em->remove($obj);
         $em->flush();
 
-        $fileUploader->deleteFile($obj->getAvatar(), User::FOLDER_AVATARS);
+        $fileUploader->deleteFile($obj->getAvatar(), self::FOLDER_AVATARS);
         return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
     }
 
@@ -320,7 +322,7 @@ class UserController extends AbstractController
         $em->flush();
 
         foreach($avatars as $avatar){
-            $fileUploader->deleteFile($avatar, User::FOLDER_AVATARS);
+            $fileUploader->deleteFile($avatar, self::FOLDER_AVATARS);
         }
 
         return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
