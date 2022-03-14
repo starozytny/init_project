@@ -92,6 +92,7 @@ class AdminUsersCreateCommand extends Command
             "zipcode" => "13002",
             "city" => "MARSEILLE 02",
             "complement" => "",
+            "country" => "France",
             "email" => "chanbora@logilink.fr",
             "phone1" => "0652XXXXXX"
         ];
@@ -133,6 +134,7 @@ class AdminUsersCreateCommand extends Command
                     "address" => $fake->streetName,
                     "zipcode" => $fake->postcode,
                     "city" => $fake->city,
+                    "country" => $fake->country,
                     "complement" => $fake->lastName,
                     "email" => $fake->email,
                     "phone1" => $fake->e164PhoneNumber
