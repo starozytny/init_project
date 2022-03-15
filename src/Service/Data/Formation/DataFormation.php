@@ -32,7 +32,7 @@ class DataFormation extends DataConstructor
     {
         $animator = $this->sanitizeData->sanitizeString($data->animator);
         $start = $this->sanitizeData->createDateFromString($data->start);
-        $end = $this->sanitizeData->createDateFromString($data->end, $start);
+        $end = $this->sanitizeData->createDateFromString($data->end, "Europe/Paris", $start);
 
         return ($obj)
             ->setSlug(null)
