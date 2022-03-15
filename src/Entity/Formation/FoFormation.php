@@ -101,6 +101,7 @@ class FoFormation extends DataEntity
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"admin:read"})
      */
     private $createdAt;
 
