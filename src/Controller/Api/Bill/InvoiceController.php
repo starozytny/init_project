@@ -175,7 +175,9 @@ class InvoiceController extends AbstractController
         $mpdf = $fileCreator->initPDF("Facture - " . $obj->getNumero());
         $mpdf = $fileCreator->addCustomStyle($mpdf, 'custom-facture.css');
 
-        $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/invoice.html.twig", [
+        dump($obj);
+
+        $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/bill/invoice.html.twig", [
             'elem' => $obj,
         ]);
 

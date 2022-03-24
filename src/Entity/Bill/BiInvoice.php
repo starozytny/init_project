@@ -222,6 +222,11 @@ class BiInvoice extends DataEntity
      */
     private $society;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $logo;
+
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
@@ -678,6 +683,18 @@ class BiInvoice extends DataEntity
     public function setSociety(?Society $society): self
     {
         $this->society = $society;
+
+        return $this;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): self
+    {
+        $this->logo = $logo;
 
         return $this;
     }
