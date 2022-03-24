@@ -4,10 +4,23 @@ namespace App\Service\Data\Bill;
 
 use App\Entity\Bill\BiInvoice;
 use App\Entity\Society;
+use App\Service\Bill\BillService;
 use App\Service\Data\DataConstructor;
+use App\Service\SanitizeData;
+use App\Service\ValidatorService;
+use Doctrine\ORM\EntityManagerInterface;
 
 class DataInvoice extends DataConstructor
 {
+    private $billService;
+
+    public function __construct(EntityManagerInterface $entityManager, ValidatorService $validatorService, SanitizeData $sanitizeData,
+                                BillService $billService)
+    {
+        parent::__construct($entityManager, $validatorService, $sanitizeData);
+
+        $this->billService = $billService;
+    }
     public function setDataInvoice(BiInvoice $obj, $data): BiInvoice
     {
         return ($obj)
@@ -36,27 +49,20 @@ class DataInvoice extends DataConstructor
             ->setTotalTva($this->sanitizeData->setToFloat($data->totalTva, 0))
             ->setTotalTtc($this->sanitizeData->setToFloat($data->totalTtc, 0))
             ->setTotal($this->sanitizeData->setToFloat($data->total, 0))
+            ->setLogo($this->sanitizeData->trimData($data->logo))
         ;
     }
 
-    public function getNewNumeroBill(Society $society): string
+    public function createNumeroInvoice(Society $society): string
     {
         $counter = $society->getCounterBill() + 1;
         $society->setCounterBill($counter);
 
-        return $this->createNewNumeroBill($counter);
+        return $this->createNumero($counter);
     }
 
-    public function createNewNumeroBill($i, $prefix = "FA"): string
+    public function createNumero($i): string
     {
-        $year = (new \DateTime())->format('y');
-
-        $tab = array_map('intval', str_split($i));
-        $nbZero = 6 - count($tab);
-
-        $counter = $year . str_repeat("0", $nbZero);
-        $counter .= $i;
-
-        return $prefix . $counter;
+        return $this->billService->createNewNumero($i, BiInvoice::PREFIX);
     }
 }

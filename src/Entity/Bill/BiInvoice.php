@@ -13,6 +13,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class BiInvoice extends DataEntity
 {
+    const PREFIX = "FA";
+
     const INVOICE_READ = ['invoice:read'];
 
     const STATUS_DRAFT = 0;
