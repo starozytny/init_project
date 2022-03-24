@@ -6,6 +6,20 @@
 </head>
 <body>
 
+<htmlpagefooter name="myFooter1" style="display:none">
+    <table width="100%" style="border-top: 1px solid #000000">
+        <tr>
+            <td width="50%">
+                <span style="font-weight: bold; font-style: italic;">Facture N°{{ elem.numero }} du {{ elem.dateAt | date('d/m/Y') }}</span>
+            </td>
+            <td width="50%" align="right" style="font-weight: bold; font-style: italic;">
+                {PAGENO}/{nbpg}
+            </td>
+        </tr>
+    </table>
+</htmlpagefooter>
+
+
 <div class="main facture">
     <div class="header">
         <div class="image">
