@@ -43,10 +43,12 @@ class DataInvoice extends DataConstructor
             ->setToPhone1($this->sanitizeData->trimData($data->toPhone1))
 
             ->setTotalHt($this->sanitizeData->setToFloat($data->totalHt, 0))
+            ->setTotalRemise($this->sanitizeData->setToFloat($data->totalRemise, 0))
             ->setTotalTva($this->sanitizeData->setToFloat($data->totalTva, 0))
             ->setTotalTtc($this->sanitizeData->setToFloat($data->totalTtc, 0))
 
             ->setNote($this->sanitizeData->trimData($data->note))
+            ->setFooter($this->sanitizeData->trimData($data->note))
             ->setLogo($this->sanitizeData->trimData($data->logo))
         ;
     }

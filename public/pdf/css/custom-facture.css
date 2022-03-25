@@ -176,7 +176,13 @@ b{
     border-right: 1px solid #939393;
     text-align: left;
 }
-
+/**
+    FOOTER and NOTE
+ */
+.note{
+    margin-top: 24px;
+    font-size: 11px;
+}
 .footer{
     text-align: center;
     font-size: 10px;

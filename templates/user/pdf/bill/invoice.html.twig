@@ -89,6 +89,9 @@
                     <div class="col col-4"></div>
                 </div>
             </div>
+            <div class="note">
+                {{ elem.note }}
+            </div>
         </div>
         <div class="totaux-col">
             <div class="totaux">
@@ -98,11 +101,11 @@
                 </div>
                 <div class="item">
                     <div class="col col-1">Total Remise HT</div>
-                    <div class="col col-2"></div>
+                    <div class="col col-2">{{ elem.totalRemise | price }}</div>
                 </div>
                 <div class="item">
                     <div class="col col-1"><b>NET HT</b></div>
-                    <div class="col col-2"></div>
+                    <div class="col col-2">{{ (elem.totalHt - elem.totalRemise) | price }}</div>
                 </div>
                 <div class="item">
                     <div class="col col-1">Total TVA</div>
@@ -117,13 +120,7 @@
     </div>
 
     <div class="footer">
-        <div><b>Renseignements bancaires</b> : {{ elem.fromBankName }}</div>
-        <div>{{ elem.fromBankIban }} - CODE BIC : {{ elem.fromBankBic }}</div>
-        <div>Code Banque : 30077 Guichet : 04975 N° de compte : 14798800200 Clé RIB : 68</div>
-        <div style="margin-top: 12px;">
-            <div>Pénalités pour retard de paiement, 1,5 fois le taux d'intérêt légal sur la somme restant dues</div>
-            <div>En cas de retard de paiement, indemnité forfaitaire pour frais de recouvrement : 40 euros</div>
-        </div>
+        {{ elem.footer }}
     </div>
 </div>
 
