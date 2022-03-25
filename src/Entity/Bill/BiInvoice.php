@@ -65,6 +65,11 @@ class BiInvoice extends DataEntity
 
     /**
      * @ORM\Column(type="float")
+     */
+    private $totalRemise;
+
+    /**
+     * @ORM\Column(type="float")
      * @Groups({"invoice:read"})
      */
     private $totalTva;
@@ -74,12 +79,6 @@ class BiInvoice extends DataEntity
      * @Groups({"invoice:read"})
      */
     private $totalTtc;
-
-    /**
-     * @ORM\Column(type="float")
-     * @Groups({"invoice:read"})
-     */
-    private $total;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -124,6 +123,16 @@ class BiInvoice extends DataEntity
     private $fromEmail;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromSiren;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromTva;
+
+    /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"invoice:read"})
      */
@@ -166,42 +175,6 @@ class BiInvoice extends DataEntity
     private $toPhone1;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
-     */
-    private $fromBankName;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
-     */
-    private $fromBankIban;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
-     */
-    private $fromBankBic;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
-     */
-    private $toBankName;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
-     */
-    private $toBankIban;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
-     */
-    private $toBankBic;
-
-    /**
      * @ORM\Column(type="datetime")
      * @Groups({"invoice:read"})
      */
@@ -213,12 +186,6 @@ class BiInvoice extends DataEntity
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     * @Groups({"invoice:read"})
-     */
-    private $note;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Society::class, inversedBy="biInvoices")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -227,17 +194,23 @@ class BiInvoice extends DataEntity
     /**
      * @ORM\Column(type="text", nullable=true)
      */
+    private $footer;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"invoice:read"})
+     */
+    private $note;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
     private $logo;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer")
      */
-    private $fromSiren;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $fromTva;
+    private $theme = 0;
 
     public function __construct()
     {
@@ -562,18 +535,6 @@ class BiInvoice extends DataEntity
         return $this;
     }
 
-    public function getTotal(): ?float
-    {
-        return $this->total;
-    }
-
-    public function setTotal(float $total): self
-    {
-        $this->total = $total;
-
-        return $this;
-    }
-
     public function getNote(): ?string
     {
         return $this->note;
@@ -582,78 +543,6 @@ class BiInvoice extends DataEntity
     public function setNote(?string $note): self
     {
         $this->note = $note;
-
-        return $this;
-    }
-
-    public function getFromBankName(): ?string
-    {
-        return $this->fromBankName;
-    }
-
-    public function setFromBankName(string $fromBankName): self
-    {
-        $this->fromBankName = $fromBankName;
-
-        return $this;
-    }
-
-    public function getFromBankIban(): ?string
-    {
-        return $this->cryptBank('decrypt', $this->fromBankIban);
-    }
-
-    public function setFromBankIban(string $fromBankIban): self
-    {
-        $this->fromBankIban = $this->cryptBank('encrypt', $fromBankIban);
-
-        return $this;
-    }
-
-    public function getFromBankBic(): ?string
-    {
-        return $this->fromBankBic;
-    }
-
-    public function setFromBankBic(string $fromBankBic): self
-    {
-        $this->fromBankBic = $fromBankBic;
-
-        return $this;
-    }
-
-    public function getToBankName(): ?string
-    {
-        return $this->toBankName;
-    }
-
-    public function setToBankName(string $toBankName): self
-    {
-        $this->toBankName = $toBankName;
-
-        return $this;
-    }
-
-    public function getToBankIban(): ?string
-    {
-        return $this->cryptBank('decrypt', $this->toBankIban);
-    }
-
-    public function setToBankIban(string $toBankIban): self
-    {
-        $this->toBankIban = $this->cryptBank('encrypt', $toBankIban);
-
-        return $this;
-    }
-
-    public function getToBankBic(): ?string
-    {
-        return $this->toBankBic;
-    }
-
-    public function setToBankBic(string $toBankBic): self
-    {
-        $this->toBankBic = $toBankBic;
 
         return $this;
     }
@@ -667,24 +556,6 @@ class BiInvoice extends DataEntity
         $values = ["Brouillon", "A régler", "Payée", "Annulée", "Expirée", "Archivée", "Supprimée"];
 
         return $values[$this->status];
-    }
-
-    /**
-     * @return string
-     * @Groups({"invoice:read"})
-     */
-    public function getFromBankIbanHidden(): string
-    {
-        return $this->toFormatIbanHidden($this->fromBankIban);
-    }
-
-    /**
-     * @return string
-     * @Groups({"invoice:read"})
-     */
-    public function getToBankIbanHidden(): string
-    {
-        return $this->toFormatIbanHidden($this->toBankIban);
     }
 
     public function getSociety(): ?Society
@@ -731,6 +602,42 @@ class BiInvoice extends DataEntity
     public function setFromTva(?string $fromTva): self
     {
         $this->fromTva = $fromTva;
+
+        return $this;
+    }
+
+    public function getFooter(): ?string
+    {
+        return $this->footer;
+    }
+
+    public function setFooter(?string $footer): self
+    {
+        $this->footer = $footer;
+
+        return $this;
+    }
+
+    public function getTheme(): ?int
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(int $theme): self
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
+    public function getTotalRemise(): ?float
+    {
+        return $this->totalRemise;
+    }
+
+    public function setTotalRemise(float $totalRemise): self
+    {
+        $this->totalRemise = $totalRemise;
 
         return $this;
     }
