@@ -11,3 +11,7 @@ body{
 b{
     font-weight: bold;
 }
+
+.logo{
+    width: 128px;
+}

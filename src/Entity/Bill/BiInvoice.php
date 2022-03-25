@@ -229,6 +229,16 @@ class BiInvoice extends DataEntity
      */
     private $logo;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromSiren;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromTva;
+
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
@@ -697,6 +707,30 @@ class BiInvoice extends DataEntity
     public function setLogo(?string $logo): self
     {
         $this->logo = $logo;
+
+        return $this;
+    }
+
+    public function getFromSiren(): ?string
+    {
+        return $this->fromSiren;
+    }
+
+    public function setFromSiren(?string $fromSiren): self
+    {
+        $this->fromSiren = $fromSiren;
+
+        return $this;
+    }
+
+    public function getFromTva(): ?string
+    {
+        return $this->fromTva;
+    }
+
+    public function setFromTva(?string $fromTva): self
+    {
+        $this->fromTva = $fromTva;
 
         return $this;
     }
