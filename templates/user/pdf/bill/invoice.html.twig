@@ -18,23 +18,22 @@
             {% endif %}
         </div>
         <div class="col-2">
+            {% if elem.fromSiren %}
+                <div><b>n° Siren/Siret : </b>{{ elem.fromSiren }}</div>
+            {% endif %}
+            {% if elem.fromTva %}
+                <div><b>n° TVA UE : </b>{{ elem.fromTva }}</div>
+            {% endif %}
+            <div><b>Email : </b>{{ elem.fromEmail }}</div>
+            <div><b>Téléphone : </b>{{ elem.fromPhone1 }}</div>
+        </div>
+        <div class="col-3">
+            <div class="numero-facture">Facture n°{{ elem.numero }}</div>
+            <div><b>Date de facture : </b>{{ elem.dateAt | date('d/m/Y') }}</div>
+            <div><b>Date d'échéance : </b>{{ elem.dueAt | date('d/m/Y') }}</div>
+        </div>
 
-        </div>
-        <div class="col-3"></div>
 
-        <div class="bloc-table">
-            <div class="title"><b>Client</b></div>
-            <div class="content"><b>{{ elem.toName }}</b></div>
-        </div>
-        <div class="bloc-table">
-            <div class="title"><b>Date</b></div>
-            <div class="content"><b>{{ elem.dateAt | date('d/m/Y') }}</b></div>
-        </div>
-
-        <div class="bloc-table">
-            <div class="title"><b>Facture N°</b></div>
-            <div class="content"><b>{{ elem.numero }}</b></div>
-        </div>
     </div>
     <div style="margin-top: 8px">
         <h1><b>FNAIM FORMATION AIX MARSEILLE PROVENCE</b></h1>
