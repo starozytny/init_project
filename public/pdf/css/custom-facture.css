@@ -46,3 +46,139 @@ b{
 /**
     LETTER
  */
+.letter{
+    margin-top: 24px;
+}
+
+.name-society{
+    font-size: 14px;
+}
+
+.letter .from,
+.letter .to{
+    float: left;
+}
+
+.letter .from{
+    width: 60%;
+}
+
+.letter .to{
+    width: 40%;
+}
+
+/**
+    PRODUCTS
+ */
+.products{
+    margin-top: 24px;
+    height: 450px;
+    min-height: 450px !important;
+    overflow: hidden;
+    border-bottom: 1px solid #939393;
+}
+
+.tvas .item-header,
+.products .item-header{
+    background: #ececec;
+    font-weight: bold;
+    border-bottom: 1px solid #939393;
+    font-size: 11px;
+}
+
+.tvas .item .col,
+.totaux .item .col,
+.products .item .col{
+    float: left;
+    height: 16px;
+    padding: 8px 4px;
+    text-align: right;
+}
+
+.products .item-header .col{
+    text-align: center;
+    height: 33px;
+}
+
+.products .col-1{
+    width: 80px;
+    text-align: left;
+}
+.products .col-2{
+    width: 303px;
+    text-align: center;
+}
+.products .col-3,
+.products .col-4,
+.products .col-5{
+    width: 62px;
+}
+
+.products .col-6{
+    width: 80px;
+}
+
+.products .col-7{
+    width: 40px;
+}
+
+/**
+    RECAP
+ */
+
+.recap{
+    margin-top: 24px;
+}
+
+.recap .tvas-col,
+.recap .totaux-col{
+    float: left;
+    width: 50%;
+}
+
+.tvas,
+.totaux{
+    border-bottom: 1px solid #939393;
+}
+
+.tvas .item-header,
+.tvas{
+    width: 313px;
+}
+
+.tvas .item .col{
+    text-align: center;
+}
+
+.tvas .col-2,
+.tvas .col-4{
+    width: 90px;
+}
+.tvas .col-3{
+    width: 60px;
+}
+.tvas .col-1{
+    width: 40px;
+}
+
+.totaux{
+    margin-left: 60px;
+    width: 312px;
+}
+.totaux .col-1,
+.totaux .col-2{
+    float: left;
+    width: 147px;
+}
+
+.totaux .col-1{
+    background: #ececec;
+    border-right: 1px solid #939393;
+    text-align: left;
+}
+
+.footer{
+    text-align: center;
+    font-size: 10px;
+    margin-top: 24px;
+}

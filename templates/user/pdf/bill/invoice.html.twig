@@ -32,176 +32,91 @@
             <div><b>Date de facture : </b>{{ elem.dateAt | date('d/m/Y') }}</div>
             <div><b>Date d'échéance : </b>{{ elem.dueAt | date('d/m/Y') }}</div>
         </div>
-
-
     </div>
-    <div style="margin-top: 8px">
-        <h1><b>FNAIM FORMATION AIX MARSEILLE PROVENCE</b></h1>
-        <div style="font-size: 14px; margin-top: 4px;"><b>11 Place du Général de Gaulle</b></div>
-        <div style="margin-top: 8px; margin-bottom: 4px; font-size: 11px;">
-            <div><b>CS 40543</b></div>
-            <div><b>13231 MARSEILLE CEDEX 01</b></div>
+
+    <div class="letter">
+        <div class="from">
+            <div class="name-society"><b>{{ elem.fromName }}</b></div>
+            <div>{{ elem.fromAddress }}</div>
+            <div>{{ elem.fromComplement }}</div>
+            <div>{{ elem.fromZipcode }}, {{ elem.fromCity }}</div>
+        </div>
+        <div class="to">
+            <div><b>Destinataire</b></div>
+            <div>{{ elem.toName }}</div>
+            <div>{{ elem.toAddress }}</div>
+            <div>{{ elem.toComplement }}</div>
+            <div>{{ elem.toZipcode }}, {{ elem.toCity }}</div>
         </div>
     </div>
 
-    <div class="infos-adr" style="margin-bottom: 24px;">
-        <div class="infos-fnaim">
-            <table>
-                <tr>
-                    <td>Tél</td>
-                    <td>:</td>
-                    <td>{{ elem.fromPhone1 }}</td>
-                </tr>
-                <tr>
-                    <td>Mail</td>
-                    <td>:</td>
-                    <td>{{ elem.fromEmail }}</td>
-                </tr>
-                <tr>
-                    <td>R.C.S.</td>
-                    <td>:</td>
-                    <td>833488059</td>
-                </tr>
-                <tr>
-                    <td>SIRET</td>
-                    <td>:</td>
-                    <td>83348805900027</td>
-                </tr>
-                <tr>
-                    <td>N/Id CEE</td>
-                    <td>:</td>
-                    <td>FR32833488059</td>
-                </tr>
-                <tr>
-                    <td><div style="color: #FFFFFF;">--------------------</div></td>
-                    <td><div style="color: #FFFFFF;">----</div></td>
-                    <td></td>
-                </tr>
-            </table>
+    <div class="products">
+        <div class="item item-header">
+            <div class="col col-1">Référence</div>
+            <div class="col col-2">Designation</div>
+            <div class="col col-3">Quantité</div>
+            <div class="col col-4">Unité</div>
+            <div class="col col-5">P.U.<br>HT</div>
+            <div class="col col-6">Montant<br>HT</div>
+            <div class="col col-7">Code<br>TVA</div>
         </div>
 
-        <div class="infos-client">
-            <div class="crochet-up-left"></div>
-            <div class="crochet-up-right"></div>
-            <div style="margin-top: 12px; margin-bottom: 24px;">
-                <div><b>{{ elem.toName }}</b></div>
-                <div><b>{{ elem.toAddress }}</b></div>
+        <div class="item">
+            <div class="col col-1"></div>
+            <div class="col col-2"></div>
+            <div class="col col-3"></div>
+            <div class="col col-4"></div>
+            <div class="col col-5"></div>
+            <div class="col col-6"></div>
+            <div class="col col-7"></div>
+        </div>
+    </div>
+
+    <div class="recap">
+        <div class="tvas-col">
+            <div class="tvas">
+                <div class="item item-header">
+                    <div class="col col-1">Code</div>
+                    <div class="col col-2">Base HT</div>
+                    <div class="col col-3">Taux TVA</div>
+                    <div class="col col-4">Montant TVA</div>
+                </div>
+
+                <div class="item">
+                    <div class="col col-1"></div>
+                    <div class="col col-2"></div>
+                    <div class="col col-3"></div>
+                    <div class="col col-4"></div>
+                </div>
             </div>
-            <div class="crochet-down-left"></div>
-            <div class="crochet-down-right"></div>
+        </div>
+        <div class="totaux-col">
+            <div class="totaux">
+                <div class="item">
+                    <div class="col col-1">Total HT</div>
+                    <div class="col col-2">{{ elem.totalHt | price }}</div>
+                </div>
+                <div class="item">
+                    <div class="col col-1">Total Remise HT</div>
+                    <div class="col col-2"></div>
+                </div>
+                <div class="item">
+                    <div class="col col-1"><b>NET HT</b></div>
+                    <div class="col col-2"></div>
+                </div>
+                <div class="item">
+                    <div class="col col-1">Total TVA</div>
+                    <div class="col col-2">{{ elem.totalTva | price }}</div>
+                </div>
+                <div class="item">
+                    <div class="col col-1"><b>Total TTC en euros</b></div>
+                    <div class="col col-2"><b>{{ elem.totalTtc | price }}</b></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="tableau">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Référence</th>
-                <th>Désignation</th>
-                <th>Quantité</th>
-                <th>P.U. HT</th>
-                <th>Remise HT</th>
-                <th>Montant HT</th>
-                <th style="border-right: none;">TVA</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="line last-line">
-{#                <td style="height: 150px">{{ ordre.formation ? "F" ~ ordre.formation.id : "A" ~ ordre.academie.id }}</td>#}
-{#                <td>#}
-{#                    <div>FORMATIONS PROFESSIONNELLES DU</div>#}
-{#                    <div>#}
-{#                        {% if ordre.formation %}#}
-{#                            {{ ordre.formation.dateStart | date('d/m/Y') }}#}
-{#                            {% if ordre.formation.dateStart != ordre.formation.dateEnd %}#}
-{#                                {{ ordre.formation.dateEnd | date('d/m/Y') }}#}
-{#                            {% endif %}#}
-{#                        {% else %}#}
-{#                            {{ ordre.academie.dateStart | date('d/m/Y') }}#}
-{#                        {% endif %}#}
-{#                    </div>#}
-{#                    <div>THEME : {{ ordre.formation ? ordre.formation.libelle : ordre.academie.libelle }}</div>#}
-{#                </td>#}
-
-{#                {% set priceHt = ordre.formation ? ordre.formation.montantHt : ordre.academie.montantHt %}#}
-{#                {% set priceTtc = ordre.formation ? ordre.formation.montantTtc : ordre.academie.montantTtc %}#}
-{#                {% set priceTotalHt = priceHt * ordre.participants %}#}
-{#                {% set priceTotalTtc = priceTtc * ordre.participants %}#}
-
-{#                <td style="text-align: right;">{{ ordre.participants }},000</td>#}
-{#                <td style="text-align: right;">{{ priceHt | price }}</td>#}
-{#                <td style="text-align: right;"></td>#}
-{#                <td style="text-align: right;">{{ priceTotalHt | price }}</td>#}
-{#                <td style="text-align: center; border-right: none;">5</td>#}
-            </tr>
-            <tr class="line last-line">
-                <td style="height: 150px"></td>
-                <td>
-                    <div>Numéro de déclaration d'activité n°</div>
-                    <div>93131698713 - Délivré le 21 février 2018</div>
-                    <div>par la Préfecture des Bouches-du-Rhône</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="border-right: none;"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="paid">
-        <div class="tableau tableau-1">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Base HT</th>
-                    <th>Taux TVA</th>
-                    <th style="border-right: none;">Montant TVA</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="line last-line">
-                    <td style="text-align: center;">5</td>
-                    <td style="text-align: right;">5</td>
-                    <td style="text-align: right;">20,00</td>
-                    <td style="text-align: right; border-right: none;">5</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="tableau tableau-2">
-            <table class="table">
-                <tbody>
-                <tr class="line-paid">
-                    <th>Total HT</th>
-                    <td style="border-bottom: none;">{{ elem.totalHt | price }}</td>
-                </tr>
-                <tr class="line-paid">
-                    <th class="borderBottom"><b>Net HT</b></th>
-                    <td><b>{{ elem.totalHt | price }}</b></td>
-                </tr>
-                <tr class="line-paid">
-                    <th>Total TVA</th>
-                    <td style="border-bottom: none;">{{ elem.totalTva | price }}</td>
-                </tr>
-                <tr class="line-paid">
-                    <th>Total TTC</th>
-                    <td style="border-bottom: none;">{{ elem.totalTtc | price }}</td>
-                </tr>
-                <tr class="line-paid">
-                    <th><b>NET A PAYER</b></th>
-                    <th>{{ elem.total | price }}</th>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="infos-bank" style="text-align: center; margin-top: 24px;">
+    <div class="footer">
         <div><b>Renseignements bancaires</b> : {{ elem.fromBankName }}</div>
         <div>{{ elem.fromBankIban }} - CODE BIC : {{ elem.fromBankBic }}</div>
         <div>Code Banque : 30077 Guichet : 04975 N° de compte : 14798800200 Clé RIB : 68</div>
