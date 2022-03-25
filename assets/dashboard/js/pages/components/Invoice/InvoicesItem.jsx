@@ -23,7 +23,7 @@ export class InvoicesItem extends Component {
                             <span className="sub">{elem.toEmail}</span>
                         </div>
                         <div className="col-2">
-                            <div className="sub">{Sanitaze.toFormatCurrency(elem.total)}</div>
+                            <div className="sub">{Sanitaze.toFormatCurrency(elem.totalTtc)}</div>
                             <div className="sub">{elem.dateAtString}</div>
                         </div>
                         <div className="col-3">
