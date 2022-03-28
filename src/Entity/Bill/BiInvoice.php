@@ -193,6 +193,7 @@ class BiInvoice extends DataEntity
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $footer;
 
