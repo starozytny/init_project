@@ -13,18 +13,47 @@ use Doctrine\ORM\EntityManagerInterface;
 class DataInvoice extends DataConstructor
 {
     private $billService;
+    private $publicDirectory;
 
     public function __construct(EntityManagerInterface $entityManager, ValidatorService $validatorService, SanitizeData $sanitizeData,
-                                BillService $billService)
+                                $publicDirectory, BillService $billService)
     {
         parent::__construct($entityManager, $validatorService, $sanitizeData);
 
         $this->billService = $billService;
+        $this->publicDirectory = $publicDirectory;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPublicDirectory()
+    {
+        return $this->publicDirectory;
+    }
+
+    private function getLogoSociety(Society $society): ?string
+    {
+        if($society->getLogo()){
+            $file = $this->getPublicDirectory() . Society::FOLDER_LOGOS . '/' . $society->getLogo();
+
+            if(file_exists($file)){
+                $data = file_get_contents($file);
+                $extension = pathinfo($file, PATHINFO_EXTENSION);;
+
+                return 'data:image/' . $extension . ';base64,' . base64_encode($data);
+            }
+        }
+
+        return null;
     }
 
     public function setDataInvoice(BiInvoice $obj, $data, Society $society): BiInvoice
     {
         return ($obj)
+            ->setSociety($society)
+            ->setDateAt(new \DateTime())
+
             ->setFromName($society->getName())
             ->setFromAddress($society->getAddress())
             ->setFromComplement($society->getComplement())
@@ -34,6 +63,7 @@ class DataInvoice extends DataConstructor
             ->setFromPhone1($society->getPhone1())
             ->setFromSiren($society->getSiren())
             ->setFromTva($society->getNumeroTva())
+            ->setLogo($this->getLogoSociety($society))
 
             ->setToName($this->sanitizeData->trimData($data->toName))
             ->setToAddress($this->sanitizeData->trimData($data->toAddress))
@@ -50,7 +80,6 @@ class DataInvoice extends DataConstructor
 
             ->setNote($this->sanitizeData->trimData($data->note))
             ->setFooter($this->sanitizeData->trimData($data->footer))
-            ->setLogo($this->sanitizeData->trimData($data->logo))
         ;
     }
 

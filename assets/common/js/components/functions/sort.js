@@ -46,6 +46,15 @@ function compareNumeroInverse(a, b){
     return comparison(b.numero, a.numero);
 }
 
+function compareDateInverseThenNumeroInverse(a, b){
+    if (b.dateAt > a.dateAt) {
+        return 1;
+    } else if (b.dateAt < a.dateAt) {
+        return -1;
+    }
+    return comparison(b.numero, a.numero)
+}
+
 function comparison (objA, objB){
     let comparison = 0;
     if (objA > objB) {
@@ -68,5 +77,6 @@ module.exports = {
     compareZipcode,
     compareCity,
     compareNumero,
-    compareNumeroInverse
+    compareNumeroInverse,
+    compareDateInverseThenNumeroInverse,
 }
