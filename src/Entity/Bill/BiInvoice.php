@@ -25,6 +25,12 @@ class BiInvoice extends DataEntity
     const STATUS_EXPIRED = 5;
     const STATUS_ARCHIVED = 6;
 
+    const DUE_TYPE_MANUAL = 0;
+    const DUE_TYPE_ACQUITTED = 1;
+    const DUE_TYPE_8 = 2;
+    const DUE_TYPE_14 = 3;
+    const DUE_TYPE_130 = 4;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -50,6 +56,12 @@ class BiInvoice extends DataEntity
      * @Groups({"invoice:read"})
      */
     private $dueAt;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"invoice:read"})
+     */
+    private $dueType = self::DUE_TYPE_8;
 
     /**
      * @ORM\Column(type="integer")
@@ -639,6 +651,29 @@ class BiInvoice extends DataEntity
     public function setTotalRemise(float $totalRemise): self
     {
         $this->totalRemise = $totalRemise;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     * @Groups({"invoice:read"})
+     */
+    public function getDueTypeString(): string
+    {
+        $values = ["Manuel", "Acquittée", "8 jours", "14 jours", "30 jours"];
+
+        return $values[$this->dueType];
+    }
+
+    public function getDueType(): ?int
+    {
+        return $this->dueType;
+    }
+
+    public function setDueType(int $dueType): self
+    {
+        $this->dueType = $dueType;
 
         return $this;
     }

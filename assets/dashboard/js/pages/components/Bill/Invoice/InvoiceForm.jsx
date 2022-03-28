@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import axios                   from "axios";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Input, TextArea }     from "@dashboardComponents/Tools/Fields";
+import {Input, Select, TextArea} from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
@@ -40,6 +40,7 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
 
         dateAt={element ? Formulaire.setDateOrEmptyIfNull(element.dateAtJavascript) : ""}
         dueAt={element ? Formulaire.setDateOrEmptyIfNull(element.dueAtJavascript) : ""}
+        dueType={element ? Formulaire.setValueEmptyIfNull(element.dueType, 2) : 2}
 
         toName={element ? Formulaire.setValueEmptyIfNull(element.toName) : ""}
         toAddress={element ? Formulaire.setValueEmptyIfNull(element.toAddress) : ""}
@@ -68,6 +69,7 @@ class Form extends Component {
             societyId: props.societyId,
             dateAt: props.dateAt,
             dueAt: props.dueAt,
+            dueType: props.dueType,
             toName: props.toName,
             toAddress: props.toAddress,
             toComplement: props.toComplement,
@@ -146,6 +148,7 @@ class Form extends Component {
                         self.setState( {
                             dateAt: "",
                             dueAt: "",
+                            dueType: 2,
                             toName: "",
                             toAddress: "",
                             toComplement: "",
@@ -174,7 +177,17 @@ class Form extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, dateAt, dueAt, toName, toAddress, toComplement, toZipcode, toCity, toEmail, toPhone1, note, footer } = this.state;
+        const { errors, success, dateAt, dueAt, dueType,
+            toName, toAddress, toComplement, toZipcode, toCity, toEmail, toPhone1,
+            note, footer } = this.state;
+
+        let selectDueTypes = [
+            { value: 0, label: "Définir manuellement", identifiant: "c-0" },
+            { value: 1, label: "Acquitté",             identifiant: "c-1" },
+            { value: 2, label: "8 jours",              identifiant: "c-2" },
+            { value: 3, label: "14 jours",             identifiant: "c-3" },
+            { value: 4, label: "30 jours",             identifiant: "c-4" },
+        ]
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -197,10 +210,10 @@ class Form extends Component {
                     </div>
 
                     <div className="line line-2">
+                        <Select items={selectDueTypes} identifiant="dueType" valeur={dueType} noEmpty={true} errors={errors} onChange={this.handleChange}>Conditions de paiement</Select>
                         <DatePick identifiant="dueAt" valeur={dueAt} minDate={dateAt ? dateAt : new Date()} errors={errors} onChange={(e) => this.handleChangeDate("dueAt", e)}>
                             Date d'échéance
                         </DatePick>
-                        <div className="form-group" />
                     </div>
                 </div>
 
