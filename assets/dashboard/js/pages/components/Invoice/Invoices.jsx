@@ -15,13 +15,13 @@ import Formulaire        from "@dashboardComponents/functions/Formulaire";
 import { InvoicesList }      from "@dashboardPages/components/Invoice/InvoicesList";
 import { InvoiceFormulaire } from "@dashboardPages/components/Invoice/InvoiceForm";
 
-let SORTER = Sort.compareCreatedAtInverse;
+let SORTER = Sort.compareNumeroInverse;
 
 let sorters = [
     { value: 0, label: 'Création',           identifiant: 'sorter-created' },
 ]
 
-let sortersFunction = [Sort.compareCreatedAtInverse];
+let sortersFunction = [Sort.compareNumeroInverse];
 
 export class Invoices extends Component {
     constructor(props) {

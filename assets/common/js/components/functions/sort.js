@@ -38,6 +38,14 @@ function compareCity(a,b){
     return comparison(a.city, b.city);
 }
 
+function compareNumero(a, b){
+    return comparison(a.numero, b.numero);
+}
+
+function compareNumeroInverse(a, b){
+    return comparison(b.numero, a.numero);
+}
+
 function comparison (objA, objB){
     let comparison = 0;
     if (objA > objB) {
@@ -59,4 +67,6 @@ module.exports = {
     compareEmail,
     compareZipcode,
     compareCity,
+    compareNumero,
+    compareNumeroInverse
 }
