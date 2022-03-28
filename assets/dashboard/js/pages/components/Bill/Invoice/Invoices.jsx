@@ -12,8 +12,8 @@ import Filter            from "@commonComponents/functions/filter";
 import TopToolbar        from "@commonComponents/functions/topToolbar";
 import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
-import { InvoicesList }      from "@dashboardPages/components/Invoice/InvoicesList";
-import { InvoiceFormulaire } from "@dashboardPages/components/Invoice/InvoiceForm";
+import { InvoicesList }      from "@dashboardPages/components/Bill/Invoice/InvoicesList";
+import { InvoiceFormulaire } from "@dashboardPages/components/Bill/Invoice/InvoiceForm";
 
 let SORTER = Sort.compareNumeroInverse;
 

@@ -4,8 +4,8 @@ import { Button }   from "@dashboardComponents/Tools/Button";
 import { Alert }    from "@dashboardComponents/Tools/Alert";
 import { Search }   from "@dashboardComponents/Layout/Search";
 
-import { InvoicesItem }   from "@dashboardPages/components/Invoice/InvoicesItem";
-import {Filter, FilterSelected} from "@dashboardComponents/Layout/Filter";
+import { InvoicesItem }   from "@dashboardPages/components/Bill/Invoice/InvoicesItem";
+import { Filter, FilterSelected } from "@dashboardComponents/Layout/Filter";
 import {TopSorterPagination} from "@dashboardComponents/Layout/Pagination";
 
 export class InvoicesList extends Component {
