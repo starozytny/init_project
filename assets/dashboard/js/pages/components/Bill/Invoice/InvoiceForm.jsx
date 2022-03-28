@@ -87,7 +87,7 @@ class Form extends Component {
     handleChangeZipcodeCity = (e) => {
         const { arrayPostalCode } = this.state;
 
-        Helper.setCityFromZipcode(this, e, arrayPostalCode ? arrayPostalCode : arrayZipcodes)
+        Helper.setCityFromZipcode(this, e, arrayPostalCode ? arrayPostalCode : arrayZipcodes, "toCity")
     }
 
     handleSubmit = (e) => {
