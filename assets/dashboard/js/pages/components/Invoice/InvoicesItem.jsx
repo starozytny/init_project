@@ -5,6 +5,14 @@ import Sanitaze from "@commonComponents/functions/sanitaze";
 
 import { ButtonIcon }   from "@dashboardComponents/Tools/Button";
 
+const STATUS_DRAFT = 0;
+const STATUS_TO_PAY = 1;
+const STATUS_PAID = 2;
+const STATUS_PAID_PARTIAL = 3;
+const STATUS_CANCEL = 4;
+const STATUS_EXPIRED = 5;
+const STATUS_ARCHIVED = 6;
+
 export class InvoicesItem extends Component {
     render () {
         const { elem, onChangeContext, onDelete } = this.props;
@@ -32,9 +40,14 @@ export class InvoicesItem extends Component {
                             <div className={"badge badge-" + elem.status}>{elem.statusString}</div>
                         </div>
                         <div className="col-6 actions">
-                            <ButtonIcon icon="download" element="a" target="_blank" onClick={Routing.generate('api_bill_invoices_download', {'id': elem.id})}>Télécharger</ButtonIcon>
-                            <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
-                            <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
+                            {(elem.status === STATUS_TO_PAY || elem.status === STATUS_PAID || elem.status === STATUS_PAID_PARTIAL || elem.status === STATUS_ARCHIVED) && <>
+                                <ButtonIcon icon="download" element="a" target="_blank" onClick={Routing.generate('api_bill_invoices_download', {'id': elem.id})}>Télécharger</ButtonIcon>
+                            </>}
+                            {elem.status === STATUS_DRAFT && <>
+                                <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
+                                <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
+                            </>}
+
                         </div>
                     </div>
                 </div>
