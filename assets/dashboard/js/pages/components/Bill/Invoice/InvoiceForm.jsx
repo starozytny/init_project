@@ -71,6 +71,10 @@ class Form extends Component {
             toPhone1: props.toPhone1,
             note: props.note,
             footer: props.footer,
+            totalHt: 0,
+            totalRemise: 0,
+            totalTva: 0,
+            totalTtc: 0,
             errors: [],
             success: false
         }
@@ -139,6 +143,10 @@ class Form extends Component {
                             toPhone1: "",
                             note: "",
                             footer: "",
+                            totalHt: 0,
+                            totalRemise: 0,
+                            totalTva: 0,
+                            totalTtc: 0,
                         })
                     }
                 })
