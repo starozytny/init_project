@@ -49,7 +49,7 @@ class DataInvoice extends DataConstructor
             ->setTotalTtc($this->sanitizeData->setToFloat($data->totalTtc, 0))
 
             ->setNote($this->sanitizeData->trimData($data->note))
-            ->setFooter($this->sanitizeData->trimData($data->note))
+            ->setFooter($this->sanitizeData->trimData($data->footer))
             ->setLogo($this->sanitizeData->trimData($data->logo))
         ;
     }
