@@ -60,10 +60,10 @@ export class InvoicesList extends Component {
                             <div className="item-content">
                                 <div className="item-body">
                                     <div className="infos infos-col-6">
-                                        <div className="col-1">Client</div>
-                                        <div className="col-2">Client</div>
-                                        <div className="col-3">Informations</div>
-                                        <div className="col-4">Statut</div>
+                                        <div className="col-1">Numéro</div>
+                                        <div className="col-2">Date</div>
+                                        <div className="col-3">Client</div>
+                                        <div className="col-4">Montant TTC</div>
                                         <div className="col-5">Statut</div>
                                         <div className="col-6 actions">Actions</div>
                                     </div>
