@@ -125,11 +125,6 @@ class Society extends DataEntity
     private $country = "France";
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $counterBill = 0;
-
-    /**
      * @ORM\OneToMany(targetEntity=BiInvoice::class, mappedBy="society")
      */
     private $biInvoices;
@@ -137,12 +132,17 @@ class Society extends DataEntity
     /**
      * @ORM\Column(type="integer")
      */
-    private $yearBill;
+    private $counterInvoice = 0;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $yearInvoice;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $dateBill;
+    private $dateInvoice;
 
     public function __construct()
     {
@@ -412,18 +412,6 @@ class Society extends DataEntity
         return $this;
     }
 
-    public function getCounterBill(): ?int
-    {
-        return $this->counterBill;
-    }
-
-    public function setCounterBill(int $counterBill): self
-    {
-        $this->counterBill = $counterBill;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, BiInvoice>
      */
@@ -454,26 +442,38 @@ class Society extends DataEntity
         return $this;
     }
 
-    public function getYearBill(): ?int
+    public function getCounterInvoice(): ?int
     {
-        return $this->yearBill;
+        return $this->counterInvoice;
     }
 
-    public function setYearBill(int $yearBill): self
+    public function setCounterInvoice(int $counterInvoice): self
     {
-        $this->yearBill = $yearBill;
+        $this->counterInvoice = $counterInvoice;
 
         return $this;
     }
 
-    public function getDateBill(): ?\DateTimeInterface
+    public function getYearInvoice(): ?int
     {
-        return $this->dateBill;
+        return $this->yearInvoice;
     }
 
-    public function setDateBill(?\DateTimeInterface $dateBill): self
+    public function setYearInvoice(int $yearInvoice): self
     {
-        $this->dateBill = $dateBill;
+        $this->yearInvoice = $yearInvoice;
+
+        return $this;
+    }
+
+    public function getDateInvoice(): ?\DateTimeInterface
+    {
+        return $this->dateInvoice;
+    }
+
+    public function setDateInvoice(?\DateTimeInterface $dateInvoice): self
+    {
+        $this->dateInvoice = $dateInvoice;
 
         return $this;
     }

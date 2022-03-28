@@ -37,7 +37,7 @@ class FakeInvoiceCreateCommand extends Command
         $io->title('Reset des tables');
         $this->databaseService->resetTable($io, [BiInvoice::class]);
         $society = $this->em->getRepository(Society::class)->findOneBy(['name' => 'Logilink']);
-        $society->setCounterBill(0);
+        $society->setCounterInvoice(0);
         $this->em->flush();
 
         $society = $this->em->getRepository(Society::class)->findOneBy(['name' => 'Logilink']);
@@ -86,18 +86,18 @@ class FakeInvoiceCreateCommand extends Command
 
             $new = $this->dataEntity->setDataInvoice(new BiInvoice(), $data);
 
+            $dateAt = new \DateTime();
+
             $new = ($new)
                 ->setStatus($fake->numberBetween(0, 6))
-                ->setDateAt(new \DateTime())
-                ->setDueAt(new \DateTime())
+                ->setDateAt($dateAt)
+                ->setDueAt($dateAt)
                 ->setSociety($society)
-                ->setNumero($this->dataEntity->createNumero($i + 1))
+                ->setNumero($this->dataEntity->createNumero($dateAt, $society))
             ;
 
             $this->em->persist($new);
         }
-
-        $society->setCounterBill(60);
 
         $io->text('INVOICES : Invoices fake créés' );
 

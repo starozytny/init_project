@@ -4,10 +4,8 @@ namespace App\Service\Bill;
 
 class BillService
 {
-    public function createNewNumero($i, $prefix): string
+    public function createNewNumero($i, $year, $prefix): string
     {
-        $year = (new \DateTime())->format('y');
-
         $tab = array_map('intval', str_split($i));
         $nbZero = 6 - count($tab);
 

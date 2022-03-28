@@ -21,6 +21,7 @@ class DataInvoice extends DataConstructor
 
         $this->billService = $billService;
     }
+
     public function setDataInvoice(BiInvoice $obj, $data): BiInvoice
     {
         return ($obj)
@@ -53,16 +54,26 @@ class DataInvoice extends DataConstructor
         ;
     }
 
-    public function createNumeroInvoice(Society $society): string
+    public function createNumero($dateAt, Society $society): string
     {
-        $counter = $society->getCounterBill() + 1;
-        $society->setCounterBill($counter);
+        $nowYear = $dateAt->format('y');
 
-        return $this->createNumero($counter);
-    }
+        $counter = $society->getCounterInvoice();
+        $year = $society->getYearInvoice();
+        if((int) $nowYear != $year){
+            $counter = 0;
 
-    public function createNumero($i): string
-    {
-        return $this->billService->createNewNumero($i, BiInvoice::PREFIX);
+            $year = $nowYear;
+            $society->setYearInvoice($year);
+        }
+
+        $counterInvoice = $counter + 1;
+
+        ($society)
+            ->setCounterInvoice($counterInvoice)
+            ->setDateInvoice($dateAt)
+        ;
+
+        return $this->billService->createNewNumero($counterInvoice, $year, BiInvoice::PREFIX);
     }
 }
