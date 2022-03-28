@@ -1,3 +1,42 @@
 @import "../vars/vars";
 
 @include toolbarCreateFilterSearch(185);
+
+//                      __   _____ __    ___    __
+//                     | _| |___  / /_  ( _ )  |_ |
+//    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
+//   |_____|_____|_____| |    / /| (_) | (_) |  | |_____|_____|_____|
+//                     | |   /_/  \___/ \___/   | |
+//                     |__|                    |__|
+@media (min-width:768px) {
+  .items-default{
+    .infos-col-6{
+      .col-1{
+        width: 120px;
+        margin-right: 24px;
+      }
+      .col-2{
+        width: 120px;
+        margin-right: 24px;
+      }
+      .col-3{
+        width: calc(100% - 560px - 24px);
+        margin-right: 24px;
+        margin-top: 0;
+      }
+      .col-4{
+        width: 120px;
+        margin-right: 24px;
+        margin-top: 0;
+      }
+      .col-5{
+        width: 100px;
+        margin-right: 24px;
+        margin-top: 0;
+      }
+      .col-6{
+        width: 120px;
+      }
+    }
+  }
+}

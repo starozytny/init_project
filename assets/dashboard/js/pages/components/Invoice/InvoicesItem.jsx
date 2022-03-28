@@ -12,24 +12,26 @@ export class InvoicesItem extends Component {
         return <div className="item">
             <div className="item-content">
                 <div className="item-body">
-                    <div className="infos infos-col-4">
+                    <div className="infos infos-col-6">
                         <div className="col-1">
-                            <div className="badges">
-                                <div className="badge badge-default">#{elem.numero}</div>
-                            </div>
+                            <div className="name">{elem.numero}</div>
+                        </div>
+                        <div className="col-2">
+                            <div className="sub">{elem.dateAtString}</div>
+                        </div>
+                        <div className="col-3">
                             <div className="name">
                                 <span>{elem.toName}</span>
                             </div>
                             <span className="sub">{elem.toEmail}</span>
                         </div>
-                        <div className="col-2">
+                        <div className="col-4">
                             <div className="sub">{Sanitaze.toFormatCurrency(elem.totalTtc)}</div>
-                            <div className="sub">{elem.dateAtString}</div>
                         </div>
-                        <div className="col-3">
+                        <div className="col-5">
                             <div className={"badge badge-" + elem.status}>{elem.statusString}</div>
                         </div>
-                        <div className="col-4 actions">
+                        <div className="col-6 actions">
                             <ButtonIcon icon="download" element="a" target="_blank" onClick={Routing.generate('api_bill_invoices_download', {'id': elem.id})}>Télécharger</ButtonIcon>
                             <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
                             <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
