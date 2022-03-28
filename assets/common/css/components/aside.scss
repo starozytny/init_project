@@ -12,13 +12,13 @@
   &.true{
     z-index: 1600;
 
-    .aside-content{
+    & > .aside-content{
       z-index: 10;
       opacity: 1;
       transform: translateX(0);
       transition: transform 0.4s ease-in-out;
     }
-    .aside-overlay{
+    & > .aside-overlay{
       z-index: 5;
       opacity: 1;
       transition: opacity 0.2s ease-in-out;
