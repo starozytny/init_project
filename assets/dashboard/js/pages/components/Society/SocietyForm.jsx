@@ -103,7 +103,7 @@ export class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { name, address, zipcode, city } = this.state;
+        const { name, address, zipcode, city, email, phone1 } = this.state;
 
         this.setState({ errors: [], success: false })
 
@@ -112,6 +112,8 @@ export class Form extends Component {
             {type: "text", id: 'address',   value: address},
             {type: "text", id: 'zipcode',   value: zipcode},
             {type: "text", id: 'city',      value: city},
+            {type: "text", id: 'email',     value: email},
+            {type: "text", id: 'phone1',     value: phone1},
         ];
 
         let inputLogo = this.inputLogo.current;
