@@ -97,7 +97,40 @@ class Form extends Component {
         Helper.getPostalCodes(this);
     }
 
-    handleChange = (e) => { this.setState({[e.currentTarget.name]: e.currentTarget.value}) }
+    handleChange = (e) => {
+        const { dateAt } = this.state;
+
+        let name = e.currentTarget.name;
+        let value = e.currentTarget.value;
+
+        if(name === "dueType"){
+            let val = parseInt(value);
+            if(val === 1){
+                this.setState({ dueAt: "" })
+            }else{
+                if(val !== 0 && dateAt !== ""){
+                    let dueAt = new Date(dateAt);
+                    switch (val){
+                        case 2: // 8j
+                            dueAt = dueAt.setDate(dueAt.getDate() + 8);
+                            break;
+                        case 3: // 14j
+                            dueAt = dueAt.setDate(dueAt.getDate() + 14);
+                            break;
+                        case 4: // 30j
+                            dueAt = dueAt.setDate(dueAt.getDate() + 30);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    this.setState({ dueAt: dueAt })
+                }
+            }
+        }
+
+        this.setState({[name]: value})
+    }
 
     handleChangeZipcodeCity = (e) => {
         const { arrayPostalCode } = this.state;
@@ -105,7 +138,13 @@ class Form extends Component {
         Helper.setCityFromZipcode(this, e, arrayPostalCode ? arrayPostalCode : arrayZipcodes, "toCity")
     }
 
-    handleChangeDate = (name, e) => { this.setState({ [name]: e !== null ? e : "" }) }
+    handleChangeDate = (name, e) => {
+        if(name === "dueAt"){
+            this.setState({dueType: 0 })
+        }
+
+        this.setState({ [name]: e !== null ? e : "" })
+    }
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -211,9 +250,11 @@ class Form extends Component {
 
                     <div className="line line-2">
                         <Select items={selectDueTypes} identifiant="dueType" valeur={dueType} noEmpty={true} errors={errors} onChange={this.handleChange}>Conditions de paiement</Select>
-                        <DatePick identifiant="dueAt" valeur={dueAt} minDate={dateAt ? dateAt : new Date()} errors={errors} onChange={(e) => this.handleChangeDate("dueAt", e)}>
-                            Date d'échéance
-                        </DatePick>
+                        {parseInt(dueType) !== 1 ? <>
+                            <DatePick identifiant="dueAt" valeur={dueAt} minDate={dateAt ? dateAt : new Date()} errors={errors} onChange={(e) => this.handleChangeDate("dueAt", e)}>
+                                Date d'échéance
+                            </DatePick>
+                        </> : <div className="form-group" />}
                     </div>
                 </div>
 
