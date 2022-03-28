@@ -9,6 +9,7 @@ use App\Service\Data\DataConstructor;
 use App\Service\SanitizeData;
 use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class DataInvoice extends DataConstructor
 {
@@ -48,11 +49,15 @@ class DataInvoice extends DataConstructor
         return null;
     }
 
+    /**
+     * @throws Exception
+     */
     public function setDataInvoice(BiInvoice $obj, $data, Society $society): BiInvoice
     {
         return ($obj)
             ->setSociety($society)
-            ->setDateAt(new \DateTime())
+            ->setDateAt($this->sanitizeData->createDate($data->dateAt))
+            ->setDueAt($this->sanitizeData->createDate($data->dueAt))
 
             ->setFromName($society->getName())
             ->setFromAddress($society->getAddress())
