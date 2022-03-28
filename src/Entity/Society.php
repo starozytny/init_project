@@ -134,6 +134,16 @@ class Society extends DataEntity
      */
     private $biInvoices;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $yearBill;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateBill;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -440,6 +450,30 @@ class Society extends DataEntity
                 $biInvoice->setSociety(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getYearBill(): ?int
+    {
+        return $this->yearBill;
+    }
+
+    public function setYearBill(int $yearBill): self
+    {
+        $this->yearBill = $yearBill;
+
+        return $this;
+    }
+
+    public function getDateBill(): ?\DateTimeInterface
+    {
+        return $this->dateBill;
+    }
+
+    public function setDateBill(?\DateTimeInterface $dateBill): self
+    {
+        $this->dateBill = $dateBill;
 
         return $this;
     }
