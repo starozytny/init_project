@@ -11,6 +11,7 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 import Validateur              from "@commonComponents/functions/validateur";
 import Helper                  from "@commonComponents/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
+import {DatePick} from "@dashboardComponents/Tools/DatePicker";
 
 const URL_CREATE_ELEMENT     = "api_bill_invoices_create";
 const URL_UPDATE_GROUP       = "api_bill_invoices_update";
@@ -37,6 +38,9 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
 
         societyId={societyId}
 
+        dateAt={element ? Formulaire.setDateOrEmptyIfNull(element.dateAtJavascript) : ""}
+        dueAt={element ? Formulaire.setDateOrEmptyIfNull(element.dueAtJavascript) : ""}
+
         toName={element ? Formulaire.setValueEmptyIfNull(element.toName) : ""}
         toAddress={element ? Formulaire.setValueEmptyIfNull(element.toAddress) : ""}
         toComplement={element ? Formulaire.setValueEmptyIfNull(element.toComplement) : ""}
@@ -62,6 +66,8 @@ class Form extends Component {
 
         this.state = {
             societyId: props.societyId,
+            dateAt: props.dateAt,
+            dueAt: props.dueAt,
             toName: props.toName,
             toAddress: props.toAddress,
             toComplement: props.toComplement,
@@ -82,6 +88,7 @@ class Form extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeZipcodeCity = this.handleChangeZipcodeCity.bind(this);
+        this.handleChangeDate = this.handleChangeDate.bind(this);
     }
 
     componentDidMount() {
@@ -96,17 +103,20 @@ class Form extends Component {
         Helper.setCityFromZipcode(this, e, arrayPostalCode ? arrayPostalCode : arrayZipcodes, "toCity")
     }
 
+    handleChangeDate = (name, e) => { this.setState({ [name]: e !== null ? e : "" }) }
+
     handleSubmit = (e) => {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { toName, toAddress, toZipcode, toCity } = this.state;
+        const { dateAt, toName, toAddress, toZipcode, toCity } = this.state;
 
         let method = context === "create" ? "POST" : "PUT";
 
         this.setState({ errors: [], success: false })
 
         let paramsToValidate = [
+            {type: "date", id: 'dateAt',      value: dateAt},
             {type: "text", id: 'toName',      value: toName},
             {type: "text", id: 'toAddress',   value: toAddress},
             {type: "text", id: 'toZipcode',   value: toZipcode},
@@ -134,6 +144,8 @@ class Form extends Component {
                     self.setState({ success: messageSuccess, errors: [] });
                     if(context === "create"){
                         self.setState( {
+                            dateAt: "",
+                            dueAt: "",
                             toName: "",
                             toAddress: "",
                             toComplement: "",
@@ -162,12 +174,35 @@ class Form extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, toName, toAddress, toComplement, toZipcode, toCity, toEmail, toPhone1, note, footer } = this.state;
+        const { errors, success, dateAt, dueAt, toName, toAddress, toComplement, toZipcode, toCity, toEmail, toPhone1, note, footer } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
 
                 {success !== false && <Alert type="info">{success}</Alert>}
+
+                <div className="line">
+
+                    <div className="form-group">
+                        <div className="line-separator">
+                            <div className="title">Facture</div>
+                        </div>
+                    </div>
+
+                    <div className="line line-2">
+                        <DatePick identifiant="dateAt" valeur={dateAt} minDate={new Date()} errors={errors} onChange={(e) => this.handleChangeDate("dateAt", e)}>
+                            Date de facture
+                        </DatePick>
+                        <div className="form-group" />
+                    </div>
+
+                    <div className="line line-2">
+                        <DatePick identifiant="dueAt" valeur={dueAt} minDate={dateAt ? dateAt : new Date()} errors={errors} onChange={(e) => this.handleChangeDate("dueAt", e)}>
+                            Date d'échéance
+                        </DatePick>
+                        <div className="form-group" />
+                    </div>
+                </div>
 
                 <div className="line">
 
