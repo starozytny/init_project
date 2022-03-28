@@ -3,9 +3,8 @@ import React, { Component } from 'react';
 import axios                   from "axios";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import {Input, Radiobox, TextArea} from "@dashboardComponents/Tools/Fields";
+import { Input, TextArea }     from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
-import { Drop }                from "@dashboardComponents/Tools/Drop";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
@@ -20,7 +19,7 @@ const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
 let arrayZipcodes = [];
 
-export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element })
+export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element, societyId })
 {
     let title = "Ajouter une facture";
     let url = Routing.generate(URL_CREATE_ELEMENT);
@@ -35,6 +34,8 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
     let form = <Form
         context={type}
         url={url}
+
+        societyId={societyId}
 
         toName={element ? Formulaire.setValueEmptyIfNull(element.toName) : ""}
         toAddress={element ? Formulaire.setValueEmptyIfNull(element.toAddress) : ""}
@@ -60,6 +61,7 @@ class Form extends Component {
         super(props);
 
         this.state = {
+            societyId: props.societyId,
             toName: props.toName,
             toAddress: props.toAddress,
             toComplement: props.toComplement,

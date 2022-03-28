@@ -22,18 +22,18 @@ class DataInvoice extends DataConstructor
         $this->billService = $billService;
     }
 
-    public function setDataInvoice(BiInvoice $obj, $data): BiInvoice
+    public function setDataInvoice(BiInvoice $obj, $data, Society $society): BiInvoice
     {
         return ($obj)
-            ->setFromName($this->sanitizeData->trimData($data->fromName))
-            ->setFromAddress($this->sanitizeData->trimData($data->fromAddress))
-            ->setFromComplement($this->sanitizeData->trimData($data->fromComplement))
-            ->setFromZipcode($this->sanitizeData->trimData($data->fromZipcode))
-            ->setFromCity($this->sanitizeData->trimData($data->fromCity))
-            ->setFromEmail($this->sanitizeData->trimData($data->fromEmail))
-            ->setFromPhone1($this->sanitizeData->trimData($data->fromPhone1))
-            ->setFromSiren($this->sanitizeData->trimData($data->fromSiren))
-            ->setFromTva($this->sanitizeData->trimData($data->fromTva))
+            ->setFromName($society->getName())
+            ->setFromAddress($society->getAddress())
+            ->setFromComplement($society->getComplement())
+            ->setFromZipcode($society->getZipcode())
+            ->setFromCity($society->getCity())
+            ->setFromEmail($society->getEmail())
+            ->setFromPhone1($society->getPhone1())
+            ->setFromSiren($society->getSiren())
+            ->setFromTva($society->getNumeroTva())
 
             ->setToName($this->sanitizeData->trimData($data->toName))
             ->setToAddress($this->sanitizeData->trimData($data->toAddress))

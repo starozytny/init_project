@@ -3,7 +3,10 @@
 {% set page_title %}Facturations{% endset %}
 
 {% block main_content %}
-    <div id="invoices" data-donnees="{{ donnees }}">
+    <div id="invoices"
+         data-donnees="{{ donnees }}"
+         data-society-id="{{ society.id }}"
+    >
         {% include "dashboard/layout/components/spinner.html.twig" %}
     </div>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Controller\Api\Bill;
 
 use App\Entity\Bill\BiInvoice;
+use App\Entity\Society;
 use App\Entity\User;
 use App\Service\ApiResponse;
 use App\Service\Data\Bill\DataInvoice;
@@ -40,7 +41,12 @@ class InvoiceController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $obj = $dataEntity->setDataInvoice($obj, $data);
+        $society = $em->getRepository(Society::class)->find($data->societyId);
+        if(!$society){
+            return $apiResponse->apiJsonResponseBadRequest('La société est introuvable, veuillez contacter le support.');
+        }
+
+        $obj = $dataEntity->setDataInvoice($obj, $data, $society);
 
         if($type == "create"){
             $obj->setNumero("Brouillon");

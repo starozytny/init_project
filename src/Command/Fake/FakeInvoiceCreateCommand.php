@@ -54,16 +54,6 @@ class FakeInvoiceCreateCommand extends Command
             $totalTtc = ($totalHt - $totalRemise) + $totalTva;
 
             $data = [
-                'fromName' => $society->getName(),
-                'fromAddress' => $society->getAddress(),
-                'fromComplement' => $society->getComplement(),
-                'fromZipcode' => $society->getZipcode(),
-                'fromCity' => $society->getCity(),
-                'fromEmail' => $society->getEmail(),
-                'fromPhone1' => $society->getPhone1(),
-                'fromSiren' => "83348805900027",
-                'fromTva' => "FR32833488059",
-
                 'toName' => $toName,
                 'toAddress' => $fake->streetName,
                 'toComplement' => $fake->streetName,
@@ -84,7 +74,7 @@ class FakeInvoiceCreateCommand extends Command
 
             $data = json_decode(json_encode($data));
 
-            $new = $this->dataEntity->setDataInvoice(new BiInvoice(), $data);
+            $new = $this->dataEntity->setDataInvoice(new BiInvoice(), $data, $society);
 
             $dateAt = new \DateTime();
 

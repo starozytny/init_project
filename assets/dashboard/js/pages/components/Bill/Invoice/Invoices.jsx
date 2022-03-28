@@ -86,11 +86,15 @@ export class Invoices extends Component {
     }
 
     handleContentCreate = (changeContext) => {
-        return <InvoiceFormulaire type="create" onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        const { societyId } = this.props;
+        return <InvoiceFormulaire type="create" societyId={societyId}
+                                  onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        return <InvoiceFormulaire type="update" element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        const { societyId } = this.props;
+        return <InvoiceFormulaire type="update" societyId={societyId}
+                                  element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     render () {

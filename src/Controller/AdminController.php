@@ -177,10 +177,13 @@ class AdminController extends AbstractController
      */
     public function invoice(SerializerInterface $serializer): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
         $objs = $this->getAllData(BiInvoice::class, $serializer, BiInvoice::INVOICE_READ);
 
         return $this->render('admin/pages/invoice/index.html.twig', [
             'donnees' => $objs,
+            'society' => $user->getSociety()
         ]);
     }
 }
