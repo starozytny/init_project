@@ -177,13 +177,18 @@ class AdminController extends AbstractController
      */
     public function invoice(SerializerInterface $serializer): Response
     {
+        $em = $this->doctrine->getManager();
+
         /** @var User $user */
         $user = $this->getUser();
+        $society = $em->getRepository(Society::class)->find($user->getSociety()->getId());
+
         $objs = $this->getAllData(BiInvoice::class, $serializer, BiInvoice::INVOICE_READ);
+        $society = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
 
         return $this->render('admin/pages/invoice/index.html.twig', [
             'donnees' => $objs,
-            'society' => $user->getSociety()
+            'society' => $society
         ]);
     }
 }

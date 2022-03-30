@@ -20,7 +20,7 @@ const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
 let arrayZipcodes = [];
 
-export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element, societyId })
+export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element, society })
 {
     let title = "Ajouter une facture";
     let url = Routing.generate(URL_CREATE_ELEMENT);
@@ -32,14 +32,24 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
         msg = "Félicitations ! La mise à jour s'est réalisée avec succès !";
     }
 
+    let dateInvoice = society.dateInvoiceJavascript;
+
+    let dueAt = null;
+    if(dateInvoice){
+        dueAt = new Date();
+        dueAt = dueAt.setDate(new Date(dateInvoice).getDate() + 8);
+    }
+
+
     let form = <Form
         context={type}
         url={url}
 
-        societyId={societyId}
+        society={society}
+        dateInvoice={dateInvoice}
 
-        dateAt={element ? Formulaire.setDateOrEmptyIfNull(element.dateAtJavascript) : ""}
-        dueAt={element ? Formulaire.setDateOrEmptyIfNull(element.dueAtJavascript) : ""}
+        dateAt={element ? Formulaire.setDateOrEmptyIfNull(element.dateAtJavascript) : Formulaire.setDateOrEmptyIfNull(dateInvoice)}
+        dueAt={element ? Formulaire.setDateOrEmptyIfNull(element.dueAtJavascript) : dueAt}
         dueType={element ? Formulaire.setValueEmptyIfNull(element.dueType, 2) : 2}
 
         toName={element ? Formulaire.setValueEmptyIfNull(element.toName) : ""}
@@ -66,7 +76,7 @@ class Form extends Component {
         super(props);
 
         this.state = {
-            societyId: props.societyId,
+            societyId: props.society.id,
             dateAt: props.dateAt,
             dueAt: props.dueAt,
             dueType: props.dueType,
@@ -215,7 +225,7 @@ class Form extends Component {
     }
 
     render () {
-        const { context } = this.props;
+        const { context, society, dateInvoice } = this.props;
         const { errors, success, dateAt, dueAt, dueType,
             toName, toAddress, toComplement, toZipcode, toCity, toEmail, toPhone1,
             note, footer } = this.state;
@@ -242,7 +252,7 @@ class Form extends Component {
                     </div>
 
                     <div className="line line-2">
-                        <DatePick identifiant="dateAt" valeur={dateAt} minDate={new Date()} errors={errors} onChange={(e) => this.handleChangeDate("dateAt", e)}>
+                        <DatePick identifiant="dateAt" valeur={dateAt} minDate={dateInvoice ? new Date(dateInvoice) : ""} errors={errors} onChange={(e) => this.handleChangeDate("dateAt", e)}>
                             Date de facture
                         </DatePick>
                         <div className="form-group" />

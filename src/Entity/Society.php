@@ -466,6 +466,15 @@ class Society extends DataEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     * @Groups({"admin:read"})
+     */
+    public function getDateInvoiceJavascript(): ?string
+    {
+        return $this->setDateJavascript($this->dateInvoice);
+    }
+
     public function getDateInvoice(): ?\DateTimeInterface
     {
         return $this->dateInvoice;
