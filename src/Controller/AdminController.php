@@ -174,7 +174,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/facturations/factures", name="invoice_index")
+     * @Route("/facturations/factures", name="bill_invoice_index")
      */
     public function invoice(SerializerInterface $serializer): Response
     {
@@ -187,7 +187,7 @@ class AdminController extends AbstractController
         $objs = $this->getAllData(BiInvoice::class, $serializer, BiInvoice::INVOICE_READ);
         $society = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
 
-        return $this->render('admin/pages/invoice/index.html.twig', [
+        return $this->render('admin/pages/bill/invoice.html.twig', [
             'donnees' => $objs,
             'society' => $society
         ]);
@@ -198,18 +198,13 @@ class AdminController extends AbstractController
      */
     public function billItems(SerializerInterface $serializer): Response
     {
-        $em = $this->doctrine->getManager();
-
         /** @var User $user */
         $user = $this->getUser();
-        $society = $em->getRepository(Society::class)->find($user->getSociety()->getId());
+        $objs = $this->getAllData(BiItem::class, $serializer, BiItem::ITEM_READ);
 
-        $objs = $this->getAllData(BiItem::class, $serializer, BiInvoice::INVOICE_READ);
-        $society = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
-
-        return $this->render('admin/pages/invoice/index.html.twig', [
+        return $this->render('admin/pages/bill/item.html.twig', [
             'donnees' => $objs,
-            'society' => $society
+            'society' => $user->getSociety()
         ]);
     }
 }

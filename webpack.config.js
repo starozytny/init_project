@@ -68,7 +68,7 @@ Encore
     .addEntry('dashboard_notifications', './assets/dashboard/js/pages/notifications.js')
     .addEntry('dashboard_changelog', './assets/dashboard/js/pages/changelog.js')
     .addEntry('dashboard_society', './assets/dashboard/js/pages/society.js')
-    .addEntry('dashboard_invoice', './assets/dashboard/js/pages/invoice.js')
+    .addEntry('dashboard_bill', './assets/dashboard/js/pages/bill.js')
 
     .addEntry('user_homepage', './assets/user/js/pages/homepage.js')
     .addEntry('user_profil', './assets/user/js/pages/profil.js')

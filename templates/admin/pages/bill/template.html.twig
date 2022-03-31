@@ -1,0 +1,16 @@
+{% extends 'admin/layout/layout.html.twig' %}
+
+{% set submenu = [
+    { 'label': "Factures", 'path': path('admin_bill_invoice_index') },
+    { 'label': "Articles", 'path': path('admin_bill_items_index') }
+] %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('dashboard_bill') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('dashboard_bill') }}
+{% endblock %}
