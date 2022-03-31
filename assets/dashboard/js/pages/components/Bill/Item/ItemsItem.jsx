@@ -24,7 +24,7 @@ export class ItemsItem extends Component {
                             </div>
                         </div>
                         <div className="col-3">
-                            <span className="sub">{elem.unityString}</span>
+                            <span className="sub">{elem.unity}</span>
                         </div>
                         <div className="col-4">
                             <div className="sub">{elem.rateTva}%</div>
