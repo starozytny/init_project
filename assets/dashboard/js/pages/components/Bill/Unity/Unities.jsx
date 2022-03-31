@@ -7,7 +7,7 @@ import TopToolbar        from "@commonComponents/functions/topToolbar";
 import { UnitiesList } from "@dashboardPages/components/Bill/Unity/UnitiesList";
 import { UnityFormulaire } from "@dashboardPages/components/Bill/Unity/UnityForm";
 
-const URL_DELETE_ELEMENT    = 'api_bill_taxes_delete';
+const URL_DELETE_ELEMENT    = 'api_bill_unities_delete';
 const MSG_DELETE_ELEMENT    = 'Supprimer cette unité ?';
 let SORTER = Sort.compareName;
 
