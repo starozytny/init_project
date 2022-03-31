@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Bill\BiInvoice;
+use App\Entity\Bill\BiItem;
 use App\Repository\SocietyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -144,10 +145,16 @@ class Society extends DataEntity
      */
     private $dateInvoice;
 
+    /**
+     * @ORM\OneToMany(targetEntity=BiItem::class, mappedBy="society")
+     */
+    private $biItems;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->biInvoices = new ArrayCollection();
+        $this->biItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -483,6 +490,36 @@ class Society extends DataEntity
     public function setDateInvoice(?\DateTimeInterface $dateInvoice): self
     {
         $this->dateInvoice = $dateInvoice;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BiItem>
+     */
+    public function getBiItems(): Collection
+    {
+        return $this->biItems;
+    }
+
+    public function addBiItem(BiItem $biItem): self
+    {
+        if (!$this->biItems->contains($biItem)) {
+            $this->biItems[] = $biItem;
+            $biItem->setSociety($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBiItem(BiItem $biItem): self
+    {
+        if ($this->biItems->removeElement($biItem)) {
+            // set the owning side to null (unless already changed)
+            if ($biItem->getSociety() === $this) {
+                $biItem->setSociety(null);
+            }
+        }
 
         return $this;
     }
