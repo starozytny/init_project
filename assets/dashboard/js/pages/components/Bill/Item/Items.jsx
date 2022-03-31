@@ -44,7 +44,7 @@ export class Items extends Component {
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
-    handleSearch = (search) => { this.layout.current.handleSearch(search, "invoice"); }
+    handleSearch = (search) => { this.layout.current.handleSearch(search, "item"); }
 
     handlePerPage = (perPage) => { TopToolbar.onPerPage(this, perPage, SORTER) }
 
