@@ -42,6 +42,9 @@ class FakeItemCreateCommand extends Command
 
         $society = $this->em->getRepository(Society::class)->findOneBy(['name' => 'Logilink']);
 
+        $taxes = [0, 20, 13, 10, 8.5, 5.5, 2.1];
+        $unities = ["pièce", "heure", "minute", "jour", "nuit", "semaine", "mois", "année", "kg", "tonne", "litre", "km", "mètre", "m²"];
+
         $io->title('Création de 5000 items fake');
         $fake = Factory::create();
         for($i=0; $i<5000 ; $i++) {
@@ -51,9 +54,9 @@ class FakeItemCreateCommand extends Command
                 'content' => $fake->sentence,
                 'reference' => substr(uniqid(), 0,10),
                 'numero' => uniqid(),
-                'unity' => $fake->numberBetween(0, 13),
+                'unity' => $unities[$fake->numberBetween(0, 13)],
                 'price' => $fake->randomFloat(2),
-                'rateTva' => $fake->numberBetween(0, 20),
+                'rateTva' => $taxes[$fake->numberBetween(0, 6)],
             ];
 
             $data = json_decode(json_encode($data));

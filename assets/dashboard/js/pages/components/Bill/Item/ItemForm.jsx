@@ -190,7 +190,7 @@ class Form extends Component {
                         </div>
 
                         <div className="line line-2">
-                            <Input type="cleave" valeur={price} identifiant="price" errors={errors} onChange={this.handleChangeCleave}>Prix</Input>
+                            <Input type="cleave" valeur={price} identifiant="price" errors={errors} onChange={this.handleChangeCleave}>Prix unitaire</Input>
                             <SelectReactSelectize items={selectTvas} identifiant="rateTva"
                                                   valeur={rateTva} errors={errors} onChange={(e) => this.handleChangeSelect('rateTva', e)}>
                                 Taux de TVA
