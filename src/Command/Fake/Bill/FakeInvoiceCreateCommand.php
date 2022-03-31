@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command\Fake;
+namespace App\Command\Fake\Bill;
 
 use App\Entity\Bill\BiInvoice;
 use App\Entity\Society;
