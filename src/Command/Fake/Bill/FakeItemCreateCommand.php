@@ -51,9 +51,9 @@ class FakeItemCreateCommand extends Command
                 'content' => $fake->sentence,
                 'reference' => substr(uniqid(), 0,10),
                 'numero' => uniqid(),
-                'unity' => $fake->numberBetween(0, 10),
+                'unity' => $fake->numberBetween(0, 13),
                 'price' => $fake->randomFloat(2),
-                'rateTva' => $fake->numberBetween(0, 10),
+                'rateTva' => $fake->numberBetween(0, 20),
             ];
 
             $data = json_decode(json_encode($data));

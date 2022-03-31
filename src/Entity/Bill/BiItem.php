@@ -200,4 +200,15 @@ class BiItem extends DataEntity
     {
         return $this->getFileOrDefault($this->image, self::FOLDER_IMAGES, "https://robohash.org/" . $this->image . "?size=64x64");
     }
+
+    /**
+     * @return string
+     * @Groups({"item:read"})
+     */
+    public function getUnityString(): string
+    {
+        $values = ["pièce", "heure", "minute", "jour", "nuit", "semaine", "mois", "année", "kg", "tonne", "litre", "km", "mètre", "m²"];
+
+        return $values[$this->unity];
+    }
 }
