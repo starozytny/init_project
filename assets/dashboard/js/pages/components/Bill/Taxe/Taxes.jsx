@@ -7,6 +7,8 @@ import TopToolbar        from "@commonComponents/functions/topToolbar";
 import { TaxesList } from "@dashboardPages/components/Bill/Taxe/TaxesList";
 import { TaxeFormulaire } from "@dashboardPages/components/Bill/Taxe/TaxeForm";
 
+const URL_DELETE_ELEMENT    = 'api_bill_taxes_delete';
+const MSG_DELETE_ELEMENT    = 'Supprimer cette taxe ?';
 let SORTER = Sort.compareRateInverse;
 
 let sorters = [
@@ -23,6 +25,8 @@ export class Taxes extends Component {
             perPage: 10,
             currentPage: 0,
             sorter: SORTER,
+            pathDeleteElement: URL_DELETE_ELEMENT,
+            msgDeleteElement: MSG_DELETE_ELEMENT,
             sessionName: "bill.taxes.pagination"
         }
 
@@ -58,6 +62,7 @@ export class Taxes extends Component {
         return <TaxesList onChangeContext={changeContext}
                              //filter-search
                              onSearch={this.handleSearch}
+                             onDelete={this.layout.current.handleDelete}
                              //changeNumberPerPage
                              perPage={perPage}
                              onPerPage={this.handlePerPage}
