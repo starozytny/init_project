@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@commonComponents/functions/sort";
 import TopToolbar        from "@commonComponents/functions/topToolbar";
+import Filter            from "@commonComponents/functions/filter";
 
 import { UnitiesList } from "@dashboardPages/components/Bill/Unity/UnitiesList";
 import { UnityFormulaire } from "@dashboardPages/components/Bill/Unity/UnityForm";
@@ -35,6 +36,7 @@ export class Unities extends Component {
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleGetFilters = this.handleGetFilters.bind(this);
         this.handlePerPage = this.handlePerPage.bind(this);
         this.handleChangeCurrentPage = this.handleChangeCurrentPage.bind(this);
         this.handleSorter = this.handleSorter.bind(this);
@@ -48,7 +50,9 @@ export class Unities extends Component {
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
-    handleSearch = (search) => { this.layout.current.handleSearch(search, "unity"); }
+    handleGetFilters = (filters) => { this.layout.current.handleGetFilters(filters, Filter.filterNatif); }
+
+    handleSearch = (search) => { this.layout.current.handleSearch(search, "unity", true, Filter.filterNatif); }
 
     handlePerPage = (perPage) => { TopToolbar.onPerPage(this, perPage, SORTER) }
 
@@ -62,6 +66,8 @@ export class Unities extends Component {
         return <UnitiesList onChangeContext={changeContext}
                              //filter-search
                              onSearch={this.handleSearch}
+                             filters={filters}
+                             onGetFilters={this.handleGetFilters}
                              onDelete={this.layout.current.handleDelete}
                              //changeNumberPerPage
                              perPage={perPage}
