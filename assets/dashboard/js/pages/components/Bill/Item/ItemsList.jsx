@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Button }   from "@dashboardComponents/Tools/Button";
+import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
 import { Alert }    from "@dashboardComponents/Tools/Alert";
 import { Search }   from "@dashboardComponents/Layout/Search";
 import { TopSorterPagination } from "@dashboardComponents/Layout/Pagination";
@@ -10,7 +10,7 @@ import { ItemsItem } from "@dashboardPages/components/Bill/Item/ItemsItem";
 export class ItemsList extends Component {
     render () {
         const { data, onChangeContext, taille, onSearch, perPage, onPerPage,
-            onPaginationClick, currentPage, sorters, onSorter } = this.props;
+            onPaginationClick, currentPage, sorters, onSorter, onDeleteAll } = this.props;
 
         return <>
             <div>
@@ -29,6 +29,7 @@ export class ItemsList extends Component {
                 <div className="items-table">
                     <div className="items items-default">
                         <div className="item item-header">
+                            <div className="item-header-selector" />
                             <div className="item-content">
                                 <div className="item-body">
                                     <div className="infos infos-col-6">
@@ -47,6 +48,14 @@ export class ItemsList extends Component {
                         }) : <Alert>Aucun résultat</Alert>}
                     </div>
                 </div>
+
+                {(data && data.length !== 0) && <div className="page-actions">
+                    <div className="selectors-actions">
+                        <div className="item" onClick={onDeleteAll}>
+                            <ButtonIcon icon="trash" text="Supprimer la sélection" />
+                        </div>
+                    </div>
+                </div>}
             </div>
         </>
     }

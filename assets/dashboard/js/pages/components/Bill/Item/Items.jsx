@@ -7,6 +7,10 @@ import TopToolbar        from "@commonComponents/functions/topToolbar";
 import { ItemsList }      from "@dashboardPages/components/Bill/Item/ItemsList";
 import { ItemFormulaire } from "@dashboardPages/components/Bill/Item/ItemForm";
 
+const URL_DELETE_ELEMENT    = 'api_users_delete';
+const URL_DELETE_GROUP      = 'api_users_delete_group';
+const MSG_DELETE_ELEMENT    = 'Supprimer cet article ?';
+const MSG_DELETE_GROUP      = 'Aucun article sélectionné.';
 let SORTER = Sort.compareName;
 
 let sorters = [
@@ -23,6 +27,10 @@ export class Items extends Component {
             perPage: 10,
             currentPage: 0,
             sorter: SORTER,
+            pathDeleteElement: URL_DELETE_ELEMENT,
+            msgDeleteElement: MSG_DELETE_ELEMENT,
+            pathDeleteGroup: URL_DELETE_GROUP,
+            msgDeleteGroup: MSG_DELETE_GROUP,
             sessionName: "bill.item.pagination"
         }
 
@@ -58,6 +66,8 @@ export class Items extends Component {
         return <ItemsList onChangeContext={changeContext}
                              //filter-search
                              onSearch={this.handleSearch}
+                             onDelete={this.layout.current.handleDelete}
+                             onDeleteAll={this.layout.current.handleDeleteGroup}
                              //changeNumberPerPage
                              perPage={perPage}
                              onPerPage={this.handlePerPage}

@@ -3,12 +3,15 @@ import React, { Component } from 'react';
 import Sanitaze from "@commonComponents/functions/sanitaze";
 
 import { ButtonIcon } from "@dashboardComponents/Tools/Button";
+import { Selector }   from "@dashboardComponents/Layout/Selector";
 
 export class ItemsItem extends Component {
     render () {
         const { elem, onChangeContext, onDelete } = this.props;
 
         return <div className="item">
+            <Selector id={elem.id} />
+
             <div className="item-content">
                 <div className="item-body">
                     <div className="infos infos-col-6">
