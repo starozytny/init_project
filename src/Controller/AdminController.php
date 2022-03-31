@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Bill\BiInvoice;
+use App\Entity\Bill\BiItem;
 use App\Entity\Changelog;
 use App\Entity\Contact;
 use App\Entity\Notification;
@@ -173,7 +174,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/facturations", name="invoice_index")
+     * @Route("/facturations/factures", name="invoice_index")
      */
     public function invoice(SerializerInterface $serializer): Response
     {
@@ -184,6 +185,26 @@ class AdminController extends AbstractController
         $society = $em->getRepository(Society::class)->find($user->getSociety()->getId());
 
         $objs = $this->getAllData(BiInvoice::class, $serializer, BiInvoice::INVOICE_READ);
+        $society = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
+
+        return $this->render('admin/pages/invoice/index.html.twig', [
+            'donnees' => $objs,
+            'society' => $society
+        ]);
+    }
+
+    /**
+     * @Route("/facturations/articles", name="bill_items_index")
+     */
+    public function billItems(SerializerInterface $serializer): Response
+    {
+        $em = $this->doctrine->getManager();
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $society = $em->getRepository(Society::class)->find($user->getSociety()->getId());
+
+        $objs = $this->getAllData(BiItem::class, $serializer, BiInvoice::INVOICE_READ);
         $society = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
 
         return $this->render('admin/pages/invoice/index.html.twig', [

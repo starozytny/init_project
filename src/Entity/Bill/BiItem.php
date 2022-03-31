@@ -2,54 +2,68 @@
 
 namespace App\Entity\Bill;
 
+use App\Entity\DataEntity;
 use App\Entity\Society;
 use App\Repository\Bill\BiItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=BiItemRepository::class)
  */
-class BiItem
+class BiItem extends DataEntity
 {
+    const FOLDER_IMAGES = "bill/items";
+
+    const ITEM_READ = ['item:read'];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"item:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
+     * @Groups({"item:read"})
      */
     private $reference;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Groups({"item:read"})
      */
     private $numero;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"item:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"item:read"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"item:read"})
      */
     private $unity;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"item:read"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"item:read"})
      */
     private $rateTva;
 
@@ -61,6 +75,7 @@ class BiItem
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"item:read"})
      */
     private $image;
 
@@ -175,5 +190,14 @@ class BiItem
         $this->image = $image;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     * @Groups({"item:read"})
+     */
+    public function getImageFile(): string
+    {
+        return $this->getFileOrDefault($this->image, self::FOLDER_IMAGES, "https://robohash.org/" . $this->image . "?size=64x64");
     }
 }
