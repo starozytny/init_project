@@ -36,6 +36,11 @@ function switchFunction(type, search, v) {
                 return v;
             }
             break;
+        case "taxe":
+            if(v.rate.toString().toLowerCase().includes(search)){
+                return v;
+            }
+            break;
         default:
             break;
     }

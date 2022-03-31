@@ -46,6 +46,10 @@ function compareNumeroInverse(a, b){
     return comparison(b.numero, a.numero);
 }
 
+function compareRateInverse(a, b){
+    return comparison(b.rate, a.rate);
+}
+
 function compareDateInverseThenNumeroInverse(a, b){
     if (b.dateAt > a.dateAt) {
         return 1;
@@ -79,4 +83,5 @@ module.exports = {
     compareNumero,
     compareNumeroInverse,
     compareDateInverseThenNumeroInverse,
+    compareRateInverse,
 }

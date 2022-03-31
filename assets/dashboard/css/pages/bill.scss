@@ -5,7 +5,11 @@
 }
 
 #items{
-  @include toolbarCreateSearch(170);
+  @include toolbarCreateSearch(171);
+}
+
+#taxes{
+  @include toolbarCreateSearch(164);
 }
 
 //                      __   _____ __    ___    __

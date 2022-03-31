@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiItem;
+use App\Entity\Bill\BiTaxe;
+use App\Entity\Bill\BiUnity;
 use App\Entity\Changelog;
 use App\Entity\Contact;
 use App\Entity\Notification;
@@ -211,6 +213,46 @@ class AdminController extends AbstractController
             'society' => $society,
             'taxes' => $taxes,
             'unities' => $unities,
+        ]);
+    }
+
+    /**
+     * @Route("/facturations/taxes", name="bill_taxes_index")
+     */
+    public function taxes(SerializerInterface $serializer): Response
+    {
+        $em = $this->doctrine->getManager();
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $society = $user->getSociety();
+        $objs = $em->getRepository(BiTaxe::class)->findBy(['society' => [null, $society]]);
+
+        $objs = $serializer->serialize($objs, 'json', ['groups' => User::USER_READ]);
+
+        return $this->render('admin/pages/bill/taxe.html.twig', [
+            'donnees' => $objs,
+            'society' => $society,
+        ]);
+    }
+
+    /**
+     * @Route("/facturations/unites", name="bill_unities_index")
+     */
+    public function unities(SerializerInterface $serializer): Response
+    {
+        $em = $this->doctrine->getManager();
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $society = $user->getSociety();
+        $objs = $em->getRepository(BiUnity::class)->findBy(['society' => [null, $society]]);
+
+        $objs = $serializer->serialize($objs, 'json', ['groups' => User::USER_READ]);
+
+        return $this->render('admin/pages/bill/unity.html.twig', [
+            'donnees' => $objs,
+            'society' => $society,
         ]);
     }
 }
