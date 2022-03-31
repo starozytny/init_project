@@ -50,7 +50,7 @@ class BiItem extends DataEntity
     private $content;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=60)
      * @Groups({"item:read"})
      */
     private $unity;
@@ -120,12 +120,12 @@ class BiItem extends DataEntity
         return $this;
     }
 
-    public function getUnity(): ?int
+    public function getUnity(): ?string
     {
         return $this->unity;
     }
 
-    public function setUnity(int $unity): self
+    public function setUnity(string $unity): self
     {
         $this->unity = $unity;
 
@@ -199,16 +199,5 @@ class BiItem extends DataEntity
     public function getImageFile(): string
     {
         return $this->getFileOrDefault($this->image, self::FOLDER_IMAGES, "https://robohash.org/" . $this->image . "?size=64x64");
-    }
-
-    /**
-     * @return string
-     * @Groups({"item:read"})
-     */
-    public function getUnityString(): string
-    {
-        $values = ["pièce", "heure", "minute", "jour", "nuit", "semaine", "mois", "année", "kg", "tonne", "litre", "km", "mètre", "m²"];
-
-        return $values[$this->unity];
     }
 }
