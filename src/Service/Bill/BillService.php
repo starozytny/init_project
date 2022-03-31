@@ -2,8 +2,24 @@
 
 namespace App\Service\Bill;
 
+use App\Entity\Bill\BiTaxe;
+use App\Entity\Bill\BiUnity;
+use App\Entity\Society;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
 class BillService
 {
+    private $em;
+    private $serializer;
+
+    public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer)
+    {
+        $this->em = $entityManager;
+        $this->serializer = $serializer;
+    }
+
     public function createNewNumero($i, $year, $prefix): string
     {
         $tab = array_map('intval', str_split($i));
@@ -13,5 +29,18 @@ class BillService
         $counter .= $i;
 
         return $prefix . $counter;
+    }
+
+    public function getTaxesAndUnitiesData(Society $society, $withSerializer = false): array
+    {
+        $taxes = $this->em->getRepository(BiTaxe::class)->findBy(['society' => [null, $society]]);
+        $unities = $this->em->getRepository(BiUnity::class)->findBy(['society' => [null, $society]]);
+
+        if($withSerializer) {
+            $taxes = $this->serializer->serialize($taxes, 'json', ['groups' => User::USER_READ]);
+            $unities = $this->serializer->serialize($unities, 'json', ['groups' => User::USER_READ]);
+        }
+
+        return [$taxes, $unities];
     }
 }

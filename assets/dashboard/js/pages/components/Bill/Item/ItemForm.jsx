@@ -17,7 +17,7 @@ const URL_UPDATE_GROUP       = "api_bill_invoices_update";
 const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
-export function ItemFormulaire ({ type, onChangeContext, onUpdateList, element, societyId })
+export function ItemFormulaire ({ type, onChangeContext, onUpdateList, element, societyId, taxes, unities })
 {
     let title = "Ajouter un article";
     let url = Routing.generate(URL_CREATE_ELEMENT);
@@ -34,6 +34,8 @@ export function ItemFormulaire ({ type, onChangeContext, onUpdateList, element, 
         url={url}
 
         societyId={societyId}
+        taxes={taxes}
+        unities={unities}
 
         reference={element ? Formulaire.setValueEmptyIfNull(element.reference) : "ART"}
         numero={element ? Formulaire.setValueEmptyIfNull(element.numero) : ""}
@@ -138,27 +140,18 @@ class Form extends Component {
     }
 
     render () {
-        const { context } = this.props;
+        const { context, taxes, unities } = this.props;
         const { errors, success, reference, numero, name, content, unity, price, rateTva } = this.state;
 
-        let selectUnities = [
-            { value: 0, label: "pièce",  identifiant: "c-0" },
-            { value: 1, label: "heure",  identifiant: "c-1" },
-            { value: 2, label: "minute", identifiant: "c-2" },
-            { value: 3, label: "jour",   identifiant: "c-3" },
-            { value: 4, label: "nuit",   identifiant: "c-4" },
-        ]
+        let selectUnities = [];
+        unities.forEach(el => {
+            selectUnities.push({ value: el.name, label: el.name, identifiant: "u-" + el.id })
+        })
 
-        let selectTvas = [
-            { value: 20,    label: "20%",   identifiant: "tva-0" },
-            { value: 13,    label: "13%",   identifiant: "tva-1" },
-            { value: 10,    label: "10%",   identifiant: "tva-2" },
-            { value: 8.5,   label: "8.5%",  identifiant: "tva-3" },
-            { value: 5.5,   label: "5.5%",  identifiant: "tva-4" },
-            { value: 2.1,   label: "2.1%",  identifiant: "tva-4" },
-            { value: 2.2,   label: "2.2%",  identifiant: "tva-4" },
-            { value: 0,     label: "0%",    identifiant: "tva-4" },
-        ]
+        let selectTvas = [];
+        taxes.forEach(el => {
+            selectTvas.push({ value: el.rate, label: el.rate, identifiant: "t-" + el.id })
+        })
 
         return <>
             <form onSubmit={this.handleSubmit}>

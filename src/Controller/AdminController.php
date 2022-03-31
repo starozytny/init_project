@@ -10,6 +10,7 @@ use App\Entity\Notification;
 use App\Entity\Settings;
 use App\Entity\Society;
 use App\Entity\User;
+use App\Service\Bill\BillService;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -196,15 +197,20 @@ class AdminController extends AbstractController
     /**
      * @Route("/facturations/articles", name="bill_items_index")
      */
-    public function billItems(SerializerInterface $serializer): Response
+    public function billItems(SerializerInterface $serializer, BillService $billService): Response
     {
         /** @var User $user */
         $user = $this->getUser();
+        $society = $user->getSociety();
         $objs = $this->getAllData(BiItem::class, $serializer, BiItem::ITEM_READ);
+
+        [$taxes, $unities] = $billService->getTaxesAndUnitiesData($society, true);
 
         return $this->render('admin/pages/bill/item.html.twig', [
             'donnees' => $objs,
-            'society' => $user->getSociety()
+            'society' => $society,
+            'taxes' => $taxes,
+            'unities' => $unities,
         ]);
     }
 }

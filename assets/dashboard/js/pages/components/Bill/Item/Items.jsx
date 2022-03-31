@@ -73,14 +73,14 @@ export class Items extends Component {
     }
 
     handleContentCreate = (changeContext) => {
-        const { societyId } = this.props;
-        return <ItemFormulaire type="create" societyId={societyId}
+        const { societyId, taxes, unities } = this.props;
+        return <ItemFormulaire type="create" societyId={societyId} taxes={JSON.parse(taxes)} unities={JSON.parse(unities)}
                                   onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        const { societyId } = this.props;
-        return <ItemFormulaire type="update" societyId={societyId}
+        const { societyId, taxes, unities } = this.props;
+        return <ItemFormulaire type="update" societyId={societyId} taxes={JSON.parse(taxes)} unities={JSON.parse(unities)}
                                   element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
