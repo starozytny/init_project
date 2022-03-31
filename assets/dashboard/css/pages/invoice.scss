@@ -10,32 +10,44 @@
 //                     |__|                    |__|
 @media (min-width:768px) {
   .items-default{
-    .infos-col-6{
+    .infos-col-7{
       .col-1{
         width: 120px;
         margin-right: 24px;
       }
       .col-2{
-        width: 120px;
-        margin-right: 24px;
-      }
-      .col-3{
-        width: calc(100% - 560px - 24px);
+        width: calc(100% - 680px - 42px);
         margin-right: 24px;
         margin-top: 0;
       }
-      .col-4{
-        width: 120px;
+
+      .col-3, .col-4{
+        width: 140px;
         margin-right: 24px;
-        margin-top: 0;
       }
+
       .col-5{
+        width: 180px;
+        margin-right: 24px;
+        margin-top: 0;
+        text-align: right;
+      }
+      .col-6{
         width: 100px;
         margin-right: 24px;
         margin-top: 0;
+        text-align: right;
       }
-      .col-6{
+      .col-7{
         width: 120px;
+      }
+    }
+
+    .item-header{
+      .infos-col-7{
+        .col-2{
+          width: calc(100% - 680px - 24px);
+        }
       }
     }
   }

@@ -25,8 +25,8 @@ export class InvoicesList extends Component {
         const { data, onChangeContext, taille, onGetFilters, filters, onSearch, perPage, onPerPage,
             onPaginationClick, currentPage, sorters, onSorter } = this.props;
 
-        let filtersLabel = ["Brouillon", "A régler", "Payée", "Annulée", "Expirée", "Archivée", "Supprimée"];
-        let filtersId    = ["f-br", "f-are", "f-pa", 'f-an', "f-an", "f-ex", "f-arc", "f-su"];
+        let filtersLabel = ["Brouillon", "A régler", "Payée", "Partiel", "Archivée"];
+        let filtersId    = ["f-br", "f-are", "f-pa", 'f-pa', "f-arc"];
 
         let itemsFilter = [
             { value: 0, id: filtersId[0], label: filtersLabel[0] },
@@ -34,8 +34,6 @@ export class InvoicesList extends Component {
             { value: 2, id: filtersId[2], label: filtersLabel[2] },
             { value: 3, id: filtersId[3], label: filtersLabel[3] },
             { value: 4, id: filtersId[4], label: filtersLabel[4] },
-            { value: 5, id: filtersId[5], label: filtersLabel[5] },
-            { value: 6, id: filtersId[6], label: filtersLabel[6] },
         ];
 
         return <>
@@ -59,13 +57,14 @@ export class InvoicesList extends Component {
                         <div className="item item-header">
                             <div className="item-content">
                                 <div className="item-body">
-                                    <div className="infos infos-col-6">
+                                    <div className="infos infos-col-7">
                                         <div className="col-1">Numéro</div>
-                                        <div className="col-2">Date</div>
-                                        <div className="col-3">Client</div>
-                                        <div className="col-4">Montant TTC</div>
-                                        <div className="col-5">Statut</div>
-                                        <div className="col-6 actions">Actions</div>
+                                        <div className="col-2">Client</div>
+                                        <div className="col-3">Date</div>
+                                        <div className="col-4">Date échéance</div>
+                                        <div className="col-5">Montant TTC</div>
+                                        <div className="col-6">Statut</div>
+                                        <div className="col-7 actions">Actions</div>
                                     </div>
                                 </div>
                             </div>
