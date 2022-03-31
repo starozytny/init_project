@@ -31,6 +31,7 @@ function switchFunction(type, search, v) {
                 return v;
             }
             break;
+        case "unity":
         case "item":
             if(v.name.toString().toLowerCase().includes(search)){
                 return v;

@@ -17,14 +17,14 @@ const URL_UPDATE_GROUP       = "api_bill_taxes_update";
 const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
-export function TaxeFormulaire ({ type, onChangeContext, onUpdateList, element, societyId })
+export function UnityFormulaire ({ type, onChangeContext, onUpdateList, element, societyId })
 {
-    let title = "Ajouter une taxe";
+    let title = "Ajouter une unité";
     let url = Routing.generate(URL_CREATE_ELEMENT);
-    let msg = "Félicitations ! Vous avez ajouté une nouvelle taxe !"
+    let msg = "Félicitations ! Vous avez ajouté une nouvelle unité !"
 
     if(type === "update"){
-        title = "Modifier " + element.code;
+        title = "Modifier " + element.name;
         url = Routing.generate(URL_UPDATE_GROUP, {'id': element.id});
         msg = "Félicitations ! La mise à jour s'est réalisée avec succès !";
     }
@@ -35,8 +35,7 @@ export function TaxeFormulaire ({ type, onChangeContext, onUpdateList, element, 
 
         societyId={societyId}
 
-        code={element ? Formulaire.setValueEmptyIfNull(element.code) : ""}
-        rate={element ? Formulaire.setValueEmptyIfNull(element.rate) : ""}
+        name={element ? Formulaire.setValueEmptyIfNull(element.name) : ""}
 
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
@@ -52,8 +51,7 @@ class Form extends Component {
 
         this.state = {
             societyId: props.societyId,
-            code: props.code,
-            rate: props.rate,
+            name: props.name,
             errors: [],
             success: false
         }
@@ -68,15 +66,14 @@ class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { code, rate } = this.state;
+        const { name } = this.state;
 
         let method = context === "create" ? "POST" : "PUT";
 
         this.setState({ errors: [], success: false })
 
         let paramsToValidate = [
-            {type: "text", id: 'code', value: code},
-            {type: "text", id: 'rate', value: rate}
+            {type: "text", id: 'name', value: name}
         ];
 
         // validate global
@@ -97,8 +94,7 @@ class Form extends Component {
                     self.setState({ success: messageSuccess, errors: [] });
                     if(context === "create"){
                         self.setState( {
-                            code: "",
-                            rate: ""
+                            name: ""
                         })
                     }
                 })
@@ -114,7 +110,7 @@ class Form extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, code, rate } = this.state;
+        const { errors, success, name } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -123,9 +119,8 @@ class Form extends Component {
 
                 <div className="line">
 
-                    <div className="line line-2">
-                        <Input valeur={code} identifiant="code" errors={errors} onChange={this.handleChange} type="number">Code</Input>
-                        <Input valeur={rate} identifiant="rate" errors={errors} onChange={this.handleChange} type="number" step="any">Rate</Input>
+                    <div className="line">
+                        <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange}>Unité</Input>
                     </div>
                 </div>
 

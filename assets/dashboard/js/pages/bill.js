@@ -8,6 +8,7 @@ import { render } from "react-dom";
 import { Invoices } from "@dashboardPages/components/Bill/Invoice/Invoices";
 import { Items }    from "@dashboardPages/components/Bill/Item/Items";
 import { Taxes } from "@dashboardPages/components/Bill/Taxe/Taxes";
+import { Unities } from "@dashboardPages/components/Bill/Unity/Unities";
 
 Routing.setRoutingData(routes);
 
@@ -28,5 +29,5 @@ if(el){
 
 el = document.getElementById("unities");
 if(el){
-    render(<Items {...el.dataset}/>, el)
+    render(<Unities {...el.dataset}/>, el)
 }
