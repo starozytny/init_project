@@ -1,29 +1,21 @@
 import React, { Component } from 'react';
 
-import axios             from "axios";
-import toastr            from "toastr";
-import Swal              from "sweetalert2";
-import SwalOptions       from "@commonComponents/functions/swalOptions";
-import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
-
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@commonComponents/functions/sort";
-import Filter            from "@commonComponents/functions/filter";
 import TopToolbar        from "@commonComponents/functions/topToolbar";
-import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
-import { InvoicesList }      from "@dashboardPages/components/Bill/Invoice/InvoicesList";
-import { InvoiceFormulaire } from "@dashboardPages/components/Bill/Invoice/InvoiceForm";
+import { ItemsList }      from "@dashboardPages/components/Bill/Item/ItemsList";
+import { ItemFormulaire } from "@dashboardPages/components/Bill/Item/ItemForm";
 
-let SORTER = Sort.compareDateInverseThenNumeroInverse;
+let SORTER = Sort.compareName;
 
 let sorters = [
-    { value: 0, label: 'Création',           identifiant: 'sorter-created' },
+    { value: 0, label: 'Nom', identifiant: 'sorter-name' },
 ]
 
-let sortersFunction = [Sort.compareDateInverseThenNumeroInverse];
+let sortersFunction = [Sort.compareName];
 
-export class Invoices extends Component {
+export class Items extends Component {
     constructor(props) {
         super(props);
 
@@ -31,7 +23,7 @@ export class Invoices extends Component {
             perPage: 10,
             currentPage: 0,
             sorter: SORTER,
-            sessionName: "bill.invoices.pagination"
+            sessionName: "bill.item.pagination"
         }
 
         this.layout = React.createRef();
@@ -39,7 +31,6 @@ export class Invoices extends Component {
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
-        this.handleGetFilters = this.handleGetFilters.bind(this);
         this.handlePerPage = this.handlePerPage.bind(this);
         this.handleChangeCurrentPage = this.handleChangeCurrentPage.bind(this);
         this.handleSorter = this.handleSorter.bind(this);
@@ -53,9 +44,7 @@ export class Invoices extends Component {
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
-    handleGetFilters = (filters) => { this.layout.current.handleGetFilters(filters, Filter.filterStatus); }
-
-    handleSearch = (search) => { this.layout.current.handleSearch(search, "invoice", true, Filter.filterStatus); }
+    handleSearch = (search) => { this.layout.current.handleSearch(search, "invoice"); }
 
     handlePerPage = (perPage) => { TopToolbar.onPerPage(this, perPage, SORTER) }
 
@@ -66,11 +55,9 @@ export class Invoices extends Component {
     handleContentList = (currentData, changeContext, getFilters, filters, data) => {
         const { perPage, currentPage } = this.state;
 
-        return <InvoicesList onChangeContext={changeContext}
+        return <ItemsList onChangeContext={changeContext}
                              //filter-search
                              onSearch={this.handleSearch}
-                             filters={filters}
-                             onGetFilters={this.handleGetFilters}
                              //changeNumberPerPage
                              perPage={perPage}
                              onPerPage={this.handlePerPage}
@@ -86,14 +73,14 @@ export class Invoices extends Component {
     }
 
     handleContentCreate = (changeContext) => {
-        const { society } = this.props;
-        return <InvoiceFormulaire type="create" society={JSON.parse(society)}
+        const { societyId } = this.props;
+        return <ItemFormulaire type="create" societyId={societyId}
                                   onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        const { society } = this.props;
-        return <InvoiceFormulaire type="update" society={JSON.parse(society)}
+        const { societyId } = this.props;
+        return <ItemFormulaire type="update" societyId={societyId}
                                   element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 

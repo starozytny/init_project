@@ -1,6 +1,12 @@
 @import "../vars/vars";
 
-@include toolbarCreateFilterSearch(185);
+#invoices{
+  @include toolbarCreateFilterSearch(185);
+}
+
+#items{
+  @include toolbarCreateSearch(170);
+}
 
 //                      __   _____ __    ___    __
 //                     | _| |___  / /_  ( _ )  |_ |
