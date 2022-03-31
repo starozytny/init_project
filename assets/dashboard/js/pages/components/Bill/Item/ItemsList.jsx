@@ -35,7 +35,7 @@ export class ItemsList extends Component {
                                         <div className="col-1">Référence</div>
                                         <div className="col-2">Désignation</div>
                                         <div className="col-3">Unité</div>
-                                        <div className="col-4">Taux TVA</div>
+                                        <div className="col-4">Taux de TVA</div>
                                         <div className="col-5">Prix</div>
                                         <div className="col-6 actions">Actions</div>
                                     </div>
