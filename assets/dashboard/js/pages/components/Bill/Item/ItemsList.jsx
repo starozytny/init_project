@@ -33,7 +33,7 @@ export class ItemsList extends Component {
                                 <div className="item-body">
                                     <div className="infos infos-col-6">
                                         <div className="col-1">Référence</div>
-                                        <div className="col-2">Intitulé</div>
+                                        <div className="col-2">Désignation</div>
                                         <div className="col-3">Unité</div>
                                         <div className="col-4">Taux TVA</div>
                                         <div className="col-5">Prix</div>
