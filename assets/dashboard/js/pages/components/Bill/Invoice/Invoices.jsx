@@ -67,22 +67,22 @@ export class Invoices extends Component {
         const { perPage, currentPage } = this.state;
 
         return <InvoicesList onChangeContext={changeContext}
-            //filter-search
+                             //filter-search
                              onSearch={this.handleSearch}
                              filters={filters}
                              onGetFilters={this.handleGetFilters}
-            //changeNumberPerPage
+                             //changeNumberPerPage
                              perPage={perPage}
                              onPerPage={this.handlePerPage}
-            //twice pagination
+                             //twice pagination
                              currentPage={currentPage}
                              onPaginationClick={this.layout.current.handleGetPaginationClick(this)}
                              taille={data.length}
-            //sorter
+                             //sorter
                              sorters={sorters}
                              onSorter={this.handleSorter}
-            //data
-                              data={currentData} />
+                             //data
+                             data={currentData} />
     }
 
     handleContentCreate = (changeContext) => {
