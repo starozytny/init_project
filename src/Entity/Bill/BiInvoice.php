@@ -21,9 +21,7 @@ class BiInvoice extends DataEntity
     const STATUS_TO_PAY = 1;
     const STATUS_PAID = 2;
     const STATUS_PAID_PARTIAL = 3;
-    const STATUS_CANCEL = 4;
-    const STATUS_EXPIRED = 5;
-    const STATUS_ARCHIVED = 6;
+    const STATUS_ARCHIVED = 4;
 
     const DUE_TYPE_MANUAL = 0;
     const DUE_TYPE_ACQUITTED = 1;
@@ -566,7 +564,7 @@ class BiInvoice extends DataEntity
      */
     public function getStatusString(): string
     {
-        $values = ["Brouillon", "A régler", "Payée", "Partiel", "Annulée", "Expirée", "Archivée"];
+        $values = ["Brouillon", "A régler", "Payée", "Partiel", "Archivée"];
 
         return $values[$this->status];
     }

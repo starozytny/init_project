@@ -38,6 +38,8 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
     if(dateInvoice){
         dueAt = new Date();
         dueAt = dueAt.setDate(new Date(dateInvoice).getDate() + 8);
+
+        dueAt = new Date(dueAt);
     }
 
 
