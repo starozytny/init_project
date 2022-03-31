@@ -2,21 +2,12 @@
 
 namespace App\Service\Data\Bill;
 
-use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiItem;
 use App\Entity\Society;
-use App\Service\Bill\BillService;
 use App\Service\Data\DataConstructor;
-use App\Service\SanitizeData;
-use App\Service\ValidatorService;
-use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 
 class DataItem extends DataConstructor
 {
-    /**
-     * @throws Exception
-     */
     public function setData(BiItem $obj, $data, Society $society): BiItem
     {
         return ($obj)
