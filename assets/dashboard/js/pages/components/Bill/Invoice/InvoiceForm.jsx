@@ -46,13 +46,23 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
         dueAt = new Date(dueAt);
     }
 
+    let totalHt = 0,
+        totalRemise = element ? Formulaire.setValueEmptyIfNull(element.totalRemise, 0) : 0,
+        totalTva = 0,
+        totalTtc = 0;
+
     let nProducts = [];
     if(element){
         products.forEach(pr => {
             if(pr.identifiant === "FA-" + element.id){
                 nProducts.push(pr);
+
+                totalHt += pr.quantity * pr.price;
+                totalTva += (pr.quantity * pr.price) * (20/100)
             }
         })
+
+        totalTtc = totalHt + totalTva - totalRemise
     }
 
     let form = <Form
@@ -79,6 +89,11 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
         toPhone1={element ? Formulaire.setValueEmptyIfNull(element.toPhone1) : ""}
 
         products={nProducts}
+
+        totalHt={totalHt}
+        totalRemise={totalRemise}
+        totalTva={totalTva}
+        totalTtc={totalTtc}
 
         note={element ? Formulaire.setValueEmptyIfNull(element.note) : ""}
         footer={element ? Formulaire.setValueEmptyIfNull(element.footer) : ""}
@@ -110,10 +125,10 @@ class Form extends Component {
             note: props.note,
             footer: props.footer,
             products: props.products,
-            totalHt: 0,
-            totalRemise: 0,
-            totalTva: 0,
-            totalTtc: 0,
+            totalHt: props.totalHt,
+            totalRemise: props.totalRemise,
+            totalTva: props.totalTva,
+            totalTtc: props.totalTtc,
             errors: [],
             success: false,
             element: null,
@@ -272,7 +287,7 @@ class Form extends Component {
         const { context, society, dateInvoice, items, taxes, unities } = this.props;
         const { element, errors, success, dateAt, dueAt, dueType,
             toName, toAddress, toComplement, toZipcode, toCity, toEmail, toPhone1,
-            note, footer, item, products } = this.state;
+            note, footer, item, products, totalHt, totalRemise, totalTva, totalTtc } = this.state;
 
         let selectDueTypes = [
             { value: 0, label: "Définir manuellement", identifiant: "c-0" },
@@ -401,6 +416,33 @@ class Form extends Component {
                         </div>
                         <div className="line">
                             <TextArea valeur={footer} identifiant="footer" errors={errors} onChange={this.handleChange}>Renseignements bancaires</TextArea>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="line">
+                    <div className="form-group">
+                        <div className="line-separator">
+                            <div className="title">Totaux</div>
+                        </div>
+
+                        <div className="line line-4">
+                            <div className="form-group">
+                                <label>Total HT</label>
+                                <div>{Sanitaze.toFormatCurrency(totalHt)}</div>
+                            </div>
+                            <div className="form-group">
+                                <label>Total Remise</label>
+                                <div>{Sanitaze.toFormatCurrency(totalRemise)}</div>
+                            </div>
+                            <div className="form-group">
+                                <label>Total TVA</label>
+                                <div>{Sanitaze.toFormatCurrency(totalTva)}</div>
+                            </div>
+                            <div className="form-group">
+                                <label><b>Total TTC</b></label>
+                                <div><b>{Sanitaze.toFormatCurrency(totalTtc)}</b></div>
+                            </div>
                         </div>
                     </div>
                 </div>

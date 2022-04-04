@@ -75,6 +75,7 @@ class BiInvoice extends DataEntity
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"invoice:read"})
      */
     private $totalRemise;
 
