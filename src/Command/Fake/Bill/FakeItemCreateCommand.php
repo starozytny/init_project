@@ -45,9 +45,9 @@ class FakeItemCreateCommand extends Command
         $taxes = [0, 20, 13, 10, 8.5, 5.5, 2.1];
         $unities = ["pièce", "heure", "minute", "jour", "nuit", "semaine", "mois", "année", "kg", "tonne", "litre", "km", "mètre", "m²"];
 
-        $io->title('Création de 5000 items fake');
+        $io->title('Création de 1000 items fake');
         $fake = Factory::create();
-        for($i=0; $i<5000 ; $i++) {
+        for($i=0; $i<1000 ; $i++) {
 
             $data = [
                 'name' => $fake->name,

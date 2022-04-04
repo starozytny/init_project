@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import axios                   from "axios";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Input, Select, TextArea } from "@dashboardComponents/Tools/Fields";
+import { Input, Select, SelectReactSelectize, TextArea } from "@dashboardComponents/Tools/Fields";
 import { DatePick }            from "@dashboardComponents/Tools/DatePicker";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
@@ -11,10 +11,10 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@commonComponents/functions/validateur";
 import Helper                  from "@commonComponents/functions/helper";
+import Sanitaze                from "@commonComponents/functions/sanitaze";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
-import {ItemFormulaire} from "@dashboardPages/components/Bill/Item/ItemForm";
-import {Aside} from "@dashboardComponents/Tools/Aside";
-import {Items} from "@dashboardPages/components/Bill/Item/Items";
+
+import { ItemInvoiceFormulaire } from "@dashboardPages/components/Bill/Invoice/ItemInvoiceForm";
 
 const URL_CREATE_ELEMENT     = "api_bill_invoices_create";
 const URL_UPDATE_GROUP       = "api_bill_invoices_update";
@@ -22,6 +22,7 @@ const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
 let arrayZipcodes = [];
+let i = 0;
 
 export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element, society, items, taxes, unities })
 {
@@ -102,7 +103,9 @@ class Form extends Component {
             totalTva: 0,
             totalTtc: 0,
             errors: [],
-            success: false
+            success: false,
+            element: null,
+            item: ""
         }
 
         this.asideSelect = React.createRef();
@@ -113,7 +116,6 @@ class Form extends Component {
         this.handleChangeZipcodeCity = this.handleChangeZipcodeCity.bind(this);
         this.handleChangeDate = this.handleChangeDate.bind(this);
 
-        this.handleOpenAside = this.handleOpenAside.bind(this);
         this.handleSelectItem = this.handleSelectItem.bind(this);
     }
 
@@ -170,9 +172,18 @@ class Form extends Component {
         this.setState({ [name]: e !== null ? e : "" })
     }
 
-    handleOpenAside = (selector) => { selector.current.handleOpen(); }
+    handleSelectItem = (item) => {
+        const { items } = this.props;
 
-    handleSelectItem = (item) => { console.log(item) }
+        let nItem = null;
+        items.forEach(it => {
+            if(it.id === item.value){
+                nItem = it;
+            }
+        })
+
+        this.setState({ element: nItem })
+    }
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -244,9 +255,9 @@ class Form extends Component {
 
     render () {
         const { context, society, dateInvoice, items, taxes, unities } = this.props;
-        const { errors, success, dateAt, dueAt, dueType,
+        const { element, errors, success, dateAt, dueAt, dueType,
             toName, toAddress, toComplement, toZipcode, toCity, toEmail, toPhone1,
-            note, footer } = this.state;
+            note, footer, item } = this.state;
 
         let selectDueTypes = [
             { value: 0, label: "Définir manuellement", identifiant: "c-0" },
@@ -255,6 +266,11 @@ class Form extends Component {
             { value: 3, label: "14 jours",             identifiant: "c-3" },
             { value: 4, label: "30 jours",             identifiant: "c-4" },
         ]
+
+        let selectItems = [];
+        items.forEach(it => {
+            selectItems.push({ value: it.id, label: it.name + " : " + Sanitaze.toFormatCurrency(it.price), identifiant: "it-" + it.id })
+        })
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -322,7 +338,20 @@ class Form extends Component {
                     </div>
 
                     <div className="line">
+                        <SelectReactSelectize items={selectItems} identifiant="item" placeholder={"Sélectionner un article"}
+                                              valeur={item} errors={errors} onChange={(e) => this.handleSelectItem(e)}>
+                            Sélectionner un article
+                        </SelectReactSelectize>
+                    </div>
 
+                    <div className="line">
+                        <div className="form-group">
+                            <div>OU</div>
+                        </div>
+                    </div>
+
+                    <div className="line">
+                        <ItemInvoiceFormulaire element={element} societyId={society.id} taxes={taxes} unities={unities} key={i++} />
                     </div>
                 </div>
 

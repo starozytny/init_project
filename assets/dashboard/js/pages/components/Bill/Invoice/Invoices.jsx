@@ -31,7 +31,11 @@ export class Invoices extends Component {
             perPage: 10,
             currentPage: 0,
             sorter: SORTER,
-            sessionName: "bill.invoices.pagination"
+            sessionName: "bill.invoices.pagination",
+            society: props.society ? JSON.parse(props.society) : [],
+            taxes: props.taxes ? JSON.parse(props.taxes) : [],
+            unities: props.unities ? JSON.parse(props.unities) : [],
+            items: props.items ? JSON.parse(props.items) : [],
         }
 
         this.layout = React.createRef();
@@ -86,14 +90,14 @@ export class Invoices extends Component {
     }
 
     handleContentCreate = (changeContext) => {
-        const { society, items, taxes, unities } = this.props;
-        return <InvoiceFormulaire type="create" society={JSON.parse(society)} taxes={JSON.parse(taxes)} unities={JSON.parse(unities)} items={items}
+        const { society, items, taxes, unities } = this.state;
+        return <InvoiceFormulaire type="create" society={society} taxes={taxes} unities={unities} items={items}
                                   onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        const { society, items, taxes, unities } = this.props;
-        return <InvoiceFormulaire type="update" society={JSON.parse(society)} taxes={JSON.parse(taxes)} unities={JSON.parse(unities)} items={items}
+        const { society, items, taxes, unities } = this.state;
+        return <InvoiceFormulaire type="update" society={society} taxes={taxes} unities={unities} items={items}
                                   element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
