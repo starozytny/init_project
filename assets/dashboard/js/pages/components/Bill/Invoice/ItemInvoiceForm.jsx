@@ -16,9 +16,11 @@ import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
 const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 
-export function ItemInvoiceFormulaire ({ element, societyId, taxes, unities })
+export function ItemInvoiceFormulaire ({ element, societyId, taxes, unities, onSubmit })
 {
     let form = <Form
+        onSubmit={onSubmit}
+
         societyId={societyId}
         taxes={taxes}
         unities={unities}
@@ -58,6 +60,8 @@ class Form extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeCleave = this.handleChangeCleave.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
+
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange = (e) => { this.setState({[e.currentTarget.name]: e.currentTarget.value}) }
@@ -65,6 +69,35 @@ class Form extends Component {
     handleChangeCleave = (e) => { this.setState({ [e.currentTarget.name]: e.currentTarget.rawValue }) }
 
     handleChangeSelect = (name, e) => { this.setState({ [name]: e !== undefined ? e.value : "" }) }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+
+        const { name, reference } = this.state;
+
+        this.setState({ errors: [] })
+
+        let paramsToValidate = [
+            {type: "text", id: 'name', value: name}
+        ];
+
+        if(reference !== ""){
+            paramsToValidate = [...paramsToValidate,
+                ...[
+                    {type: "text", id: 'reference', value: reference},
+                    {type: "length", id: 'reference', value: reference, min: 0, max: 10}
+                ]
+            ];
+        }
+
+        // validate global
+        let validate = Validateur.validateur(paramsToValidate)
+        if(!validate.code){
+            Formulaire.showErrors(this, validate);
+        }else{
+            this.props.onSubmit(this.state);
+        }
+    }
 
     render () {
         const { taxes, unities } = this.props;
@@ -111,7 +144,7 @@ class Form extends Component {
 
             <div className="line">
                 <div className="form-button">
-                    <Button type="default" outline={true} isSubmit={false}>Enregistrer l'article</Button>
+                    <Button type="default" outline={true} isSubmit={false} onClick={this.handleSubmit}>Enregistrer l'article</Button>
                 </div>
             </div>
         </>

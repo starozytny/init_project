@@ -117,6 +117,7 @@ class Form extends Component {
         this.handleChangeDate = this.handleChangeDate.bind(this);
 
         this.handleSelectItem = this.handleSelectItem.bind(this);
+        this.handleChangeItems = this.handleChangeItems.bind(this);
     }
 
     componentDidMount() {
@@ -183,6 +184,10 @@ class Form extends Component {
         })
 
         this.setState({ element: nItem })
+    }
+
+    handleChangeItems = (item) => {
+        console.log(item)
     }
 
     handleSubmit = (e) => {
@@ -351,7 +356,7 @@ class Form extends Component {
                     </div>
 
                     <div className="line">
-                        <ItemInvoiceFormulaire element={element} societyId={society.id} taxes={taxes} unities={unities} key={i++} />
+                        <ItemInvoiceFormulaire element={element} societyId={society.id} taxes={taxes} unities={unities} key={i++} onSubmit={this.handleChangeItems}/>
                     </div>
                 </div>
 
