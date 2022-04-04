@@ -12,6 +12,8 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 import Validateur              from "@commonComponents/functions/validateur";
 import Helper                  from "@commonComponents/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
+import {ItemFormulaire} from "@dashboardPages/components/Bill/Item/ItemForm";
+import {Aside} from "@dashboardComponents/Tools/Aside";
 
 const URL_CREATE_ELEMENT     = "api_bill_invoices_create";
 const URL_UPDATE_GROUP       = "api_bill_invoices_update";
@@ -98,10 +100,15 @@ class Form extends Component {
             success: false
         }
 
+        this.asideSelect = React.createRef();
+        this.asideAdd = React.createRef();
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeZipcodeCity = this.handleChangeZipcodeCity.bind(this);
         this.handleChangeDate = this.handleChangeDate.bind(this);
+
+        this.handleOpenAside = this.handleOpenAside.bind(this);
     }
 
     componentDidMount() {
@@ -155,6 +162,10 @@ class Form extends Component {
         }
 
         this.setState({ [name]: e !== null ? e : "" })
+    }
+
+    handleOpenAside = (selector) => {
+        selector.current.handleOpen();
     }
 
     handleSubmit = (e) => {
@@ -304,9 +315,18 @@ class Form extends Component {
                         </div>
                     </div>
 
-
+                    <div className="line line-3">
+                        <div className="form-group">
+                            <Button type="default" isSubmit={false} onClick={() => this.handleOpenAside(this.asideAdd)}>Ajouter un article</Button>
+                        </div>
+                        <div className="form-group">
+                            <div>OU</div>
+                        </div>
+                        <div className="form-group">
+                            <Button type="default" isSubmit={false} onClick={() => this.handleOpenAside(this.asideSelect)}>Sélectionner un article</Button>
+                        </div>
+                    </div>
                 </div>
-
 
                 <div className="line">
                     <div className="form-group">
@@ -329,6 +349,9 @@ class Form extends Component {
                     </div>
                 </div>
             </form>
+
+            <Aside ref={this.asideSelect} content={<div>ok</div>} >Sélectionner un article</Aside>
+            <Aside ref={this.asideAdd}    content={<div>ok</div>} >Ajouter un article</Aside>
         </>
     }
 }
