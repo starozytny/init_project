@@ -17,35 +17,52 @@ const STATUS_PAID = 2;
 const STATUS_PAID_PARTIAL = 3;
 const STATUS_ARCHIVED = 4;
 
-const URL_DUPLICATE_ELEMENT = "api_bill_invoices_duplicate"
+const URL_DUPLICATE_ELEMENT = "api_bill_invoices_duplicate";
+const URL_FINAL_ELEMENT     = "api_bill_invoices_final";
+
+const TEXT_GENERATE = "En cas d'erreur sur la facture " +
+    "il faudra faire un avoir pour la rectifier. <br><br>" +
+    "<b>Un mail sera envoyé aux adhérents pour les notifier de la création de leur(s) facture(s)</b>"
+
+
+function confirmAction (elem, url, title, text, messageSuccess) {
+    Formulaire.loader(true);
+    Swal.fire(SwalOptions.options(title, text))
+        .then((result) => {
+            if (result.isConfirmed) {
+                axios.post(url, {})
+                    .then(function (response) {
+                        toastr.info(messageSuccess)
+                        setTimeout(() => {
+                            location.reload()
+                        }, 2000)
+                    })
+                    .catch(function (error) {
+                        Formulaire.loader(false);
+                        Formulaire.displayErrors(self, error, "Une erreur est survenue, veuillez contacter le support.")
+                    })
+                ;
+            }
+        })
+    ;
+}
 
 export class InvoicesItem extends Component {
     constructor(props) {
         super();
 
         this.handleDuplicate = this.handleDuplicate.bind(this);
+        this.handleFinal = this.handleFinal.bind(this);
+    }
+
+    handleFinal = (elem) => {
+        confirmAction(elem, Routing.generate(URL_DUPLICATE_ELEMENT, {'id': elem.id}),
+            "Dupliquer cette facture ?", "La nouvelle facture sera en mode brouillon.", "Facture copiée avec succès.")
     }
 
     handleDuplicate = (elem) => {
-        Formulaire.loader(true);
-        Swal.fire(SwalOptions.options("Dupliquer cette facture ?", "La nouvelle facture sera en mode brouillon."))
-            .then((result) => {
-                if (result.isConfirmed) {
-                    axios.post(Routing.generate(URL_DUPLICATE_ELEMENT, {'id': elem.id}), {})
-                        .then(function (response) {
-                            toastr.info("Facture copiée avec succès.")
-                            setTimeout(() => {
-                                location.reload()
-                            }, 2000)
-                        })
-                        .catch(function (error) {
-                            Formulaire.loader(false);
-                            Formulaire.displayErrors(self, error, "Une erreur est survenue, veuillez contacter le support.")
-                        })
-                    ;
-                }
-            })
-        ;
+        confirmAction(elem, Routing.generate(URL_DUPLICATE_ELEMENT, {'id': elem.id}),
+            "Finaliser cette facture ?", "Une fois finalisée, la facture <u>ne pourra plus être modifiée</u>." + TEXT_GENERATE, "Facture finalisée avec succès.")
     }
 
     render () {
@@ -59,6 +76,9 @@ export class InvoicesItem extends Component {
             dropdownItems = [...[
                 {data: <a href="#" onClick={() => onChangeContext("update", elem)}>Modifier</a>},
                 {data: <a href="#" onClick={() => onDelete(elem)}>Supprimer</a>},
+                {data: <div className="dropdown-separator" />},
+                {data: <a href="#" onClick={() => this.handleFinal(elem)}>Finaliser</a>},
+                {data: <div className="dropdown-separator" />},
             ], ...dropdownItems]
         }
 

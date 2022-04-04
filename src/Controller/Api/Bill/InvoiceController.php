@@ -247,6 +247,35 @@ class InvoiceController extends AbstractController
     }
 
     /**
+     * @Route("/final/{id}", name="final", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Return message successful",
+     * )
+     * @OA\Response(
+     *     response=403,
+     *     description="Forbidden for not good role or user",
+     * )
+     *
+     * @OA\Tag(name="Invoices")
+     *
+     * @param Request $request
+     * @param BiInvoice $obj
+     * @param ApiResponse $apiResponse
+     * @param DataInvoice $dataInvoice
+     * @return JsonResponse
+     */
+    public function final(Request $request, BiInvoice $obj, ApiResponse $apiResponse, DataInvoice $dataInvoice): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        $em->flush();
+
+        return $apiResponse->apiJsonResponseSuccessful(true);
+    }
+
+    /**
      * @Route("/download/{id}", name="download", options={"expose"=true}, methods={"GET"})
      *
      * @OA\Response(
