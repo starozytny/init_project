@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import axios                   from "axios";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import {Input, Select, TextArea} from "@dashboardComponents/Tools/Fields";
+import { Input, Select, TextArea } from "@dashboardComponents/Tools/Fields";
+import { DatePick }            from "@dashboardComponents/Tools/DatePicker";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
@@ -11,7 +12,6 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 import Validateur              from "@commonComponents/functions/validateur";
 import Helper                  from "@commonComponents/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
-import {DatePick} from "@dashboardComponents/Tools/DatePicker";
 
 const URL_CREATE_ELEMENT     = "api_bill_invoices_create";
 const URL_UPDATE_GROUP       = "api_bill_invoices_update";
@@ -41,7 +41,6 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
 
         dueAt = new Date(dueAt);
     }
-
 
     let form = <Form
         context={type}
@@ -271,7 +270,6 @@ class Form extends Component {
                 </div>
 
                 <div className="line">
-
                     <div className="form-group">
                         <div className="line-separator">
                             <div className="title">Client</div>
@@ -298,6 +296,17 @@ class Form extends Component {
                         </div>
                     </div>
                 </div>
+
+                <div className="line">
+                    <div className="form-group">
+                        <div className="line-separator">
+                            <div className="title">Article(s)</div>
+                        </div>
+                    </div>
+
+
+                </div>
+
 
                 <div className="line">
                     <div className="form-group">
