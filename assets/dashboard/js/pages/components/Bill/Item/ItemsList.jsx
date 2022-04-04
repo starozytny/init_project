@@ -9,17 +9,15 @@ import { ItemsItem } from "@dashboardPages/components/Bill/Item/ItemsItem";
 
 export class ItemsList extends Component {
     render () {
-        const { isInvoice, data, onChangeContext, taille, onSearch, perPage, onPerPage,
+        const { data, onChangeContext, taille, onSearch, perPage, onPerPage,
             onPaginationClick, currentPage, sorters, onSorter, onDeleteAll } = this.props;
 
         return <>
             <div>
                 <div className="toolbar">
-                    {!isInvoice && <>
-                        <div className="item create">
-                            <Button onClick={() => onChangeContext("create")}>Ajouter un article</Button>
-                        </div>
-                    </>}
+                    <div className="item create">
+                        <Button onClick={() => onChangeContext("create")}>Ajouter un article</Button>
+                    </div>
                     <div className="item filter-search">
                         <Search onSearch={onSearch} placeholder="Recherche par intitulé"/>
                     </div>

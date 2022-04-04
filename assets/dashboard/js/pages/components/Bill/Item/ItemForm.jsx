@@ -10,6 +10,7 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@commonComponents/functions/validateur";
 import Helper                  from "@commonComponents/functions/helper";
+import helper                  from "@dashboardPages/components/Bill/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
 const URL_CREATE_ELEMENT     = "api_bill_invoices_create";
@@ -147,15 +148,7 @@ class Form extends Component {
         const { context, taxes, unities } = this.props;
         const { errors, success, reference, numero, name, content, unity, price, rateTva } = this.state;
 
-        let selectUnities = [];
-        unities.forEach(el => {
-            selectUnities.push({ value: el.name, label: el.name, identifiant: "u-" + el.id })
-        })
-
-        let selectTvas = [];
-        taxes.forEach(el => {
-            selectTvas.push({ value: el.rate, label: el.rate+" %", identifiant: "t-" + el.id })
-        })
+        let [selectTvas, selectUnities] = helper.getTaxesAndUnitiesSelectItems(taxes, unities);
 
         return <>
             <form onSubmit={this.handleSubmit}>

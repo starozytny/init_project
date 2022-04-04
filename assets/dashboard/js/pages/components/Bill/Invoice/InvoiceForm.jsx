@@ -321,16 +321,8 @@ class Form extends Component {
                         </div>
                     </div>
 
-                    <div className="line line-3">
-                        <div className="form-group">
-                            <Button type="default" isSubmit={false} onClick={() => this.handleOpenAside(this.asideAdd)}>Ajouter un article</Button>
-                        </div>
-                        <div className="form-group">
-                            <div>OU</div>
-                        </div>
-                        <div className="form-group">
-                            <Button type="default" isSubmit={false} onClick={() => this.handleOpenAside(this.asideSelect)}>Sélectionner un article</Button>
-                        </div>
+                    <div className="line">
+
                     </div>
                 </div>
 
@@ -355,17 +347,6 @@ class Form extends Component {
                     </div>
                 </div>
             </form>
-
-            <Aside ref={this.asideAdd}    content={<ItemFormulaire type="create" societyId={society.id}
-                                                                   taxes={taxes}
-                                                                   unities={unities} />} >Ajouter un article</Aside>
-            <div className="aside-select">
-                <Aside ref={this.asideSelect} content={<Items societyId={society.id}
-                                                              isInvoice={true}
-                                                              taxes={taxes}
-                                                              unities={unities}
-                                                              donnees={items} onSelect={this.handleSelectItem} />} >Sélectionner un article</Aside>
-            </div>
         </>
     }
 }
