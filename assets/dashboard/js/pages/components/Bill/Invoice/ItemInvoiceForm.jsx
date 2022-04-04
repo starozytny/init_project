@@ -32,7 +32,6 @@ export function ItemInvoiceFormulaire ({ element, societyId, taxes, unities, onS
         unity={element ? Formulaire.setValueEmptyIfNull(element.unity) : "pièce"}
         price={element ? Formulaire.setToFloat(element.price) : ""}
         quantity={element && element.quantity ? Formulaire.setToFloat(element.quantity, 1) : 1}
-        totalHt={element && element.totalHt ? Formulaire.setToFloat(element.totalHt, 0) : 0}
         rateTva={element ? Formulaire.setValueEmptyIfNull(element.rateTva, 20) : 20}
     />
 
@@ -53,7 +52,7 @@ class Form extends Component {
             price: props.price,
             rateTva: props.rateTva,
             quantity: props.quantity,
-            totalHt: props.totalHt !== 0 ? props.totalHt : (props.quantity * (props.price !== "" ? parseFloat(props.price) : 0)),
+            totalHt: props.quantity !== 0 ? props.quantity * (props.price !== "" ? parseFloat(props.price) : 0) : 1,
             errors: [],
         }
 
@@ -64,9 +63,31 @@ class Form extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange = (e) => { this.setState({[e.currentTarget.name]: e.currentTarget.value}) }
+    handleChange = (e) => {
+        const { price } = this.state;
 
-    handleChangeCleave = (e) => { this.setState({ [e.currentTarget.name]: e.currentTarget.rawValue }) }
+        let name = e.currentTarget.name;
+        let value = e.currentTarget.value;
+
+        if(name === "quantity"){
+            this.setState({ totalHt: helper.getTotalHt(value, price) });
+        }
+
+        this.setState({[name]: value})
+    }
+
+    handleChangeCleave = (e) => {
+        const { quantity } = this.state;
+
+        let name = e.currentTarget.name;
+        let value = e.currentTarget.rawValue;
+
+        if(name === "price"){
+            this.setState({ totalHt: helper.getTotalHt(quantity, value) });
+        }
+
+        this.setState({ [e.currentTarget.name]: e.currentTarget.rawValue })
+    }
 
     handleChangeSelect = (name, e) => { this.setState({ [name]: e !== undefined ? e.value : "" }) }
 
@@ -93,7 +114,7 @@ class Form extends Component {
         // validate global
         let validate = Validateur.validateur(paramsToValidate)
         if(!validate.code){
-            Formulaire.showErrors(this, validate);
+            Formulaire.showErrors(this, validate, "Veuillez vérifier les informations transmises.", false);
         }else{
             this.props.onSubmit(this.state);
         }

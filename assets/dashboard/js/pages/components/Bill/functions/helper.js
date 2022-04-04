@@ -1,3 +1,5 @@
+const Formulaire = require('@dashboardComponents/functions/Formulaire');
+
 function getTaxesAndUnitiesSelectItems(taxes, unities) {
     let selectUnities = [];
     unities.forEach(el => {
@@ -12,6 +14,14 @@ function getTaxesAndUnitiesSelectItems(taxes, unities) {
     return [selectTvas, selectUnities];
 }
 
+function getTotalHt(quantity, price){
+    let nQuantity = quantity !== "" ? parseInt(quantity) : 0;
+    let nPrice = price !== "" ? Formulaire.setToFloat(price) : 0;
+
+    return nQuantity * nPrice;
+}
+
 module.exports = {
-    getTaxesAndUnitiesSelectItems
+    getTaxesAndUnitiesSelectItems,
+    getTotalHt
 }

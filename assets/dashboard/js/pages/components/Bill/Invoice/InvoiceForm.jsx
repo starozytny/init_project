@@ -69,6 +69,8 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
         toEmail={element ? Formulaire.setValueEmptyIfNull(element.toEmail) : ""}
         toPhone1={element ? Formulaire.setValueEmptyIfNull(element.toPhone1) : ""}
 
+        products={[]}
+
         note={element ? Formulaire.setValueEmptyIfNull(element.note) : ""}
         footer={element ? Formulaire.setValueEmptyIfNull(element.footer) : ""}
 
@@ -98,6 +100,7 @@ class Form extends Component {
             toPhone1: props.toPhone1,
             note: props.note,
             footer: props.footer,
+            products: props.products,
             totalHt: 0,
             totalRemise: 0,
             totalTva: 0,
@@ -187,7 +190,11 @@ class Form extends Component {
     }
 
     handleChangeItems = (item) => {
-        console.log(item)
+        const { products } = this.state;
+
+        let nProducts = [];
+
+        this.setState({ products: [...products, ...[item]] })
     }
 
     handleSubmit = (e) => {
@@ -262,7 +269,7 @@ class Form extends Component {
         const { context, society, dateInvoice, items, taxes, unities } = this.props;
         const { element, errors, success, dateAt, dueAt, dueType,
             toName, toAddress, toComplement, toZipcode, toCity, toEmail, toPhone1,
-            note, footer, item } = this.state;
+            note, footer, item, products } = this.state;
 
         let selectDueTypes = [
             { value: 0, label: "Définir manuellement", identifiant: "c-0" },
@@ -357,6 +364,18 @@ class Form extends Component {
 
                     <div className="line">
                         <ItemInvoiceFormulaire element={element} societyId={society.id} taxes={taxes} unities={unities} key={i++} onSubmit={this.handleChangeItems}/>
+                    </div>
+
+                    <div className="line">
+                        {products.map((pr, index) => {
+                            return <div key={index}>
+                                <div className="col-1">{pr.name}</div>
+                                <div className="col-2">
+                                    <div>{pr.quantity} * {Sanitaze.toFormatCurrency(pr.price)}</div>
+                                    <div className="sub">{pr.rateTva}%</div>
+                                </div>
+                            </div>
+                        })}
                     </div>
                 </div>
 
