@@ -19,6 +19,13 @@ export class InvoicesItem extends Component {
             {data: <a href="/">Copier</a>},
         ];
 
+        if(elem.status === STATUS_DRAFT){
+            dropdownItems = [...[
+                {data: <a href="#" onClick={() => onChangeContext("update", elem)}>Modifier</a>},
+                {data: <a href="#" onClick={() => onDelete(elem)}>Supprimer</a>},
+            ], ...dropdownItems]
+        }
+
         if(elem.status !== STATUS_DRAFT && elem.status !== STATUS_ARCHIVED){
             dropdownItems = [...[
                 {data: <a href="/">Archiver</a>}
@@ -60,13 +67,7 @@ export class InvoicesItem extends Component {
                             <div className={"badge badge-" + elem.status}>{elem.statusString}</div>
                         </div>
                         <div className="col-7 actions">
-                            {(elem.status !== STATUS_DRAFT) && <>
-                                <ButtonIcon icon="download" element="a" target="_blank" onClick={Routing.generate('api_bill_invoices_download', {'id': elem.id})}>Télécharger</ButtonIcon>
-                            </>}
-                            {elem.status === STATUS_DRAFT && <>
-                                <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
-                                <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
-                            </>}
+                            <ButtonIcon icon="download" element="a" target="_blank" onClick={Routing.generate('api_bill_invoices_download', {'id': elem.id})}>Télécharger</ButtonIcon>
                             <ButtonIconDropdown type="default" icon="more" items={dropdownItems} />
                         </div>
                     </div>
