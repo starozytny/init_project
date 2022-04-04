@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiItem;
+use App\Entity\Bill\BiProduct;
 use App\Entity\Bill\BiTaxe;
 use App\Entity\Bill\BiUnity;
 use App\Entity\Changelog;
@@ -185,15 +186,16 @@ class AdminController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        $society = $em->getRepository(Society::class)->find($user->getSociety()->getId());
+        $society  = $em->getRepository(Society::class)->find($user->getSociety()->getId());
 
-        $objs = $this->getAllData(BiInvoice::class, $serializer, BiInvoice::INVOICE_READ);
-        $items = $this->getAllData(BiItem::class, $serializer, BiItem::ITEM_READ);
+        $objs     = $this->getAllData(BiInvoice::class, $serializer, BiInvoice::INVOICE_READ);
+        $items    = $this->getAllData(BiItem::class, $serializer, BiItem::ITEM_READ);
+        $products = $em->getRepository(BiProduct::class)->findBy(['society' => $society, 'type' => BiProduct::TYPE_INVOICE]);
 
         [$taxes, $unities] = $billService->getTaxesAndUnitiesData($society, true);
 
-        $society = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
-
+        $society  = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
+        $products = $serializer->serialize($products, 'json', ['groups' => BiProduct::PRODUCT_READ]);
 
         return $this->render('admin/pages/bill/invoice.html.twig', [
             'donnees' => $objs,
@@ -201,6 +203,7 @@ class AdminController extends AbstractController
             'items' => $items,
             'taxes' => $taxes,
             'unities' => $unities,
+            'products' => $products,
         ]);
     }
 

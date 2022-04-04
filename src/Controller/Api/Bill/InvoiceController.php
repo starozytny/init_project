@@ -3,6 +3,7 @@
 namespace App\Controller\Api\Bill;
 
 use App\Entity\Bill\BiInvoice;
+use App\Entity\Bill\BiProduct;
 use App\Entity\Society;
 use App\Entity\User;
 use App\Service\ApiResponse;
@@ -31,6 +32,9 @@ class InvoiceController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
+    /**
+     * @throws Exception
+     */
     public function submitForm($type, BiInvoice $obj, Request $request, ApiResponse $apiResponse,
                                ValidatorService $validator, DataInvoice $dataEntity): JsonResponse
     {
@@ -44,6 +48,18 @@ class InvoiceController extends AbstractController
         $society = $em->getRepository(Society::class)->find($data->societyId);
         if(!$society){
             return $apiResponse->apiJsonResponseBadRequest('La société est introuvable, veuillez contacter le support.');
+        }
+
+        //OLD products
+        $products = $em->getRepository(BiProduct::class)->findBy(['uid' => 'FA-' . $obj->getId()]);
+        foreach($products as $pr){
+            $em->remove($pr);
+        }
+
+        //NEW products
+        $products = [];
+        foreach($data->products as $pr){
+            $products[] = $dataEntity->setDataProduct(new BiProduct(), $pr);
         }
 
         $obj = $dataEntity->setDataInvoice($obj, $data, $society);
@@ -60,6 +76,18 @@ class InvoiceController extends AbstractController
         }
 
         $em->persist($obj);
+        $em->flush();
+
+        /** @var BiProduct $product */
+        foreach($products as $product){
+            $product = ($product)
+                ->setType(BiProduct::TYPE_INVOICE)
+                ->setIdentifiant("FA-" . $obj->getId())
+                ->setSociety($society)
+            ;
+
+            $em->persist($product);
+        }
         $em->flush();
 
         return $apiResponse->apiJsonResponse($obj, BiInvoice::INVOICE_READ);
@@ -87,6 +115,7 @@ class InvoiceController extends AbstractController
      * @param ApiResponse $apiResponse
      * @param DataInvoice $dataEntity
      * @return JsonResponse
+     * @throws Exception
      */
     public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, DataInvoice $dataEntity): JsonResponse
     {
@@ -119,6 +148,7 @@ class InvoiceController extends AbstractController
      * @param ApiResponse $apiResponse
      * @param DataInvoice $dataEntity
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(Request $request, BiInvoice $obj, ValidatorService $validator,  ApiResponse $apiResponse, DataInvoice $dataEntity): JsonResponse
     {

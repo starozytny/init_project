@@ -4,9 +4,9 @@ import axios                   from "axios";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Input, Select, SelectReactSelectize, TextArea } from "@dashboardComponents/Tools/Fields";
+import { Button, ButtonIcon }  from "@dashboardComponents/Tools/Button";
 import { DatePick }            from "@dashboardComponents/Tools/DatePicker";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
-import {Button, ButtonIcon} from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@commonComponents/functions/validateur";
@@ -24,7 +24,7 @@ const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 let arrayZipcodes = [];
 let i = 0;
 
-export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element, society, items, taxes, unities })
+export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element, society, items, taxes, unities, products })
 {
     let title = "Ajouter une facture";
     let url = Routing.generate(URL_CREATE_ELEMENT);
@@ -44,6 +44,15 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
         dueAt = dueAt.setDate(new Date(dateInvoice).getDate() + 8);
 
         dueAt = new Date(dueAt);
+    }
+
+    let nProducts = [];
+    if(element){
+        products.forEach(pr => {
+            if(pr.identifiant === "FA-" + element.id){
+                nProducts.push(pr);
+            }
+        })
     }
 
     let form = <Form
@@ -69,7 +78,7 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
         toEmail={element ? Formulaire.setValueEmptyIfNull(element.toEmail) : ""}
         toPhone1={element ? Formulaire.setValueEmptyIfNull(element.toPhone1) : ""}
 
-        products={[]}
+        products={nProducts}
 
         note={element ? Formulaire.setValueEmptyIfNull(element.note) : ""}
         footer={element ? Formulaire.setValueEmptyIfNull(element.footer) : ""}
@@ -245,28 +254,9 @@ class Form extends Component {
                     Helper.toTop();
                     if(self.props.onUpdateList){
                         self.props.onUpdateList(data);
+                        self.props.onChangeContext("list");
                     }
                     self.setState({ success: messageSuccess, errors: [] });
-                    if(context === "create"){
-                        self.setState( {
-                            dateAt: "",
-                            dueAt: "",
-                            dueType: 2,
-                            toName: "",
-                            toAddress: "",
-                            toComplement: "",
-                            toZipcode: "",
-                            toCity: "",
-                            toEmail: "",
-                            toPhone1: "",
-                            note: "",
-                            footer: "",
-                            totalHt: 0,
-                            totalRemise: 0,
-                            totalTva: 0,
-                            totalTtc: 0,
-                        })
-                    }
                 })
                 .catch(function (error) {
                     Formulaire.displayErrors(self, error);

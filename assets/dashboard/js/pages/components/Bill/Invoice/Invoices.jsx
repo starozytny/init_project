@@ -36,6 +36,7 @@ export class Invoices extends Component {
             taxes: props.taxes ? JSON.parse(props.taxes) : [],
             unities: props.unities ? JSON.parse(props.unities) : [],
             items: props.items ? JSON.parse(props.items) : [],
+            products: props.products ? JSON.parse(props.products) : [],
         }
 
         this.layout = React.createRef();
@@ -90,14 +91,14 @@ export class Invoices extends Component {
     }
 
     handleContentCreate = (changeContext) => {
-        const { society, items, taxes, unities } = this.state;
-        return <InvoiceFormulaire type="create" society={society} taxes={taxes} unities={unities} items={items}
+        const { society, items, taxes, unities, products } = this.state;
+        return <InvoiceFormulaire type="create" society={society} taxes={taxes} unities={unities} items={items} products={products}
                                   onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        const { society, items, taxes, unities } = this.state;
-        return <InvoiceFormulaire type="update" society={society} taxes={taxes} unities={unities} items={items}
+        const { society, items, taxes, unities, products } = this.state;
+        return <InvoiceFormulaire type="update" society={society} taxes={taxes} unities={unities} items={items} products={products}
                                   element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 

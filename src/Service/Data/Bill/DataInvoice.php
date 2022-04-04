@@ -3,6 +3,7 @@
 namespace App\Service\Data\Bill;
 
 use App\Entity\Bill\BiInvoice;
+use App\Entity\Bill\BiProduct;
 use App\Entity\Society;
 use App\Service\Bill\BillService;
 use App\Service\Data\DataConstructor;
@@ -109,5 +110,20 @@ class DataInvoice extends DataConstructor
         ;
 
         return $this->billService->createNewNumero($counterInvoice, $year, BiInvoice::PREFIX);
+    }
+
+    public function setDataProduct(BiProduct $obj, $data): BiProduct
+    {
+        return ($obj)
+            ->setUid($this->sanitizeData->trimData($data->uid))
+            ->setReference($this->sanitizeData->trimData($data->reference))
+            ->setNumero($this->sanitizeData->trimData($data->numero))
+            ->setName($this->sanitizeData->trimData($data->name))
+            ->setContent($this->sanitizeData->trimData($data->content))
+            ->setUnity($this->sanitizeData->trimData($data->unity))
+            ->setPrice($this->sanitizeData->setToFloat($data->price, 0))
+            ->setRateTva($this->sanitizeData->setToFloat($data->rateTva, 0))
+            ->setQuantity($this->sanitizeData->setToInteger($data->quantity, 0))
+        ;
     }
 }
