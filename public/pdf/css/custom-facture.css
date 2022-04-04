@@ -95,6 +95,10 @@ b{
     text-align: right;
 }
 
+.products .item-even{
+    background-color: #f5f9ff;
+}
+
 .products .item-header .col{
     text-align: center;
     height: 33px;
@@ -106,13 +110,21 @@ b{
 }
 .products .col-2{
     width: 303px;
+    text-align: left;
+}
+
+.products .item-header .col-2,
+.products .col-4{
     text-align: center;
 }
+
 .products .col-3,
 .products .col-4,
 .products .col-5{
     width: 62px;
 }
+
+
 
 .products .col-6{
     width: 80px;

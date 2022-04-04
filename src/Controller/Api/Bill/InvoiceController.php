@@ -52,8 +52,11 @@ class InvoiceController extends AbstractController
 
         //OLD products
         $products = $em->getRepository(BiProduct::class)->findBy(['uid' => 'FA-' . $obj->getId()]);
-        foreach($products as $pr){
-            $em->remove($pr);
+        if(count($products) != 0){
+            foreach($products as $pr){
+                $em->remove($pr);
+            }
+            $em->flush();
         }
 
         //NEW products
@@ -208,13 +211,16 @@ class InvoiceController extends AbstractController
      */
     public function download(BiInvoice $obj, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
     {
+        $em = $this->doctrine->getManager();
+
         $mpdf = $fileCreator->initPDF("Facture - " . $obj->getNumero());
         $mpdf = $fileCreator->addCustomStyle($mpdf, 'custom-facture.css');
 
-        dump($obj);
+        $products = $em->getRepository(BiProduct::class)->findBy(['identifiant' => "FA-" . $obj->getId()]);
 
         $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/bill/invoice.html.twig", [
             'elem' => $obj,
+            'products' => $products
         ]);
 
         $mpdf = $fileCreator->outputPDF($mpdf, "facture-" . $obj->getNumero() . '.pdf');
