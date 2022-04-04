@@ -676,4 +676,9 @@ class BiInvoice extends DataEntity
 
         return $this;
     }
+
+    public function getIdentifiant(): string
+    {
+        return "FA-" . $this->id;
+    }
 }

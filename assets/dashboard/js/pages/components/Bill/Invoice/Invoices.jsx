@@ -15,10 +15,12 @@ import Formulaire        from "@dashboardComponents/functions/Formulaire";
 import { InvoicesList }      from "@dashboardPages/components/Bill/Invoice/InvoicesList";
 import { InvoiceFormulaire } from "@dashboardPages/components/Bill/Invoice/InvoiceForm";
 
+const URL_DELETE_ELEMENT    = 'api_bill_invoices_delete';
+const MSG_DELETE_ELEMENT    = 'Supprimer ce brouillon ?';
 let SORTER = Sort.compareNumeroInverse;
 
 let sorters = [
-    { value: 0, label: 'Numéro',           identifiant: 'sorter-numero' },
+    { value: 0, label: 'Numéro', identifiant: 'sorter-numero' },
 ]
 
 let sortersFunction = [Sort.compareNumeroInverse];
@@ -31,6 +33,8 @@ export class Invoices extends Component {
             perPage: 10,
             currentPage: 0,
             sorter: SORTER,
+            pathDeleteElement: URL_DELETE_ELEMENT,
+            msgDeleteElement: MSG_DELETE_ELEMENT,
             sessionName: "bill.invoices.pagination",
             society: props.society ? JSON.parse(props.society) : [],
             taxes: props.taxes ? JSON.parse(props.taxes) : [],
@@ -72,6 +76,7 @@ export class Invoices extends Component {
         const { perPage, currentPage } = this.state;
 
         return <InvoicesList onChangeContext={changeContext}
+                             onDelete={this.layout.current.handleDelete}
                              //filter-search
                              onSearch={this.handleSearch}
                              filters={filters}

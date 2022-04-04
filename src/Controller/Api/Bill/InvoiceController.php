@@ -84,7 +84,7 @@ class InvoiceController extends AbstractController
         foreach($products as $product){
             $product = ($product)
                 ->setType(BiProduct::TYPE_INVOICE)
-                ->setIdentifiant("FA-" . $obj->getId())
+                ->setIdentifiant($obj->getIdentifiant())
                 ->setSociety($society)
             ;
 
@@ -158,9 +158,7 @@ class InvoiceController extends AbstractController
     }
 
     /**
-     * @Route("/status/{id}", name="status_delete", options={"expose"=true}, methods={"PUT"})
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
+     * @Route("/delete/{id}", name="delete", options={"expose"=true}, methods={"DELETE"})
      *
      * @OA\Response(
      *     response=200,
@@ -177,14 +175,23 @@ class InvoiceController extends AbstractController
      * @param ApiResponse $apiResponse
      * @return JsonResponse
      */
-    public function statusDelete(BiInvoice $obj, ApiResponse $apiResponse): JsonResponse
+    public function delete(BiInvoice $obj, ApiResponse $apiResponse): JsonResponse
     {
-        $em = $this->doctrine->getManager();
-        $obj->setStatus(BiInvoice::STATUS_DELETED);
+        if($obj->getStatus() !== BiInvoice::STATUS_DRAFT){
+            return $apiResponse->apiJsonResponseBadRequest("Vous ne pouvez pas supprimer une facture établie.");
+        }
 
+        $em = $this->doctrine->getManager();
+
+        $products = $em->getRepository(BiProduct::class)->findBy(['identifiant' => $obj->getIdentifiant()]);
+        foreach($products as $product){
+            $em->remove($product);
+        }
+
+        $em->remove($obj);
         $em->flush();
 
-        return $apiResponse->apiJsonResponse($obj, BiInvoice::INVOICE_READ);
+        return $apiResponse->apiJsonResponseSuccessful(true);
     }
 
     /**
