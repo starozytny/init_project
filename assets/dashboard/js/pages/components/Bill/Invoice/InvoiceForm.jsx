@@ -58,7 +58,7 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
                 nProducts.push(pr);
 
                 totalHt += pr.quantity * pr.price;
-                totalTva += (pr.quantity * pr.price) * (20/100)
+                totalTva += (pr.quantity * pr.price) * (pr.rateTva/100)
             }
         })
 
@@ -214,7 +214,7 @@ class Form extends Component {
     }
 
     handleChangeItems = (item) => {
-        const { products } = this.state;
+        const { products, totalRemise } = this.state;
 
         let nProducts = [];
         let find = false;
@@ -231,7 +231,18 @@ class Form extends Component {
             nProducts = products.filter(pr => pr.uid !== item.uid)
         }
 
-        this.setState({ products: nProducts })
+        let totalHt = 0,
+            totalTva = 0,
+            totalTtc = 0;
+
+        nProducts.forEach(pr => {
+            totalHt += pr.quantity * pr.price;
+            totalTva += (pr.quantity * pr.price) * (pr.rateTva/100)
+        })
+
+        totalTtc = totalHt + totalTva - totalRemise
+
+        this.setState({ products: nProducts, totalHt: totalHt, totalTva: totalTva, totalTtc: totalTtc })
     }
 
     handleSubmit = (e) => {
