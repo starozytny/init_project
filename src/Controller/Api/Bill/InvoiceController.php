@@ -51,12 +51,11 @@ class InvoiceController extends AbstractController
         }
 
         //OLD products
-        $products = $em->getRepository(BiProduct::class)->findBy(['uid' => 'FA-' . $obj->getId()]);
+        $products = $em->getRepository(BiProduct::class)->findBy(['identifiant' => 'FA-' . $obj->getId()]);
         if(count($products) != 0){
             foreach($products as $pr){
                 $em->remove($pr);
             }
-            $em->flush();
         }
 
         //NEW products
