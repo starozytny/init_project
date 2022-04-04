@@ -51,7 +51,7 @@ class InvoiceController extends AbstractController
         }
 
         //OLD products
-        $products = $em->getRepository(BiProduct::class)->findBy(['identifiant' => 'FA-' . $obj->getId()]);
+        $products = $em->getRepository(BiProduct::class)->findBy(['identifiant' => $obj->getIdentifiant()]);
         if(count($products) != 0){
             foreach($products as $pr){
                 $em->remove($pr);
@@ -67,7 +67,7 @@ class InvoiceController extends AbstractController
         $obj = $dataEntity->setDataInvoice($obj, $data, $society);
 
         if($type == "create"){
-            $obj->setNumero("Brouillon");
+            $obj->setNumero("Z-Brouillon");
         }else{
             $obj->setUpdatedAt(new \DateTime());
         }
@@ -189,6 +189,58 @@ class InvoiceController extends AbstractController
         }
 
         $em->remove($obj);
+        $em->flush();
+
+        return $apiResponse->apiJsonResponseSuccessful(true);
+    }
+
+    /**
+     * @Route("/duplicate/{id}", name="duplicate", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Return message successful",
+     * )
+     * @OA\Response(
+     *     response=403,
+     *     description="Forbidden for not good role or user",
+     * )
+     *
+     * @OA\Tag(name="Invoices")
+     *
+     * @param BiInvoice $obj
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     */
+    public function duplicate(BiInvoice $obj, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        $products = $em->getRepository(BiProduct::class)->findBy(['identifiant' => $obj->getIdentifiant()]);
+
+        $createdAt = new \DateTime();
+        $createdAt->setTimezone(new \DateTimeZone("Europe/Paris"));
+
+        $newObj = clone $obj;
+        $newObj = ($newObj)
+            ->setStatus(BiInvoice::STATUS_DRAFT)
+            ->setNumero("Z-Brouillon")
+            ->setCreatedAt($createdAt)
+            ->setUpdatedAt(null)
+        ;
+        $em->persist($newObj);
+        $em->flush();
+
+        foreach($products as $product){
+            $pr = clone $product;
+            $pr = ($pr)
+                ->setUid(uniqid())
+                ->setIdentifiant($newObj->getIdentifiant())
+            ;
+
+            $em->persist($pr);
+        }
+
         $em->flush();
 
         return $apiResponse->apiJsonResponseSuccessful(true);

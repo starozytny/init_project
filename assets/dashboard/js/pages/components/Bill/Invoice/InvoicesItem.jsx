@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 
-import Routing  from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
-import Sanitaze from "@commonComponents/functions/sanitaze";
+import axios             from "axios";
+import toastr            from "toastr";
+import Swal              from "sweetalert2";
+import SwalOptions       from "@commonComponents/functions/swalOptions";
+import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+
+import Sanitaze   from "@commonComponents/functions/sanitaze";
+import Formulaire from "@dashboardComponents/functions/Formulaire";
 
 import { ButtonIcon, ButtonIconDropdown } from "@dashboardComponents/Tools/Button";
 
@@ -11,12 +17,42 @@ const STATUS_PAID = 2;
 const STATUS_PAID_PARTIAL = 3;
 const STATUS_ARCHIVED = 4;
 
+const URL_DUPLICATE_ELEMENT = "api_bill_invoices_duplicate"
+
 export class InvoicesItem extends Component {
+    constructor(props) {
+        super();
+
+        this.handleDuplicate = this.handleDuplicate.bind(this);
+    }
+
+    handleDuplicate = (elem) => {
+        Formulaire.loader(true);
+        Swal.fire(SwalOptions.options("Dupliquer cette facture ?", "La nouvelle facture sera en mode brouillon."))
+            .then((result) => {
+                if (result.isConfirmed) {
+                    axios.post(Routing.generate(URL_DUPLICATE_ELEMENT, {'id': elem.id}), {})
+                        .then(function (response) {
+                            toastr.info("Facture copiée avec succès.")
+                            setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        })
+                        .catch(function (error) {
+                            Formulaire.loader(false);
+                            Formulaire.displayErrors(self, error, "Une erreur est survenue, veuillez contacter le support.")
+                        })
+                    ;
+                }
+            })
+        ;
+    }
+
     render () {
         const { elem, onChangeContext, onDelete } = this.props;
 
         let dropdownItems = [
-            {data: <a href="/">Copier</a>},
+            {data: <a href="#" onClick={() => this.handleDuplicate(elem)}>Copier</a>},
         ];
 
         if(elem.status === STATUS_DRAFT){
