@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import axios                   from "axios";
+import toastr                  from "toastr";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Input, Select, SelectReactSelectize, TextArea } from "@dashboardComponents/Tools/Fields";
@@ -277,18 +278,16 @@ class Form extends Component {
             axios({ method: method, url: url, data: this.state })
                 .then(function (response) {
                     let data = response.data;
-                    Helper.toTop();
-                    if(self.props.onUpdateList){
-                        self.props.onUpdateList(data);
-                        self.props.onChangeContext("list");
-                    }
                     self.setState({ success: messageSuccess, errors: [] });
+                    toastr.info(messageSuccess);
+
+                    setTimeout(() => {
+                        location.reload()
+                    }, 2000)
                 })
                 .catch(function (error) {
-                    Formulaire.displayErrors(self, error);
-                })
-                .then(() => {
                     Formulaire.loader(false);
+                    Formulaire.displayErrors(self, error);
                 })
             ;
         }
