@@ -86,14 +86,14 @@ export class Invoices extends Component {
     }
 
     handleContentCreate = (changeContext) => {
-        const { society } = this.props;
-        return <InvoiceFormulaire type="create" society={JSON.parse(society)}
+        const { society, items, taxes, unities } = this.props;
+        return <InvoiceFormulaire type="create" society={JSON.parse(society)} taxes={JSON.parse(taxes)} unities={JSON.parse(unities)} items={items}
                                   onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        const { society } = this.props;
-        return <InvoiceFormulaire type="update" society={JSON.parse(society)}
+        const { society, items, taxes, unities } = this.props;
+        return <InvoiceFormulaire type="update" society={JSON.parse(society)} taxes={JSON.parse(taxes)} unities={JSON.parse(unities)} items={items}
                                   element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 

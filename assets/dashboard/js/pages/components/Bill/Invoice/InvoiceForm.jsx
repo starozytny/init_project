@@ -14,6 +14,7 @@ import Helper                  from "@commonComponents/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 import {ItemFormulaire} from "@dashboardPages/components/Bill/Item/ItemForm";
 import {Aside} from "@dashboardComponents/Tools/Aside";
+import {Items} from "@dashboardPages/components/Bill/Item/Items";
 
 const URL_CREATE_ELEMENT     = "api_bill_invoices_create";
 const URL_UPDATE_GROUP       = "api_bill_invoices_update";
@@ -22,7 +23,7 @@ const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
 let arrayZipcodes = [];
 
-export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element, society })
+export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element, society, items, taxes, unities })
 {
     let title = "Ajouter une facture";
     let url = Routing.generate(URL_CREATE_ELEMENT);
@@ -47,6 +48,10 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
     let form = <Form
         context={type}
         url={url}
+
+        items={items}
+        taxes={taxes}
+        unities={unities}
 
         society={society}
         dateInvoice={dateInvoice}
@@ -237,7 +242,7 @@ class Form extends Component {
     }
 
     render () {
-        const { context, society, dateInvoice } = this.props;
+        const { context, society, dateInvoice, items, taxes, unities } = this.props;
         const { errors, success, dateAt, dueAt, dueType,
             toName, toAddress, toComplement, toZipcode, toCity, toEmail, toPhone1,
             note, footer } = this.state;
@@ -350,8 +355,10 @@ class Form extends Component {
                 </div>
             </form>
 
-            <Aside ref={this.asideSelect} content={<div>ok</div>} >Sélectionner un article</Aside>
-            <Aside ref={this.asideAdd}    content={<div>ok</div>} >Ajouter un article</Aside>
+            <Aside ref={this.asideAdd}    content={<ItemFormulaire type="create" societyId={society.id} taxes={taxes} unities={unities} />} >Ajouter un article</Aside>
+            <div className="aside-select">
+                <Aside ref={this.asideSelect} content={<Items societyId={society.id} taxes={taxes} unities={unities} donnees={items} isInvoice={true} />} >Sélectionner un article</Aside>
+            </div>
         </>
     }
 }

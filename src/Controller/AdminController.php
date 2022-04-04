@@ -179,7 +179,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/facturations/factures", name="bill_invoice_index")
      */
-    public function invoice(SerializerInterface $serializer): Response
+    public function invoice(SerializerInterface $serializer, BillService $billService): Response
     {
         $em = $this->doctrine->getManager();
 
@@ -188,11 +188,19 @@ class AdminController extends AbstractController
         $society = $em->getRepository(Society::class)->find($user->getSociety()->getId());
 
         $objs = $this->getAllData(BiInvoice::class, $serializer, BiInvoice::INVOICE_READ);
+        $items = $this->getAllData(BiItem::class, $serializer, BiItem::ITEM_READ);
+
+        [$taxes, $unities] = $billService->getTaxesAndUnitiesData($society, true);
+
         $society = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
+
 
         return $this->render('admin/pages/bill/invoice.html.twig', [
             'donnees' => $objs,
-            'society' => $society
+            'society' => $society,
+            'items' => $items,
+            'taxes' => $taxes,
+            'unities' => $unities,
         ]);
     }
 

@@ -31,7 +31,9 @@ export class Items extends Component {
             msgDeleteElement: MSG_DELETE_ELEMENT,
             pathDeleteGroup: URL_DELETE_GROUP,
             msgDeleteGroup: MSG_DELETE_GROUP,
-            sessionName: "bill.item.pagination"
+            sessionName: "bill.item.pagination",
+            isInvoice: props.isInvoice ? props.isInvoice : false,
+            classes: props.isInvoice ? "" : "main-content",
         }
 
         this.layout = React.createRef();
@@ -61,7 +63,7 @@ export class Items extends Component {
     handleSorter = (nb) => { SORTER = TopToolbar.onSorter(this, nb, sortersFunction, this.state.perPage) }
 
     handleContentList = (currentData, changeContext, getFilters, filters, data) => {
-        const { perPage, currentPage } = this.state;
+        const { perPage, currentPage, isInvoice } = this.state;
 
         return <ItemsList onChangeContext={changeContext}
                              //filter-search
@@ -79,6 +81,7 @@ export class Items extends Component {
                              sorters={sorters}
                              onSorter={this.handleSorter}
                              //data
+                             isInvoice={isInvoice}
                              data={currentData} />
     }
 

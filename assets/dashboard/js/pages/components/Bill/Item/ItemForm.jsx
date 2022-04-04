@@ -17,7 +17,7 @@ const URL_UPDATE_GROUP       = "api_bill_invoices_update";
 const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
-export function ItemFormulaire ({ type, onChangeContext, onUpdateList, element, societyId, taxes, unities, isInvoice=false })
+export function ItemFormulaire ({ type, onChangeContext, onUpdateList, element, societyId, taxes, unities })
 {
     let title = "Ajouter un article";
     let url = Routing.generate(URL_CREATE_ELEMENT);
@@ -33,7 +33,6 @@ export function ItemFormulaire ({ type, onChangeContext, onUpdateList, element, 
         context={type}
         url={url}
 
-        isInvoice={isInvoice}
         societyId={societyId}
         taxes={taxes}
         unities={unities}
@@ -145,7 +144,7 @@ class Form extends Component {
     }
 
     render () {
-        const { context, isInvoice, taxes, unities } = this.props;
+        const { context, taxes, unities } = this.props;
         const { errors, success, reference, numero, name, content, unity, price, rateTva } = this.state;
 
         let selectUnities = [];
@@ -174,11 +173,9 @@ class Form extends Component {
                 <div className="line">
 
                     <div className="form-group">
-                        {!isInvoice && <>
-                            <div className="line-separator">
-                                <div className="title">Article</div>
-                            </div>
-                        </>}
+                        <div className="line-separator">
+                            <div className="title">Article</div>
+                        </div>
 
                         <div className="line line-2">
                             <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange}>* Désignation</Input>
@@ -204,9 +201,7 @@ class Form extends Component {
 
                 <div className="line">
                     <div className="form-button">
-                        {isInvoice ? <Button isSubmit={true} >Ajouter l'article</Button> : <>
-                            <Button isSubmit={true}>{context === "create" ? TXT_CREATE_BUTTON_FORM : TXT_UPDATE_BUTTON_FORM}</Button>
-                        </>}
+                        <Button isSubmit={true}>{context === "create" ? TXT_CREATE_BUTTON_FORM : TXT_UPDATE_BUTTON_FORM}</Button>
                     </div>
                 </div>
             </form>

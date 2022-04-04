@@ -16,6 +16,18 @@
   @include toolbarCreateFilterSearch(170);
 }
 
+#invoices{
+  .aside-select{
+    .toolbar{
+      .filter-search{
+        .search{
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
 //                      __   _____ __    ___    __
 //                     | _| |___  / /_  ( _ )  |_ |
 //    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
@@ -23,6 +35,19 @@
 //                     | |   /_/  \___/ \___/   | |
 //                     |__|                    |__|
 @media (min-width:768px) {
+
+  #invoices{
+    .aside-select{
+      .toolbar{
+        .filter-search{
+          margin-left: 0;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+
   .items-default{
     .infos-col-7{
       .col-1{
@@ -66,3 +91,20 @@
     }
   }
 }
+
+//                      __   _  ___ ____  _  _     __
+//                     | _| / |/ _ \___ \| || |   |_ |
+//    _____ _____ _____| |  | | | | |__) | || |_   | |_____ _____ _____
+//   |_____|_____|_____| |  | | |_| / __/|__   _|  | |_____|_____|_____|
+//                     | |  |_|\___/_____|  |_|    | |
+//                     |__|                       |__|
+@media (min-width: 1024px) {
+  #invoices{
+    .aside-select{
+      .aside{
+        width: 70%;
+      }
+    }
+  }
+}
+
