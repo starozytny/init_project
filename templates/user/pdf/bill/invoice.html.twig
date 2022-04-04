@@ -62,7 +62,7 @@
         </div>
 
         {% for el in products %}
-            <div class="item {{ loop.index0 == 0 ? "item-odd" : "item-even" }}">
+            <div class="item {{ loop.index0 % 2 == 0 ? "item-even" : "item-odd" }}">
                 <div class="col col-1">{{ el.reference }}</div>
                 <div class="col col-2">
                     <div>{{ el.name }}</div>
