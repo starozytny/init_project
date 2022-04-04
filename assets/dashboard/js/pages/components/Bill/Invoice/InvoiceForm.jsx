@@ -193,8 +193,21 @@ class Form extends Component {
         const { products } = this.state;
 
         let nProducts = [];
+        let find = false;
+        products.forEach(pr => {
+            if(pr.uid === item.uid){
+                find = true;
+            }
+        })
 
-        this.setState({ products: [...products, ...[item]] })
+        if(!find){
+            nProducts = products;
+            nProducts.push(item)
+        }else{
+            nProducts = products.filter(pr => pr.uid !== item.uid)
+        }
+
+        this.setState({ products: nProducts })
     }
 
     handleSubmit = (e) => {
@@ -379,8 +392,7 @@ class Form extends Component {
                                         </> : <div>Prix vide</div>}
                                     </div>
                                     <div className="col-3">
-                                        <ButtonIcon icon="pencil">Modifier</ButtonIcon>
-                                        <ButtonIcon icon="trash">Supprimer</ButtonIcon>
+                                        <ButtonIcon icon="trash" onClick={() => this.handleChangeItems(pr)}>Supprimer</ButtonIcon>
                                     </div>
                                 </div>
                             })}

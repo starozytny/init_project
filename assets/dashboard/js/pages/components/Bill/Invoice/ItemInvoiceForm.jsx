@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 
-import axios                   from "axios"
-import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+import { uid }  from "uid";
 
 import { Input, SelectReactSelectize, TextArea } from "@dashboardComponents/Tools/Fields";
-import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Button }              from "@dashboardComponents/Tools/Button";
-import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@commonComponents/functions/validateur";
-import Helper                  from "@commonComponents/functions/helper";
 import Sanitaze                from "@commonComponents/functions/sanitaze";
 import helper                  from "@dashboardPages/components/Bill/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
@@ -25,6 +21,7 @@ export function ItemInvoiceFormulaire ({ element, societyId, taxes, unities, onS
         taxes={taxes}
         unities={unities}
 
+        uid={element ? (element.uid ? element.uid :  uid(16)) : uid(16) }
         reference={element ? Formulaire.setValueEmptyIfNull(element.reference) : "ART"}
         numero={element ? Formulaire.setValueEmptyIfNull(element.numero) : ""}
         name={element ? Formulaire.setValueEmptyIfNull(element.name) : ""}
@@ -44,6 +41,7 @@ class Form extends Component {
 
         this.state = {
             societyId: props.societyId,
+            uid: props.uid,
             reference: props.reference,
             numero: props.numero,
             name: props.name,
@@ -117,6 +115,7 @@ class Form extends Component {
             Formulaire.showErrors(this, validate, "Veuillez vérifier les informations transmises.", false);
         }else{
             this.props.onSubmit(this.state);
+            this.setState({ uid: uid(16) })
         }
     }
 
