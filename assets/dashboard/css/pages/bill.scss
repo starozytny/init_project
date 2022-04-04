@@ -26,6 +26,36 @@
       }
     }
   }
+
+  .line-products{
+    margin-top: 24px;
+
+    .item{
+      @include flex(row, flex-start, flex-start);
+      width: 100%;
+
+      &:not(:last-child){
+        margin-bottom: 12px;
+      }
+
+      .col-1{
+        @include fontSemibold();
+        width: calc(100% - 30% - 12px);
+        margin-right: 12px;
+      }
+
+      .col-2{
+        width: 30%;
+
+        .sub{
+          font-size: 15px;
+          color: var(--grey3);
+          margin-top: 2px;
+        }
+      }
+    }
+  }
+
 }
 
 //                      __   _____ __    ___    __

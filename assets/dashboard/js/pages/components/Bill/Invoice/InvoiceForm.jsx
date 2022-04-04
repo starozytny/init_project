@@ -366,16 +366,21 @@ class Form extends Component {
                         <ItemInvoiceFormulaire element={element} societyId={society.id} taxes={taxes} unities={unities} key={i++} onSubmit={this.handleChangeItems}/>
                     </div>
 
-                    <div className="line">
-                        {products.map((pr, index) => {
-                            return <div key={index}>
-                                <div className="col-1">{pr.name}</div>
-                                <div className="col-2">
-                                    <div>{pr.quantity} * {Sanitaze.toFormatCurrency(pr.price)}</div>
-                                    <div className="sub">{pr.rateTva}%</div>
+                    <div className="line line-products">
+                        <div className="form-group">
+                            <label>Liste des produits rattachés à la facture</label>
+                            {products.map((pr, index) => {
+                                return <div className="item" key={index}>
+                                    <div className="col-1">{pr.name}</div>
+                                    <div className="col-2">
+                                        {pr.quantity !== "" ? <>
+                                            <div>{pr.quantity} * {Sanitaze.toFormatCurrency(pr.price)}</div>
+                                            {(pr.rateTva !== "" && parseFloat(pr.rateTva) !== 0) && <div className="sub">({pr.rateTva}%)</div>}
+                                        </> : <div>Prix vide</div>}
+                                    </div>
                                 </div>
-                            </div>
-                        })}
+                            })}
+                        </div>
                     </div>
                 </div>
 
