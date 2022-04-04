@@ -82,6 +82,7 @@ export class Items extends Component {
                              onSorter={this.handleSorter}
                              //data
                              isInvoice={isInvoice}
+                             onSelect={this.props.onSelect}
                              data={currentData} />
     }
 

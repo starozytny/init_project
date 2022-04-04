@@ -7,10 +7,18 @@ import { Selector }   from "@dashboardComponents/Layout/Selector";
 
 export class ItemsItem extends Component {
     render () {
-        const { elem, onChangeContext, onDelete } = this.props;
+        const { elem, onChangeContext, onDelete, onSelect } = this.props;
+
+        let active = false;
 
         return <div className="item">
-            <Selector id={elem.id} />
+            {!onSelect ? <>
+                <Selector id={elem.id} />
+            </> : <>
+                <div className="selector" onClick={onSelect ? () => onSelect(elem) : null}>
+                    <label className={"item-selector " + (active)}/>
+                </div>
+            </>}
 
             <div className="item-content">
                 <div className="item-body">

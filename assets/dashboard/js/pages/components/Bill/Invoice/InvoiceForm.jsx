@@ -114,6 +114,7 @@ class Form extends Component {
         this.handleChangeDate = this.handleChangeDate.bind(this);
 
         this.handleOpenAside = this.handleOpenAside.bind(this);
+        this.handleSelectItem = this.handleSelectItem.bind(this);
     }
 
     componentDidMount() {
@@ -169,9 +170,9 @@ class Form extends Component {
         this.setState({ [name]: e !== null ? e : "" })
     }
 
-    handleOpenAside = (selector) => {
-        selector.current.handleOpen();
-    }
+    handleOpenAside = (selector) => { selector.current.handleOpen(); }
+
+    handleSelectItem = (item) => { console.log(item) }
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -355,9 +356,15 @@ class Form extends Component {
                 </div>
             </form>
 
-            <Aside ref={this.asideAdd}    content={<ItemFormulaire type="create" societyId={society.id} taxes={taxes} unities={unities} />} >Ajouter un article</Aside>
+            <Aside ref={this.asideAdd}    content={<ItemFormulaire type="create" societyId={society.id}
+                                                                   taxes={taxes}
+                                                                   unities={unities} />} >Ajouter un article</Aside>
             <div className="aside-select">
-                <Aside ref={this.asideSelect} content={<Items societyId={society.id} taxes={taxes} unities={unities} donnees={items} isInvoice={true} />} >Sélectionner un article</Aside>
+                <Aside ref={this.asideSelect} content={<Items societyId={society.id}
+                                                              isInvoice={true}
+                                                              taxes={taxes}
+                                                              unities={unities}
+                                                              donnees={items} onSelect={this.handleSelectItem} />} >Sélectionner un article</Aside>
             </div>
         </>
     }
