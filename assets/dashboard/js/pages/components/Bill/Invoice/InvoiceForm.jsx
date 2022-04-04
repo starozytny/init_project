@@ -6,7 +6,7 @@ import Routing                 from '@publicFolder/bundles/fosjsrouting/js/route
 import { Input, Select, SelectReactSelectize, TextArea } from "@dashboardComponents/Tools/Fields";
 import { DatePick }            from "@dashboardComponents/Tools/DatePicker";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
-import { Button }              from "@dashboardComponents/Tools/Button";
+import {Button, ButtonIcon} from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@commonComponents/functions/validateur";
@@ -377,6 +377,10 @@ class Form extends Component {
                                             <div>{pr.quantity} * {Sanitaze.toFormatCurrency(pr.price)}</div>
                                             {(pr.rateTva !== "" && parseFloat(pr.rateTva) !== 0) && <div className="sub">({pr.rateTva}%)</div>}
                                         </> : <div>Prix vide</div>}
+                                    </div>
+                                    <div className="col-3">
+                                        <ButtonIcon icon="pencil">Modifier</ButtonIcon>
+                                        <ButtonIcon icon="trash">Supprimer</ButtonIcon>
                                     </div>
                                 </div>
                             })}
