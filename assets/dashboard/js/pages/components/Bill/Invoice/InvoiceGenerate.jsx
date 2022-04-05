@@ -101,7 +101,7 @@ class Form extends Component {
         }
 
         if(parseInt(dueType) !== 1){
-            if(dateAt === ""){
+            if(dueAt === ""){
                 paramsToValidate = [...paramsToValidate,
                     ...[{type: "date", id: 'dueAt', value: dueAt}]
                 ];
