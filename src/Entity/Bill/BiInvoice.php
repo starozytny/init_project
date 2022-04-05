@@ -129,6 +129,11 @@ class BiInvoice extends DataEntity
     private $fromCity;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromCountry;
+
+    /**
      * @ORM\Column(type="string", length=60, nullable=true)
      * @Groups({"invoice:read"})
      */
@@ -179,6 +184,11 @@ class BiInvoice extends DataEntity
      * @Groups({"invoice:read"})
      */
     private $toCity;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $toCountry;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -789,6 +799,30 @@ class BiInvoice extends DataEntity
                 $history->setInvoice(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFromCountry(): ?string
+    {
+        return $this->fromCountry;
+    }
+
+    public function setFromCountry(?string $fromCountry): self
+    {
+        $this->fromCountry = $fromCountry;
+
+        return $this;
+    }
+
+    public function getToCountry(): ?string
+    {
+        return $this->toCountry;
+    }
+
+    public function setToCountry(?string $toCountry): self
+    {
+        $this->toCountry = $toCountry;
 
         return $this;
     }

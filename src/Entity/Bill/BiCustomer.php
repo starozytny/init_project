@@ -59,6 +59,11 @@ class BiCustomer
     private $city;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $country;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Society::class, inversedBy="biCustomers")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -173,6 +178,18 @@ class BiCustomer
     public function setSociety(?Society $society): self
     {
         $this->society = $society;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): self
+    {
+        $this->country = $country;
 
         return $this;
     }
