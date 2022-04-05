@@ -94,23 +94,7 @@ class Form extends Component {
             {type: "text", id: 'dueType',     value: dueType}
         ];
 
-        if(dateInvoice){
-            paramsToValidate = [...paramsToValidate,
-                ...[{type: "dateCompare", id: 'dateAt', value: new Date(dateInvoice), idCheck: 'dateInvoice', valueCheck: dateAt}]
-            ];
-        }
-
-        if(parseInt(dueType) !== 1){
-            if(dueAt === ""){
-                paramsToValidate = [...paramsToValidate,
-                    ...[{type: "date", id: 'dueAt', value: dueAt}]
-                ];
-            }else{
-                paramsToValidate = [...paramsToValidate,
-                    ...[{type: "dateCompare", id: 'dueAt', value: dateAt, idCheck: 'dateAt', valueCheck: dueAt}]
-                ];
-            }
-        }
+        paramsToValidate = helper.validateDates(paramsToValidate, dateInvoice, dateAt, dueAt, dueType);
 
         // validate global
         let validate = Validateur.validateur(paramsToValidate)

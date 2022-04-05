@@ -114,11 +114,34 @@ function generateInvoice(self, elem, dateAt, dueAt, dueType)
     ;
 }
 
+function validateDates(paramsToValidate, dateInvoice, dateAt, dueAt, dueType){
+    if(dateInvoice){
+        paramsToValidate = [...paramsToValidate,
+            ...[{type: "dateCompare", id: 'dateAt', value: new Date(dateInvoice), idCheck: 'dateInvoice', valueCheck: dateAt}]
+        ];
+    }
+
+    if(parseInt(dueType) !== 1){
+        if(dueAt === ""){
+            paramsToValidate = [...paramsToValidate,
+                ...[{type: "date", id: 'dueAt', value: dueAt}]
+            ];
+        }else{
+            paramsToValidate = [...paramsToValidate,
+                ...[{type: "dateCompare", id: 'dueAt', value: dateAt, idCheck: 'dateAt', valueCheck: dueAt}]
+            ];
+        }
+    }
+
+    return paramsToValidate;
+}
+
 
 module.exports = {
     getTaxesAndUnitiesSelectItems,
     getTotalHt,
     getConditionPaiementChoices,
     setDueAt,
-    generateInvoice
+    generateInvoice,
+    validateDates
 }
