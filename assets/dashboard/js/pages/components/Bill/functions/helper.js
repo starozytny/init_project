@@ -101,8 +101,6 @@ function generateInvoice(self, elem, dateAt, dueAt, dueType)
 
                     })
                     .catch(function (error) {
-                        console.log(error)
-                        console.log(error.response)
                         Formulaire.displayErrors(self, error);
                     })
                     .then(function () {

@@ -93,6 +93,12 @@ class BiInvoice extends DataEntity
     private $totalTtc;
 
     /**
+     * @ORM\Column(type="float")
+     * @Groups({"invoice:read"})
+     */
+    private $toPay;
+
+    /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"invoice:read"})
      */
@@ -242,11 +248,6 @@ class BiInvoice extends DataEntity
      * @Groups({"invoice:read"})
      */
     private $isArchived = false;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $toPay;
 
     /**
      * @ORM\OneToMany(targetEntity=BiHistory::class, mappedBy="invoice")

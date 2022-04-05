@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+import axios                   from "axios";
+import toastr                  from "toastr";
+import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+
 import { Input }               from "@dashboardComponents/Tools/Fields";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { DatePick }            from "@dashboardComponents/Tools/DatePicker";
@@ -8,14 +12,17 @@ import { Alert }               from "@dashboardComponents/Tools/Alert";
 import Validateur              from "@commonComponents/functions/validateur";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
+const URL_PAYEMENT_ELEMENT = "api_bill_invoices_payement";
+
 export function InvoicePayementFormulaire ({ onUpdateList, onCloseAside, element })
 {
     let form = <div />
     if(element){
         form = <Form
+            url={Routing.generate(URL_PAYEMENT_ELEMENT, {'id': element.id})}
 
             element={element}
-            total={element.totalTtc}
+            price={element.toPay}
 
             onUpdateList={onUpdateList}
             onCloseAside={onCloseAside}
@@ -31,9 +38,9 @@ class Form extends Component {
 
         this.state = {
             element: props.element,
-            content: "",
+            name: "",
             dateAt: new Date(),
-            total: props.total,
+            price: props.price,
             errors: [],
             success: false,
         }
@@ -54,13 +61,14 @@ class Form extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const { dateAt, total } = this.state;
+        const { url } = this.props;
+        const { dateAt, price } = this.state;
 
         this.setState({ errors: [], success: false })
 
         let paramsToValidate = [
             {type: "date", id: 'dateAt',    value: dateAt},
-            {type: "text", id: 'total',     value: total}
+            {type: "text", id: 'price',     value: price}
         ];
 
         // validate global
@@ -69,11 +77,32 @@ class Form extends Component {
             Formulaire.showErrors(this, validate);
         }else{
 
+            Formulaire.loader(true);
+            let self = this;
+            axios({ method: "POST", url: url, data: this.state })
+                .then(function (response) {
+                    let data = response.data;
+                    toastr.info("La paiement a été réalisée avec succès !")
+
+                    if (self.props.onCloseAside) {
+                        self.props.onCloseAside()
+                    }
+                    if (self.props.onUpdateList) {
+                        self.props.onUpdateList(data, "update")
+                    }
+                })
+                .catch(function (error) {
+                    Formulaire.displayErrors(self, error);
+                })
+                .then(function () {
+                    Formulaire.loader(false);
+                })
+            ;
         }
     }
 
     render () {
-        const { errors, success, element, content, dateAt, total } = this.state;
+        const { errors, success, element, name, dateAt, price } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -81,7 +110,7 @@ class Form extends Component {
                 {success !== false && <Alert type="info">{success}</Alert>}
 
                 <div className="line">
-                    <Input valeur={content} identifiant="content" errors={errors} onChange={this.handleChangeCleave} placeholder={"Entrer une desription du paiement"}>
+                    <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChangeCleave} placeholder={"Entrer une description du paiement"}>
                         Description du paiement
                     </Input>
                 </div>
@@ -90,7 +119,7 @@ class Form extends Component {
                     <DatePick identifiant="dateAt" valeur={dateAt} minDate={new Date(element.dateAtJavascript)} errors={errors} onChange={(e) => this.handleChangeDate("dateAt", e)}>
                         Date de paiement
                     </DatePick>
-                    <Input type="cleave" valeur={total} identifiant="total" errors={errors} onChange={this.handleChangeCleave}>Montant</Input>
+                    <Input type="cleave" valeur={price} identifiant="price" errors={errors} onChange={this.handleChangeCleave}>Montant</Input>
                 </div>
 
                 <div className="line">

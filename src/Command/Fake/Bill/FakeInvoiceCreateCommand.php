@@ -2,7 +2,9 @@
 
 namespace App\Command\Fake\Bill;
 
+use App\Entity\Bill\BiHistory;
 use App\Entity\Bill\BiInvoice;
+use App\Entity\Bill\BiProduct;
 use App\Entity\Society;
 use App\Service\Bill\BillService;
 use App\Service\Data\Bill\DataInvoice;
@@ -39,7 +41,7 @@ class FakeInvoiceCreateCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Reset des tables');
-        $this->databaseService->resetTable($io, [BiInvoice::class]);
+        $this->databaseService->resetTable($io, [BiProduct::class, BiHistory::class, BiInvoice::class]);
         $society = $this->em->getRepository(Society::class)->findOneBy(['name' => 'Logilink']);
         $society->setCounterInvoice(0);
         $this->em->flush();

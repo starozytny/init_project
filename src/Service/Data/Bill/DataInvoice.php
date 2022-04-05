@@ -151,9 +151,10 @@ class DataInvoice extends DataConstructor
     /**
      * @throws Exception
      */
-    public function setDataHistory(BiHistory $obj, $type, $name, DateTime $date, $price = null): BiHistory
+    public function setDataHistory(BiHistory $obj, BiInvoice $invoice, $type, $name, DateTime $date, $price = null): BiHistory
     {
         return ($obj)
+            ->setInvoice($invoice)
             ->setType($type)
             ->setName($name)
             ->setDateAt($date)

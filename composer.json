@@ -54,7 +54,8 @@
         "symfony/web-profiler-bundle": "5.4.*",
         "symfony/webpack-encore-bundle": "^1.8",
         "symfony/yaml": "5.3.*",
-      "ext-openssl": "*"
+      "ext-openssl": "*",
+      "ext-intl": "*"
     },
     "config": {
         "optimize-autoloader": true,

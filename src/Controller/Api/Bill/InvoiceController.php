@@ -11,11 +11,13 @@ use App\Service\ApiResponse;
 use App\Service\Bill\BillService;
 use App\Service\Data\Bill\DataInvoice;
 use App\Service\MailerService;
+use App\Service\SanitizeData;
 use App\Service\SettingsService;
 use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
 use Mpdf\MpdfException;
+use NumberFormatter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -286,8 +288,7 @@ class InvoiceController extends AbstractController
         $now = new \DateTime();
         $now->setTimezone(new \DateTimeZone("Europe/Paris"));
 
-        $history = $dataInvoice->setDataHistory(new BiHistory(), BiHistory::TYPE_GENERATED, "Facture finalisée", $now);
-        $history->setInvoice($obj);
+        $history = $dataInvoice->setDataHistory(new BiHistory(), $obj, BiHistory::TYPE_GENERATED, "Facture finalisée", $now);
 
         $obj->setIsSent(true);
 
@@ -362,12 +363,29 @@ class InvoiceController extends AbstractController
      * @param Request $request
      * @param BiInvoice $obj
      * @param ApiResponse $apiResponse
+     * @param DataInvoice $dataInvoice
+     * @param SanitizeData $sanitizeData
      * @return JsonResponse
+     * @throws Exception
      */
-    public function payement(Request $request, BiInvoice $obj, ApiResponse $apiResponse): JsonResponse
+    public function payement(Request $request, BiInvoice $obj, ApiResponse $apiResponse, DataInvoice $dataInvoice, SanitizeData $sanitizeData): JsonResponse
     {
         $em = $this->doctrine->getManager();
+        $data = json_decode($request->getContent());
 
+        $name = $sanitizeData->trimData($data->name);
+        $dateAt = $sanitizeData->createDate($data->dateAt);
+        $price = $sanitizeData->setToFloat($data->price, 0);
+
+        $history = $dataInvoice->setDataHistory(new BiHistory(), $obj, BiHistory::TYPE_PAYEMENT, $name , $dateAt, $price);
+
+        $remaining = $obj->getToPay() - $price;
+        $obj = ($obj)
+            ->setToPay($remaining)
+            ->setStatus($remaining > 0 ? BiInvoice::STATUS_TO_PAY : BiInvoice::STATUS_PAID);
+        ;
+
+        $em->persist($history);
         $em->flush();
 
         return $apiResponse->apiJsonResponse($obj, BiInvoice::INVOICE_READ);
