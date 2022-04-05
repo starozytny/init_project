@@ -11,6 +11,7 @@ import { Alert }               from "@dashboardComponents/Tools/Alert";
 
 import Validateur              from "@commonComponents/functions/validateur";
 import Helper                  from "@commonComponents/functions/helper";
+import helper                  from "@dashboardPages/components/Bill/functions/helper";
 import Sanitaze                from "@commonComponents/functions/sanitaze";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
@@ -63,17 +64,27 @@ class Form extends Component {
         let name = e.currentTarget.name;
         let value = e.currentTarget.value;
 
+        if(name === "dueType"){
+            helper.setDueAt(this, value, dateAt);
+        }
+
         this.setState({[name]: value})
     }
 
 
     handleChangeDate = (name, e) => {
-        if(name === "dueAt"){
-            this.setState({dueType: 0 })
-        }
+        const { dueType } = this.state;
 
         if(e !== null){
             e.setHours(0,0,0);
+
+            if(name === "dueAt"){
+                this.setState({ dueType: 0 })
+            }
+
+            if(name === "dateAt"){
+                helper.setDueAt(this, dueType, e);
+            }
         }
 
         this.setState({ [name]: e !== null ? e : "" })
@@ -121,13 +132,7 @@ class Form extends Component {
         const { dateInvoice } = this.props;
         const { errors, success, dateAt, dueAt, dueType } = this.state;
 
-        let selectDueTypes = [
-            { value: 0, label: "Définir manuellement", identifiant: "c-0" },
-            { value: 1, label: "Acquitté",             identifiant: "c-1" },
-            { value: 2, label: "8 jours",              identifiant: "c-2" },
-            { value: 3, label: "14 jours",             identifiant: "c-3" },
-            { value: 4, label: "30 jours",             identifiant: "c-4" },
-        ]
+        let selectDueTypes = helper.getConditionPaiementChoices();
 
         let dateInvoiceString = dateInvoice.toLocaleDateString("fr");
 
