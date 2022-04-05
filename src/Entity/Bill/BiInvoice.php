@@ -225,16 +225,19 @@ class BiInvoice extends DataEntity
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"invoice:read"})
      */
     private $isSent = false;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"invoice:read"})
      */
     private $isSeen = false;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"invoice:read"})
      */
     private $isArchived = false;
 

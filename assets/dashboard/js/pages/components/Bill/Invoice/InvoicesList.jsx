@@ -61,15 +61,14 @@ export class InvoicesList extends Component {
             onPaginationClick, currentPage, sorters, onSorter, onUpdateList } = this.props;
         const { element, dateInvoice } = this.state;
 
-        let filtersLabel = ["Brouillon", "A régler", "Payée", "Partiel", "Archivée"];
-        let filtersId    = ["f-br", "f-are", "f-pa", 'f-pa', "f-arc"];
+        let filtersLabel = ["Brouillon", "A régler", "Payée", "Partiel"];
+        let filtersId    = ["f-br", "f-are", "f-pa", 'f-pa'];
 
         let itemsFilter = [
             { value: 0, id: filtersId[0], label: filtersLabel[0] },
             { value: 1, id: filtersId[1], label: filtersLabel[1] },
             { value: 2, id: filtersId[2], label: filtersLabel[2] },
             { value: 3, id: filtersId[3], label: filtersLabel[3] },
-            { value: 4, id: filtersId[4], label: filtersLabel[4] },
         ];
 
         let contentAside = <InvoiceGenerateFormulaire onUpdateList={onUpdateList} onUpdateDateInvoice={this.handleUpdateDateInvoice}

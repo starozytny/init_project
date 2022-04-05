@@ -66,30 +66,32 @@ export class InvoicesItem extends Component {
         const { elem, onChangeContext, onDelete, onGenerate } = this.props;
 
         let dropdownItems = [
-            {data: <a href="#" onClick={() => this.handleDuplicate(elem)}>Copier</a>},
+            {data: <div onClick={() => this.handleDuplicate(elem)}>Copier</div>},
         ];
 
-        if(elem.status === STATUS_DRAFT){
-            dropdownItems = [...[
-                {data: <div onClick={() => onChangeContext("update", elem)}>Modifier</div>},
-                {data: <div onClick={() => onDelete(elem)}>Supprimer</div>},
-                {data: <div className="dropdown-separator" />},
-                {data: <div onClick={() => onGenerate(elem)}>Finaliser</div>},
-                {data: <div className="dropdown-separator" />},
-            ], ...dropdownItems]
-        }
+        if(!elem.isArchived){
+            if(elem.status === STATUS_DRAFT){
+                dropdownItems = [...[
+                    {data: <div onClick={() => onChangeContext("update", elem)}>Modifier</div>},
+                    {data: <div onClick={() => onDelete(elem)}>Supprimer</div>},
+                    {data: <div className="dropdown-separator" />},
+                    {data: <div onClick={() => onGenerate(elem)}>Finaliser</div>},
+                    {data: <div className="dropdown-separator" />},
+                ], ...dropdownItems]
+            }
 
-        if(elem.status !== STATUS_DRAFT && elem.status !== STATUS_ARCHIVED){
-            dropdownItems = [...[
-                {data: <a href="/">Archiver</a>}
-            ], ...dropdownItems]
-        }
+            if(elem.status !== STATUS_DRAFT){
+                dropdownItems = [...[
+                    {data: <div>Archiver</div>}
+                ], ...dropdownItems]
+            }
 
-        if(elem.status === STATUS_TO_PAY){
-            dropdownItems = [...[
-                {data: <a href="/">Entrer un paiement</a>},
-                {data: <div className="dropdown-separator" />},
-            ], ...dropdownItems]
+            if(elem.status === STATUS_TO_PAY){
+                dropdownItems = [...[
+                    {data: <div>Entrer un paiement</div>},
+                    {data: <div className="dropdown-separator" />},
+                ], ...dropdownItems]
+            }
         }
 
 
@@ -116,7 +118,10 @@ export class InvoicesItem extends Component {
                             <div className="sub">{Sanitaze.toFormatCurrency(elem.totalTtc)}</div>
                         </div>
                         <div className="col-6">
-                            <div className={"badge badge-" + elem.status}>{elem.statusString}</div>
+                            <div className="badges">
+                                <div className={"badge badge-" + elem.status}>{elem.statusString}</div>
+                            </div>
+                            {elem.isArchived && <div className="badge badge-default">Archivé</div>}
                         </div>
                         <div className="col-7 actions">
                             <ButtonIcon icon="download" element="a" target="_blank" onClick={Routing.generate('api_bill_invoices_download', {'id': elem.id})}>Télécharger</ButtonIcon>

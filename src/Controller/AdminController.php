@@ -180,21 +180,23 @@ class AdminController extends AbstractController
     /**
      * @Route("/facturations/factures", name="bill_invoice_index")
      */
-    public function invoice(SerializerInterface $serializer, BillService $billService): Response
+    public function invoice(Request $request, SerializerInterface $serializer, BillService $billService): Response
     {
         $em = $this->doctrine->getManager();
+        $isArchived = $request->query->get('archive');
 
         /** @var User $user */
         $user = $this->getUser();
         $society  = $em->getRepository(Society::class)->find($user->getSociety()->getId());
 
-        $objs     = $this->getAllData(BiInvoice::class, $serializer, BiInvoice::INVOICE_READ);
+        $objs     = $em->getRepository(BiInvoice::class)->findBy(['isArchived' => (bool)$isArchived]);
         $items    = $this->getAllData(BiItem::class, $serializer, BiItem::ITEM_READ);
         $products = $em->getRepository(BiProduct::class)->findBy(['society' => $society, 'type' => BiProduct::TYPE_INVOICE]);
 
         [$taxes, $unities] = $billService->getTaxesAndUnitiesData($society, true);
 
         $society  = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
+        $objs     = $serializer->serialize($objs, 'json', ['groups' => BiInvoice::INVOICE_READ]);
         $products = $serializer->serialize($products, 'json', ['groups' => BiProduct::PRODUCT_READ]);
 
         return $this->render('admin/pages/bill/invoice.html.twig', [
