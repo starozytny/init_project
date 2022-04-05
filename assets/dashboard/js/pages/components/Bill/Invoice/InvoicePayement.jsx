@@ -81,7 +81,9 @@ class Form extends Component {
                 {success !== false && <Alert type="info">{success}</Alert>}
 
                 <div className="line">
-                    <Input valeur={content} identifiant="content" errors={errors} onChange={this.handleChangeCleave}>Description du paiement</Input>
+                    <Input valeur={content} identifiant="content" errors={errors} onChange={this.handleChangeCleave} placeholder={"Entrer une desription du paiement"}>
+                        Description du paiement
+                    </Input>
                 </div>
 
                 <div className="line line-2">

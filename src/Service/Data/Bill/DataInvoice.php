@@ -2,6 +2,7 @@
 
 namespace App\Service\Data\Bill;
 
+use App\Entity\Bill\BiHistory;
 use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiProduct;
 use App\Entity\Society;
@@ -9,6 +10,7 @@ use App\Service\Bill\BillService;
 use App\Service\Data\DataConstructor;
 use App\Service\SanitizeData;
 use App\Service\ValidatorService;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
@@ -84,6 +86,7 @@ class DataInvoice extends DataConstructor
             ->setTotalRemise($this->sanitizeData->setToFloat($data->totalRemise, 0))
             ->setTotalTva($this->sanitizeData->setToFloat($data->totalTva, 0))
             ->setTotalTtc($this->sanitizeData->setToFloat($data->totalTtc, 0))
+            ->setToPay($this->sanitizeData->setToFloat($data->totalTtc, 0))
 
             ->setNote($this->sanitizeData->trimData($data->note))
             ->setFooter($this->sanitizeData->trimData($data->footer))
@@ -142,6 +145,19 @@ class DataInvoice extends DataConstructor
             ->setPrice($this->sanitizeData->setToFloat($data->price, 0))
             ->setRateTva($this->sanitizeData->setToFloat($data->rateTva, 0))
             ->setQuantity($this->sanitizeData->setToInteger($data->quantity, 0))
+        ;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function setDataHistory(BiHistory $obj, $type, $name, DateTime $date, $price = null): BiHistory
+    {
+        return ($obj)
+            ->setType($type)
+            ->setName($name)
+            ->setDateAt($date)
+            ->setPrice($price)
         ;
     }
 }

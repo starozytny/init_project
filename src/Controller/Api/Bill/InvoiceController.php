@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api\Bill;
 
+use App\Entity\Bill\BiHistory;
 use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiProduct;
 use App\Entity\Society;
@@ -282,6 +283,14 @@ class InvoiceController extends AbstractController
         $user = $this->getUser();
         $obj = $dataInvoice->setDataInvoiceGenerated($obj, $data, $user->getSociety());
 
+        $now = new \DateTime();
+        $now->setTimezone(new \DateTimeZone("Europe/Paris"));
+
+        $history = $dataInvoice->setDataHistory(new BiHistory(), BiHistory::TYPE_GENERATED, "Facture finalisée", $now);
+        $history->setInvoice($obj);
+
+        $obj->setIsSent(true);
+
 //        if($mailerService->sendMail(
 //                $obj->getToEmail(),
 //                "[" . $settingsService->getWebsiteName() ."] Facture",
@@ -302,8 +311,7 @@ class InvoiceController extends AbstractController
 //            ]]);
 //        }
 
-        $obj->setIsSent(true);
-
+        $em->persist($history);
         $em->flush();
 
         return $apiResponse->apiJsonResponse($obj, BiInvoice::INVOICE_READ);

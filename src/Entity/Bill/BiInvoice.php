@@ -5,6 +5,8 @@ namespace App\Entity\Bill;
 use App\Entity\DataEntity;
 use App\Entity\Society;
 use App\Repository\Bill\BiInvoiceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -241,9 +243,20 @@ class BiInvoice extends DataEntity
      */
     private $isArchived = false;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $toPay;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BiHistory::class, mappedBy="invoice")
+     */
+    private $histories;
+
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
+        $this->histories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -733,6 +746,48 @@ class BiInvoice extends DataEntity
     public function setIsArchived(bool $isArchived): self
     {
         $this->isArchived = $isArchived;
+
+        return $this;
+    }
+
+    public function getToPay(): ?float
+    {
+        return $this->toPay;
+    }
+
+    public function setToPay(float $toPay): self
+    {
+        $this->toPay = $toPay;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BiHistory>
+     */
+    public function getHistories(): Collection
+    {
+        return $this->histories;
+    }
+
+    public function addHistory(BiHistory $history): self
+    {
+        if (!$this->histories->contains($history)) {
+            $this->histories[] = $history;
+            $history->setInvoice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistory(BiHistory $history): self
+    {
+        if ($this->histories->removeElement($history)) {
+            // set the owning side to null (unless already changed)
+            if ($history->getInvoice() === $this) {
+                $history->setInvoice(null);
+            }
+        }
 
         return $this;
     }
