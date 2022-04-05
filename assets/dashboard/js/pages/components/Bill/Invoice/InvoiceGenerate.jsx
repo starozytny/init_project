@@ -93,8 +93,8 @@ class Form extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const { context, url, messageSuccess } = this.props;
-        const { dateAt, dueType } = this.state;
+        const { context, url, messageSuccess, dateInvoice } = this.props;
+        const { dateAt, dueAt, dueType } = this.state;
 
         let method = context === "create" ? "POST" : "PUT";
 
@@ -104,6 +104,18 @@ class Form extends Component {
             {type: "date", id: 'dateAt',      value: dateAt},
             {type: "text", id: 'dueType',     value: dueType}
         ];
+
+        if(dateInvoice){
+            paramsToValidate = [...paramsToValidate,
+                ...[{type: "dateCompare", id: 'dateAt', value: new Date(dateInvoice), idCheck: 'dateInvoice', valueCheck: dateAt}]
+            ];
+        }
+
+        if(parseInt(dueType) !== 1){
+            paramsToValidate = [...paramsToValidate,
+                ...[{type: "dateCompare", id: 'dueAt', value: dateAt, idCheck: 'dateAt', valueCheck: dueAt}]
+            ];
+        }
 
         // validate global
         let validate = Validateur.validateur(paramsToValidate)

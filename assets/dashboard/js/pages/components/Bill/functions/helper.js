@@ -34,7 +34,7 @@ function getConditionPaiementChoices(){
 function setDueAt(self, dueType, dateAt) {
     let val = parseInt(dueType);
     if(val === 1){
-        this.setState({ dueAt: "" })
+        self.setState({ dueAt: "" })
     }else{
         if(val !== 0 && dateAt !== ""){
             let dueAt = new Date(dateAt);

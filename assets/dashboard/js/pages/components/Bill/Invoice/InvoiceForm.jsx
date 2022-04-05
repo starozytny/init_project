@@ -238,8 +238,8 @@ class Form extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const { context, url, messageSuccess } = this.props;
-        const { dateAt, toName, toAddress, toZipcode, toCity } = this.state;
+        const { context, url, messageSuccess, dateInvoice } = this.props;
+        const { dateAt, dueType, dueAt, toName, toAddress, toZipcode, toCity } = this.state;
 
         let method = context === "create" ? "POST" : "PUT";
 
@@ -252,6 +252,18 @@ class Form extends Component {
             {type: "text", id: 'toZipcode',   value: toZipcode},
             {type: "text", id: 'toCity',      value: toCity},
         ];
+
+        if(dateInvoice){
+            paramsToValidate = [...paramsToValidate,
+                ...[{type: "dateCompare", id: 'dateAt', value: new Date(dateInvoice), idCheck: 'dateInvoice', valueCheck: dateAt}]
+            ];
+        }
+
+        if(parseInt(dueType) !== 1){
+            paramsToValidate = [...paramsToValidate,
+                ...[{type: "dateCompare", id: 'dueAt', value: dateAt, idCheck: 'dateAt', valueCheck: dueAt}]
+            ];
+        }
 
         // validate global
         let validate = Validateur.validateur(paramsToValidate)
@@ -312,7 +324,12 @@ class Form extends Component {
                         <DatePick identifiant="dateAt" valeur={dateAt} minDate={dateInvoice ? new Date(dateInvoice) : ""} errors={errors} onChange={(e) => this.handleChangeDate("dateAt", e)}>
                             Date de facture
                         </DatePick>
-                        <div className="form-group" />
+                        <div className="form-group">
+                            {dateInvoice && <>
+                                <label>Dernière date de facturation</label>
+                                <div>La date de facture doit être supérieur à {new Date(dateInvoice).toLocaleDateString()} </div>
+                            </>}
+                        </div>
                     </div>
 
                     <div className="line line-2">
