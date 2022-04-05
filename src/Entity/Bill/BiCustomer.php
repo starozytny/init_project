@@ -2,64 +2,77 @@
 
 namespace App\Entity\Bill;
 
+use App\Entity\DataEntity;
 use App\Entity\Society;
 use App\Repository\Bill\BiCustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=BiCustomerRepository::class)
  */
-class BiCustomer
+class BiCustomer extends DataEntity
 {
+    const CUSTOMER_READ = ["customer:read"];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"customer:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customer:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customer:read"})
      */
     private $numeroTva;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customer:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
+     * @Groups({"customer:read"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customer:read"})
      */
-    private $adresse;
+    private $address;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customer:read"})
      */
     private $complement;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
+     * @Groups({"customer:read"})
      */
     private $zipcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customer:read"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customer:read"})
      */
     private $country;
 
@@ -68,6 +81,22 @@ class BiCustomer
      * @ORM\JoinColumn(nullable=false)
      */
     private $society;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Groups({"customer:read"})
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+    public function __construct()
+    {
+        $this->createdAt = $this->initNewDate();
+    }
 
     public function getId(): ?int
     {
@@ -122,14 +151,14 @@ class BiCustomer
         return $this;
     }
 
-    public function getAdresse(): ?string
+    public function getAddress(): ?string
     {
-        return $this->adresse;
+        return $this->address;
     }
 
-    public function setAdresse(?string $adresse): self
+    public function setAddress(?string $address): self
     {
-        $this->adresse = $adresse;
+        $this->address = $address;
 
         return $this;
     }
@@ -190,6 +219,30 @@ class BiCustomer
     public function setCountry(?string $country): self
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

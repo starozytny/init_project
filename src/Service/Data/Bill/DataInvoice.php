@@ -2,6 +2,7 @@
 
 namespace App\Service\Data\Bill;
 
+use App\Entity\Bill\BiCustomer;
 use App\Entity\Bill\BiHistory;
 use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiProduct;
@@ -147,6 +148,22 @@ class DataInvoice extends DataConstructor
             ->setPrice($this->sanitizeData->setToFloat($data->price, 0))
             ->setRateTva($this->sanitizeData->setToFloat($data->rateTva, 0))
             ->setQuantity($this->sanitizeData->setToInteger($data->quantity, 0))
+        ;
+    }
+
+    public function setDataCustomer(BiCustomer $obj, $data, Society $society): BiCustomer
+    {
+        return ($obj)
+            ->setSociety($society)
+            ->setName($this->sanitizeData->trimData($data->name))
+            ->setNumeroTva($this->sanitizeData->trimData($data->numeroTva))
+            ->setEmail($this->sanitizeData->trimData($data->email))
+            ->setPhone($this->sanitizeData->trimData($data->phone))
+            ->setAddress($this->sanitizeData->trimData($data->address))
+            ->setComplement($this->sanitizeData->trimData($data->complement))
+            ->setZipcode($this->sanitizeData->trimData($data->zipcode))
+            ->setCity($this->sanitizeData->trimData($data->city))
+            ->setCountry($this->sanitizeData->trimData($data->country))
         ;
     }
 
