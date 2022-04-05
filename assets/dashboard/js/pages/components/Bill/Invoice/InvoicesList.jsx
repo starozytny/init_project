@@ -11,11 +11,13 @@ import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { Button }   from "@dashboardComponents/Tools/Button";
 import { Alert }    from "@dashboardComponents/Tools/Alert";
+import { Aside }    from "@dashboardComponents/Tools/Aside";
 import { Search }   from "@dashboardComponents/Layout/Search";
 import { Filter, FilterSelected } from "@dashboardComponents/Layout/Filter";
 import { TopSorterPagination } from "@dashboardComponents/Layout/Pagination";
 
 import { InvoicesItem }   from "@dashboardPages/components/Bill/Invoice/InvoicesItem";
+import { InvoiceGenerateFormulaire } from "@dashboardPages/components/Bill/Invoice/InvoiceGenerate";
 
 const URL_GENERATE_INVOICE = "api_bill_invoices_generate";
 
@@ -24,10 +26,12 @@ export class InvoicesList extends Component {
         super(props);
 
         this.state = {
-            dateInvoice: props.society.dateInvoiceJavascript ? new Date(props.society.dateInvoiceJavascript) : null
+            dateInvoice: props.society.dateInvoiceJavascript ? new Date(props.society.dateInvoiceJavascript) : null,
+            element: null
         }
 
         this.filter = React.createRef();
+        this.aside = React.createRef();
 
         this.handleFilter = this.handleFilter.bind(this);
         this.handleGenerate = this.handleGenerate.bind(this);
@@ -47,7 +51,8 @@ export class InvoicesList extends Component {
             dateInvoice.setHours(0, 0, 0);
 
             if(dateAt < dateInvoice){
-                askDate(this, elem, dateInvoice);
+                this.setState({ element: elem })
+                this.aside.current.handleOpen();
             }else{
                 generateInvoice(this, elem, dateAt)
             }
@@ -58,7 +63,8 @@ export class InvoicesList extends Component {
 
     render () {
         const { data, onChangeContext, taille, onGetFilters, filters, onSearch, perPage, onPerPage,
-            onPaginationClick, currentPage, sorters, onSorter } = this.props;
+            onPaginationClick, currentPage, sorters, onSorter, onUpdateList } = this.props;
+        const { element, dateInvoice } = this.state;
 
         let filtersLabel = ["Brouillon", "A régler", "Payée", "Partiel", "Archivée"];
         let filtersId    = ["f-br", "f-are", "f-pa", 'f-pa', "f-arc"];
@@ -70,6 +76,8 @@ export class InvoicesList extends Component {
             { value: 3, id: filtersId[3], label: filtersLabel[3] },
             { value: 4, id: filtersId[4], label: filtersLabel[4] },
         ];
+
+        let contentAside = <InvoiceGenerateFormulaire onUpdateList={onUpdateList} dateInvoice={dateInvoice} element={element} />
 
         return <>
             <div>
@@ -110,6 +118,8 @@ export class InvoicesList extends Component {
                     </div>
                 </div>
             </div>
+
+            <Aside ref={this.aside} content={contentAside} >Modification de la date de facturation</Aside>
         </>
     }
 }
