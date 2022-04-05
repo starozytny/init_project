@@ -471,7 +471,7 @@ class BiInvoice extends DataEntity
      */
     public function getDateAtString(): ?string
     {
-        return $this->getFullDateString($this->dateAt);
+        return $this->getFullDateString($this->dateAt, "ll", false);
     }
 
     /**
@@ -480,7 +480,7 @@ class BiInvoice extends DataEntity
      */
     public function getDueAtString(): ?string
     {
-        return $this->getFullDateString($this->dueAt);
+        return $this->getFullDateString($this->dueAt, "ll", false);
     }
 
     /**

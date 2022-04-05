@@ -44,8 +44,6 @@ export class InvoicesList extends Component {
             dateAt.setHours(0, 0, 0);
             dateInvoice.setHours(0, 0, 0);
 
-            console.log(dateAt, dateInvoice)
-
             if(dateAt < dateInvoice){
                 askDate(this, elem, dateInvoice);
             }else{
@@ -172,8 +170,10 @@ function generateInvoice(self, elem, dateAt)
                     .then(function (response) {
                         let data = response.data;
                         if (self.props.onUpdateList) {
+                            console.log(data);
                             self.props.onUpdateList(data, "update")
                         }
+                        toastr.info("Facture générée avec succès.")
                         self.setState({ dateInvoice: dateAt })
                     })
                     .catch(function (error) {
