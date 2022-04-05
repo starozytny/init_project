@@ -31,8 +31,9 @@
     cursor: pointer;
   }
 
-  a, .btn, .btn-icon{
+  a, .btn, .btn-icon, div{
     color: var(--grey3);
+    cursor: pointer;
 
     &:hover{
       color: var(--txt);
