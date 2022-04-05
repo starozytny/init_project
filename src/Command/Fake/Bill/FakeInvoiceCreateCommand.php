@@ -71,8 +71,8 @@ class FakeInvoiceCreateCommand extends Command
                 'totalTva' => $totalTva,
                 'totalTtc' => $totalTtc,
 
-                'dateAt' => (new \DateTime())->format("Y-m-d\\TH:i:s.000Z"),
-                'dueAt' => (new \DateTime())->format("Y-m-d\\TH:i:s.000Z"),
+                'dateAt' => (new \DateTime())->setTime(0,0,0)->format("Y-m-d\\TH:i:s.000Z"),
+                'dueAt' => (new \DateTime())->setTime(0,0,0)->format("Y-m-d\\TH:i:s.000Z"),
                 'dueType' => 0,
 
                 'note' => $fake->sentence,

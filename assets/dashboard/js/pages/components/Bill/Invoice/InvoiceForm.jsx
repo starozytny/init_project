@@ -165,6 +165,7 @@ class Form extends Component {
             }else{
                 if(val !== 0 && dateAt !== ""){
                     let dueAt = new Date(dateAt);
+                    dueAt.setHours(0,0,0);
                     switch (val){
                         case 2: // 8j
                             dueAt = dueAt.setDate(dueAt.getDate() + 8);
@@ -178,6 +179,7 @@ class Form extends Component {
                         default:
                             break;
                     }
+                    dueAt = new Date(dueAt);
 
                     this.setState({ dueAt: dueAt })
                 }
@@ -196,6 +198,10 @@ class Form extends Component {
     handleChangeDate = (name, e) => {
         if(name === "dueAt"){
             this.setState({dueType: 0 })
+        }
+
+        if(e !== null){
+            e.setHours(0,0,0);
         }
 
         this.setState({ [name]: e !== null ? e : "" })
