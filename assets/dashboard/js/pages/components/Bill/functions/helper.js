@@ -84,13 +84,25 @@ function generateInvoice(self, elem, dateAt, dueAt, dueType)
                 } })
                     .then(function (response) {
                         let data = response.data;
+                        toastr.info("Félicitations ! La facture a été réalisée avec succès !")
+
+                        if (self.props.onCloseAside) {
+                            self.props.onCloseAside()
+                        }
                         if (self.props.onUpdateList) {
                             self.props.onUpdateList(data, "update")
                         }
-                        toastr.info("Facture générée avec succès.")
-                        self.setState({ dateInvoice: dateAt })
+
+                        if(self.props.onUpdateDateInvoice){
+                            self.props.onUpdateDateInvoice(dateAt)
+                        }else{
+                            self.handleUpdateDateInvoice(dateAt)
+                        }
+
                     })
                     .catch(function (error) {
+                        console.log(error)
+                        console.log(error.response)
                         Formulaire.displayErrors(self, error);
                     })
                     .then(function () {

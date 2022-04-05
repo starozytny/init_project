@@ -9,7 +9,7 @@ import Validateur              from "@commonComponents/functions/validateur";
 import helper                  from "@dashboardPages/components/Bill/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
-export function InvoiceGenerateFormulaire ({ onUpdateList, element, dateInvoice })
+export function InvoiceGenerateFormulaire ({ onUpdateList, onUpdateDateInvoice, onCloseAside, element, dateInvoice })
 {
     let form = <div />
     if(element){
@@ -23,6 +23,8 @@ export function InvoiceGenerateFormulaire ({ onUpdateList, element, dateInvoice 
             dueType={Formulaire.setValueEmptyIfNull(element.dueType, 2)}
 
             onUpdateList={onUpdateList}
+            onUpdateDateInvoice={onUpdateDateInvoice}
+            onCloseAside={onCloseAside}
         />
     }
 
@@ -99,9 +101,15 @@ class Form extends Component {
         }
 
         if(parseInt(dueType) !== 1){
-            paramsToValidate = [...paramsToValidate,
-                ...[{type: "dateCompare", id: 'dueAt', value: dateAt, idCheck: 'dateAt', valueCheck: dueAt}]
-            ];
+            if(dateAt === ""){
+                paramsToValidate = [...paramsToValidate,
+                    ...[{type: "date", id: 'dueAt', value: dueAt}]
+                ];
+            }else{
+                paramsToValidate = [...paramsToValidate,
+                    ...[{type: "dateCompare", id: 'dueAt', value: dateAt, idCheck: 'dateAt', valueCheck: dueAt}]
+                ];
+            }
         }
 
         // validate global

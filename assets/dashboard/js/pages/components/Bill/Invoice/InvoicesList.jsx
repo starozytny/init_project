@@ -32,6 +32,10 @@ export class InvoicesList extends Component {
         this.filter.current.handleChange(e, true);
     }
 
+    handleUpdateDateInvoice = (dateAt) => { this.setState({ dateInvoice: dateAt }) }
+
+    handleCloseAside = () => { this.aside.current.handleClose(); }
+
     handleGenerate = (elem) => {
         const { dateInvoice } = this.state;
 
@@ -68,7 +72,9 @@ export class InvoicesList extends Component {
             { value: 4, id: filtersId[4], label: filtersLabel[4] },
         ];
 
-        let contentAside = <InvoiceGenerateFormulaire onUpdateList={onUpdateList} dateInvoice={dateInvoice} element={element} />
+        let contentAside = <InvoiceGenerateFormulaire onUpdateList={onUpdateList} onUpdateDateInvoice={this.handleUpdateDateInvoice}
+                                                      onCloseAside={this.handleCloseAside}
+                                                      dateInvoice={dateInvoice} element={element} key={element ? element.id : 1}/>
 
         return <>
             <div>

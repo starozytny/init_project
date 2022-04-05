@@ -246,7 +246,7 @@ class InvoiceController extends AbstractController
 
         $em->flush();
 
-        return $apiResponse->apiJsonResponseSuccessful(true);
+        return $apiResponse->apiJsonResponse($newObj, BiInvoice::INVOICE_READ);
     }
 
     /**
@@ -282,25 +282,25 @@ class InvoiceController extends AbstractController
         $user = $this->getUser();
         $obj = $dataInvoice->setDataInvoiceGenerated($obj, $data, $user->getSociety());
 
-        if($mailerService->sendMail(
-                $obj->getToEmail(),
-                "[" . $settingsService->getWebsiteName() ."] Facture",
-                "Facture venant de " . $settingsService->getWebsiteName(),
-                'app/email/bill/invoice.html.twig',
-                [
-                    'elem' => $obj,
-                    'user' => $user,
-                    'settings' => $settingsService->getSettings(),
-                    'urlLogin' => $this->generateUrl('app_login', [], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'url' => $this->generateUrl('user_invoice', ['id' => $obj->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
-                ]
-            ) != true)
-        {
-            return $apiResponse->apiJsonResponseValidationFailed([[
-                'name' => 'message',
-                'message' => "Le message n\'a pas pu être délivré. Veuillez contacter le support."
-            ]]);
-        }
+//        if($mailerService->sendMail(
+//                $obj->getToEmail(),
+//                "[" . $settingsService->getWebsiteName() ."] Facture",
+//                "Facture venant de " . $settingsService->getWebsiteName(),
+//                'app/email/bill/invoice.html.twig',
+//                [
+//                    'elem' => $obj,
+//                    'user' => $user,
+//                    'settings' => $settingsService->getSettings(),
+//                    'urlLogin' => $this->generateUrl('app_login', [], UrlGeneratorInterface::ABSOLUTE_URL),
+//                    'url' => $this->generateUrl('user_invoice', ['id' => $obj->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+//                ]
+//            ) != true)
+//        {
+//            return $apiResponse->apiJsonResponseValidationFailed([[
+//                'name' => 'message',
+//                'message' => "Le message n\'a pas pu être délivré. Veuillez contacter le support."
+//            ]]);
+//        }
 
         $obj->setIsSent(true);
 

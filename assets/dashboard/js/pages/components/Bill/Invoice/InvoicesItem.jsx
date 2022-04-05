@@ -19,8 +19,7 @@ const STATUS_ARCHIVED = 4;
 
 const URL_DUPLICATE_ELEMENT = "api_bill_invoices_duplicate";
 
-function confirmAction (elem, url, title, text, messageSuccess) {
-    const self = this;
+function confirmAction (self, context, elem, url, title, text, messageSuccess) {
     Swal.fire(SwalOptions.options(title, text))
         .then((result) => {
             if (result.isConfirmed) {
@@ -28,10 +27,18 @@ function confirmAction (elem, url, title, text, messageSuccess) {
 
                 axios.post(url, {})
                     .then(function (response) {
+                        let data = response.data;
+
                         toastr.info(messageSuccess)
-                        setTimeout(() => {
-                            location.reload()
-                        }, 2000)
+
+                        if (self.props.onUpdateList) {
+                            Formulaire.loader(false);
+                            self.props.onUpdateList(data, context);
+                        }else{
+                            setTimeout(() => {
+                                location.reload()
+                            }, 2000)
+                        }
                     })
                     .catch(function (error) {
                         Formulaire.loader(false);
@@ -51,7 +58,7 @@ export class InvoicesItem extends Component {
     }
 
     handleDuplicate = (elem) => {
-        confirmAction(elem, Routing.generate(URL_DUPLICATE_ELEMENT, {'id': elem.id}),
+        confirmAction(this, "create", elem, Routing.generate(URL_DUPLICATE_ELEMENT, {'id': elem.id}),
             "Dupliquer cette facture ?", "La nouvelle facture sera en mode brouillon.", "Facture copiée avec succès.")
     }
 
