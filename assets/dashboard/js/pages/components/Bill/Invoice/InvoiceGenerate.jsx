@@ -1,40 +1,28 @@
 import React, { Component } from 'react';
 
-import axios                   from "axios";
-import toastr                  from "toastr";
-import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
-
 import { Select }              from "@dashboardComponents/Tools/Fields";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { DatePick }            from "@dashboardComponents/Tools/DatePicker";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 
 import Validateur              from "@commonComponents/functions/validateur";
-import Helper                  from "@commonComponents/functions/helper";
 import helper                  from "@dashboardPages/components/Bill/functions/helper";
-import Sanitaze                from "@commonComponents/functions/sanitaze";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
-
-const URL_GENERATE_INVOICE     = "api_bill_invoices_generate";
 
 export function InvoiceGenerateFormulaire ({ onUpdateList, element, dateInvoice })
 {
     let form = <div />
     if(element){
-        let url = Routing.generate(URL_GENERATE_INVOICE, {"id" : element.id});
-        let msg = "Félicitations ! La génération de la facture s'est réalisée avec succès !";
-
         form = <Form
-            url={url}
-
             dateInvoice={dateInvoice}
+
+            element={element}
 
             dateAt={""}
             dueAt={""}
             dueType={Formulaire.setValueEmptyIfNull(element.dueType, 2)}
 
             onUpdateList={onUpdateList}
-            messageSuccess={msg}
         />
     }
 
@@ -46,6 +34,7 @@ class Form extends Component {
         super(props);
 
         this.state = {
+            element: props.element,
             dateAt: props.dateAt,
             dueAt: props.dueAt,
             dueType: props.dueType,
@@ -93,10 +82,8 @@ class Form extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const { context, url, messageSuccess, dateInvoice } = this.props;
-        const { dateAt, dueAt, dueType } = this.state;
-
-        let method = context === "create" ? "POST" : "PUT";
+        const { dateInvoice } = this.props;
+        const { element, dateAt, dueAt, dueType } = this.state;
 
         this.setState({ errors: [], success: false })
 
@@ -122,21 +109,7 @@ class Form extends Component {
         if(!validate.code){
             Formulaire.showErrors(this, validate);
         }else{
-            Formulaire.loader(true);
-            let self = this;
-            axios({ method: method, url: url, data: this.state })
-                .then(function (response) {
-                    let data = response.data;
-                    self.setState({ success: messageSuccess, errors: [] });
-                    toastr.info(messageSuccess);
-                })
-                .catch(function (error) {
-                    Formulaire.displayErrors(self, error);
-                })
-                .then(function () {
-                    Formulaire.loader(false);
-                })
-            ;
+            helper.generateInvoice(this, element, dateAt, dueAt, dueType);
         }
     }
 

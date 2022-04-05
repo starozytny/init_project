@@ -59,6 +59,7 @@ class DataInvoice extends DataConstructor
             ->setSociety($society)
             ->setDateAt($this->sanitizeData->createDate($data->dateAt))
             ->setDueAt($this->sanitizeData->createDate($data->dueAt))
+            ->setDueType((int) $data->dueType)
 
             ->setFromName($society->getName())
             ->setFromAddress($society->getAddress())
@@ -123,6 +124,8 @@ class DataInvoice extends DataConstructor
         return ($obj)
             ->setStatus(BiInvoice::STATUS_TO_PAY)
             ->setDateAt($dateAt)
+            ->setDueAt($this->sanitizeData->createDate($data->dueAt))
+            ->setDueType((int) $data->dueType)
             ->setNumero($numero)
         ;
     }

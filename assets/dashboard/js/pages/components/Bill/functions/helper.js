@@ -1,4 +1,12 @@
+const axios  = require("axios");
+const toastr = require("toastr");
+const Swal   = require("sweetalert2");
+const SwalOptions = require("@commonComponents/functions/swalOptions");
+const Routing = require('@publicFolder/bundles/fosjsrouting/js/router.min.js');
+
 const Formulaire = require('@dashboardComponents/functions/Formulaire');
+
+const URL_GENERATE_INVOICE = "api_bill_invoices_generate";
 
 function getTaxesAndUnitiesSelectItems(taxes, unities) {
     let selectUnities = [];
@@ -60,9 +68,45 @@ function setDueAt(self, dueType, dateAt) {
     }
 }
 
+function generateInvoice(self, elem, dateAt, dueAt, dueType)
+{
+    Swal.fire(SwalOptions.options("Finaliser la facture",
+        "Une fois finalisée, la facture <u>ne pourra plus être modifiée</u>. " +
+        "En cas d'erreur sur la facture, il faudra faire un avoir pour la rectifier. <br><br>" +
+        "<b>Un mail sera envoyé aux adhérents pour les notifier de la création de leur(s) facture(s)</b>"))
+        .then((result) => {
+            if (result.isConfirmed) {
+                Formulaire.loader(true);
+                axios({ method: "POST", url: Routing.generate(URL_GENERATE_INVOICE, {'id': elem.id}), data: {
+                    dateAt: dateAt,
+                    dueAt: dueAt,
+                    dueType: dueType,
+                } })
+                    .then(function (response) {
+                        let data = response.data;
+                        if (self.props.onUpdateList) {
+                            self.props.onUpdateList(data, "update")
+                        }
+                        toastr.info("Facture générée avec succès.")
+                        self.setState({ dateInvoice: dateAt })
+                    })
+                    .catch(function (error) {
+                        Formulaire.displayErrors(self, error);
+                    })
+                    .then(function () {
+                        Formulaire.loader(false);
+                    })
+                ;
+            }
+        })
+    ;
+}
+
+
 module.exports = {
     getTaxesAndUnitiesSelectItems,
     getTotalHt,
     getConditionPaiementChoices,
-    setDueAt
+    setDueAt,
+    generateInvoice
 }

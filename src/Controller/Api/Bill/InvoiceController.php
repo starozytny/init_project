@@ -267,6 +267,8 @@ class InvoiceController extends AbstractController
      * @param BiInvoice $obj
      * @param ApiResponse $apiResponse
      * @param DataInvoice $dataInvoice
+     * @param MailerService $mailerService
+     * @param SettingsService $settingsService
      * @return JsonResponse
      * @throws Exception
      */
