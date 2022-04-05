@@ -1,5 +1,7 @@
 @import "../vars/vars";
 
+@import "flatpickr";
+
 #invoices{
   @include toolbarCreateFilterSearch(185);
 }

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import axios             from "axios";
 import toastr            from "toastr";
 import Swal              from "sweetalert2";
+import flatpickr         from "flatpickr";
 import SwalOptions       from "@commonComponents/functions/swalOptions";
 import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
@@ -23,7 +24,7 @@ export class InvoicesList extends Component {
         super(props);
 
         this.state = {
-            dateInvoice: new Date(props.society.dateInvoiceJavascript)
+            dateInvoice: props.society.dateInvoiceJavascript ? new Date(props.society.dateInvoiceJavascript) : null
         }
 
         this.filter = React.createRef();
@@ -39,9 +40,10 @@ export class InvoicesList extends Component {
     handleGenerate = (elem) => {
         const { dateInvoice } = this.state;
 
+        let dateAt = new Date(elem.dateAtJavascript);
+        dateAt.setHours(0, 0, 0);
+
         if(dateInvoice){
-            let dateAt = new Date(elem.dateAtJavascript);
-            dateAt.setHours(0, 0, 0);
             dateInvoice.setHours(0, 0, 0);
 
             if(dateAt < dateInvoice){
@@ -49,6 +51,8 @@ export class InvoicesList extends Component {
             }else{
                 generateInvoice(this, elem, dateAt)
             }
+        }else{
+            generateInvoice(this, elem, dateAt)
         }
     }
 
@@ -110,32 +114,33 @@ export class InvoicesList extends Component {
     }
 }
 
-function askDate(self, elem, nDateCreancier)
+function askDate(self, elem, dateInvoice)
 {
     let flatpickrInstance;
-    let nDateCreancierString = nDateCreancier.toLocaleDateString("fr");
-    let msg = `La date ne peut pas être inférieur à ${nDateCreancierString}`;
+    let dateInvoiceString = dateInvoice.toLocaleDateString("fr");
+    let msg = `La date ne peut pas être inférieur à ${dateInvoiceString}`;
 
     Swal.fire({
         title: 'Veuillez saisir une date de facturation.',
         html: '<div>' +
-            'Afin de respecter la cohérence entre la date et le numéro de facturation, ' +
-            'vous ne pouvez pas établir une facture avec la date de formation. <br><br>' +
-            'La date doit être supérieure ou égale à ' + nDateCreancierString + "." +
+                'Afin de respecter la cohérence entre la date et le numéro de facturation, ' +
+                '<u>la date de facturation</u> doit être supérieure ou égale à <b>' + dateInvoiceString + "</b>." +
             '</div>' +
             '<input class="swal2-input" id="expiry-date">',
         stopKeydownPropagation: false,
+        showCancelButton: true,
+        confirmButtonText: "Confirmer",
+        cancelButtonText: "Annuler",
         preConfirm: () => {
-            nDateCreancier.setHours(0,0,0);
-            if (nDateCreancier && flatpickrInstance.selectedDates[0] < nDateCreancier) {
+            if (dateInvoice && flatpickrInstance.selectedDates[0] < dateInvoice) {
                 Swal.showValidationMessage(msg)
             }
         },
-        onOpen: () => {
-            if(nDateCreancier){
+        willOpen: () => {
+            if(dateInvoice){
                 flatpickrInstance = flatpickr('#expiry-date', {
                     'dateFormat': 'd/m/Y',
-                    'minDate': nDateCreancier
+                    'minDate': dateInvoice
                 });
             }else{
                 flatpickrInstance = flatpickr('#expiry-date', {
@@ -146,13 +151,15 @@ function askDate(self, elem, nDateCreancier)
     })
         .then((result) => {
             if (result.isConfirmed) {
-                if(flatpickrInstance.selectedDates[0] >= nDateCreancier){
-                    generateInvoice(self, elem, flatpickrInstance.selectedDates[0])
-                }else{
-                    Swal.showValidationMessage(msg)
+                let dateAt = flatpickrInstance.selectedDates[0]
+                if(dateAt){
+                    dateAt.setHours(0,0,0);
+                    if(dateAt && dateAt >= dateInvoice){
+                        generateInvoice(self, elem, dateAt)
+                    }else{
+                        Swal.showValidationMessage(msg)
+                    }
                 }
-            }else{
-                Swal.showValidationMessage(msg)
             }
         })
 }
@@ -170,7 +177,6 @@ function generateInvoice(self, elem, dateAt)
                     .then(function (response) {
                         let data = response.data;
                         if (self.props.onUpdateList) {
-                            console.log(data);
                             self.props.onUpdateList(data, "update")
                         }
                         toastr.info("Facture générée avec succès.")
