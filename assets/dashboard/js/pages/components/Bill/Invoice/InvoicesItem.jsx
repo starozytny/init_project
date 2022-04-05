@@ -121,7 +121,7 @@ export class InvoicesItem extends Component {
                             <div className="sub">{elem.dueAtString}</div>
                         </div>
                         <div className="col-5">
-                            <div className="sub">{Sanitaze.toFormatCurrency(elem.totalTtc)}</div>
+                            <div className="name">{Sanitaze.toFormatCurrency(elem.totalTtc)}</div>
                         </div>
                         <div className="col-6">
                             <div className="badges">

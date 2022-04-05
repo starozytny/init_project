@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Bill\BiCustomer;
 use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiItem;
 use App\Repository\SocietyRepository;
@@ -150,11 +151,17 @@ class Society extends DataEntity
      */
     private $biItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity=BiCustomer::class, mappedBy="society")
+     */
+    private $biCustomers;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->biInvoices = new ArrayCollection();
         $this->biItems = new ArrayCollection();
+        $this->biCustomers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -518,6 +525,36 @@ class Society extends DataEntity
             // set the owning side to null (unless already changed)
             if ($biItem->getSociety() === $this) {
                 $biItem->setSociety(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BiCustomer>
+     */
+    public function getBiCustomers(): Collection
+    {
+        return $this->biCustomers;
+    }
+
+    public function addBiCustomer(BiCustomer $biCustomer): self
+    {
+        if (!$this->biCustomers->contains($biCustomer)) {
+            $this->biCustomers[] = $biCustomer;
+            $biCustomer->setSociety($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBiCustomer(BiCustomer $biCustomer): self
+    {
+        if ($this->biCustomers->removeElement($biCustomer)) {
+            // set the owning side to null (unless already changed)
+            if ($biCustomer->getSociety() === $this) {
+                $biCustomer->setSociety(null);
             }
         }
 
