@@ -68,6 +68,7 @@ class DataInvoice extends DataConstructor
             ->setFromComplement($society->getComplement())
             ->setFromZipcode($society->getZipcode())
             ->setFromCity($society->getCity())
+            ->setFromCountry($society->getCountry())
             ->setFromEmail($society->getEmail())
             ->setFromPhone1($society->getPhone1())
             ->setFromSiren($society->getSiren())
@@ -79,6 +80,7 @@ class DataInvoice extends DataConstructor
             ->setToComplement($this->sanitizeData->trimData($data->toComplement))
             ->setToZipcode($this->sanitizeData->trimData($data->toZipcode))
             ->setToCity($this->sanitizeData->trimData($data->toCity))
+            ->setToCountry($this->sanitizeData->trimData($data->toCountry))
             ->setToEmail($this->sanitizeData->trimData($data->toEmail))
             ->setToPhone1($this->sanitizeData->trimData($data->toPhone1))
 

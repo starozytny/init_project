@@ -130,6 +130,7 @@ class BiInvoice extends DataEntity
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $fromCountry;
 
@@ -187,6 +188,7 @@ class BiInvoice extends DataEntity
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $toCountry;
 

@@ -87,6 +87,7 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
         toComplement={element ? Formulaire.setValueEmptyIfNull(element.toComplement) : ""}
         toZipcode={element ? Formulaire.setValueEmptyIfNull(element.toZipcode) : ""}
         toCity={element ? Formulaire.setValueEmptyIfNull(element.toCity) : ""}
+        toCountry={element ? Formulaire.setValueEmptyIfNull(element.toCountry, "France") : "France"}
         toEmail={element ? Formulaire.setValueEmptyIfNull(element.toEmail) : ""}
         toPhone1={element ? Formulaire.setValueEmptyIfNull(element.toPhone1) : ""}
 
@@ -122,6 +123,7 @@ class Form extends Component {
             toComplement: props.toComplement,
             toZipcode: props.toZipcode,
             toCity: props.toCity,
+            toCountry: props.toCountry,
             toEmail: props.toEmail,
             toPhone1: props.toPhone1,
             note: props.note,
@@ -287,7 +289,7 @@ class Form extends Component {
     render () {
         const { context, society, dateInvoice, items, taxes, unities } = this.props;
         const { element, errors, success, dateAt, dueAt, dueType,
-            toName, toAddress, toComplement, toZipcode, toCity, toEmail, toPhone1,
+            toName, toAddress, toComplement, toZipcode, toCity, toCountry, toEmail, toPhone1,
             note, footer, item, products, totalHt, totalRemise, totalTva, totalTtc } = this.state;
 
         let selectDueTypes = helper.getConditionPaiementChoices();
@@ -353,9 +355,10 @@ class Form extends Component {
                         <div className="line">
                             <Input identifiant="toComplement" valeur={toComplement} errors={errors} onChange={this.handleChange}>Complément d'adresse</Input>
                         </div>
-                        <div className="line line-2">
+                        <div className="line line-3">
                             <Input identifiant="toZipcode" valeur={toZipcode} errors={errors} onChange={this.handleChangeZipcodeCity} type="number">* Code postal</Input>
                             <Input identifiant="toCity" valeur={toCity} errors={errors} onChange={this.handleChange}>* Ville</Input>
+                            <Input identifiant="toCountry" valeur={toCountry} errors={errors} onChange={this.handleChange}>Pays</Input>
                         </div>
                     </div>
                 </div>

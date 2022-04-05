@@ -40,6 +40,9 @@
             <div>{{ elem.fromAddress }}</div>
             <div>{{ elem.fromComplement }}</div>
             <div>{{ elem.fromZipcode }}, {{ elem.fromCity }}</div>
+            {% if elem.fromCountry %}
+                <div>{{ elem.fromCountry }}</div>
+            {% endif %}
         </div>
         <div class="to">
             <div><b>Destinataire</b></div>
@@ -47,6 +50,9 @@
             <div>{{ elem.toAddress }}</div>
             <div>{{ elem.toComplement }}</div>
             <div>{{ elem.toZipcode }}, {{ elem.toCity }}</div>
+            {% if elem.toCountry %}
+                <div>{{ elem.toCountry }}</div>
+            {% endif %}
         </div>
     </div>
 

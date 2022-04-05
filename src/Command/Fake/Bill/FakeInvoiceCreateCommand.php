@@ -65,6 +65,7 @@ class FakeInvoiceCreateCommand extends Command
                 'toComplement' => $fake->streetName,
                 'toZipcode' => $fake->postcode,
                 'toCity' => $fake->city,
+                'toCountry' => $fake->country,
                 'toEmail' => $fake->email,
                 'toPhone1' => $fake->e164PhoneNumber,
 
