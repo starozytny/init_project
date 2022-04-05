@@ -11,6 +11,7 @@ import { TopSorterPagination } from "@dashboardComponents/Layout/Pagination";
 
 import { InvoicesItem }   from "@dashboardPages/components/Bill/Invoice/InvoicesItem";
 import { InvoiceGenerateFormulaire } from "@dashboardPages/components/Bill/Invoice/InvoiceGenerate";
+import {InvoicePayementFormulaire} from "@dashboardPages/components/Bill/Invoice/InvoicePayement";
 
 export class InvoicesList extends Component {
     constructor(props) {
@@ -22,10 +23,12 @@ export class InvoicesList extends Component {
         }
 
         this.filter = React.createRef();
-        this.aside = React.createRef();
+        this.asideGenerate = React.createRef();
+        this.asidePayement = React.createRef();
 
         this.handleFilter = this.handleFilter.bind(this);
         this.handleGenerate = this.handleGenerate.bind(this);
+        this.handlePayement = this.handlePayement.bind(this);
     }
 
     handleFilter = (e) => {
@@ -34,7 +37,13 @@ export class InvoicesList extends Component {
 
     handleUpdateDateInvoice = (dateAt) => { this.setState({ dateInvoice: dateAt }) }
 
-    handleCloseAside = () => { this.aside.current.handleClose(); }
+    handleCloseAside = () => {
+        if(this.asideGenerate.current){
+            this.asideGenerate.current.handleClose();
+        }else{
+            this.asidePayement.current.handleClose();
+        }
+    }
 
     handleGenerate = (elem) => {
         const { dateInvoice } = this.state;
@@ -47,13 +56,18 @@ export class InvoicesList extends Component {
 
             if(dateAt < dateInvoice){
                 this.setState({ element: elem })
-                this.aside.current.handleOpen();
+                this.asideGenerate.current.handleOpen();
             }else{
                 helper.generateInvoice(this, elem, dateAt, elem.dueAtJavascript, elem.dueType)
             }
         }else{
             helper.generateInvoice(this, elem, dateAt, elem.dueAtJavascript, elem.dueType)
         }
+    }
+
+    handlePayement = (elem) => {
+        this.setState({ element: elem })
+        this.asidePayement.current.handleOpen();
     }
 
     render () {
@@ -71,9 +85,12 @@ export class InvoicesList extends Component {
             { value: 3, id: filtersId[3], label: filtersLabel[3] },
         ];
 
-        let contentAside = <InvoiceGenerateFormulaire onUpdateList={onUpdateList} onUpdateDateInvoice={this.handleUpdateDateInvoice}
-                                                      onCloseAside={this.handleCloseAside}
-                                                      dateInvoice={dateInvoice} element={element} key={element ? element.id : 1}/>
+        let contentGenerate = <InvoiceGenerateFormulaire onUpdateList={onUpdateList} onCloseAside={this.handleCloseAside}
+                                                         onUpdateDateInvoice={this.handleUpdateDateInvoice} dateInvoice={dateInvoice}
+                                                         element={element} key={element ? element.id : 1}/>
+
+        let contentPayement = <InvoicePayementFormulaire onUpdateList={onUpdateList} onCloseAside={this.handleCloseAside}
+                                                         element={element} key={element ? element.id : 1}/>
 
         return <>
             <div>
@@ -109,13 +126,14 @@ export class InvoicesList extends Component {
                             </div>
                         </div>
                         {data && data.length !== 0 ? data.map(elem => {
-                            return <InvoicesItem {...this.props} onGenerate={this.handleGenerate} elem={elem} key={elem.id}/>
+                            return <InvoicesItem {...this.props} onGenerate={this.handleGenerate} onPayement={this.handlePayement} elem={elem} key={elem.id}/>
                         }) : <Alert>Aucun résultat</Alert>}
                     </div>
                 </div>
             </div>
 
-            <Aside ref={this.aside} content={contentAside} >Modification de la date de facturation</Aside>
+            <Aside ref={this.asideGenerate} content={contentGenerate} >Modification de la date de facturation</Aside>
+            <Aside ref={this.asidePayement} content={contentPayement} >Entrer un paiement</Aside>
         </>
     }
 }

@@ -15,7 +15,6 @@ const STATUS_DRAFT = 0;
 const STATUS_TO_PAY = 1;
 const STATUS_PAID = 2;
 const STATUS_PAID_PARTIAL = 3;
-const STATUS_ARCHIVED = 4;
 
 const URL_DUPLICATE_ELEMENT  = "api_bill_invoices_duplicate";
 const URL_ARCHIVE_ELEMENT    = "api_bill_invoices_archive";
@@ -70,7 +69,7 @@ export class InvoicesItem extends Component {
     }
 
     render () {
-        const { elem, onChangeContext, onDelete, onGenerate } = this.props;
+        const { elem, onChangeContext, onDelete, onGenerate, onPayement } = this.props;
 
         let dropdownItems = [
             {data: <div onClick={() => this.handleDuplicate(elem)}>Copier</div>},
@@ -95,7 +94,7 @@ export class InvoicesItem extends Component {
 
             if(elem.status === STATUS_TO_PAY){
                 dropdownItems = [...[
-                    {data: <div>Entrer un paiement</div>},
+                    {data: <div onClick={() => onPayement(elem)}>Entrer un paiement</div>},
                     {data: <div className="dropdown-separator" />},
                 ], ...dropdownItems]
             }
