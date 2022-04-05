@@ -112,6 +112,21 @@ class DataInvoice extends DataConstructor
         return $this->billService->createNewNumero($counterInvoice, $year, BiInvoice::PREFIX);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function setDataInvoiceGenerated(BiInvoice $obj, $data, Society $society): BiInvoice
+    {
+        $dateAt = $this->sanitizeData->createDate($data->dateAt);
+
+        $numero = $this->createNumero($dateAt, $society);
+        return ($obj)
+            ->setStatus(BiInvoice::STATUS_TO_PAY)
+            ->setDateAt($dateAt)
+            ->setNumero($numero)
+        ;
+    }
+
     public function setDataProduct(BiProduct $obj, $data): BiProduct
     {
         return ($obj)

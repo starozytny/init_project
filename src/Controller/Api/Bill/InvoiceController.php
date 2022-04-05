@@ -247,7 +247,7 @@ class InvoiceController extends AbstractController
     }
 
     /**
-     * @Route("/final/{id}", name="final", options={"expose"=true}, methods={"POST"})
+     * @Route("/generate/{id}", name="generate", options={"expose"=true}, methods={"POST"})
      *
      * @OA\Response(
      *     response=200,
@@ -265,14 +265,20 @@ class InvoiceController extends AbstractController
      * @param ApiResponse $apiResponse
      * @param DataInvoice $dataInvoice
      * @return JsonResponse
+     * @throws Exception
      */
-    public function final(Request $request, BiInvoice $obj, ApiResponse $apiResponse, DataInvoice $dataInvoice): JsonResponse
+    public function generate(Request $request, BiInvoice $obj, ApiResponse $apiResponse, DataInvoice $dataInvoice): JsonResponse
     {
         $em = $this->doctrine->getManager();
+        $data = json_decode($request->getContent());
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $obj = $dataInvoice->setDataInvoiceGenerated($obj, $data, $user->getSociety());
 
         $em->flush();
 
-        return $apiResponse->apiJsonResponseSuccessful(true);
+        return $apiResponse->apiJsonResponse($obj, BiInvoice::INVOICE_READ);
     }
 
     /**

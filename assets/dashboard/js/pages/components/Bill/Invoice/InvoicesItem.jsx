@@ -66,7 +66,7 @@ export class InvoicesItem extends Component {
     }
 
     render () {
-        const { elem, onChangeContext, onDelete } = this.props;
+        const { elem, onChangeContext, onDelete, onGenerate } = this.props;
 
         let dropdownItems = [
             {data: <a href="#" onClick={() => this.handleDuplicate(elem)}>Copier</a>},
@@ -74,10 +74,10 @@ export class InvoicesItem extends Component {
 
         if(elem.status === STATUS_DRAFT){
             dropdownItems = [...[
-                {data: <a href="#" onClick={() => onChangeContext("update", elem)}>Modifier</a>},
-                {data: <a href="#" onClick={() => onDelete(elem)}>Supprimer</a>},
+                {data: <div onClick={() => onChangeContext("update", elem)}>Modifier</div>},
+                {data: <div onClick={() => onDelete(elem)}>Supprimer</div>},
                 {data: <div className="dropdown-separator" />},
-                {data: <a href="#" onClick={() => this.handleFinal(elem)}>Finaliser</a>},
+                {data: <div onClick={() => onGenerate(elem)}>Finaliser</div>},
                 {data: <div className="dropdown-separator" />},
             ], ...dropdownItems]
         }

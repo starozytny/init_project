@@ -36,11 +36,11 @@ export class Invoices extends Component {
             pathDeleteElement: URL_DELETE_ELEMENT,
             msgDeleteElement: MSG_DELETE_ELEMENT,
             sessionName: "bill.invoices.pagination",
-            society: props.society ? JSON.parse(props.society) : [],
+            society: props.society ? JSON.parse(props.society) : null,
             taxes: props.taxes ? JSON.parse(props.taxes) : [],
             unities: props.unities ? JSON.parse(props.unities) : [],
             items: props.items ? JSON.parse(props.items) : [],
-            products: props.products ? JSON.parse(props.products) : [],
+            products: props.products ? JSON.parse(props.products) : []
         }
 
         this.layout = React.createRef();
@@ -73,7 +73,7 @@ export class Invoices extends Component {
     handleSorter = (nb) => { SORTER = TopToolbar.onSorter(this, nb, sortersFunction, this.state.perPage) }
 
     handleContentList = (currentData, changeContext, getFilters, filters, data) => {
-        const { perPage, currentPage } = this.state;
+        const { perPage, currentPage, society } = this.state;
 
         return <InvoicesList onChangeContext={changeContext}
                              onDelete={this.layout.current.handleDelete}
@@ -92,6 +92,8 @@ export class Invoices extends Component {
                              sorters={sorters}
                              onSorter={this.handleSorter}
                              //data
+                             society={society}
+                             onUpdateList={this.handleUpdateList}
                              data={currentData} />
     }
 
