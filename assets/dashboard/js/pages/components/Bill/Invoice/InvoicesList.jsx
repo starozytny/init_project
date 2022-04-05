@@ -40,7 +40,9 @@ export class InvoicesList extends Component {
     handleCloseAside = () => {
         if(this.asideGenerate.current){
             this.asideGenerate.current.handleClose();
-        }else{
+        }
+
+        if(this.asidePayement.current){
             this.asidePayement.current.handleClose();
         }
     }
