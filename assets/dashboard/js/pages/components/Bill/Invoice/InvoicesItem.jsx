@@ -17,7 +17,8 @@ const STATUS_PAID = 2;
 const STATUS_PAID_PARTIAL = 3;
 const STATUS_ARCHIVED = 4;
 
-const URL_DUPLICATE_ELEMENT = "api_bill_invoices_duplicate";
+const URL_DUPLICATE_ELEMENT  = "api_bill_invoices_duplicate";
+const URL_ARCHIVE_ELEMENT    = "api_bill_invoices_archive";
 
 function confirmAction (self, context, elem, url, title, text, messageSuccess) {
     Swal.fire(SwalOptions.options(title, text))
@@ -55,11 +56,17 @@ export class InvoicesItem extends Component {
         super();
 
         this.handleDuplicate = this.handleDuplicate.bind(this);
+        this.handleArchive = this.handleArchive.bind(this);
     }
 
     handleDuplicate = (elem) => {
         confirmAction(this, "create", elem, Routing.generate(URL_DUPLICATE_ELEMENT, {'id': elem.id}),
             "Dupliquer cette facture ?", "La nouvelle facture sera en mode brouillon.", "Facture copiée avec succès.")
+    }
+
+    handleArchive = (elem) => {
+        confirmAction(this, "update", elem, Routing.generate(URL_ARCHIVE_ELEMENT, {'id': elem.id}),
+            "Archiver cette facture ?", "", "Facture archivée avec succès.")
     }
 
     render () {
@@ -82,7 +89,7 @@ export class InvoicesItem extends Component {
 
             if(elem.status !== STATUS_DRAFT){
                 dropdownItems = [...[
-                    {data: <div>Archiver</div>}
+                    {data: <div onClick={() => this.handleArchive(elem)}>Archiver</div>}
                 ], ...dropdownItems]
             }
 
