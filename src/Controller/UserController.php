@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Bill\BiInvoice;
 use App\Entity\Changelog;
 use App\Entity\User;
+use App\Service\Bill\BillService;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Mpdf\MpdfException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -87,5 +90,21 @@ class UserController extends AbstractController
     {
         $data = $serializer->serialize($obj, 'json', ['groups' => User::ADMIN_READ]);
         return $this->render('user/pages/profil/user/update.html.twig', ['elem' => $obj, 'donnees' => $data]);
+    }
+
+    /**
+     * @Route("/facture/{id}", name="invoice")
+     * @throws MpdfException
+     */
+    public function invoice(BiInvoice $obj, BillService $billService): Response
+    {
+        $em = $this->doctrine->getManager();
+
+        if(!$this->isGranted('ROLE_ADMIN')){
+            $obj->setIsSeen(true);
+        }
+
+        $em->flush();
+        return $billService->getInvoice([$obj]);
     }
 }

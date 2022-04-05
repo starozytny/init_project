@@ -224,6 +224,16 @@ class BiInvoice extends DataEntity
      */
     private $theme = 0;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isSent = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isSeen = false;
+
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
@@ -682,5 +692,29 @@ class BiInvoice extends DataEntity
     public function getIdentifiant(): string
     {
         return "FA-" . $this->id;
+    }
+
+    public function getIsSent(): ?bool
+    {
+        return $this->isSent;
+    }
+
+    public function setIsSent(bool $isSent): self
+    {
+        $this->isSent = $isSent;
+
+        return $this;
+    }
+
+    public function getIsSeen(): ?bool
+    {
+        return $this->isSeen;
+    }
+
+    public function setIsSeen(bool $isSeen): self
+    {
+        $this->isSeen = $isSeen;
+
+        return $this;
     }
 }

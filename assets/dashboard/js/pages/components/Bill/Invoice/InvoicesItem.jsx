@@ -80,7 +80,6 @@ export class InvoicesItem extends Component {
 
         if(elem.status === STATUS_TO_PAY){
             dropdownItems = [...[
-                {data: <a href="/">Envoyer</a>},
                 {data: <a href="/">Entrer un paiement</a>},
                 {data: <div className="dropdown-separator" />},
             ], ...dropdownItems]

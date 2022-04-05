@@ -7,8 +7,10 @@ use App\Entity\Bill\BiProduct;
 use App\Entity\Society;
 use App\Entity\User;
 use App\Service\ApiResponse;
+use App\Service\Bill\BillService;
 use App\Service\Data\Bill\DataInvoice;
-use App\Service\FileCreator;
+use App\Service\MailerService;
+use App\Service\SettingsService;
 use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
@@ -19,6 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @Route("/api/bill/invoices", name="api_bill_invoices_")
@@ -267,7 +270,8 @@ class InvoiceController extends AbstractController
      * @return JsonResponse
      * @throws Exception
      */
-    public function generate(Request $request, BiInvoice $obj, ApiResponse $apiResponse, DataInvoice $dataInvoice): JsonResponse
+    public function generate(Request $request, BiInvoice $obj, ApiResponse $apiResponse, DataInvoice $dataInvoice,
+                             MailerService $mailerService, SettingsService $settingsService): JsonResponse
     {
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
@@ -275,6 +279,28 @@ class InvoiceController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $obj = $dataInvoice->setDataInvoiceGenerated($obj, $data, $user->getSociety());
+
+        if($mailerService->sendMail(
+                $obj->getToEmail(),
+                "[" . $settingsService->getWebsiteName() ."] Facture",
+                "Facture venant de " . $settingsService->getWebsiteName(),
+                'app/email/bill/invoice.html.twig',
+                [
+                    'elem' => $obj,
+                    'user' => $user,
+                    'settings' => $settingsService->getSettings(),
+                    'urlLogin' => $this->generateUrl('app_login', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'url' => $this->generateUrl('user_invoice', ['id' => $obj->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                ]
+            ) != true)
+        {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'message',
+                'message' => "Le message n\'a pas pu être délivré. Veuillez contacter le support."
+            ]]);
+        }
+
+        $obj->setIsSent(true);
 
         $em->flush();
 
@@ -296,32 +322,14 @@ class InvoiceController extends AbstractController
      * @OA\Tag(name="Invoices")
      *
      * @param BiInvoice $obj
-     * @param FileCreator $fileCreator
      * @param ApiResponse $apiResponse
+     * @param BillService $billService
      * @return JsonResponse
      * @throws MpdfException
-     * @throws Exception
      */
-    public function download(BiInvoice $obj, FileCreator $fileCreator, ApiResponse $apiResponse): JsonResponse
+    public function download(BiInvoice $obj, ApiResponse $apiResponse, BillService $billService): JsonResponse
     {
-        $em = $this->doctrine->getManager();
-
-        $mpdf = $fileCreator->initPDF("Facture - " . $obj->getNumero());
-        $mpdf = $fileCreator->addCustomStyle($mpdf, 'custom-facture.css');
-
-        $products = $em->getRepository(BiProduct::class)->findBy(['identifiant' => "FA-" . $obj->getId()]);
-
-        if($obj->getStatus() == BiInvoice::STATUS_DRAFT){
-            $mpdf->SetWatermarkText('Brouillon');
-            $mpdf->showWatermarkText = true;
-        }
-
-        $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/bill/invoice.html.twig", [
-            'elem' => $obj,
-            'products' => $products
-        ]);
-
-        $mpdf = $fileCreator->outputPDF($mpdf, "facture-" . $obj->getNumero() . '.pdf');
+        $billService->getInvoice([$obj]);
 
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }

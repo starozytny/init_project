@@ -1,0 +1,27 @@
+{% extends 'app/email/template/template.html.twig' %}
+
+{% block preheader %}Facture.{% endblock %}
+
+{% block title %}Votre facture{% endblock %}
+
+{% block body %}
+    <div>
+        <p>
+            Bonjour, <br><br>
+            Votre facture du {{ elem.dateAtString }} est dès maintenant disponible dans
+            <a href="{{ urlLogin }}">votre Espace</a>.
+            <br><br>
+            <b>Le montant de votre facture est de {{ elem.totalTtc | price }} €.</b>
+            <br><br>
+            <b><a href="{{ url }}">Consulter ma facture</a>.</b>
+            <br><br>
+            Pour la consulter, rendez-vous dans votre <a href="{{ urlLogin }}">Espace</a>
+            en saisissant votre identifiant et votre mot de passe.
+            <br><br>
+            Si vous avez oublié votre mot de passe, rendez-vous sur la page de connexion et cliquer sur
+            <a href="{{ urlLogin }}">Mot de passe oublié ?</a>.
+            <br><br>
+            Nous vous remercions de votre confiance.
+        </p>
+    </div>
+{% endblock %}
