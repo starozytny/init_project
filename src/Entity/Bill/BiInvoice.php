@@ -21,7 +21,6 @@ class BiInvoice extends DataEntity
     const STATUS_TO_PAY = 1;
     const STATUS_PAID = 2;
     const STATUS_PAID_PARTIAL = 3;
-    const STATUS_ARCHIVED = 4;
 
     const DUE_TYPE_MANUAL = 0;
     const DUE_TYPE_ACQUITTED = 1;
@@ -233,6 +232,11 @@ class BiInvoice extends DataEntity
      * @ORM\Column(type="boolean")
      */
     private $isSeen = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isArchived = false;
 
     public function __construct()
     {
@@ -577,7 +581,7 @@ class BiInvoice extends DataEntity
      */
     public function getStatusString(): string
     {
-        $values = ["Brouillon", "A régler", "Payée", "Partiel", "Archivée"];
+        $values = ["Brouillon", "A régler", "Payée", "Partiel"];
 
         return $values[$this->status];
     }
@@ -714,6 +718,18 @@ class BiInvoice extends DataEntity
     public function setIsSeen(bool $isSeen): self
     {
         $this->isSeen = $isSeen;
+
+        return $this;
+    }
+
+    public function getIsArchived(): ?bool
+    {
+        return $this->isArchived;
+    }
+
+    public function setIsArchived(bool $isArchived): self
+    {
+        $this->isArchived = $isArchived;
 
         return $this;
     }

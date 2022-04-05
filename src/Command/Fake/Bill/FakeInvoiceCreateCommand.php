@@ -85,9 +85,10 @@ class FakeInvoiceCreateCommand extends Command
             $new = $this->dataEntity->setDataInvoice(new BiInvoice(), $data, $society);
 
             $dateAt = new \DateTime();
-            $status = $fake->numberBetween(0, 4);
+            $status = $fake->numberBetween(0, 3);
 
             $new = ($new)
+                ->setIsArchived($fake->numberBetween(0, 1))
                 ->setStatus($status)
                 ->setSociety($society)
                 ->setNumero($status == 0 ? "Z-Brouillon" : $this->dataEntity->createNumero($dateAt, $society))
