@@ -311,6 +311,11 @@ class InvoiceController extends AbstractController
 
         $products = $em->getRepository(BiProduct::class)->findBy(['identifiant' => "FA-" . $obj->getId()]);
 
+        if($obj->getStatus() == BiInvoice::STATUS_DRAFT){
+            $mpdf->SetWatermarkText('Brouillon');
+            $mpdf->showWatermarkText = true;
+        }
+
         $mpdf = $fileCreator->writePDF($mpdf, "user/pdf/bill/invoice.html.twig", [
             'elem' => $obj,
             'products' => $products
