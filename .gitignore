@@ -34,6 +34,4 @@ winpty.exe.stackdump
 /public/articles/*
 /public/avatars/*
 
-/documents/*
-
 graph.svg
