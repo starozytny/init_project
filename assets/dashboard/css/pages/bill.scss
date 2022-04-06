@@ -9,7 +9,6 @@
 #items{
   @include toolbarCreateSearch(171);
 }
-
 #taxes{
   @include toolbarCreateFilterSearch(164);
 }
@@ -17,6 +16,11 @@
 #unities{
   @include toolbarCreateFilterSearch(170);
 }
+
+#customers{
+  @include toolbarCreateSearch(164);
+}
+
 
 #invoices{
   .aside-select{
