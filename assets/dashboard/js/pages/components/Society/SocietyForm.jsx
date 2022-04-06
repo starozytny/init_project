@@ -32,6 +32,8 @@ export function SocietyFormulaire ({ type, onChangeContext, onUpdateList, elemen
         msg = "Félicitations ! La mise à jour s'est réalisée avec succès !";
     }
 
+    console.log(element)
+
     let form = <Form
         context={type}
         url={url}
@@ -48,7 +50,7 @@ export function SocietyFormulaire ({ type, onChangeContext, onUpdateList, elemen
         zipcode={element ? Formulaire.setValueEmptyIfNull(element.zipcode) : ""}
         city={element ? Formulaire.setValueEmptyIfNull(element.city) : ""}
         complement={element ? Formulaire.setValueEmptyIfNull(element.complement) : ""}
-        country={element ? Formulaire.setValueEmptyIfNull(element.country) : "France"}
+        country={element ? Formulaire.setValueEmptyIfNull(element.country, "France") : "France"}
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
         messageSuccess={msg}
@@ -103,7 +105,7 @@ export class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { name, address, zipcode, city, email, phone1 } = this.state;
+        const { name, address, zipcode, city, country, email, phone1 } = this.state;
 
         this.setState({ errors: [], success: false })
 
@@ -113,7 +115,8 @@ export class Form extends Component {
             {type: "text", id: 'zipcode',   value: zipcode},
             {type: "text", id: 'city',      value: city},
             {type: "text", id: 'email',     value: email},
-            {type: "text", id: 'phone1',     value: phone1},
+            {type: "text", id: 'phone1',    value: phone1},
+            {type: "text", id: 'country',   value: country},
         ];
 
         let inputLogo = this.inputLogo.current;
@@ -152,14 +155,14 @@ export class Form extends Component {
                             siret: '',
                             rcs: '',
                             numeroTva: '',
-                            forme: '',
+                            forme: 0,
                             email: '',
                             phone1: '',
                             address: '',
                             zipcode: '',
                             city: '',
                             complement: '',
-                            country: '',
+                            country: 'France',
                         })
                     }
                 })
@@ -250,7 +253,7 @@ export class Form extends Component {
                         <div className="line">
                             <div className="line">
                                 <Drop ref={this.inputLogo} identifiant="logo" previewFile={logo} errors={errors} accept={"image/*"} maxFiles={1}
-                                      label="Téléverser un logo" labelError="Seules les images sont acceptées.">Logo (facultatif)</Drop>
+                                      label="Téléverser un logo" labelError="Seules les images sont acceptées." />
                             </div>
                         </div>
                     </div>
