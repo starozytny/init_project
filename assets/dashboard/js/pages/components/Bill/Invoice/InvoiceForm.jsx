@@ -136,7 +136,8 @@ class Form extends Component {
             errors: [],
             success: false,
             element: null,
-            item: ""
+            item: "",
+            arrayPostalCode: []
         }
 
         this.asideSelect = React.createRef();
