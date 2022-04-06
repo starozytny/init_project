@@ -94,7 +94,7 @@ class AdminUsersCreateCommand extends Command
             "complement" => "",
             "country" => "France",
             "email" => "chanbora@logilink.fr",
-            "phone1" => "0652XXXXXX"
+            "phone1" => "0652XXXXXX",
         ];
         $data = json_decode(json_encode($data));
 

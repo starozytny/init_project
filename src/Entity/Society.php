@@ -86,11 +86,13 @@ class Society extends DataEntity
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
+     * @Groups({"admin:read"})
      */
     private $phone1;
 
@@ -120,6 +122,7 @@ class Society extends DataEntity
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
      */
     private $country = "France";
 
