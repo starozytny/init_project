@@ -3,7 +3,7 @@ const Sanitaze = require('@commonComponents/functions/sanitaze')
 function search(type, dataImmuable, search) {
     let newData = [];
     search = search.toLowerCase();
-    search = Sanitaze.removeAccents();
+    search = Sanitaze.removeAccents(search);
     newData = dataImmuable.filter(function(v) {
         return switchFunction(type, search, v);
     })
