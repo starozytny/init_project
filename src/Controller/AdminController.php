@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Bill\BiCustomer;
 use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiItem;
 use App\Entity\Bill\BiProduct;
@@ -266,6 +267,22 @@ class AdminController extends AbstractController
         return $this->render('admin/pages/bill/unity.html.twig', [
             'donnees' => $objs,
             'society' => $society,
+        ]);
+    }
+
+    /**
+     * @Route("/facturations/clients", name="bill_customers_index")
+     */
+    public function customers(SerializerInterface $serializer): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $society = $user->getSociety();
+        $objs = $this->getAllData(BiCustomer::class, $serializer, BiCustomer::CUSTOMER_READ);
+
+        return $this->render('admin/pages/bill/customer.html.twig', [
+            'donnees' => $objs,
+            'society' => $society
         ]);
     }
 }

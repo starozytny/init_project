@@ -1,0 +1,13 @@
+{% extends 'admin/pages/bill/template.html.twig' %}
+
+{% set page_title %}Clients{% endset %}
+{% set submenuActive = "Clients" %}
+
+{% block main_content %}
+    <div id="customers"
+         data-donnees="{{ donnees }}"
+         data-society-id="{{ society.id }}"
+    >
+        {% include "dashboard/layout/components/spinner.html.twig" %}
+    </div>
+{% endblock %}
