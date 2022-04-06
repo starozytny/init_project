@@ -190,9 +190,10 @@ class AdminController extends AbstractController
         $user = $this->getUser();
         $society  = $em->getRepository(Society::class)->find($user->getSociety()->getId());
 
-        $objs     = $em->getRepository(BiInvoice::class)->findBy(['isArchived' => (bool)$isArchived]);
-        $items    = $this->getAllData(BiItem::class, $serializer, BiItem::ITEM_READ);
-        $products = $em->getRepository(BiProduct::class)->findBy(['society' => $society, 'type' => BiProduct::TYPE_INVOICE]);
+        $objs      = $em->getRepository(BiInvoice::class)->findBy(['isArchived' => (bool)$isArchived]);
+        $products  = $em->getRepository(BiProduct::class)->findBy(['society' => $society, 'type' => BiProduct::TYPE_INVOICE]);
+        $items     = $this->getAllData(BiItem::class, $serializer, BiItem::ITEM_READ);
+        $customers = $this->getAllData(BiCustomer::class, $serializer, BiCustomer::CUSTOMER_READ);
 
         [$taxes, $unities] = $billService->getTaxesAndUnitiesData($society, true);
 
@@ -207,6 +208,7 @@ class AdminController extends AbstractController
             'taxes' => $taxes,
             'unities' => $unities,
             'products' => $products,
+            'customers' => $customers,
         ]);
     }
 

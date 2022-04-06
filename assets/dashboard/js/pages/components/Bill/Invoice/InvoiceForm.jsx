@@ -26,7 +26,8 @@ const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 let arrayZipcodes = [];
 let i = 0;
 
-export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element, society, items, taxes, unities, products })
+export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, element, society,
+                                       items, taxes, unities, products, customers })
 {
     let title = "Ajouter une facture";
     let url = Routing.generate(URL_CREATE_ELEMENT);
@@ -74,6 +75,7 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
         items={items}
         taxes={taxes}
         unities={unities}
+        customers={customers}
 
         society={society}
         dateInvoice={dateInvoice}
@@ -136,6 +138,7 @@ class Form extends Component {
             errors: [],
             success: false,
             element: null,
+            customer: null,
             item: "",
             arrayPostalCode: []
         }
@@ -150,6 +153,7 @@ class Form extends Component {
 
         this.handleSelectItem = this.handleSelectItem.bind(this);
         this.handleChangeItems = this.handleChangeItems.bind(this);
+        this.handleSelectCustomer = this.handleSelectCustomer.bind(this);
     }
 
     componentDidMount() {
@@ -204,6 +208,30 @@ class Form extends Component {
         })
 
         this.setState({ element: nItem })
+    }
+
+    handleSelectCustomer = (elem) => {
+        const { customers } = this.props;
+
+        let nCustomer = null;
+        customers.forEach(it => {
+            if(it.id === elem.value){
+                nCustomer = it;
+            }
+        })
+
+        if(nCustomer){
+            this.setState({
+                toName: nCustomer.name,
+                toAddress: nCustomer.address,
+                toComplement: nCustomer.complement,
+                toZipcode: nCustomer.zipcode,
+                toCity: nCustomer.city,
+                toCountry: nCustomer.country,
+                toEmail: nCustomer.email,
+                toPhone1: nCustomer.phone,
+            })
+        }
     }
 
     handleChangeItems = (item) => {
@@ -288,16 +316,21 @@ class Form extends Component {
     }
 
     render () {
-        const { context, society, dateInvoice, items, taxes, unities } = this.props;
+        const { context, society, dateInvoice, items, taxes, unities, customers } = this.props;
         const { element, errors, success, dateAt, dueAt, dueType,
             toName, toAddress, toComplement, toZipcode, toCity, toCountry, toEmail, toPhone1,
-            note, footer, item, products, totalHt, totalRemise, totalTva, totalTtc } = this.state;
+            note, footer, item, products, totalHt, totalRemise, totalTva, totalTtc, customer } = this.state;
 
         let selectDueTypes = helper.getConditionPaiementChoices();
 
         let selectItems = [];
         items.forEach(it => {
             selectItems.push({ value: it.id, label: it.name + " : " + Sanitaze.toFormatCurrency(it.price), identifiant: "it-" + it.id })
+        })
+
+        let selectCustomers = [];
+        customers.forEach(it => {
+            selectCustomers.push({ value: it.id, label: it.name, identifiant: "cu-" + it.id })
         })
 
         return <>
@@ -339,6 +372,19 @@ class Form extends Component {
                     <div className="form-group">
                         <div className="line-separator">
                             <div className="title">Client</div>
+                        </div>
+
+                        <div className="line">
+                            <SelectReactSelectize items={selectCustomers} identifiant="customer" placeholder={"Sélectionner un client"}
+                                                  valeur={customer} errors={errors} onChange={(e) => this.handleSelectCustomer(e)}>
+                                Sélectionner un client
+                            </SelectReactSelectize>
+                        </div>
+
+                        <div className="line">
+                            <div className="form-group">
+                                <div>OU</div>
+                            </div>
                         </div>
 
                         <div className="line">

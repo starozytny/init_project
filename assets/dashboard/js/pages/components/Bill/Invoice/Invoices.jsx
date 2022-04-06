@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
 
-import axios             from "axios";
-import toastr            from "toastr";
-import Swal              from "sweetalert2";
-import SwalOptions       from "@commonComponents/functions/swalOptions";
-import Routing           from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
-
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@commonComponents/functions/sort";
 import Filter            from "@commonComponents/functions/filter";
 import TopToolbar        from "@commonComponents/functions/topToolbar";
-import Formulaire        from "@dashboardComponents/functions/Formulaire";
 
 import { InvoicesList }      from "@dashboardPages/components/Bill/Invoice/InvoicesList";
 import { InvoiceFormulaire } from "@dashboardPages/components/Bill/Invoice/InvoiceForm";
@@ -40,7 +33,8 @@ export class Invoices extends Component {
             taxes: props.taxes ? JSON.parse(props.taxes) : [],
             unities: props.unities ? JSON.parse(props.unities) : [],
             items: props.items ? JSON.parse(props.items) : [],
-            products: props.products ? JSON.parse(props.products) : []
+            products: props.products ? JSON.parse(props.products) : [],
+            customers: props.customers ? JSON.parse(props.customers) : [],
         }
 
         this.layout = React.createRef();
@@ -98,14 +92,14 @@ export class Invoices extends Component {
     }
 
     handleContentCreate = (changeContext) => {
-        const { society, items, taxes, unities, products } = this.state;
-        return <InvoiceFormulaire type="create" society={society} taxes={taxes} unities={unities} items={items} products={products}
+        const { society, items, taxes, unities, products, customers } = this.state;
+        return <InvoiceFormulaire type="create" society={society} taxes={taxes} unities={unities} items={items} products={products} customers={customers}
                                   onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        const { society, items, taxes, unities, products } = this.state;
-        return <InvoiceFormulaire type="update" society={society} taxes={taxes} unities={unities} items={items} products={products}
+        const { society, items, taxes, unities, products, customers } = this.state;
+        return <InvoiceFormulaire type="update" society={society} taxes={taxes} unities={unities} items={items} products={products} customers={customers}
                                   element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
