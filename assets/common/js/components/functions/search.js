@@ -27,6 +27,9 @@ function switchFunction(type, search, v) {
                 return v;
             }
             break;
+        case "customer":
+        case "unity":
+        case "item":
         case "society":
         case "changelog":
             if(searchStartWith(v.name.toLowerCase(), search)){
@@ -34,15 +37,9 @@ function switchFunction(type, search, v) {
             }
             break;
         case "invoice":
-            if(v.numero.toString().toLowerCase().includes(search)
-                || v.toName.toLowerCase().startsWith(search)){
-                return v;
-            }
-            break;
-        case "customer":
-        case "unity":
-        case "item":
-            if(v.name.toString().toLowerCase().includes(search)){
+            let numero = Sanitaze.removeAccents(v.numero.toString().toLowerCase());
+            if(numero.includes(search)
+                || searchStartWith(v.toName.toLowerCase(), search)){
                 return v;
             }
             break;
