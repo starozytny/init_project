@@ -12,8 +12,8 @@ import Validateur              from "@commonComponents/functions/validateur";
 import Helper                  from "@commonComponents/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
-const URL_CREATE_ELEMENT     = "api_bill_items_create";
-const URL_UPDATE_GROUP       = "api_bill_items_update";
+const URL_CREATE_ELEMENT     = "api_bill_customers_create";
+const URL_UPDATE_GROUP       = "api_bill_customers_update";
 const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 

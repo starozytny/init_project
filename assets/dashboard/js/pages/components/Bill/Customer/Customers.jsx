@@ -7,10 +7,10 @@ import TopToolbar        from "@commonComponents/functions/topToolbar";
 import { CustomersList } from "@dashboardPages/components/Bill/Customer/CustomersList";
 import { CustomerFormulaire } from "@dashboardPages/components/Bill/Customer/CustomerForm";
 
-const URL_DELETE_ELEMENT    = 'api_bill_items_delete';
-const URL_DELETE_GROUP      = 'api_bill_items_delete_group';
-const MSG_DELETE_ELEMENT    = 'Supprimer cet article ?';
-const MSG_DELETE_GROUP      = 'Aucun article sélectionné.';
+const URL_DELETE_ELEMENT    = 'api_bill_customers_delete';
+const URL_DELETE_GROUP      = 'api_bill_customers_delete_group';
+const MSG_DELETE_ELEMENT    = 'Supprimer ce client ?';
+const MSG_DELETE_GROUP      = 'Aucun client sélectionné.';
 let SORTER = Sort.compareName;
 
 let sorters = [

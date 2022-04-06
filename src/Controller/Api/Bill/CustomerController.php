@@ -2,10 +2,10 @@
 
 namespace App\Controller\Api\Bill;
 
-use App\Entity\Bill\BiItem;
+use App\Entity\Bill\BiCustomer;
 use App\Entity\Society;
 use App\Service\ApiResponse;
-use App\Service\Data\Bill\DataItem;
+use App\Service\Data\Bill\DataInvoice;
 use App\Service\Data\DataService;
 use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -16,9 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 
 /**
- * @Route("/api/bill/items", name="api_bill_items_")
+ * @Route("/api/bill/customers", name="api_bill_customers_")
  */
-class ItemController extends AbstractController
+class CustomerController extends AbstractController
 {
     private $doctrine;
 
@@ -27,8 +27,8 @@ class ItemController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    public function submitForm($type, BiItem $obj, Request $request, ApiResponse $apiResponse,
-                               ValidatorService $validator, DataItem $dataEntity): JsonResponse
+    public function submitForm($type, BiCustomer $obj, Request $request, ApiResponse $apiResponse,
+                               ValidatorService $validator, DataInvoice $dataEntity): JsonResponse
     {
         $em = $this->doctrine->getManager();
         $data = json_decode($request->getContent());
@@ -42,7 +42,7 @@ class ItemController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('La société est introuvable, veuillez contacter le support.');
         }
 
-        $obj = $dataEntity->setData($obj, $data, $society);
+        $obj = $dataEntity->setDataCustomer($obj, $data, $society);
 
         $noErrors = $validator->validate($obj);
         if ($noErrors !== true) {
@@ -52,7 +52,7 @@ class ItemController extends AbstractController
         $em->persist($obj);
         $em->flush();
 
-        return $apiResponse->apiJsonResponse($obj, BiItem::ITEM_READ);
+        return $apiResponse->apiJsonResponse($obj, BiCustomer::CUSTOMER_READ);
     }
 
     /**
@@ -73,12 +73,12 @@ class ItemController extends AbstractController
      * @param Request $request
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
-     * @param DataItem $dataEntity
+     * @param DataInvoice $dataEntity
      * @return JsonResponse
      */
-    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, DataItem $dataEntity): JsonResponse
+    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, DataInvoice $dataEntity): JsonResponse
     {
-        return $this->submitForm("create", new BiItem(), $request, $apiResponse, $validator, $dataEntity);
+        return $this->submitForm("create", new BiCustomer(), $request, $apiResponse, $validator, $dataEntity);
     }
 
     /**
@@ -100,13 +100,13 @@ class ItemController extends AbstractController
      * @OA\Tag(name="Bill")
      *
      * @param Request $request
-     * @param BiItem $obj
+     * @param BiCustomer $obj
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
-     * @param DataItem $dataEntity
+     * @param DataInvoice $dataEntity
      * @return JsonResponse
      */
-    public function update(Request $request, BiItem $obj, ValidatorService $validator,  ApiResponse $apiResponse, DataItem $dataEntity): JsonResponse
+    public function update(Request $request, BiCustomer $obj, ValidatorService $validator,  ApiResponse $apiResponse, DataInvoice $dataEntity): JsonResponse
     {
         return $this->submitForm("update", $obj, $request, $apiResponse, $validator, $dataEntity);
     }
@@ -121,11 +121,11 @@ class ItemController extends AbstractController
      *
      * @OA\Tag(name="Bill")
      *
-     * @param BiItem $obj
+     * @param BiCustomer $obj
      * @param DataService $dataService
      * @return JsonResponse
      */
-    public function delete(BiItem $obj, DataService $dataService): JsonResponse
+    public function delete(BiCustomer $obj, DataService $dataService): JsonResponse
     {
         return $dataService->delete($obj);
     }
@@ -147,6 +147,6 @@ class ItemController extends AbstractController
      */
     public function deleteSelected(Request $request, DataService $dataService): JsonResponse
     {
-        return $dataService->deleteSelected(BiItem::class, json_decode($request->getContent()));
+        return $dataService->deleteSelected(BiCustomer::class, json_decode($request->getContent()));
     }
 }
