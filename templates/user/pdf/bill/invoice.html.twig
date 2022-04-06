@@ -28,7 +28,7 @@
             <div><b>Téléphone : </b>{{ elem.fromPhone1 }}</div>
         </div>
         <div class="col-3">
-            <div class="numero-facture">Facture n°{{ elem.numero }}</div>
+            <div class="numero-facture"><b>Facture n°</b>{{ elem.status == 0 ? "Brouillon" : elem.numero }}</div>
             <div><b>Date de facture : </b>{{ elem.dateAt | date('d/m/Y') }}</div>
             <div><b>Date d'échéance : </b>{{ elem.dueAt | date('d/m/Y') }}</div>
         </div>
