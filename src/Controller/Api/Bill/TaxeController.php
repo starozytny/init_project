@@ -77,7 +77,7 @@ class TaxeController extends AbstractController
      *     description="JSON empty or missing data or validation failed",
      * )
      *
-     * @OA\Tag(name="Invoices")
+     * @OA\Tag(name="Bill")
      *
      * @param Request $request
      * @param ValidatorService $validator
@@ -106,7 +106,7 @@ class TaxeController extends AbstractController
      *     description="Validation failed",
      * )
      *
-     * @OA\Tag(name="Invoices")
+     * @OA\Tag(name="Bill")
      *
      * @param Request $request
      * @param BiTaxe $obj
@@ -131,7 +131,7 @@ class TaxeController extends AbstractController
      *     description="Return message successful",
      * )
      *
-     * @OA\Tag(name="Contact")
+     * @OA\Tag(name="Bill")
      *
      * @param BiTaxe $obj
      * @param DataService $dataService

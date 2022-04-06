@@ -7,8 +7,8 @@ import TopToolbar        from "@commonComponents/functions/topToolbar";
 import { ItemsList }      from "@dashboardPages/components/Bill/Item/ItemsList";
 import { ItemFormulaire } from "@dashboardPages/components/Bill/Item/ItemForm";
 
-const URL_DELETE_ELEMENT    = 'api_users_delete';
-const URL_DELETE_GROUP      = 'api_users_delete_group';
+const URL_DELETE_ELEMENT    = 'api_bill_items_delete';
+const URL_DELETE_GROUP      = 'api_bill_items_delete_group';
 const MSG_DELETE_ELEMENT    = 'Supprimer cet article ?';
 const MSG_DELETE_GROUP      = 'Aucun article sélectionné.';
 let SORTER = Sort.compareName;

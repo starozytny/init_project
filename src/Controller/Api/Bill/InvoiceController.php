@@ -17,14 +17,12 @@ use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
 use Mpdf\MpdfException;
-use NumberFormatter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @Route("/api/bill/invoices", name="api_bill_invoices_")
@@ -116,7 +114,7 @@ class InvoiceController extends AbstractController
      *     description="JSON empty or missing data or validation failed",
      * )
      *
-     * @OA\Tag(name="Invoices")
+     * @OA\Tag(name="Bill")
      *
      * @param Request $request
      * @param ValidatorService $validator
@@ -148,7 +146,7 @@ class InvoiceController extends AbstractController
      *     description="Validation failed",
      * )
      *
-     * @OA\Tag(name="Invoices")
+     * @OA\Tag(name="Bill")
      *
      * @param Request $request
      * @param BiInvoice $obj
@@ -175,7 +173,7 @@ class InvoiceController extends AbstractController
      *     description="Forbidden for not good role or user",
      * )
      *
-     * @OA\Tag(name="Invoices")
+     * @OA\Tag(name="Bill")
      *
      * @param BiInvoice $obj
      * @param ApiResponse $apiResponse
@@ -212,7 +210,7 @@ class InvoiceController extends AbstractController
      *     description="Forbidden for not good role or user",
      * )
      *
-     * @OA\Tag(name="Invoices")
+     * @OA\Tag(name="Bill")
      *
      * @param BiInvoice $obj
      * @param ApiResponse $apiResponse
@@ -264,7 +262,7 @@ class InvoiceController extends AbstractController
      *     description="Forbidden for not good role or user",
      * )
      *
-     * @OA\Tag(name="Invoices")
+     * @OA\Tag(name="Bill")
      *
      * @param Request $request
      * @param BiInvoice $obj
@@ -330,7 +328,7 @@ class InvoiceController extends AbstractController
      *     description="Forbidden for not good role or user",
      * )
      *
-     * @OA\Tag(name="Invoices")
+     * @OA\Tag(name="Bill")
      *
      * @param BiInvoice $obj
      * @param ApiResponse $apiResponse
@@ -358,7 +356,7 @@ class InvoiceController extends AbstractController
      *     description="Forbidden for not good role or user",
      * )
      *
-     * @OA\Tag(name="Invoices")
+     * @OA\Tag(name="Bill")
      *
      * @param Request $request
      * @param BiInvoice $obj
@@ -403,7 +401,7 @@ class InvoiceController extends AbstractController
      *     description="Forbidden for not good role or user",
      * )
      *
-     * @OA\Tag(name="Invoices")
+     * @OA\Tag(name="Bill")
      *
      * @param BiInvoice $obj
      * @param ApiResponse $apiResponse

@@ -13,8 +13,8 @@ import Helper                  from "@commonComponents/functions/helper";
 import helper                  from "@dashboardPages/components/Bill/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
-const URL_CREATE_ELEMENT     = "api_bill_invoices_create";
-const URL_UPDATE_GROUP       = "api_bill_invoices_update";
+const URL_CREATE_ELEMENT     = "api_bill_items_create";
+const URL_UPDATE_GROUP       = "api_bill_items_update";
 const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
