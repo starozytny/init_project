@@ -106,7 +106,7 @@ export class InvoicesItem extends Component {
                 <div className="item-body">
                     <div className="infos infos-col-7">
                         <div className="col-1">
-                            <div className="sub">{elem.numero}</div>
+                            <div className="sub">{elem.status === STATUS_DRAFT ? "-" : elem.numero}</div>
                         </div>
                         <div className="col-2">
                             <div className="name">
