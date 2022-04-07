@@ -74,6 +74,12 @@ class DataInvoice extends DataConstructor
             ->setFromPhone1($society->getPhone1())
             ->setFromSiren($society->getSiren())
             ->setFromTva($society->getNumeroTva())
+            ->setFromBankName($society->getBankName())
+            ->setFromBankNumero($society->getBankNumero())
+            ->setFromBankTitulaire($society->getBankTitulaire())
+            ->setFromBankBic($society->getBankBic())
+            ->setFromBankCode($society->getBankCode())
+            ->setFromBankIban($society->getBankIban())
             ->setLogo($this->getLogoSociety($society))
 
             ->setToName($this->sanitizeData->trimData($data->toName))

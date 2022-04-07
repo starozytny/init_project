@@ -131,7 +131,22 @@
     </div>
 
     <div class="footer">
-        {{ elem.footer }}
+
+        <div class="bank">
+            <div>
+                <span><b>Renseignements bancaires : </b> <span>{{ elem.fromBankTitulaire }}</span></span>
+            </div>
+            <div>
+                <span><b>IBAN : </b> <span>{{ elem.fromBankIban }} - </span></span>
+                <span><b>BIC : </b> <span>{{ elem.fromBankBic }}</span></span>
+            </div>
+            <div>
+                <span><b>Banque : </b> <span>{{ elem.fromBankName }} - </span></span>
+                <span><b>N° du compte : </b> <span>{{ elem.fromBankNumero }} - </span></span>
+                <span><b>Code banque : </b> <span>{{ elem.fromBankCode }}</span></span>
+            </div>
+        </div>
+        <div>{{ elem.footer }}</div>
     </div>
 </div>
 

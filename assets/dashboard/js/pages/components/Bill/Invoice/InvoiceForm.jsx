@@ -458,14 +458,14 @@ class Form extends Component {
                 <div className="line">
                     <div className="form-group">
                         <div className="line-separator">
-                            <div className="title">Informations de bas de page</div>
+                            <div className="title">Informations complémentaire</div>
                         </div>
 
                         <div className="line">
                             <TextArea valeur={note} identifiant="note" errors={errors} onChange={this.handleChange}>Note</TextArea>
                         </div>
                         <div className="line">
-                            <TextArea valeur={footer} identifiant="footer" errors={errors} onChange={this.handleChange}>Renseignements bancaires</TextArea>
+                            <TextArea valeur={footer} identifiant="footer" errors={errors} onChange={this.handleChange}>Note sous les renseignements bancaires</TextArea>
                         </div>
                     </div>
                 </div>

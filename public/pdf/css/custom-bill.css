@@ -191,6 +191,13 @@ b{
 /**
     FOOTER and NOTE
  */
+.bank b{
+    color: #696969
+}
+.bank span{
+    color: #4d4d4d
+}
+
 .note{
     margin-top: 24px;
     font-size: 11px;
