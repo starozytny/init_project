@@ -49,7 +49,7 @@ function compareNumeroInverse(a, b){
 }
 
 function compareRateInverse(a, b){
-    return compareWithoutAccent(b.rate, a.rate);
+    return comparison(b.rate, a.rate);
 }
 
 function compareDateInverseThenNumeroInverse(a, b){
