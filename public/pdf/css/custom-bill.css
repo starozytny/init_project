@@ -27,11 +27,11 @@ b{
 
 .header .col-1{
     width: 110px;
+    padding-right: 24px;
 }
 
 .header .col-2{
     width: 33%;
-    margin-left: 24px;
 }
 
 .header .col-3{
