@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import axios                   from "axios";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import { Input, Radiobox } from "@dashboardComponents/Tools/Fields";
+import { Input, Radiobox }     from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
 import { Drop }                from "@dashboardComponents/Tools/Drop";
 import { Button }              from "@dashboardComponents/Tools/Button";
@@ -19,6 +19,7 @@ const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
 
 let arrayZipcodes = [];
+let arrayBicSave = [];
 
 export function SocietyFormulaire ({ type, onChangeContext, onUpdateList, element })
 {
@@ -31,8 +32,6 @@ export function SocietyFormulaire ({ type, onChangeContext, onUpdateList, elemen
         url = Routing.generate(URL_UPDATE_GROUP, {'id': element.id});
         msg = "Félicitations ! La mise à jour s'est réalisée avec succès !";
     }
-
-    console.log(element)
 
     let form = <Form
         context={type}
@@ -51,6 +50,12 @@ export function SocietyFormulaire ({ type, onChangeContext, onUpdateList, elemen
         city={element ? Formulaire.setValueEmptyIfNull(element.city) : ""}
         complement={element ? Formulaire.setValueEmptyIfNull(element.complement) : ""}
         country={element ? Formulaire.setValueEmptyIfNull(element.country, "France") : "France"}
+        bankName={element ? Formulaire.setValueEmptyIfNull(element.bankName) : ""}
+        bankNumero={element ? Formulaire.setValueEmptyIfNull(element.bankNumero) : ""}
+        bankTitulaire={element ? Formulaire.setValueEmptyIfNull(element.bankTitulaire) : ""}
+        bankBic={element ? Formulaire.setValueEmptyIfNull(element.bankBic) : ""}
+        bankCode={element ? Formulaire.setValueEmptyIfNull(element.bankCode) : ""}
+        bankIban={element ? Formulaire.setValueEmptyIfNull(element.bankIban) : ""}
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
         messageSuccess={msg}
@@ -78,8 +83,16 @@ export class Form extends Component {
             email: props.email,
             phone1: props.phone1,
             country: props.country,
+            bankName: props.bankName,
+            bankNumero: props.bankNumero,
+            bankTitulaire: props.bankTitulaire,
+            bankBic: props.bankBic,
+            bankCode: props.bankCode,
+            bankIban: props.bankIban,
             errors: [],
-            success: false
+            success: false,
+            arrayPostalCode: [],
+            arrayBic: [],
         }
 
         this.inputLogo = React.createRef();
@@ -91,9 +104,25 @@ export class Form extends Component {
 
     componentDidMount() {
         Helper.getPostalCodes(this);
+        Helper.getBicCodes(this);
     }
 
-    handleChange = (e) => { this.setState({[e.currentTarget.name]: e.currentTarget.value}) }
+    handleChange = (e) => {
+        const { arrayBic } = this.state;
+
+        let name = e.currentTarget.name;
+        let value = e.currentTarget.value;
+
+        if(name === "bankIban"){
+            Helper.setBicFromIban(this, value, arrayBic)
+        }
+
+        if(name === "bankIban" || name === "bankBic" || name === "bankTitulaire"){
+            value = value.toUpperCase()
+        }
+
+        this.setState({[name]: value})
+    }
 
     handleChangeZipcodeCity = (e) => {
         const { arrayPostalCode } = this.state;
@@ -105,18 +134,24 @@ export class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { name, address, zipcode, city, country, email, phone1 } = this.state;
+        const { name, address, zipcode, city, country, email, phone1, bankName, bankNumero, bankTitulaire, bankBic, bankCode, bankIban } = this.state;
 
         this.setState({ errors: [], success: false })
 
         let paramsToValidate = [
-            {type: "text", id: 'name',      value: name},
-            {type: "text", id: 'address',   value: address},
-            {type: "text", id: 'zipcode',   value: zipcode},
-            {type: "text", id: 'city',      value: city},
-            {type: "text", id: 'email',     value: email},
-            {type: "text", id: 'phone1',    value: phone1},
-            {type: "text", id: 'country',   value: country},
+            {type: "text", id: 'name',              value: name},
+            {type: "text", id: 'address',           value: address},
+            {type: "text", id: 'zipcode',           value: zipcode},
+            {type: "text", id: 'city',              value: city},
+            {type: "text", id: 'email',             value: email},
+            {type: "text", id: 'phone1',            value: phone1},
+            {type: "text", id: 'country',           value: country},
+            {type: "text", id: 'bankName',          value: bankName},
+            {type: "text", id: 'bankNumero',        value: bankNumero},
+            {type: "text", id: 'bankTitulaire',     value: bankTitulaire},
+            {type: "text", id: 'bankBic',           value: bankBic},
+            {type: "text", id: 'bankCode',          value: bankCode},
+            {type: "text", id: 'bankIban',          value: bankIban},
         ];
 
         let inputLogo = this.inputLogo.current;
@@ -138,7 +173,9 @@ export class Form extends Component {
             formData.append("data", JSON.stringify(this.state));
 
             arrayZipcodes = this.state.arrayPostalCode;
+            arrayBicSave = this.state.arrayBic;
             delete this.state.arrayPostalCode;
+            delete this.state.arrayBic;
 
             axios({ method: "POST", url: url, data: formData, headers: {'Content-Type': 'multipart/form-data'} })
                 .then(function (response) {
@@ -163,6 +200,12 @@ export class Form extends Component {
                             city: '',
                             complement: '',
                             country: 'France',
+                            bankName: '',
+                            bankNumero: '',
+                            bankTitulaire: '',
+                            bankBic: '',
+                            bankCode: '',
+                            bankIban: '',
                         })
                     }
                 })
@@ -179,7 +222,7 @@ export class Form extends Component {
     render () {
         const { context } = this.props;
         const { errors, success, name, logo, siren, siret, rcs, numeroTva, forme, email, phone1,
-            address, zipcode, city, complement, country } = this.state;
+            address, zipcode, city, complement, country, bankName, bankNumero, bankTitulaire, bankBic, bankCode, bankIban } = this.state;
 
         let formItems = [
             { value: 0, label: "EURL", identifiant: "eurl" },
@@ -224,6 +267,30 @@ export class Form extends Component {
                         <div className="line line-2">
                             <Input valeur={rcs} identifiant="rcs" errors={errors} onChange={this.handleChange}>Rcs</Input>
                             <Input valeur={numeroTva} identifiant="numeroTva" errors={errors} onChange={this.handleChange}>Numéro TVA</Input>
+                        </div>
+
+                        <div className="line-separator">
+                            <div className="title">Coordonnées bancaires</div>
+                        </div>
+
+                        <div className="line line-3">
+                            <Input valeur={bankName} identifiant="bankName" errors={errors} onChange={this.handleChange}>Banque</Input>
+                            <Input valeur={bankNumero} identifiant="bankNumero" errors={errors} onChange={this.handleChange}>N° du compte</Input>
+                            <Input valeur={bankCode} identifiant="bankCode" errors={errors} onChange={this.handleChange}>Code banque</Input>
+                        </div>
+                        <div className="line">
+                            <Input valeur={bankIban} identifiant="bankIban" errors={errors} onChange={this.handleChange}
+                                   type="cleave" options={{
+                                        blocks: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+                                        uppercase: true
+                                    }}
+                            >
+                                Iban
+                            </Input>
+                        </div>
+                        <div className="line line-2">
+                            <Input valeur={bankTitulaire} identifiant="bankTitulaire" errors={errors} onChange={this.handleChange}>Titulaire du compte</Input>
+                            <Input valeur={bankBic} identifiant="bankBic" errors={errors} onChange={this.handleChange}>BIC</Input>
                         </div>
                     </div>
 

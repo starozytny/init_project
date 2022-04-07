@@ -159,6 +159,42 @@ class Society extends DataEntity
      */
     private $biCustomers;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $bankName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $bankNumero;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $bankTitulaire;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $bankBic;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $bankCode;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $bankIban;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -560,6 +596,78 @@ class Society extends DataEntity
                 $biCustomer->setSociety(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBankName(): ?string
+    {
+        return $this->bankName;
+    }
+
+    public function setBankName(?string $bankName): self
+    {
+        $this->bankName = $bankName;
+
+        return $this;
+    }
+
+    public function getBankNumero(): ?string
+    {
+        return $this->bankNumero;
+    }
+
+    public function setBankNumero(?string $bankNumero): self
+    {
+        $this->bankNumero = $bankNumero;
+
+        return $this;
+    }
+
+    public function getBankTitulaire(): ?string
+    {
+        return $this->bankTitulaire;
+    }
+
+    public function setBankTitulaire(?string $bankTitulaire): self
+    {
+        $this->bankTitulaire = $bankTitulaire;
+
+        return $this;
+    }
+
+    public function getBankBic(): ?string
+    {
+        return $this->bankBic;
+    }
+
+    public function setBankBic(?string $bankBic): self
+    {
+        $this->bankBic = $bankBic;
+
+        return $this;
+    }
+
+    public function getBankCode(): ?string
+    {
+        return $this->bankCode;
+    }
+
+    public function setBankCode(?string $bankCode): self
+    {
+        $this->bankCode = $bankCode;
+
+        return $this;
+    }
+
+    public function getBankIban(): ?string
+    {
+        return $this->bankIban;
+    }
+
+    public function setBankIban(?string $bankIban): self
+    {
+        $this->bankIban = $bankIban;
 
         return $this;
     }

@@ -1,5 +1,11 @@
 const axios = require("axios");
 
+function addProcessBic(lines, data)
+{
+    lines.push({"code": data[1], "bic": data[2]});
+    return lines;
+}
+
 function addProcessZipcode(lines, data)
 {
     lines.push({"cp": data[2], "city": data[1]});
@@ -17,6 +23,8 @@ function processData(allText, type = "zipcode")
 
         if(type === "zipcode"){
             lines = addProcessZipcode(lines, data)
+        }else if(type === "bic"){
+            lines = addProcessBic(lines, data)
         }
     }
 
@@ -28,6 +36,15 @@ function getPostalCodes(self)
     axios.get( window.location.origin + "/postalcode.csv", {})
         .then(function (response) {
             self.setState({ arrayPostalCode: processData(response.data) })
+        })
+    ;
+}
+
+function getBicCodes(self)
+{
+    axios.get( window.location.origin + "/bic.csv", {})
+        .then(function (response) {
+            self.setState({ arrayBic: processData(response.data, "bic") })
         })
     ;
 }
@@ -198,6 +215,21 @@ function countProgress (number, total) {
     return progress;
 }
 
+function setBicFromIban(self, iban, arrayBic, name = "bic")
+{
+    if(iban.length >= 10 && arrayBic.length !== 0){
+        iban = iban.trim();
+        iban = iban.replaceAll(" ", "");
+        let ibanCode = iban.substring(4,9);
+        let v = arrayBic.filter(el => el.code === ibanCode)
+
+        if(v.length === 1){
+            self.setState({ [name]: v[0].bic.toUpperCase() })
+        }
+    }
+
+}
+
 module.exports = {
     getPostalCodes,
     setCityFromZipcode,
@@ -209,5 +241,7 @@ module.exports = {
     getNbDayBetweenDateArray,
     downloadBinaryFile,
     toTop,
-    countProgress
+    countProgress,
+    getBicCodes,
+    setBicFromIban,
 }
