@@ -33,6 +33,12 @@ class DataSociety
             ->setCity($this->sanitizeData->trimData($data->city))
             ->setComplement($this->sanitizeData->trimData($data->complement))
             ->setCountry($this->sanitizeData->trimData($data->country))
+            ->setBankName($this->sanitizeData->trimData($data->bankName))
+            ->setBankNumero($this->sanitizeData->trimData($data->bankNumero))
+            ->setBankTitulaire($this->sanitizeData->trimData($data->bankTitulaire))
+            ->setBankBic($this->sanitizeData->trimData($data->bankBic))
+            ->setBankCode($this->sanitizeData->trimData($data->bankCode))
+            ->setBankIban($this->sanitizeData->trimData($data->bankIban))
         ;
     }
 }

@@ -47,6 +47,8 @@ class AdminUsersCreateCommand extends Command
         $io->title('Reset des tables');
         $this->databaseService->resetTable($io, [Notification::class, User::class, Society::class]);
 
+        $fake = Factory::create();
+
         $users = array(
             [
                 'username' => 'shanbo',
@@ -95,6 +97,12 @@ class AdminUsersCreateCommand extends Command
             "country" => "France",
             "email" => "chanbora@logilink.fr",
             "phone1" => "0652XXXXXX",
+            "bankName" => $fake->company,
+            "bankNumero" => $fake->creditCardNumber,
+            "bankTitulaire" => $fake->lastName,
+            "bankBic" => $fake->swiftBicNumber,
+            "bankCode" => $fake->numberBetween(10,50),
+            "bankIban" => $fake->iban,
         ];
         $data = json_decode(json_encode($data));
 
@@ -122,7 +130,6 @@ class AdminUsersCreateCommand extends Command
         if ($input->getOption('fake')) {
             $io->title('Création de 10 société fake');
             $societies = [];
-            $fake = Factory::create();
             for($i=0; $i<10 ; $i++) {
                 $data = [
                     "name" => $fake->name,
@@ -137,7 +144,13 @@ class AdminUsersCreateCommand extends Command
                     "country" => $fake->country,
                     "complement" => $fake->lastName,
                     "email" => $fake->email,
-                    "phone1" => $fake->e164PhoneNumber
+                    "phone1" => $fake->e164PhoneNumber,
+                    "bankName" => $fake->company,
+                    "bankNumero" => $fake->creditCardNumber,
+                    "bankTitulaire" => $fake->lastName,
+                    "bankBic" => $fake->swiftBicNumber,
+                    "bankCode" => $fake->numberBetween(10,50),
+                    "bankIban" => $fake->iban,
                 ];
 
                 $data = json_decode(json_encode($data));
