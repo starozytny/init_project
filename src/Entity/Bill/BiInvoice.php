@@ -266,6 +266,42 @@ class BiInvoice extends DataEntity
      */
     private $histories;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromBankName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromBankNumero;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromBankTitulaire;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromBankBic;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromBankCode;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fromBankIban;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @Groups({"invoice:read"})
+     */
+    private $displayBank = true;
+
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
@@ -825,6 +861,90 @@ class BiInvoice extends DataEntity
     public function setToCountry(?string $toCountry): self
     {
         $this->toCountry = $toCountry;
+
+        return $this;
+    }
+
+    public function getFromBankName(): ?string
+    {
+        return $this->fromBankName;
+    }
+
+    public function setFromBankName(?string $fromBankName): self
+    {
+        $this->fromBankName = $fromBankName;
+
+        return $this;
+    }
+
+    public function getFromBankNumero(): ?string
+    {
+        return $this->fromBankNumero;
+    }
+
+    public function setFromBankNumero(?string $fromBankNumero): self
+    {
+        $this->fromBankNumero = $fromBankNumero;
+
+        return $this;
+    }
+
+    public function getFromBankTitulaire(): ?string
+    {
+        return $this->fromBankTitulaire;
+    }
+
+    public function setFromBankTitulaire(?string $fromBankTitulaire): self
+    {
+        $this->fromBankTitulaire = $fromBankTitulaire;
+
+        return $this;
+    }
+
+    public function getFromBankBic(): ?string
+    {
+        return $this->fromBankBic;
+    }
+
+    public function setFromBankBic(?string $fromBankBic): self
+    {
+        $this->fromBankBic = $fromBankBic;
+
+        return $this;
+    }
+
+    public function getFromBankCode(): ?string
+    {
+        return $this->fromBankCode;
+    }
+
+    public function setFromBankCode(?string $fromBankCode): self
+    {
+        $this->fromBankCode = $fromBankCode;
+
+        return $this;
+    }
+
+    public function getFromBankIban(): ?string
+    {
+        return $this->cryptBank('decrypt', $this->fromBankIban);
+    }
+
+    public function setFromBankIban(?string $fromBankIban): self
+    {
+        $this->fromBankIban = $this->cryptBank('encrypt', $fromBankIban);
+
+        return $this;
+    }
+
+    public function getDisplayBank(): ?bool
+    {
+        return $this->displayBank;
+    }
+
+    public function setDisplayBank(bool $displayBank): self
+    {
+        $this->displayBank = $displayBank;
 
         return $this;
     }

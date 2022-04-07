@@ -662,13 +662,14 @@ class Society extends DataEntity
 
     public function getBankIban(): ?string
     {
-        return $this->bankIban;
+        return $this->cryptBank('decrypt', $this->bankIban);
     }
 
     public function setBankIban(?string $bankIban): self
     {
-        $this->bankIban = $bankIban;
+        $this->bankIban = $this->cryptBank('encrypt', $bankIban);
 
         return $this;
     }
+
 }

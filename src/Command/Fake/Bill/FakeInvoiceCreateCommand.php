@@ -6,7 +6,6 @@ use App\Entity\Bill\BiHistory;
 use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiProduct;
 use App\Entity\Society;
-use App\Service\Bill\BillService;
 use App\Service\Data\Bill\DataInvoice;
 use App\Service\DatabaseService;
 use Doctrine\ORM\EntityManagerInterface;
