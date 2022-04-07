@@ -2,7 +2,13 @@
 
 namespace App\Command;
 
+use App\Entity\Bill\BiCustomer;
+use App\Entity\Bill\BiHistory;
+use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiItem;
+use App\Entity\Bill\BiProduct;
+use App\Entity\Bill\BiTaxe;
+use App\Entity\Bill\BiUnity;
 use App\Entity\Notification;
 use App\Entity\Society;
 use App\Entity\User;
@@ -46,7 +52,10 @@ class AdminUsersCreateCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Reset des tables');
-        $this->databaseService->resetTable($io, [BiItem::class, Notification::class, User::class, Society::class]);
+        $this->databaseService->resetTable($io, [
+            BiCustomer::class, BiUnity::class, BiTaxe::class, BiProduct::class, BiHistory::class, BiInvoice::class, BiItem::class,
+            Notification::class, User::class, Society::class
+        ]);
 
         $fake = Factory::create();
 

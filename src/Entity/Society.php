@@ -142,7 +142,7 @@ class Society extends DataEntity
     /**
      * @ORM\Column(type="integer")
      */
-    private $yearInvoice;
+    private $yearInvoice = 22;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
