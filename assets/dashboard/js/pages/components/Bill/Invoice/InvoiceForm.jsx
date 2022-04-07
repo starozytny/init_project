@@ -458,7 +458,7 @@ class Form extends Component {
                 <div className="line">
                     <div className="form-group">
                         <div className="line-separator">
-                            <div className="title">Informations complémentaire</div>
+                            <div className="title">Informations complémentaires</div>
                         </div>
 
                         <div className="line">
