@@ -84,6 +84,7 @@ class DataInvoice extends DataConstructor
 
             ->setToName($this->sanitizeData->trimData($data->toName))
             ->setToAddress($this->sanitizeData->trimData($data->toAddress))
+            ->setToAddress2($this->sanitizeData->trimData($data->toAddress2))
             ->setToComplement($this->sanitizeData->trimData($data->toComplement))
             ->setToZipcode($this->sanitizeData->trimData($data->toZipcode))
             ->setToCity($this->sanitizeData->trimData($data->toCity))
@@ -167,6 +168,7 @@ class DataInvoice extends DataConstructor
             ->setEmail($this->sanitizeData->trimData($data->email))
             ->setPhone($this->sanitizeData->trimData($data->phone))
             ->setAddress($this->sanitizeData->trimData($data->address))
+            ->setAddress2($this->sanitizeData->trimData($data->address2))
             ->setComplement($this->sanitizeData->trimData($data->complement))
             ->setZipcode($this->sanitizeData->trimData($data->zipcode))
             ->setCity($this->sanitizeData->trimData($data->city))

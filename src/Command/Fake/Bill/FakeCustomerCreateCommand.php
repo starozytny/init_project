@@ -51,7 +51,8 @@ class FakeCustomerCreateCommand extends Command
             $data = [
                 'name' => $toName,
                 'address' => $fake->streetName,
-                'complement' => null,
+                'address2' => $fake->numberBetween(0, 1) ? $fake->streetName : null,
+                'complement' => $fake->numberBetween(0, 1) ? $fake->streetName : null,
                 'zipcode' => $fake->postcode,
                 'city' => $fake->city,
                 'country' => $fake->country,

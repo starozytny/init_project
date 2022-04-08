@@ -61,7 +61,8 @@ class FakeInvoiceCreateCommand extends Command
             $data = [
                 'toName' => $toName,
                 'toAddress' => $fake->streetName,
-                'toComplement' => $fake->streetName,
+                'toAddress2' => $fake->numberBetween(0, 1) ? $fake->streetName : null,
+                'toComplement' => $fake->numberBetween(0, 1) ? $fake->streetName : null,
                 'toZipcode' => $fake->postcode,
                 'toCity' => $fake->city,
                 'toCountry' => $fake->country,
