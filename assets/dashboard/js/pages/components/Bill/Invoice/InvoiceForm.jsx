@@ -87,6 +87,7 @@ export function InvoiceFormulaire ({ type, onChangeContext, onUpdateList, elemen
 
         toName={element ? Formulaire.setValueEmptyIfNull(element.toName) : ""}
         toAddress={element ? Formulaire.setValueEmptyIfNull(element.toAddress) : ""}
+        toAddress2={element ? Formulaire.setValueEmptyIfNull(element.toAddress2) : ""}
         toComplement={element ? Formulaire.setValueEmptyIfNull(element.toComplement) : ""}
         toZipcode={element ? Formulaire.setValueEmptyIfNull(element.toZipcode) : ""}
         toCity={element ? Formulaire.setValueEmptyIfNull(element.toCity) : ""}
@@ -123,6 +124,7 @@ class Form extends Component {
             dueType: props.dueType,
             toName: props.toName,
             toAddress: props.toAddress,
+            toAddress2: props.toAddress2,
             toComplement: props.toComplement,
             toZipcode: props.toZipcode,
             toCity: props.toCity,
@@ -235,6 +237,7 @@ class Form extends Component {
             this.setState({
                 toName: Formulaire.setValueEmptyIfNull(nCustomer.name),
                 toAddress: Formulaire.setValueEmptyIfNull(nCustomer.address),
+                toAddress2: Formulaire.setValueEmptyIfNull(nCustomer.address2),
                 toComplement: Formulaire.setValueEmptyIfNull(nCustomer.complement),
                 toZipcode: Formulaire.setValueEmptyIfNull(nCustomer.zipcode),
                 toCity: Formulaire.setValueEmptyIfNull(nCustomer.city),
@@ -281,7 +284,7 @@ class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess, dateInvoice } = this.props;
-        const { dateAt, dueType, dueAt, toName, toAddress, toComplement, toZipcode, toCity, toCountry } = this.state;
+        const { dateAt, dueType, dueAt, toName, toAddress, toAddress2, toComplement, toZipcode, toCity, toCountry } = this.state;
 
         let method = context === "create" ? "POST" : "PUT";
 
@@ -298,6 +301,7 @@ class Form extends Component {
         ];
 
         paramsToValidate = helper.validateDates(paramsToValidate, dateInvoice, dateAt, dueAt, dueType);
+        paramsToValidate = helper.checkLength(paramsToValidate, "toAddress2", toAddress2);
         paramsToValidate = helper.checkLength(paramsToValidate, "toComplement", toComplement);
 
         // validate global
@@ -332,7 +336,7 @@ class Form extends Component {
     render () {
         const { context, society, dateInvoice, items, taxes, unities, customers } = this.props;
         const { edit, element, errors, success, dateAt, dueAt, dueType,
-            toName, toAddress, toComplement, toZipcode, toCity, toCountry, toEmail, toPhone1,
+            toName, toAddress, toAddress2, toComplement, toZipcode, toCity, toCountry, toEmail, toPhone1,
             note, footer, item, products, totalHt, totalRemise, totalTva, totalTtc, customer } = this.state;
 
         let tvas = [];
@@ -435,11 +439,11 @@ class Form extends Component {
                     </div>
                     <div className="col-2">
                         <BlocEdit step={2} edit={edit} onClickEdit={this.handleClickEdit} haveError={blocError2}
-                                  view={<View2 toName={toName} toAddress={toAddress} toComplement={toComplement}
+                                  view={<View2 toName={toName} toAddress={toAddress} toComplement={toComplement} toAddress2={toAddress2}
                                                toZipcode={toZipcode} toCity={toCity} toCountry={toCountry} />}
                                   form={<Form2 errors={errors} onChange={this.handleChange} onChangeZipcodeCity={this.handleChangeZipcodeCity}
                                                onSelectCustomer={this.handleSelectCustomer} customers={customers} customer={customer}
-                                               toName={toName} toAddress={toAddress} toComplement={toComplement}
+                                               toName={toName} toAddress={toAddress} toComplement={toComplement} toAddress2={toAddress2}
                                                toZipcode={toZipcode} toCity={toCity} toCountry={toCountry}
                                                toEmail={toEmail} toPhone1={toPhone1} />}/>
                     </div>

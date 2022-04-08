@@ -43,6 +43,7 @@ export function CustomerFormulaire ({ type, onChangeContext, onUpdateList, eleme
         email={element ? Formulaire.setValueEmptyIfNull(element.email) : ""}
         phone={element ? Formulaire.setValueEmptyIfNull(element.phone) : ""}
         address={element ? Formulaire.setValueEmptyIfNull(element.address) : ""}
+        address2={element ? Formulaire.setValueEmptyIfNull(element.address2) : ""}
         complement={element ? Formulaire.setValueEmptyIfNull(element.complement) : ""}
         zipcode={element ? Formulaire.setValueEmptyIfNull(element.zipcode) : ""}
         city={element ? Formulaire.setValueEmptyIfNull(element.city) : ""}
@@ -67,6 +68,7 @@ class Form extends Component {
             email: props.email,
             phone: props.phone,
             address: props.address,
+            address2: props.address2,
             complement: props.complement,
             zipcode: props.zipcode,
             city: props.city,
@@ -96,7 +98,7 @@ class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { name, address, complement } = this.state;
+        const { name, address, address2, complement } = this.state;
 
         let method = context === "create" ? "POST" : "PUT";
 
@@ -107,6 +109,7 @@ class Form extends Component {
         ];
 
         paramsToValidate = helper.checkLength(paramsToValidate, "address", address);
+        paramsToValidate = helper.checkLength(paramsToValidate, "address2", address2);
         paramsToValidate = helper.checkLength(paramsToValidate, "complement", complement);
 
         // validate global
@@ -135,6 +138,7 @@ class Form extends Component {
                             email: "",
                             phone: "",
                             address: "",
+                            address2: "",
                             complement: "",
                             zipcode: "",
                             city: "",
@@ -154,7 +158,7 @@ class Form extends Component {
 
     render () {
         const { context } = this.props;
-        const { errors, success, name, numeroTva, email, phone, address, complement, zipcode, city, country } = this.state;
+        const { errors, success, name, numeroTva, email, phone, address, address2, complement, zipcode, city, country } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
@@ -189,6 +193,9 @@ class Form extends Component {
 
                         <div className="line">
                             <Input identifiant="address" valeur={address} errors={errors} onChange={this.handleChange}>Adresse</Input>
+                        </div>
+                        <div className="line">
+                            <Input identifiant="address2" valeur={address2} errors={errors} onChange={this.handleChange}>Adresse ligne 2</Input>
                         </div>
                         <div className="line">
                             <Input identifiant="complement" valeur={complement} errors={errors} onChange={this.handleChange}>Complément d'adresse</Input>

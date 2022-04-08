@@ -7,7 +7,7 @@ function ToDefine ({ val }) {
     return val !== "" ? val : <span className="txt-danger">A définir</span>
 }
 
-export function View2({ toName, toAddress, toComplement, toZipcode, toCity, toCountry })
+export function View2({ toName, toAddress, toAddress2, toComplement, toZipcode, toCity, toCountry })
 {
     return <>
         {(toName === "" && toAddress === "" && toZipcode === "" && toCity === "") ? <>
@@ -25,6 +25,7 @@ export function View2({ toName, toAddress, toComplement, toZipcode, toCity, toCo
                 <div><b>Destinataire</b></div>
                 <div>{<ToDefine val={toName} />}</div>
                 <div>{<ToDefine val={toAddress} />}</div>
+                <div>{toAddress2}</div>
                 <div>{toComplement}</div>
                 <div>{<ToDefine val={toZipcode} />}, {<ToDefine val={toCity} />}</div>
                 {toCountry && <div>{toCountry}</div>}
@@ -34,7 +35,7 @@ export function View2({ toName, toAddress, toComplement, toZipcode, toCity, toCo
 }
 
 export function Form2({ errors, onChange, onChangeZipcodeCity, onSelectCustomer, customers, customer,
-                          toName, toAddress, toComplement, toZipcode, toCity, toCountry, toEmail, toPhone1 })
+                          toName, toAddress, toAddress2, toComplement, toZipcode, toCity, toCountry, toEmail, toPhone1 })
 {
     let selectCustomers = [];
     customers.forEach(it => {
@@ -57,6 +58,10 @@ export function Form2({ errors, onChange, onChangeZipcodeCity, onSelectCustomer,
 
         <div className="line">
             <Input identifiant="toAddress" valeur={toAddress} errors={errors} onChange={onChange}>* Adresse</Input>
+        </div>
+
+        <div className="line">
+            <Input identifiant="toAddress2" valeur={toAddress2} errors={errors} onChange={onChange}>Adresse ligne 2</Input>
         </div>
         <div className="line">
             <Input identifiant="toComplement" valeur={toComplement} errors={errors} onChange={onChange}>Complément d'adresse</Input>
