@@ -3,16 +3,15 @@ import React, { Component } from 'react';
 import { uid }  from "uid";
 
 import { Input, SelectReactSelectize, TextArea } from "@dashboardComponents/Tools/Fields";
-import { Button }              from "@dashboardComponents/Tools/Button";
+import { ButtonIcon } from "@dashboardComponents/Tools/Button";
 
 import Validateur              from "@commonComponents/functions/validateur";
 import Sanitaze                from "@commonComponents/functions/sanitaze";
 import helper                  from "@dashboardPages/components/Bill/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
-const TXT_CREATE_BUTTON_FORM = "Enregistrer";
-
-export function ItemInvoiceFormulaire ({ element, societyId, taxes, unities, onSubmit })
+export function ItemInvoiceFormulaire ({ element, societyId, taxes, unities, onSubmit,
+                                           selectItems, item, onSelectItem, onCloseAdd, step })
 {
     let form = <Form
         onSubmit={onSubmit}
@@ -21,8 +20,14 @@ export function ItemInvoiceFormulaire ({ element, societyId, taxes, unities, onS
         taxes={taxes}
         unities={unities}
 
+        selectItems={selectItems}
+        item={item}
+        step={step}
+        onSelectItem={onSelectItem}
+        onCloseAdd={onCloseAdd}
+
         uid={element ? (element.uid ? element.uid :  uid(16)) : uid(16) }
-        reference={element ? Formulaire.setValueEmptyIfNull(element.reference) : "ART"}
+        reference={element ? Formulaire.setValueEmptyIfNull(element.reference) : ""}
         numero={element ? Formulaire.setValueEmptyIfNull(element.numero) : ""}
         name={element ? Formulaire.setValueEmptyIfNull(element.name) : ""}
         content={element ? Formulaire.setValueEmptyIfNull(element.content) : ""}
@@ -93,7 +98,6 @@ class Form extends Component {
         helper.setRateTva(this, this.props.taxes, name, e);
         this.setState({ [name]: e !== undefined ? e.value : "" })
     }
-
     handleSubmit = (e) => {
         e.preventDefault();
 
@@ -125,51 +129,88 @@ class Form extends Component {
     }
 
     render () {
-        const { taxes, unities } = this.props;
+        const { taxes, unities, selectItems, onSelectItem, onCloseAdd, step, item } = this.props;
         const { errors, reference, numero, name, content, unity, price, codeTva, quantity, totalHt } = this.state;
 
         let [selectTvas, selectUnities] = helper.getTaxesAndUnitiesSelectItems(taxes, unities);
 
         return <>
-            <div className="line">
+            <div className="item item-add">
+                <div className="item-content">
+                    <div className="item-body">
+                        <div className="infos infos-col-7">
+                            <div className="col-1">
+                                <div className="bloc-edit-cancel" onClick={() => onCloseAdd(step)}>
+                                    <ButtonIcon icon="cancel">Fermer</ButtonIcon>
+                                </div>
+                            </div>
+                            <div className="col-2">
+                                <div className="line line-select-special">
+                                    <SelectReactSelectize items={selectItems} identifiant="item" placeholder={"Sélectionner"}
+                                                          valeur={item} errors={errors} onChange={(e) => onSelectItem(e)}>
+                                        <span className="icon-box" /><span>Pré-remplir l'article</span>
+                                    </SelectReactSelectize>
+                                </div>
+                            </div>
+                            <div className="col-3" />
+                            <div className="col-4" />
+                            <div className="col-5" />
+                            <div className="col-6" />
+                            <div className="col-7" />
+                        </div>
 
-                <div className="line line-2">
-                    <Input valeur={reference} identifiant="reference" errors={errors} onChange={this.handleChange}>Référence (max 10 caractères)</Input>
-                    <Input valeur={numero} identifiant="numero" errors={errors} onChange={this.handleChange}>Numéro comptable</Input>
-                </div>
-            </div>
-
-            <div className="line line-2">
-                <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange}>* Désignation</Input>
-                <SelectReactSelectize items={selectUnities} identifiant="unity"
-                                      valeur={unity} errors={errors} onChange={(e) => this.handleChangeSelect('unity', e)}>
-                    Unité
-                </SelectReactSelectize>
-            </div>
-
-            <div className="line">
-                <TextArea valeur={content} identifiant="content" errors={errors} onChange={this.handleChange}>Description</TextArea>
-            </div>
-
-            <div className="line line-3">
-                <Input type="number" valeur={quantity} identifiant="quantity" errors={errors} onChange={this.handleChange}>Quantité</Input>
-                <Input type="cleave" valeur={price} identifiant="price" errors={errors} onChange={this.handleChangeCleave}>Prix unitaire</Input>
-                <SelectReactSelectize items={selectTvas} identifiant="codeTva"
-                                      valeur={codeTva} errors={errors} onChange={(e) => this.handleChangeSelect('codeTva', e)}>
-                    Taux de TVA
-                </SelectReactSelectize>
-            </div>
-
-            <div className="line">
-                <div className="form-group">
-                    <label>Total HT</label>
-                    <div>{Sanitaze.toFormatCurrency(totalHt)}</div>
-                </div>
-            </div>
-
-            <div className="line">
-                <div className="form-button">
-                    <Button type="default" outline={true} isSubmit={false} onClick={this.handleSubmit}>Enregistrer l'article</Button>
+                    </div>
+                    <div className="item-body">
+                        <div className="infos infos-col-7">
+                            <div className="col-1">
+                                <div className="line">
+                                    <Input valeur={reference} identifiant="reference" errors={errors} onChange={this.handleChange} placeholder="Ref (max 10 caractères)" />
+                                </div>
+                                <div className="line">
+                                    <Input valeur={numero} identifiant="numero" errors={errors} onChange={this.handleChange} placeholder="Numéro comptable" />
+                                </div>
+                            </div>
+                            <div className="col-2">
+                                <div className="line">
+                                    <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange} placeholder="* Désignation" />
+                                </div>
+                                <div className="line">
+                                    <TextArea valeur={content} identifiant="content" errors={errors} onChange={this.handleChange} placeholder="Description" />
+                                </div>
+                            </div>
+                            <div className="col-3">
+                                <div className="line">
+                                    <Input type="number" valeur={quantity} identifiant="quantity" errors={errors} onChange={this.handleChange} placeholder="Quantité" />
+                                </div>
+                            </div>
+                            <div className="col-4">
+                                <div className="line">
+                                    <SelectReactSelectize items={selectUnities} identifiant="unity" placeholder="Unité"
+                                                          valeur={unity} errors={errors} onChange={(e) => this.handleChangeSelect('unity', e)} />
+                                </div>
+                            </div>
+                            <div className="col-5">
+                                <div className="line">
+                                    <Input type="cleave" valeur={price} identifiant="price" errors={errors} onChange={this.handleChangeCleave} placeholder="€" />
+                                </div>
+                                <div className="line">
+                                    <div className="form-group">
+                                        <label>Total HT</label>
+                                        <div className="sub">{Sanitaze.toFormatCurrency(totalHt)}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <div className="line">
+                                    <SelectReactSelectize items={selectTvas} identifiant="codeTva" placeholder="Taux de TVA"
+                                                          valeur={codeTva} errors={errors} onChange={(e) => this.handleChangeSelect('codeTva', e)} />
+                                </div>
+                            </div>
+                            <div className="col-7 actions">
+                                <ButtonIcon icon="add-square" isSubmit={false} onClick={this.handleSubmit}>Ajouter</ButtonIcon>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>
