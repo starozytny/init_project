@@ -1,0 +1,492 @@
+.invoice-form{
+  .form{
+    max-width: 1280px;
+    margin: 0 auto;
+
+    textarea{
+      resize: none;
+      height: 48px;
+    }
+    .form-group .react-selectize.default.root-node:not(.open) .react-selectize-control{
+      padding: 0 4px 0 0;
+    }
+    .react-selectize.root-node .react-selectize-control .react-selectize-toggle-button-container{
+      width: 10px;
+    }
+
+    .line{
+      label{
+        [class^="icon-"]{
+          display: inline-block;
+          margin-right: 8px;
+        }
+      }
+    }
+
+    .form-button{
+      .btn{
+        width: 100%;
+      }
+    }
+  }
+
+  .bloc-edit{
+    position: relative;
+    @include flex(row, flex-start, flex-start);
+    background-color: var(--color2);
+    border: 2px solid var(--greyShadow);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    .bloc-edit-cancel{
+      position: absolute;
+      top: 0; right: 0;
+    }
+
+    .bloc-edit-icon{
+      width: 48px;
+
+      .btn-icon{
+        @include flex(row, center, center);
+        background-color: var(--greyShadow);
+        border: 1px solid var(--greyShadow);
+        border-radius: 200px;
+        width: 48px; height: 48px;
+
+        [class^="icon-"]{
+          font-size: 20px;
+        }
+      }
+    }
+
+    .bloc-edit-add{
+
+      .btn-icon{
+        border-color: var(--primary);
+
+        [class^="icon-"]{
+          color: var(--primary);
+        }
+      }
+
+      & + .bloc-edit-content{
+        align-self: center;
+        @include fontSemibold();
+        color: var(--primary);
+      }
+    }
+
+    .bloc-edit-content{
+      width: calc(100% - 50px - 12px);
+      margin-left: 12px;
+
+      & > div{
+        &:not(:last-child){
+          margin-bottom: 4px;
+        }
+      }
+    }
+
+    &.active{
+      flex-direction: column;
+      cursor: initial;
+
+      select{
+        cursor: pointer;
+      }
+    }
+
+    &.active, &:hover{
+      border-color: var(--color1);
+
+      .bloc-edit-icon{
+        .btn-icon{
+          border-color: var(--color1);
+        }
+      }
+    }
+
+    &.bloc-error{
+      background-color: var(--dangerShadow2);
+      border-color: var(--danger);
+      color: var(--danger);
+
+      .bloc-edit-icon{
+        .btn-icon{
+          border-color: var(--danger);
+
+          [class^="icon-"]{
+            color: var(--danger);
+          }
+        }
+
+        & + .bloc-edit-content{
+          color: var(--danger);
+        }
+      }
+    }
+  }
+
+  .bloc-error-msg{
+    color: var(--error);
+    padding: 6px 4px 4px 4px;
+    font-size: 14px;
+
+    [class^="icon-"]{
+      margin-right: 5px;
+    }
+  }
+
+  .line-select-special{
+    .form-group .react-selectize.default.root-node:not(.open) .react-selectize-control{
+      border-color: var(--color1);
+    }
+
+    .form-group:first-child > label{
+      color: var(--color1);
+      @include fontSemibold();
+    }
+  }
+
+  .line-infos-invoice{
+    margin-bottom: 24px;
+
+    .alert{
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  .invoice-line{
+    margin-bottom: 24px;
+
+    .col-1 + .col-2{
+      margin-top: 12px;
+    }
+  }
+
+  .invoice-line-1{
+    .image{
+      img{
+        width: 110px;
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .invoice-line-3, .invoice-line-4{
+    .items-table{
+      width: 100%;
+      margin-bottom: 0;
+      box-shadow: none;
+
+      .bloc-edit{
+        border-radius: 0 0 8px 8px;
+      }
+
+      & > .items {
+        .item{
+
+          &:hover{
+            background-color: var(--greyShadow);
+          }
+
+          &.item-add{
+            background-color: var(--color2);
+            border: 2px solid var(--greyShadow);
+            border-radius: 0 0 8px 8px;
+
+            &:hover{
+              background-color: var(--color2);
+              border-color: var(--color1);
+            }
+          }
+        }
+      }
+    }
+
+    .item-header {
+      background-color: var(--greyShadow);
+    }
+
+    .infos-col-7, .infos-col-4 {
+      .col-1, .col-3, .col-4, .col-5, .col-6, .col-7 {
+        margin-right: 12px;
+      }
+    }
+  }
+
+  .invoice-line-3{
+    .items-default{
+      .infos-col-7{
+        .actions.trash{
+          .btn-icon {
+            color: var(--danger);
+          }
+        }
+
+        .actions{
+          .btn-icon{
+            color: var(--primary);
+
+            [class^="icon-"]{
+              font-size: 24px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .invoice-line-4{
+
+    .tvas{
+      min-height: 64px;
+      border-bottom: 2px solid var(--grey);
+    }
+
+    .note{
+      margin-top: 24px;
+      font-size: 14px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .totaux{
+      @include flex(row, flex-end, flex-end);
+
+      .labels{
+        width: 160px;
+        background-color: var(--greyShadow);
+        border-right: 2px solid var(--grey);
+        border-bottom: 2px solid var(--grey);
+
+        & > div{
+          padding: 12px;
+        }
+      }
+
+      .values{
+        width: 200px;
+        border-bottom: 2px solid var(--grey);
+
+        & > div{
+          padding: 12px;
+        }
+      }
+    }
+  }
+
+  .invoice-line-5{
+    .bank{
+      @include flex(column, center, center);
+      font-size: 14px;
+      margin-bottom: 12px;
+
+      b{
+        color: var(--grey3);
+      }
+    }
+
+    .note{
+      width: 100%;
+      max-width: 500px;
+    }
+  }
+}
+
+//                      __   _____ __    ___    __
+//                     | _| |___  / /_  ( _ )  |_ |
+//    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
+//   |_____|_____|_____| |    / /| (_) | (_) |  | |_____|_____|_____|
+//                     | |   /_/  \___/ \___/   | |
+//                     |__|                    |__|
+@media (min-width:768px) {
+  .invoice-form{
+    .invoice-line{
+      @include flex(row, flex-start, space-between);
+
+      .col-1 + .col-2{
+        margin-top: 0;
+      }
+    }
+
+    .invoice-line-1{
+      .col-1{
+        @include flex(row, flex-start, flex-start);
+        width: calc(100% - 300px - 24px);
+        margin-right: 24px;
+
+        .image{
+          width: 110px;
+          margin-right: 8px;
+
+          img{
+            margin-bottom: 0;
+          }
+        }
+
+        .infos{
+          width: calc(100% - 110px);
+        }
+      }
+
+      .col-2{
+        width: 300px;
+      }
+    }
+
+    .invoice-line-2{
+      .col-1{
+        width: 250px;
+      }
+      .col-2{
+        width: calc(100% - 250px - 24px);
+      }
+    }
+
+    .invoice-line-3{
+      .items-default{
+        .infos-col-7{
+          .col-1, .col-3, .col-4, .col-5, .col-6, .col-7{
+            margin-right: 12px;
+          }
+          .col-2{
+            width: calc(100% - 64%);
+          }
+          .col-3, .col-4, .col-5, .col-6, .col-7{
+            width: 10%;
+            text-align: right;
+          }
+
+          .col-5{
+            .line > .form-group{
+              align-items: flex-end;
+            }
+          }
+
+          .col-4, .col-7{
+            text-align: center;
+          }
+
+          .col-1{
+            width: 14%;
+            text-align: left;
+          }
+        }
+
+        .item-header{
+          .infos-col-7{
+            .col-3, .col-4, .col-5, .col-6, .col-7{
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+
+    .invoice-line-4 {
+
+      & > .col-1{
+        width: 50%;
+      }
+
+      & > .col-2{
+        width: calc(50% - 48px);
+        margin-left: 48px;
+      }
+
+      .items-default {
+        .infos-col-4 {
+          .col-1, .col-2, .col-3, .col-4{
+            width: 25%;
+          }
+
+          .col-1, .col-3{
+            text-align: center;
+          }
+
+          .col-2, .col-4{
+            text-align: right;
+          }
+        }
+      }
+    }
+
+    .invoice-line-5{
+      @include flex(column, center, center);
+    }
+
+  }
+}
+
+//                      __   _  ___ ____  _  _     __
+//                     | _| / |/ _ \___ \| || |   |_ |
+//    _____ _____ _____| |  | | | | |__) | || |_   | |_____ _____ _____
+//   |_____|_____|_____| |  | | |_| / __/|__   _|  | |_____|_____|_____|
+//                     | |  |_|\___/_____|  |_|    | |
+//                     |__|                       |__|
+@media (min-width: 1024px) {
+  .invoice-form{
+    .invoice-line-2{
+      .col-1{
+        width: 400px;
+      }
+      .col-2{
+        width: calc(100% - 400px - 24px);
+      }
+    }
+  }
+}
+
+//                      __   _ ____  ___   ___    __
+//                     | _| / |___ \( _ ) / _ \  |_ |
+//    _____ _____ _____| |  | | __) / _ \| | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | |/ __/ (_) | |_| |  | |_____|_____|_____|
+//                     | |  |_|_____\___/ \___/   | |
+//                     |__|                      |__|
+@media (min-width:1280px) {
+  #invoices, #invoice-create{
+
+    .bloc-edit{
+      padding: 24px;
+    }
+
+    .invoice-line-1{
+      .col-1{
+        .image{
+          margin-right: 12px;
+        }
+      }
+
+      .col-2{
+        width: 348px;
+      }
+    }
+
+    .invoice-line-2{
+      .col-2{
+        width: calc(100% - 500px - 24px);
+      }
+    }
+  }
+}
+
+
+//                      __   _  __    ___   ___    __
+//                     | _| / |/ /_  / _ \ / _ \  |_ |
+//    _____ _____ _____| |  | | '_ \| | | | | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | | (_) | |_| | |_| |  | |_____|_____|_____|
+//                     | |  |_|\___/ \___/ \___/   | |
+//                     |__|                       |__|
+@media (min-width: 1600px){
+  #invoices, #invoice-create {
+    .invoice-line-2{
+      .col-2{
+        width: calc(100% - 700px - 24px);
+      }
+    }
+  }
+}
