@@ -56,6 +56,12 @@ class BiCustomer extends DataEntity
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"customer:read"})
      */
+    private $address2;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customer:read"})
+     */
     private $complement;
 
     /**
@@ -243,6 +249,18 @@ class BiCustomer extends DataEntity
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getAddress2(): ?string
+    {
+        return $this->address2;
+    }
+
+    public function setAddress2(?string $address2): self
+    {
+        $this->address2 = $address2;
 
         return $this;
     }
