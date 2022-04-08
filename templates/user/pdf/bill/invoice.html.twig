@@ -38,17 +38,17 @@
         <div class="from">
             <div class="name-society"><b>{{ elem.fromName }}</b></div>
             <div>{{ elem.fromAddress }}</div>
-            <div>{{ elem.fromComplement }}</div>
+            <div>{{ elem.fromComplement | spacevoid | raw  }}</div>
             <div>{{ elem.fromZipcode }}, {{ elem.fromCity }}</div>
-            <div>{{ elem.fromCountry }}</div>
+            <div>{{ elem.fromCountry | spacevoid | raw  }}</div>
         </div>
         <div class="to">
             <div><b>Destinataire</b></div>
             <div>{{ elem.toName }}</div>
             <div>{{ elem.toAddress }}</div>
-            <div>{{ elem.toComplement ? elem.toComplement : "&nbsp;" }}</div>
+            <div>{{ elem.toComplement | spacevoid | raw }}</div>
             <div>{{ elem.toZipcode }}, {{ elem.toCity }}</div>
-            <div>{{ elem.toCountry ? elem.toCountry : "&nbsp;" }}</div>
+            <div>{{ elem.toCountry | spacevoid | raw }}</div>
         </div>
     </div>
 
