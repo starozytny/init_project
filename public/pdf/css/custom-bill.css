@@ -124,14 +124,13 @@ b{
     width: 62px;
 }
 
-
-
 .products .col-6{
     width: 80px;
 }
 
 .products .col-7{
     width: 40px;
+    text-align: center;
 }
 
 /**
