@@ -46,6 +46,7 @@
             <div><b>Destinataire</b></div>
             <div>{{ elem.toName }}</div>
             <div>{{ elem.toAddress }}</div>
+            <div>{{ elem.toAddress2 | spacevoid | raw }}</div>
             <div>{{ elem.toComplement | spacevoid | raw }}</div>
             <div>{{ elem.toZipcode }}, {{ elem.toCity }}</div>
             <div>{{ elem.toCountry | spacevoid | raw }}</div>
