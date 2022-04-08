@@ -136,6 +136,7 @@ class Society extends DataEntity
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"admin:read"})
      */
     private $counterInvoice = 0;
 
