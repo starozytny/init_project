@@ -153,12 +153,21 @@ b{
     border-bottom: 1px solid #939393;
 }
 
+.tvas{
+    margin-bottom: 24px;
+}
+
 .tvas .item-header,
 .tvas{
     width: 313px;
 }
 
-.tvas .item .col{
+.tvas .item-header .col{
+    text-align: center;
+}
+
+.tvas .col-1{
+    width: 40px;
     text-align: center;
 }
 
@@ -168,9 +177,7 @@ b{
 }
 .tvas .col-3{
     width: 60px;
-}
-.tvas .col-1{
-    width: 40px;
+    text-align: center;
 }
 
 .totaux{
@@ -191,6 +198,9 @@ b{
 /**
     FOOTER and NOTE
  */
+.bank{
+    margin-bottom: 4px;
+}
 .bank b{
     color: #696969
 }
@@ -199,7 +209,6 @@ b{
 }
 
 .note{
-    margin-top: 24px;
     font-size: 11px;
 }
 .footer{

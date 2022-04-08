@@ -153,7 +153,7 @@ class DataInvoice extends DataConstructor
             ->setUnity($this->sanitizeData->trimData($data->unity))
             ->setPrice($this->sanitizeData->setToFloat($data->price, 0))
             ->setRateTva($this->sanitizeData->setToFloat($data->rateTva, 0))
-            ->setQuantity($this->sanitizeData->setToInteger($data->quantity, 0))
+            ->setQuantity($this->sanitizeData->setToFloat($data->quantity, 0))
         ;
     }
 

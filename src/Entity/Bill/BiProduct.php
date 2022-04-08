@@ -61,7 +61,7 @@ class BiProduct
     private $content;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      * @Groups({"product:read"})
      */
     private $quantity;
@@ -161,12 +161,12 @@ class BiProduct
         return $this;
     }
 
-    public function getQuantity(): ?int
+    public function getQuantity(): ?float
     {
         return $this->quantity;
     }
 
-    public function setQuantity(?int $quantity): self
+    public function setQuantity(?float $quantity): self
     {
         $this->quantity = $quantity;
 
