@@ -65,7 +65,7 @@ class BiItem extends DataEntity
      * @ORM\Column(type="float")
      * @Groups({"item:read"})
      */
-    private $rateTva;
+    private $rateTva = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity=Society::class, inversedBy="biItems")
