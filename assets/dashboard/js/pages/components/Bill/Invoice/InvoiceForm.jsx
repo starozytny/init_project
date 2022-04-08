@@ -281,7 +281,7 @@ class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess, dateInvoice } = this.props;
-        const { dateAt, dueType, dueAt, toName, toAddress, toZipcode, toCity, toCountry } = this.state;
+        const { dateAt, dueType, dueAt, toName, toAddress, toComplement, toZipcode, toCity, toCountry } = this.state;
 
         let method = context === "create" ? "POST" : "PUT";
 
@@ -294,9 +294,11 @@ class Form extends Component {
             {type: "text", id: 'toZipcode',   value: toZipcode},
             {type: "text", id: 'toCity',      value: toCity},
             {type: "text", id: 'toCountry',   value: toCountry},
+            {type: "length", id: 'toAddress',   value: toAddress, min: 0, max: 40},
         ];
 
         paramsToValidate = helper.validateDates(paramsToValidate, dateInvoice, dateAt, dueAt, dueType);
+        paramsToValidate = helper.checkLength(paramsToValidate, "toComplement", toComplement);
 
         // validate global
         let validate = Validateur.validateur(paramsToValidate)

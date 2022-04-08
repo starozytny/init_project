@@ -10,6 +10,7 @@ import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@commonComponents/functions/validateur";
 import Helper                  from "@commonComponents/functions/helper";
+import helper                  from "@dashboardPages/components/Bill/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
 const URL_CREATE_ELEMENT     = "api_bill_customers_create";
@@ -95,7 +96,7 @@ class Form extends Component {
         e.preventDefault();
 
         const { context, url, messageSuccess } = this.props;
-        const { name } = this.state;
+        const { name, address, complement } = this.state;
 
         let method = context === "create" ? "POST" : "PUT";
 
@@ -104,6 +105,9 @@ class Form extends Component {
         let paramsToValidate = [
             {type: "text", id: 'name', value: name}
         ];
+
+        paramsToValidate = helper.checkLength(paramsToValidate, "address", address);
+        paramsToValidate = helper.checkLength(paramsToValidate, "complement", complement);
 
         // validate global
         let validate = Validateur.validateur(paramsToValidate)

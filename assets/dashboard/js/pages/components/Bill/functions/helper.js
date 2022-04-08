@@ -152,6 +152,16 @@ function setRateTva (self, taxes, name, e,) {
     }
 }
 
+function checkLength(paramsToValidate, name, value) {
+    if(value && value !== ""){
+        paramsToValidate = [...paramsToValidate,
+            ...[{type: "length", id: name,   value: value, min: 0, max: 40},]
+        ];
+    }
+
+    return paramsToValidate
+}
+
 
 module.exports = {
     getTaxesAndUnitiesSelectItems,
@@ -161,4 +171,5 @@ module.exports = {
     generateInvoice,
     validateDates,
     setRateTva,
+    checkLength,
 }
