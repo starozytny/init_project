@@ -88,6 +88,12 @@ class BiProduct
      * @ORM\Column(type="integer")
      * @Groups({"product:read"})
      */
+    private $codeTva = 0;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"product:read"})
+     */
     private $type = self::TYPE_INVOICE;
 
     /**
@@ -241,6 +247,18 @@ class BiProduct
     public function setSociety(?Society $society): self
     {
         $this->society = $society;
+
+        return $this;
+    }
+
+    public function getCodeTva(): ?int
+    {
+        return $this->codeTva;
+    }
+
+    public function setCodeTva(int $codeTva): self
+    {
+        $this->codeTva = $codeTva;
 
         return $this;
     }

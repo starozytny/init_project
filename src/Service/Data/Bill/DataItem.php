@@ -22,6 +22,7 @@ class DataItem extends DataConstructor
             ->setUnity($this->sanitizeData->trimData($data->unity, "pièce"))
             ->setPrice($this->sanitizeData->setToFloat($data->price))
             ->setRateTva($this->sanitizeData->setToFloat($data->rateTva, 0))
+            ->setCodeTva($this->sanitizeData->setToInteger($data->codeTva, 0))
         ;
     }
 }

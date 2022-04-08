@@ -16,7 +16,7 @@ function getTaxesAndUnitiesSelectItems(taxes, unities) {
 
     let selectTvas = [];
     taxes.forEach(el => {
-        selectTvas.push({ value: el.rate, label: el.rate+" %", identifiant: "t-" + el.id })
+        selectTvas.push({ value: el.code, label: el.rate+" %", identifiant: "t-" + el.id })
     })
 
     return [selectTvas, selectUnities];
@@ -114,9 +114,11 @@ function generateInvoice(self, elem, dateAt, dueAt, dueType)
 
 function validateDates(paramsToValidate, dateInvoice, dateAt, dueAt, dueType){
     if(dateInvoice){
-        paramsToValidate = [...paramsToValidate,
-            ...[{type: "dateCompare", id: 'dateAt', value: new Date(dateInvoice), idCheck: 'dateInvoice', valueCheck: dateAt}]
-        ];
+        if(dateAt !== ""){
+            paramsToValidate = [...paramsToValidate,
+                ...[{type: "dateCompare", id: 'dateAt', value: new Date(dateInvoice), idCheck: 'dateInvoice', valueCheck: dateAt}]
+            ];
+        }
     }
 
     if(parseInt(dueType) !== 1){
@@ -134,6 +136,22 @@ function validateDates(paramsToValidate, dateInvoice, dateAt, dueAt, dueType){
     return paramsToValidate;
 }
 
+function setRateTva (self, taxes, name, e,) {
+    if(name === "codeTva"){
+        let rateTva = 0;
+
+        if(e.value !== undefined){
+            taxes.forEach(tva => {
+                if(tva.code === parseInt(e.value)){
+                    rateTva = tva.rate;
+                }
+            })
+        }
+
+        self.setState({ rateTva: rateTva })
+    }
+}
+
 
 module.exports = {
     getTaxesAndUnitiesSelectItems,
@@ -141,5 +159,6 @@ module.exports = {
     getConditionPaiementChoices,
     setDueAt,
     generateInvoice,
-    validateDates
+    validateDates,
+    setRateTva,
 }

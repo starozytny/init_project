@@ -68,6 +68,12 @@ class BiItem extends DataEntity
     private $rateTva = 0;
 
     /**
+     * @ORM\Column(type="integer")
+     * @Groups({"item:read"})
+     */
+    private $codeTva = 0;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Society::class, inversedBy="biItems")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -199,5 +205,17 @@ class BiItem extends DataEntity
     public function getImageFile(): string
     {
         return $this->getFileOrDefault($this->image, self::FOLDER_IMAGES, "https://robohash.org/" . $this->image . "?size=64x64");
+    }
+
+    public function getCodeTva(): ?int
+    {
+        return $this->codeTva;
+    }
+
+    public function setCodeTva(int $codeTva): self
+    {
+        $this->codeTva = $codeTva;
+
+        return $this;
     }
 }

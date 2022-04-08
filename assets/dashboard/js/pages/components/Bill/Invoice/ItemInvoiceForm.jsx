@@ -30,6 +30,7 @@ export function ItemInvoiceFormulaire ({ element, societyId, taxes, unities, onS
         price={element ? Formulaire.setToFloat(element.price) : ""}
         quantity={element && element.quantity ? Formulaire.setToFloat(element.quantity, 1) : 1}
         rateTva={element ? Formulaire.setValueEmptyIfNull(element.rateTva, 20) : 20}
+        codeTva={element ? Formulaire.setValueEmptyIfNull(element.codeTva, 1) : 1}
     />
 
     return <>{form}</>
@@ -49,6 +50,7 @@ class Form extends Component {
             unity: props.unity,
             price: props.price,
             rateTva: props.rateTva,
+            codeTva: props.codeTva,
             quantity: props.quantity,
             totalHt: props.quantity !== 0 ? props.quantity * (props.price !== "" ? parseFloat(props.price) : 0) : 1,
             errors: [],
@@ -87,7 +89,10 @@ class Form extends Component {
         this.setState({ [e.currentTarget.name]: e.currentTarget.rawValue })
     }
 
-    handleChangeSelect = (name, e) => { this.setState({ [name]: e !== undefined ? e.value : "" }) }
+    handleChangeSelect = (name, e) => {
+        helper.setRateTva(this, this.props.taxes, name, e);
+        this.setState({ [name]: e !== undefined ? e.value : "" })
+    }
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -121,7 +126,7 @@ class Form extends Component {
 
     render () {
         const { taxes, unities } = this.props;
-        const { errors, reference, numero, name, content, unity, price, rateTva, quantity, totalHt } = this.state;
+        const { errors, reference, numero, name, content, unity, price, codeTva, quantity, totalHt } = this.state;
 
         let [selectTvas, selectUnities] = helper.getTaxesAndUnitiesSelectItems(taxes, unities);
 
@@ -149,8 +154,8 @@ class Form extends Component {
             <div className="line line-3">
                 <Input type="number" valeur={quantity} identifiant="quantity" errors={errors} onChange={this.handleChange}>Quantité</Input>
                 <Input type="cleave" valeur={price} identifiant="price" errors={errors} onChange={this.handleChangeCleave}>Prix unitaire</Input>
-                <SelectReactSelectize items={selectTvas} identifiant="rateTva"
-                                      valeur={rateTva} errors={errors} onChange={(e) => this.handleChangeSelect('rateTva', e)}>
+                <SelectReactSelectize items={selectTvas} identifiant="codeTva"
+                                      valeur={codeTva} errors={errors} onChange={(e) => this.handleChangeSelect('codeTva', e)}>
                     Taux de TVA
                 </SelectReactSelectize>
             </div>
