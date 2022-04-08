@@ -87,6 +87,7 @@ class BillService
         $haveDraft = false;
 
         $i = 0;
+        $tvas = [];
         foreach($data as $elem){
             if ($i != 0) {
                 $mpdf->AddPage();
@@ -99,9 +100,33 @@ class BillService
 
             $products = $this->em->getRepository(BiProduct::class)->findBy(['identifiant' => $elem->getIdentifiant()]);
 
+            foreach($products as $product){
+                $quantity = $product->getQuantity();
+                $codeTva = $product->getCodeTva();
+                $price = $product->getPrice();
+
+                if($quantity && $quantity != "" && $price && $price != "" && $codeTva != 0){
+                    $montantHt = $quantity * $price;
+                    $total = $montantHt * ($product->getRateTva() / 100);
+
+                    if(isset($tvas[$codeTva])){
+                        $tvas[$codeTva]["base"] += $montantHt;
+                        $tvas[$codeTva]["total"] += $total;
+                    }else{
+                        $tvas[$codeTva] = [
+                            "code" => $codeTva,
+                            "base" => round($montantHt,2),
+                            "rate" => $product->getRateTva(),
+                            "total" => round($total,2)
+                        ];
+                    }
+                }
+            }
+
             $mpdf = $this->fileCreator->writePDF($mpdf, $template, [
                 'elem' => $elem,
-                'products' => $products
+                'products' => $products,
+                'tvas' => $tvas
             ]);
         }
 

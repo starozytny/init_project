@@ -62,9 +62,9 @@
             <div class="col col-2">Designation</div>
             <div class="col col-3">Quantité</div>
             <div class="col col-4">Unité</div>
-            <div class="col col-5">P.U.<br>HT</div>
-            <div class="col col-6">Montant<br>HT</div>
-            <div class="col col-7">Code<br>TVA</div>
+            <div class="col col-5">P.U. HT</div>
+            <div class="col col-6">Montant HT</div>
+            <div class="col col-7">Code TVA</div>
         </div>
 
         {% for el in products %}
@@ -74,32 +74,35 @@
                     <div>{{ el.name }}</div>
                     <div>{{ el.content | raw }}</div>
                 </div>
-                <div class="col col-3">{{ el.quantity }}</div>
-                <div class="col col-4">{{ el.unity }}</div>
-                <div class="col col-5">{{ el.price | price }}</div>
-                <div class="col col-6">{{ el.price != 0 ? ((el.quantity * el.price) | price) : "" }}</div>
-                <div class="col col-7">{{ el.rateTva }}%</div>
+                <div class="col col-3">{{ (el.quantity == 0 and el.price == 0) ? "" : el.quantity }}</div>
+                <div class="col col-4">{{ (el.quantity == 0 and el.price == 0) ? "" : el.unity }}</div>
+                <div class="col col-5">{{ (el.quantity == 0 and el.price == 0) ? "" : el.price | price }}</div>
+                <div class="col col-6">{{ (el.quantity == 0 and el.price == 0) ? "" : ((el.quantity * el.price) | price) }}</div>
+                <div class="col col-7">{{ (el.quantity == 0 and el.price == 0) ? "" : ((el.codeTva != 0) ? el.codeTva : "")}}</div>
             </div>
         {% endfor %}
     </div>
 
     <div class="recap">
         <div class="tvas-col">
-            <div class="tvas">
-                <div class="item item-header">
-                    <div class="col col-1">Code</div>
-                    <div class="col col-2">Base HT</div>
-                    <div class="col col-3">Taux TVA</div>
-                    <div class="col col-4">Montant TVA</div>
+            {% if tvas | length > 0 %}
+                <div class="tvas">
+                    <div class="item item-header">
+                        <div class="col col-1">Code</div>
+                        <div class="col col-2">Base HT</div>
+                        <div class="col col-3">Taux TVA</div>
+                        <div class="col col-4">Montant TVA</div>
+                    </div>
+                    {% for tva in tvas %}
+                        <div class="item">
+                            <div class="col col-1">{{ tva.code }}</div>
+                            <div class="col col-2">{{ tva.base }}</div>
+                            <div class="col col-3">{{ tva.rate }}%</div>
+                            <div class="col col-4">{{ tva.total }}</div>
+                        </div>
+                    {% endfor %}
                 </div>
-
-                <div class="item">
-                    <div class="col col-1"></div>
-                    <div class="col col-2"></div>
-                    <div class="col col-3"></div>
-                    <div class="col col-4"></div>
-                </div>
-            </div>
+            {% endif %}
             <div class="note">
                 {{ elem.note }}
             </div>
