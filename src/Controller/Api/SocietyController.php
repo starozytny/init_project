@@ -177,7 +177,7 @@ class SocietyController extends AbstractController
         $em->flush();
 
         $fileUploader->deleteFile($obj->getLogo(), self::FOLDER_LOGOS);
-        return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+        return $apiResponse->apiJsonResponseSuccessful("Suppression réussie !");
     }
 
     /**
@@ -231,7 +231,7 @@ class SocietyController extends AbstractController
             $fileUploader->deleteFile($logo, self::FOLDER_LOGOS);
         }
 
-        return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
+        return $apiResponse->apiJsonResponseSuccessful("Suppression de la sélection réussie !");
     }
 
     /**
