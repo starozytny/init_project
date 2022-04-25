@@ -33,6 +33,13 @@
 }
 
 @mixin toolbarSearch(){
+  .toolbar {
+    .filter-search {
+      .search{
+        width: 100%;
+      }
+    }
+  }
   @media (min-width:768px) {
     .toolbar{
       .filter-search{
