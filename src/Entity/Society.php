@@ -126,6 +126,12 @@ class Society extends DataEntity
      */
     private $country = "France";
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"admin:read"})
+     */
+    private $address2;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -389,6 +395,18 @@ class Society extends DataEntity
     public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getAddress2(): ?string
+    {
+        return $this->address2;
+    }
+
+    public function setAddress2(?string $address2): self
+    {
+        $this->address2 = $address2;
 
         return $this;
     }

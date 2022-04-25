@@ -29,6 +29,7 @@ class DataSociety
             ->setEmail($this->sanitizeData->trimData($data->email))
             ->setPhone1($this->sanitizeData->trimData($data->phone1))
             ->setAddress($this->sanitizeData->trimData($data->address))
+            ->setAddress2($this->sanitizeData->trimData($data->address2))
             ->setZipcode($this->sanitizeData->trimData($data->zipcode))
             ->setCity($this->sanitizeData->trimData($data->city))
             ->setComplement($this->sanitizeData->trimData($data->complement))
