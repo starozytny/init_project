@@ -263,7 +263,6 @@
     & > .items {
       & > .item{
         padding-top: 12px;
-        padding-right: 4px;
       }
       & > .item-header {
         display: flex;
@@ -332,6 +331,12 @@
 
       & > *:not(:first-child) {
         margin-left: 8px;
+      }
+    }
+
+    & > .item:not(.item-header){
+      .actions{
+        transform: translateX(6px);
       }
     }
 
