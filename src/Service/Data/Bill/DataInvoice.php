@@ -66,6 +66,7 @@ class DataInvoice extends DataConstructor
 
             ->setFromName($society->getName())
             ->setFromAddress($society->getAddress())
+            ->setFromAddress2($society->getAddress2())
             ->setFromComplement($society->getComplement())
             ->setFromZipcode($society->getZipcode())
             ->setFromCity($society->getCity())

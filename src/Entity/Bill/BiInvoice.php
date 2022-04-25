@@ -114,6 +114,12 @@ class BiInvoice extends DataEntity
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"invoice:read"})
      */
+    private $fromAddress2;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoice:read"})
+     */
     private $fromComplement;
 
     /**
@@ -164,12 +170,12 @@ class BiInvoice extends DataEntity
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
      */
     private $toAddress;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoice:read"})
      */
     private $toAddress2;
 
@@ -962,6 +968,18 @@ class BiInvoice extends DataEntity
     public function setToAddress2(?string $toAddress2): self
     {
         $this->toAddress2 = $toAddress2;
+
+        return $this;
+    }
+
+    public function getFromAddress2(): ?string
+    {
+        return $this->fromAddress2;
+    }
+
+    public function setFromAddress2(?string $fromAddress2): self
+    {
+        $this->fromAddress2 = $fromAddress2;
 
         return $this;
     }

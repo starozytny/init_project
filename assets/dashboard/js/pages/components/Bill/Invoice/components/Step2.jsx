@@ -46,7 +46,7 @@ export function Form2({ errors, onChange, onChangeZipcodeCity, onSelectCustomer,
         <div className="line line-2 line-select-special">
             <SelectReactSelectize items={selectCustomers} identifiant="customer" placeholder={"Sélectionner"}
                                   valeur={customer} errors={errors} onChange={(e) => onSelectCustomer(e)}>
-                <span className="icon-group" /> <span>Pré-remplir les informations</span>
+                <span className="icon-group" /> <span>Pré-remplir</span>
             </SelectReactSelectize>
             <Input valeur={toName} identifiant="toName" errors={errors} onChange={onChange}>* Nom / Raison sociale</Input>
         </div>

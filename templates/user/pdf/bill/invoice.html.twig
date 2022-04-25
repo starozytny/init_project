@@ -38,6 +38,7 @@
         <div class="from">
             <div class="name-society"><b>{{ elem.fromName }}</b></div>
             <div>{{ elem.fromAddress }}</div>
+            <div>{{ elem.fromAddress2 | spacevoid | raw }}</div>
             <div>{{ elem.fromComplement | spacevoid | raw  }}</div>
             <div>{{ elem.fromZipcode }}, {{ elem.fromCity }}</div>
             <div>{{ elem.fromCountry | spacevoid | raw  }}</div>

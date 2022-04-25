@@ -431,6 +431,7 @@ class Form extends Component {
                     <div className="col-1">
                         <div><b>{society.name}</b></div>
                         <div>{society.address}</div>
+                        <div>{society.address2}</div>
                         <div>{society.complement}</div>
                         <div>{society.zipcode}, {society.city}</div>
                         {society.country && <div>
