@@ -44,6 +44,7 @@ export function SocietyFormulaire ({ type, onChangeContext, onUpdateList, elemen
         numeroTva={element ? Formulaire.setValueEmptyIfNull(element.numeroTva) : ""}
         forme={element ? Formulaire.setValueEmptyIfNull(element.forme, 0) : 0}
         address={element ? Formulaire.setValueEmptyIfNull(element.address) : ""}
+        address2={element ? Formulaire.setValueEmptyIfNull(element.address2) : ""}
         email={element ? Formulaire.setValueEmptyIfNull(element.email) : ""}
         phone1={element ? Formulaire.setValueEmptyIfNull(element.phone1) : ""}
         zipcode={element ? Formulaire.setValueEmptyIfNull(element.zipcode) : ""}
@@ -77,6 +78,7 @@ export class Form extends Component {
             numeroTva: props.numeroTva,
             forme: props.forme,
             address: props.address,
+            address2: props.address2,
             zipcode: props.zipcode,
             city: props.city,
             complement: props.complement,
@@ -196,6 +198,7 @@ export class Form extends Component {
                             email: '',
                             phone1: '',
                             address: '',
+                            address2: '',
                             zipcode: '',
                             city: '',
                             complement: '',
@@ -222,7 +225,7 @@ export class Form extends Component {
     render () {
         const { context } = this.props;
         const { errors, success, name, logo, siren, siret, rcs, numeroTva, forme, email, phone1,
-            address, zipcode, city, complement, country, bankName, bankNumero, bankTitulaire, bankBic, bankCode, bankIban } = this.state;
+            address, address2, zipcode, city, complement, country, bankName, bankNumero, bankTitulaire, bankBic, bankCode, bankIban } = this.state;
 
         let formItems = [
             { value: 0, label: "EURL", identifiant: "eurl" },
@@ -301,6 +304,9 @@ export class Form extends Component {
 
                         <div className="line">
                             <Input identifiant="address" valeur={address} errors={errors} onChange={this.handleChange}>Adresse</Input>
+                        </div>
+                        <div className="line">
+                            <Input identifiant="address2" valeur={address2} errors={errors} onChange={this.handleChange}>Adresse suite</Input>
                         </div>
                         <div className="line">
                             <Input identifiant="complement" valeur={complement} errors={errors} onChange={this.handleChange}>Complément d'adresse</Input>
