@@ -114,9 +114,13 @@ function generateInvoice(self, elem, dateAt, dueAt, dueType)
 
 function validateDates(paramsToValidate, dateInvoice, dateAt, dueAt, dueType){
     if(dateInvoice){
+
+        let nDateInvoice = new Date(dateInvoice);
+        nDateInvoice.setHours(0,0,0);
+
         if(dateAt !== ""){
             paramsToValidate = [...paramsToValidate,
-                ...[{type: "dateCompare", id: 'dateAt', value: new Date(dateInvoice), idCheck: 'dateInvoice', valueCheck: dateAt}]
+                ...[{type: "dateCompare", id: 'dateAt', value: nDateInvoice, idCheck: 'dateInvoice', valueCheck: dateAt}]
             ];
         }
     }

@@ -45,13 +45,13 @@ class BiInvoice extends DataEntity
     private $numero;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      * @Groups({"invoice:read"})
      */
     private $dateAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="date", nullable=true)
      * @Groups({"invoice:read"})
      */
     private $dueAt;
