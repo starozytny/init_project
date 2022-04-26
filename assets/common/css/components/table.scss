@@ -61,6 +61,14 @@
       &:hover{
         background-color: var(--primaryNuance0);
       }
+
+      &.item-sub{
+        padding: 8px 12px;
+      }
+
+      &.item-main {
+        background-color: var(--fondContent);
+      }
     }
 
     & > .item:not(:last-child){
