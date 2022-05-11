@@ -79,6 +79,14 @@ h2{
     color: var(--danger);
 }
 
+.txt-primary{
+    color: var(--primary);
+}
+
+.linethrough{
+    text-decoration: line-through;
+}
+
 main{
     background-color: var(--fondContent);
 }

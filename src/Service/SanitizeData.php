@@ -95,12 +95,23 @@ class SanitizeData
 
     public function setToFloat($value, $return = null): ?float
     {
+        if($value == 0 || $value == "0"){
+            return ($value == null) ? $return : (float) $value;
+        }
         return ($value == "" || $value == null) ? $return : (float) $value;
     }
 
     public function setToInteger($value, $return = null): ?int
     {
+        if($value == 0 || $value == "0"){
+            return ($value == null) ? $return : (int) $value;
+        }
         return ($value == "" || $value == null) ? $return : (int) $value;
+    }
+
+    public function setToKey($value, $return = null): ?int
+    {
+        return ($value == "" || $value == null || $value == 0 || $value == "0") ? $return : (int) $value;
     }
 
     public function setToTrillean($value): int

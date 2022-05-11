@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class UserController extends AbstractController
 {
     const FOLDER_AVATARS = User::FOLDER_AVATARS;
-    
+
     const ICON = "user";
 
     private $doctrine;
@@ -39,7 +39,7 @@ class UserController extends AbstractController
     {
         $this->doctrine = $doctrine;
     }
-    
+
     /**
      * Admin - Get array of users
      *
@@ -240,7 +240,7 @@ class UserController extends AbstractController
         $em->flush();
 
         $fileUploader->deleteFile($obj->getAvatar(), self::FOLDER_AVATARS);
-        return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+        return $apiResponse->apiJsonResponseSuccessful("Suppression réussie !");
     }
 
     /**
@@ -301,7 +301,7 @@ class UserController extends AbstractController
             $fileUploader->deleteFile($avatar, self::FOLDER_AVATARS);
         }
 
-        return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
+        return $apiResponse->apiJsonResponseSuccessful("Suppression de la sélection réussie !");
     }
 
     /**

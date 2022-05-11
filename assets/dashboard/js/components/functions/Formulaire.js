@@ -161,7 +161,7 @@ function axiosDeleteGroupElement(self, checked, url,
     }
 }
 
-function showErrors(self, validate, text="Veuillez vérifier les informations transmises.", toTop = true)
+function showErrors(self, validate, text="Veuillez vérifier les informations transmises.", toTop = false)
 {
     if(toTop){
         document.body.scrollTop = 0;

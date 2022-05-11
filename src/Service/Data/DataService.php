@@ -44,7 +44,7 @@ class DataService
 
         $fileUploader->deleteFile($img, $folder);
 
-        return $this->apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+        return $this->apiResponse->apiJsonResponseSuccessful("Suppression réussie !");
     }
 
     public function delete($obj, $isSeen = false, $messageError = "Vous n'avez pas lu ce message."): JsonResponse
@@ -57,7 +57,7 @@ class DataService
 
         $this->em->remove($obj);
         $this->em->flush();
-        return $this->apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+        return $this->apiResponse->apiJsonResponseSuccessful("Suppression réussie !");
     }
 
     public function deleteSelected($classe, $ids, $isSeen = false): JsonResponse
@@ -77,7 +77,7 @@ class DataService
         }
 
         $this->em->flush();
-        return $this->apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
+        return $this->apiResponse->apiJsonResponseSuccessful("Suppression de la sélection réussie !");
     }
 
     public function createDate($timezone="Europe/Paris"): \DateTime
