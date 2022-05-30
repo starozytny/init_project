@@ -10,6 +10,14 @@
     { 'value': "contrats" ,    'label': "Liste",      'path': path('admin_bill_contracts_index') },
 ] %}
 
+{% set submenu = [
+    { 'label': "Devis",       'path': path('admin_bill_quotations_index') },
+    { 'label': "Factures",    'path': path('admin_bill_invoices_index') },
+    { 'label': "Contrats",    'path': path('admin_bill_contracts_index') },
+    { 'label': "Clients",     'path': path('admin_bill_customers_index') },
+] %}
+
+
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('dashboard_bill') }}
