@@ -12,140 +12,82 @@
 
 <div class="main">
     <div class="header">
-        <div class="col-1">
-            {% if elem.logo %}
-                <img src="{{ elem.logo }}" class="logo" alt="Logo société">
-            {% endif %}
-        </div>
-        <div class="col-2">
-            {% if elem.fromSiren %}
-                <div><b>n° Siren/Siret : </b>{{ elem.fromSiren }}</div>
-            {% endif %}
-            {% if elem.fromTva %}
-                <div><b>n° TVA UE : </b>{{ elem.fromTva }}</div>
-            {% endif %}
-            <div><b>Email : </b>{{ elem.fromEmail }}</div>
-            <div><b>Téléphone : </b>{{ elem.fromPhone1 }}</div>
-        </div>
+        {% include "user/pdf/bill/components/header_left.html.twig" %}
         <div class="col-3">
             <div class="numero-facture"><b>Facture n°</b>{{ elem.status == 0 ? "Brouillon" : elem.numero }}</div>
             <div><b>Date de facture : </b>{{ elem.dateAt | date('d/m/Y') }}</div>
-            <div><b>Date d'échéance : </b>{{ elem.dueAt | date('d/m/Y') }}</div>
         </div>
     </div>
 
     <div class="letter">
         <div class="from">
-            <div class="name-society"><b>{{ elem.fromName }}</b></div>
-            <div>{{ elem.fromAddress }}</div>
-            <div>{{ elem.fromAddress2 | spacevoid | raw }}</div>
-            <div>{{ elem.fromComplement | spacevoid | raw  }}</div>
-            <div>{{ elem.fromZipcode }}, {{ elem.fromCity }}</div>
-            <div>{{ elem.fromCountry | spacevoid | raw  }}</div>
+            {% include "user/pdf/bill/components/expeditor.html.twig" %}
         </div>
         <div class="to">
-            <div><b>Destinataire</b></div>
-            <div>{{ elem.toName }}</div>
-            <div>{{ elem.toAddress }}</div>
-            <div>{{ elem.toAddress2 | spacevoid | raw }}</div>
-            <div>{{ elem.toComplement | spacevoid | raw }}</div>
-            <div>{{ elem.toZipcode }}, {{ elem.toCity }}</div>
-            <div>{{ elem.toCountry | spacevoid | raw }}</div>
+            <div class="concerne">
+                {% include "user/pdf/bill/components/concerne.html.twig" %}
+            </div>
+            <div class="destinataire">
+                {% include "user/pdf/bill/components/destinator.html.twig" %}
+
+            </div>
         </div>
     </div>
 
-    <div class="products">
-        <div class="item item-header">
-            <div class="col col-1">Référence</div>
-            <div class="col col-2">Designation</div>
-            <div class="col col-3">Quantité</div>
-            <div class="col col-4">Unité</div>
-            <div class="col col-5">P.U. HT</div>
-            <div class="col col-6">Montant HT</div>
-            <div class="col col-7">Code TVA</div>
+    <div class="references">
+        <div class="ref-1">
+            {% if elem.refQuotation is defined %}
+                {{ (elem.refQuotation ? "Réf. Devis : " ~ elem.refQuotation : "") | spacevoid | raw }}
+            {% else %}
+                {{ "" | spacevoid | raw }}
+            {% endif %}
         </div>
+        {% include "user/pdf/bill/components/reference2.html.twig" %}
+    </div>
 
-        {% for el in products %}
-            <div class="item {{ loop.index0 % 2 == 0 ? "item-even" : "item-odd" }}">
-                <div class="col col-1">{{ el.reference }}</div>
-                <div class="col col-2">
-                    <div>{{ el.name }}</div>
-                    <div>{{ el.content | raw }}</div>
-                </div>
-                <div class="col col-3">{{ (el.quantity == 0 and el.price == 0) ? "" : el.quantity }}</div>
-                <div class="col col-4">{{ (el.quantity == 0 and el.price == 0) ? "" : el.unity }}</div>
-                <div class="col col-5">{{ (el.quantity == 0 and el.price == 0) ? "" : el.price | price }}</div>
-                <div class="col col-6">{{ (el.quantity == 0 and el.price == 0) ? "" : ((el.quantity * el.price) | price) }}</div>
-                <div class="col col-7">{{ (el.quantity == 0 and el.price == 0) ? "" : ((el.codeTva != 0) ? el.codeTva : "")}}</div>
-            </div>
-        {% endfor %}
+    <div class="products">
+        {% include "user/pdf/bill/components/product.html.twig" %}
     </div>
 
     <div class="recap">
         <div class="tvas-col">
-            {% if tvas | length > 0 %}
-                <div class="tvas">
-                    <div class="item item-header">
-                        <div class="col col-1">Code</div>
-                        <div class="col col-2">Base HT</div>
-                        <div class="col col-3">Taux TVA</div>
-                        <div class="col col-4">Montant TVA</div>
-                    </div>
-                    {% for tva in tvas %}
-                        <div class="item">
-                            <div class="col col-1">{{ tva.code }}</div>
-                            <div class="col col-2">{{ tva.base }}</div>
-                            <div class="col col-3">{{ tva.rate }}%</div>
-                            <div class="col col-4">{{ tva.total }}</div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+            {% include "user/pdf/bill/components/tvas.html.twig" %}
+{#            <div class="note">#}
+{#                {% if elem.dueType != 1 %}#}
+{#                    Facture payable le {{ elem.dateAt | date('d/m/Y') }} pour la somme de {{ elem.totalTtc | price }} Euros.#}
+{#                {% else %}#}
+{#                    Facture acquittée le {{ elem.dateAt | date('d/m/Y') }} pour la somme de {{ elem.totalTtc | price }} Euros.#}
+{#                {% endif %}#}
+{#            </div>#}
             <div class="note">
-                {{ elem.note }}
+                <div><b>Date d'échéance : </b>{{ elem.dueAt | date('d/m/Y') }}</div>
+                <div><b>Mode de règlement : </b>{{ elem.payTypeString }}</div>
+            </div>
+            <div class="note">
+                {{ elem.note | raw }}
             </div>
         </div>
         <div class="totaux-col">
-            <div class="totaux">
-                <div class="item">
-                    <div class="col col-1">Total HT</div>
-                    <div class="col col-2">{{ elem.totalHt | price }}</div>
-                </div>
-                <div class="item">
-                    <div class="col col-1">Total Remise HT</div>
-                    <div class="col col-2">{{ elem.totalRemise | price }}</div>
-                </div>
-                <div class="item">
-                    <div class="col col-1"><b>NET HT</b></div>
-                    <div class="col col-2">{{ (elem.totalHt - elem.totalRemise) | price }}</div>
-                </div>
-                <div class="item">
-                    <div class="col col-1">Total TVA</div>
-                    <div class="col col-2">{{ elem.totalTva | price }}</div>
-                </div>
-                <div class="item">
-                    <div class="col col-1"><b>Total TTC en euros</b></div>
-                    <div class="col col-2"><b>{{ elem.totalTtc | price }}</b></div>
-                </div>
-            </div>
+            {% include "user/pdf/bill/components/totaux.html.twig" %}
         </div>
     </div>
 
     <div class="footer">
-
         <div class="bank">
-            <div>
-                <span><b>Renseignements bancaires : </b> <span>{{ elem.fromBankTitulaire }}</span></span>
-            </div>
-            <div>
-                <span><b>IBAN : </b> <span>{{ elem.fromBankIban }} - </span></span>
-                <span><b>BIC : </b> <span>{{ elem.fromBankBic }}</span></span>
-            </div>
-            <div>
-                <span><b>Banque : </b> <span>{{ elem.fromBankName }} - </span></span>
-                <span><b>N° du compte : </b> <span>{{ elem.fromBankNumero }} - </span></span>
-                <span><b>Code banque : </b> <span>{{ elem.fromBankCode }}</span></span>
-            </div>
+            {% if elem.displayBank %}
+                <div>
+                    <span><b>Renseignements bancaires : </b> <span>{{ elem.fromBankTitulaire }}</span></span>
+                </div>
+                <div>
+                    <span><b>IBAN : </b> <span>{{ elem.fromBankIban }} - </span></span>
+                    <span><b>BIC : </b> <span>{{ elem.fromBankBic }}</span></span>
+                </div>
+                <div>
+                    <span><b>Banque : </b> <span>{{ elem.fromBankName }} - </span></span>
+                    <span><b>N° du compte : </b> <span>{{ elem.fromBankNumero }} - </span></span>
+                    <span><b>Code banque : </b> <span>{{ elem.fromBankCode }}</span></span>
+                </div>
+            {% endif %}
         </div>
         <div>{{ elem.footer }}</div>
     </div>

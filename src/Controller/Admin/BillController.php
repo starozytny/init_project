@@ -2,7 +2,11 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Society;
+use App\Entity\Bill\BiAvoir;
+use App\Entity\Bill\BiContract;
+use App\Entity\Bill\BiContractCustomer;
+use App\Entity\Bill\BiQuotation;
+use App\Entity\Bill\BiSociety;
 use App\Entity\User;
 use App\Entity\Bill\BiCustomer;
 use App\Entity\Bill\BiInvoice;
@@ -10,10 +14,12 @@ use App\Entity\Bill\BiItem;
 use App\Entity\Bill\BiProduct;
 use App\Entity\Bill\BiSite;
 use App\Entity\Bill\BiTaxe;
-use App\Entity\Bill\BiUnity;
 use App\Service\Bill\BillService;
+use App\Service\Bill\ContractService;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Http\Discovery\Exception\NotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,9 +55,9 @@ class BillController extends AbstractController
         $objs    = $em->getRepository(BiInvoice::class)->findBy(['society' => $society, 'isArchived' => (bool)$isArchived, 'isHidden' => false]);
 
         $objs   = $serializer->serialize($objs, 'json', ['groups' => BiInvoice::INVOICE_READ]);
-        $params = $this->billService->getDataCommonPage($user->getNameManager(), $society, BiProduct::TYPE_INVOICE, $serializer);
+        $params = $this->billService->getDataCommonPage($society, BiProduct::TYPE_INVOICE, $serializer);
 
-        return $this->render('user/pages/bill/invoice.html.twig', array_merge($params, ['donnees' => $objs, 'status' => $status]));
+        return $this->render('admin/pages/bill/invoice.html.twig', array_merge($params, ['donnees' => $objs, 'status' => $status]));
     }
 
     /**
@@ -64,9 +70,9 @@ class BillController extends AbstractController
 
         $society = $this->billService->getSociety($user);
 
-        $params = $this->billService->getDataCommonPage($user->getNameManager(), $society, BiProduct::TYPE_INVOICE, $serializer);
+        $params = $this->billService->getDataCommonPage($society, BiProduct::TYPE_INVOICE, $serializer);
 
-        return $this->render('user/pages/bill/invoice_create.html.twig', $params);
+        return $this->render('admin/pages/bill/invoice_create.html.twig', $params);
     }
 
     /**
@@ -76,20 +82,20 @@ class BillController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $obj = $em->getRepository(BiInvoice::class)->find($id);
         if($obj->getStatus() != BiInvoice::STATUS_DRAFT){
             $this->addFlash('error', 'Vous ne pouvez pas modifier une facture établie.');
-            return $this->redirectToRoute('user_bill_invoices_index');
+            return $this->redirectToRoute('admin_bill_invoices_index');
         }
 
         $society = $this->billService->getSociety($user);
 
         $obj = $serializer->serialize($obj, 'json', ['groups' => BiInvoice::INVOICE_READ]);
-        $params = $this->billService->getDataCommonPage($user->getNameManager(), $society, BiProduct::TYPE_INVOICE, $serializer);
+        $params = $this->billService->getDataCommonPage($society, BiProduct::TYPE_INVOICE, $serializer);
 
-        return $this->render('user/pages/bill/invoice_update.html.twig', array_merge([
+        return $this->render('admin/pages/bill/invoice_update.html.twig', array_merge([
             'donnees' => $obj
         ], $params));
     }
@@ -101,15 +107,15 @@ class BillController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $society = $this->billService->getSociety($user);
 
         $elem   = $em->getRepository(BiInvoice::class)->find($id);
         $obj    = $serializer->serialize($elem, 'json', ['groups' => BiInvoice::INVOICE_READ]);
-        $params = $this->billService->getDataCommonPage($user->getNameManager(), $society, BiProduct::TYPE_INVOICE, $serializer);
+        $params = $this->billService->getDataCommonPage($society, BiProduct::TYPE_INVOICE, $serializer);
 
-        return $this->render('user/pages/bill/avoir_create_by_invoice.html.twig', array_merge($params, [
+        return $this->render('admin/pages/bill/avoir_create_by_invoice.html.twig', array_merge($params, [
             'donnees' => $obj,
             'elem' => $elem,
         ]));
@@ -122,15 +128,15 @@ class BillController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $society = $this->billService->getSociety($user);
 
         $elem   = $em->getRepository(BiInvoice::class)->find($id);
         $obj    = $serializer->serialize($elem, 'json', ['groups' => BiInvoice::INVOICE_READ]);
-        $params = $this->billService->getDataCommonPage($user->getNameManager(), $society, BiProduct::TYPE_INVOICE, $serializer);
+        $params = $this->billService->getDataCommonPage($society, BiProduct::TYPE_INVOICE, $serializer);
 
-        return $this->render('user/pages/bill/quotation_create_by_invoice.html.twig', array_merge($params, [
+        return $this->render('admin/pages/bill/quotation_create_by_invoice.html.twig', array_merge($params, [
             'donnees' => $obj,
             'elem' => $elem,
         ]));
@@ -146,15 +152,15 @@ class BillController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $society = $this->billService->getSociety($user);
         $objs    = $em->getRepository(BiQuotation::class)->findBy(['society' => $society, 'isArchived' => (bool)$isArchived]);
 
         $objs   = $serializer->serialize($objs, 'json', ['groups' => BiQuotation::QUOTATION_READ]);
-        $params = $this->billService->getDataCommonPage($user->getNameManager(), $society, BiProduct::TYPE_QUOTATION, $serializer);
+        $params = $this->billService->getDataCommonPage($society, BiProduct::TYPE_QUOTATION, $serializer);
 
-        return $this->render('user/pages/bill/quotation.html.twig', array_merge($params, ['donnees' => $objs, 'status' => $status]));
+        return $this->render('admin/pages/bill/quotation.html.twig', array_merge($params, ['donnees' => $objs, 'status' => $status]));
     }
 
     /**
@@ -167,9 +173,9 @@ class BillController extends AbstractController
 
         $society = $this->billService->getSociety($user);
 
-        $params = $this->billService->getDataCommonPage($user->getNameManager(), $society, BiProduct::TYPE_QUOTATION, $serializer);
+        $params = $this->billService->getDataCommonPage($society, BiProduct::TYPE_QUOTATION, $serializer);
 
-        return $this->render('user/pages/bill/quotation_create.html.twig', $params);
+        return $this->render('admin/pages/bill/quotation_create.html.twig', $params);
     }
 
     /**
@@ -179,16 +185,16 @@ class BillController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $elem = $em->getRepository(BiQuotation::class)->find($id);
 
         $society = $this->billService->getSociety($user);
 
         $obj    = $serializer->serialize($elem, 'json', ['groups' => BiQuotation::QUOTATION_READ]);
-        $params = $this->billService->getDataCommonPage($user->getNameManager(), $society, BiProduct::TYPE_QUOTATION, $serializer);
+        $params = $this->billService->getDataCommonPage($society, BiProduct::TYPE_QUOTATION, $serializer);
 
-        return $this->render('user/pages/bill/invoice_create_by_quotation.html.twig', array_merge($params, [
+        return $this->render('admin/pages/bill/invoice_create_by_quotation.html.twig', array_merge($params, [
             'donnees' => $obj,
             'elem' => $elem,
         ]));
@@ -203,15 +209,15 @@ class BillController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $society = $this->billService->getSociety($user);
         $objs    = $em->getRepository(BiAvoir::class)->findBy(['society' => $society, 'isArchived' => (bool)$isArchived]);
 
         $objs   = $serializer->serialize($objs, 'json', ['groups' => BiAvoir::AVOIR_READ]);
-        $params = $this->billService->getDataCommonPage($user->getNameManager(), $society, BiProduct::TYPE_AVOIR, $serializer);
+        $params = $this->billService->getDataCommonPage($society, BiProduct::TYPE_AVOIR, $serializer);
 
-        return $this->render('user/pages/bill/avoir.html.twig', array_merge($params, ['donnees' => $objs]));
+        return $this->render('admin/pages/bill/avoir.html.twig', array_merge($params, ['donnees' => $objs]));
     }
 
     /**
@@ -221,16 +227,16 @@ class BillController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $society = $this->billService->getSociety($user);
         $objs    = $em->getRepository(BiItem::class)->findBy(['society' => $society]);
 
         $objs = $serializer->serialize($objs, 'json', ['groups' => BiItem::ITEM_READ]);
 
-        [$taxes, $unities] = $billService->getTaxesAndUnitiesData($user->getNameManager(), $society, true);
+        [$taxes, $unities] = $billService->getTaxesAndUnitiesData($society, true);
 
-        return $this->render('user/pages/bill/item.html.twig', [
+        return $this->render('admin/pages/bill/item.html.twig', [
             'donnees' => $objs,
             'society' => $society,
             'taxes' => $taxes,
@@ -245,7 +251,7 @@ class BillController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $society  = $this->billService->getSociety($user);
         $objs     = $em->getRepository(BiCustomer::class)->findBy(['society' => $society]);
@@ -256,7 +262,7 @@ class BillController extends AbstractController
         $sites    = $serializer->serialize($sites, 'json', ['groups' => BiSite::SITE_READ]);
         $invoices = $serializer->serialize($invoices, 'json', ['groups' => BiInvoice::INVOICE_READ]);
 
-        return $this->render('user/pages/bill/customer.html.twig', [
+        return $this->render('admin/pages/bill/customer.html.twig', [
             'pageName' => "clients",
             'donnees' => $objs,
             'sites' => $sites,
@@ -272,7 +278,7 @@ class BillController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $society    = $this->billService->getSociety($user);
         $objs       = $em->getRepository(BiSite::class)->findBy(['society' => $society]);
@@ -281,7 +287,7 @@ class BillController extends AbstractController
         $objs       = $serializer->serialize($objs, 'json', ['groups' => BiSite::SITE_READ]);
         $customers  = $serializer->serialize($customers, 'json', ['groups' => BiCustomer::CUSTOMER_READ]);
 
-        return $this->render('user/pages/bill/site.html.twig', [
+        return $this->render('admin/pages/bill/site.html.twig', [
             'pageName' => "sites",
             'donnees' => $objs,
             'customers' => $customers,
@@ -296,7 +302,7 @@ class BillController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $society    = $this->billService->getSociety($user);
         $objs       = $em->getRepository(BiContract::class)->findBy(['society' => $society]);
@@ -313,9 +319,9 @@ class BillController extends AbstractController
         $customers  = $serializer->serialize($customers, 'json', ['groups' => BiCustomer::CUSTOMER_READ]);
         $sites      = $serializer->serialize($sites, 'json', ['groups' => BiSite::SITE_READ]);
 
-        [$taxes, $unities] = $this->billService->getTaxesAndUnitiesData($user->getNameManager(), $society, true);
+        [$taxes, $unities] = $this->billService->getTaxesAndUnitiesData($society, true);
 
-        return $this->render('user/pages/bill/contract.html.twig', [
+        return $this->render('admin/pages/bill/contract.html.twig', [
             'pageName' => "contrats",
             'donnees' => $objs,
             'relations' => $relations,
@@ -336,7 +342,7 @@ class BillController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $society    = $this->billService->getSociety($user);
         $objs       = $em->getRepository(BiContract::class)->findBy(['society' => $society]);
@@ -364,7 +370,7 @@ class BillController extends AbstractController
         $society    = $serializer->serialize($society, 'json', ['groups' => BiSociety::BILL_READ]);
         $invoices   = $serializer->serialize($invoices, 'json', ['groups' => BiInvoice::CONTRACT_READ]);
 
-        return $this->render('user/pages/bill/contract_process.html.twig', [
+        return $this->render('admin/pages/bill/contract_process.html.twig', [
             'pageName' => "traitement",
             'year' => $year,
             'month' => $month,
@@ -382,7 +388,7 @@ class BillController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $em = $this->billService->getEntityManager($user);
+        $em = $this->doctrine->getManager();
 
         $society = $this->billService->getSociety($user);
 
@@ -393,7 +399,7 @@ class BillController extends AbstractController
         $filename = $this->billService->getExportCompta($objs, $society, $products, $taxes);
         if(!$filename){
             $this->addFlash('error', 'Il n\'y a pas de données à exporter.');
-            return $this->redirectToRoute('user_settings_compta_index');
+            return $this->redirectToRoute('admin_homepage');
         }
 
         $em->flush();

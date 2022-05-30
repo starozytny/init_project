@@ -101,7 +101,7 @@ class BillService
         return $prefix . $counter;
     }
 
-    public function getTaxesAndUnitiesData($manager, BiSociety $society, $withSerializer = false): array
+    public function getTaxesAndUnitiesData(BiSociety $society, $withSerializer = false): array
     {
         $taxes = $this->em->getRepository(BiTaxe::class)->findBy(['society' => [null, $society]]);
         $unities = $this->em->getRepository(BiUnity::class)->findBy(['society' => [null, $society]]);
@@ -350,14 +350,14 @@ class BillService
         return $apiResponse->apiJsonResponse($invoice, BiInvoice::INVOICE_READ);
     }
 
-    public function getDataCommonPage($manager, BiSociety $society, $typeProducts, SerializerInterface $serializer): array
+    public function getDataCommonPage(BiSociety $society, $typeProducts, SerializerInterface $serializer): array
     {
         $products  = $this->em->getRepository(BiProduct::class)->findBy(['society' => $society, 'type' => $typeProducts]);
         $items     = $this->em->getRepository(BiItem::class)->findBy(['society' => $society]);
         $customers = $this->em->getRepository(BiCustomer::class)->findBy(['society' => $society]);
         $sites     = $this->em->getRepository(BiSite::class)->findBy(['customer' => $customers]);
 
-        [$taxes, $unities] = $this->getTaxesAndUnitiesData($manager, $society, true);
+        [$taxes, $unities] = $this->getTaxesAndUnitiesData($society, true);
 
         $society   = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
         $products  = $serializer->serialize($products, 'json', ['groups' => BiProduct::PRODUCT_READ]);

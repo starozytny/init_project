@@ -1,0 +1,37 @@
+<div class="item item-header">
+    <div class="col col-1">Référence</div>
+    <div class="col col-2">Designation</div>
+    <div class="col col-3">Quantité</div>
+    <div class="col col-4">Unité</div>
+    <div class="col col-5">P.U. HT</div>
+    <div class="col col-6">Montant HT</div>
+    <div class="col col-7">Code TVA</div>
+</div>
+{% if elem.noteProduct is defined and elem.noteProduct %}
+    <div class="item item-even">
+        <div class="col col-1"></div>
+        <div class="col col-2">
+            <div>{{ elem.noteProduct | raw }}</div>
+        </div>
+        <div class="col col-3"></div>
+        <div class="col col-4"></div>
+        <div class="col col-5"></div>
+        <div class="col col-6"></div>
+        <div class="col col-7"></div>
+    </div>
+{% endif %}
+
+{% for el in products %}
+    <div class="item {{ loop.index0 % 2 == 0 ? "item-even" : "item-odd" }}">
+        <div class="col col-1">{{ el.reference }}</div>
+        <div class="col col-2">
+            <div>{{ el.name }}</div>
+            <div>{{ el.content | raw }}</div>
+        </div>
+        <div class="col col-3">{{ isAvoir is defined ? "-" : "" }}{{ (el.quantity == 0 and el.price == 0) ? "" : el.quantity }}</div>
+        <div class="col col-4">{{ (el.quantity == 0 and el.price == 0) ? "" : el.unity }}</div>
+        <div class="col col-5">{{ (el.quantity == 0 and el.price == 0) ? "" : el.price | price }}</div>
+        <div class="col col-6">{{ isAvoir is defined ? "-" : "" }}{{ (el.quantity == 0 and el.price == 0) ? "" : ((el.quantity * el.price) | price) }}</div>
+        <div class="col col-7">{{ (el.quantity == 0 and el.price == 0) ? "" : el.codeTva }}</div>
+    </div>
+{% endfor %}

@@ -443,12 +443,12 @@ class ContractController extends AbstractController
 
         $obj = $em->getRepository(BiContractCustomer::class)->find($id);
         if(!$obj->getNumero()){
-            return $this->redirectToRoute('user_bill_contracts_index');
+            return $this->redirectToRoute('admin_bill_contracts_index');
         }
 
         $invoice = $this->createDraftInvoice($year, $month, $obj, $dataBill);
 
-        return $this->redirectToRoute('user_bill_invoice_update', ["id" => $invoice->getId()]);
+        return $this->redirectToRoute('admin_bill_invoice_update', ["id" => $invoice->getId()]);
     }
 
     /**

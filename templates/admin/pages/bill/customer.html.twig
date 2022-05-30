@@ -1,13 +1,33 @@
 {% extends 'admin/pages/bill/template.html.twig' %}
 
-{% set page_title %}Clients{% endset %}
-{% set submenuActive = "Clients" %}
+{% set page_title %}Liste des clients{% endset %}
+
+{% set page_text_infos %}
+    Les données clients et sites permettent de gagner du temps dans la saisie de vos documents. <br>
+    Vous pouvez les modifier ou les supprimer sans qu'il y ait un impact sur les documents en cours ou terminés.
+{% endset %}
 
 {% block main_content %}
-    <div id="customers"
-         data-donnees="{{ donnees }}"
-         data-society-id="{{ society.id }}"
-    >
-        {% include "dashboard/layout/components/spinner.html.twig" %}
+    <div class="main-content">
+        <div class="default-page default-page-col-2">
+            <div class="col-1">
+                {% include "admin/layout/components/default_menu.html.twig" with { default_menu: menu_customer } %}
+            </div>
+
+            <div class="col-2">
+                <div class="default-page-content">
+                    <div id="customers"
+                         data-donnees="{{ donnees }}"
+                         data-sites="{{ sites }}"
+                         data-invoices="{{ invoices }}"
+                         data-society-id="{{ society.id }}"
+                         data-counter-customer="{{ society.counterCustomer }}"
+                         data-year-customer="{{ society.yearCustomer }}"
+                    >
+                        {% include "dashboard/layout/components/spinner.html.twig" %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

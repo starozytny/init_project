@@ -1,0 +1,8 @@
+<div><b>{{ (elem.siName ? "Concerne" : "") | spacevoid | raw}}</b></div>
+<div>{{ "" | spacevoid | raw}}</div>
+<div>{{ elem.siName | spacevoid | raw }}</div>
+<div>{{ elem.siAddress | spacevoid | raw }}</div>
+<div>{{ elem.siAddress2 | spacevoid | raw }}</div>
+<div>{{ elem.siComplement | spacevoid | raw }}</div>
+<div>{{ elem.siZipcode | spacevoid | raw }}{{ elem.siZipcode and elem.siCity ? ", " : "" }}{{ elem.siCity | spacevoid | raw }}</div>
+<div>{{ elem.siCountry | spacevoid | raw }}</div>

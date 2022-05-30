@@ -1,0 +1,22 @@
+<div class="totaux">
+    <div class="item">
+        <div class="col col-1">Total HT</div>
+        <div class="col col-2">{{ isAvoir is defined ? "-" : "" }}{{ elem.totalHt | price }}</div>
+    </div>
+    <div class="item">
+        <div class="col col-1">Total Remise HT</div>
+        <div class="col col-2">{{ elem.totalRemise | price }}</div>
+    </div>
+    <div class="item">
+        <div class="col col-1"><b>NET HT</b></div>
+        <div class="col col-2">{{ isAvoir is defined ? "-" : "" }}{{ (elem.totalHt - elem.totalRemise) | price }}</div>
+    </div>
+    <div class="item">
+        <div class="col col-1">Total TVA</div>
+        <div class="col col-2">{{ isAvoir is defined ? "-" : "" }}{{ elem.totalTva | price }}</div>
+    </div>
+    <div class="item">
+        <div class="col col-1"><b>Total TTC en euros</b></div>
+        <div class="col col-2"><b>{{ isAvoir is defined ? "-" : "" }}{{ elem.totalTtc | price }}</b></div>
+    </div>
+</div>

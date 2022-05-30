@@ -1,0 +1,11 @@
+{% if default_menu is defined %}
+    <div class="default-page-menu">
+        <div class="items">
+            {% for item in default_menu %}
+                <div class="item {{ item.value == pageName ? "active" : "" }}">
+                    <a href="{{ item.path }}">{{ item.label | raw }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

@@ -1,18 +1,27 @@
 {% extends 'admin/pages/bill/template.html.twig' %}
 
-{% set page_title %}Factures{% endset %}
-{% set submenuActive = "Factures" %}
+{% set page_title %}Liste des factures{% endset %}
 
 {% block main_content %}
-    <div id="invoices" class="invoice-form"
-         data-donnees="{{ donnees }}"
-         data-society="{{ society }}"
-         data-items="{{ items }}"
-         data-taxes="{{ taxes }}"
-         data-unities="{{ unities }}"
-         data-products="{{ products }}"
-         data-customers="{{ customers }}"
-    >
-        {% include "dashboard/layout/components/spinner.html.twig" %}
+    <div class="main-content">
+        <div class="default-page">
+            <div class="col-1">
+                <div class="default-page-content">
+                    <div id="invoices" class="invoice-form"
+                         data-donnees="{{ donnees }}"
+                         data-society="{{ society }}"
+                         data-items="{{ items }}"
+                         data-taxes="{{ taxes }}"
+                         data-unities="{{ unities }}"
+                         data-products="{{ products }}"
+                         data-customers="{{ customers }}"
+                         data-sites="{{ sites }}"
+                         data-status="{{ status }}"
+                    >
+                        {% include "dashboard/layout/components/spinner.html.twig" %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

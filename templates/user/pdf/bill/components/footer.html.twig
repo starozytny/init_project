@@ -2,7 +2,7 @@
     <table width="100%" style="border-top: 1px solid #000000">
         <tr>
             <td width="50%">
-                <span style="font-weight: bold; font-style: italic;">{{ title_page }} N°{{ elem.numero }} du {{ elem.dateAt | date('d/m/Y') }}</span>
+                <span style="font-weight: bold; font-style: italic;">{{ title_page }} N°{{ elem.status == 0 ? "Brouillon" : elem.numero }} du {{ elem.dateAt | date('d/m/Y') }}</span>
             </td>
             <td width="50%" align="right" style="font-weight: bold; font-style: italic;">
                 {PAGENO}/{nbpg}

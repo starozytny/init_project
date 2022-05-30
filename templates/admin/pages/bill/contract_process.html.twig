@@ -1,0 +1,28 @@
+{% extends 'admin/pages/bill/template.html.twig' %}
+
+{% set page_title %}Traitement des contrats{% endset %}
+
+{% block main_content %}
+    <div class="main-content">
+        <div class="default-page default-page-col-2">
+            <div class="col-1">
+                {% include "admin/layout/components/default_menu.html.twig" with { default_menu: menu_contracts } %}
+            </div>
+
+            <div class="col-2">
+                <div class="default-page-content">
+                    <div id="contracts-process"
+                         data-donnees="{{ donnees }}"
+                         data-year="{{ year }}"
+                         data-month="{{ month }}"
+                         data-relations="{{ relations }}"
+                         data-invoices="{{ invoices }}"
+                         data-society="{{ society }}"
+                    >
+                        {% include "dashboard/layout/components/spinner.html.twig" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

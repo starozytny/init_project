@@ -1,0 +1,18 @@
+<div class="tvas">
+    <div class="item item-header">
+        <div class="col col-1">Code</div>
+        <div class="col col-2">Base HT</div>
+        <div class="col col-3">Taux TVA</div>
+        <div class="col col-4">Montant TVA</div>
+    </div>
+    {% if tvas | length > 0 %}
+        {% for tva in tvas %}
+            <div class="item">
+                <div class="col col-1">{{ tva.code }}</div>
+                <div class="col col-2">{{ isAvoir is defined ? "-" : "" }}{{ tva.base | price }}</div>
+                <div class="col col-3">{{ tva.rate }}%</div>
+                <div class="col col-4">{{ isAvoir is defined ? "-" : "" }}{{ tva.total | price }}</div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>

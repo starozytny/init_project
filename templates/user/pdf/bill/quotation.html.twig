@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+{% set title_page = "Devis" %}
+
+{% include "user/pdf/bill/components/footer.html.twig" %}
+
+<div class="main">
+    <div class="header">
+        {% include "user/pdf/bill/components/header_left.html.twig" %}
+        <div class="col-3">
+            <div class="numero-facture"><b>Devis n°</b>{{ elem.status == 0 ? "Brouillon" : elem.numero }}</div>
+            <div><b>Date du devis : </b>{{ elem.dateAt | date('d/m/Y') }}</div>
+            <div><b>Date de validité : </b>{{ elem.valideTo | date('d/m/Y') }}</div>
+        </div>
+    </div>
+
+    <div class="letter">
+        <div class="from">
+            {% include "user/pdf/bill/components/expeditor.html.twig" %}
+        </div>
+        <div class="to">
+            <div class="concerne">
+                {% include "user/pdf/bill/components/concerne.html.twig" %}
+            </div>
+            <div class="destinataire">
+                {% include "user/pdf/bill/components/destinator.html.twig" %}
+
+            </div>
+        </div>
+    </div>
+    <div class="references">
+        <div class="ref-1">{{ "" | spacevoid | raw }}</div>
+        {% include "user/pdf/bill/components/reference2.html.twig" %}
+    </div>
+
+    <div class="products">
+        {% include "user/pdf/bill/components/product.html.twig" %}
+    </div>
+
+    <div class="recap">
+        <div class="tvas-col">
+            {% include "user/pdf/bill/components/tvas.html.twig" %}
+            <div class="note">
+                {{ elem.note | raw }}
+            </div>
+        </div>
+        <div class="totaux-col">
+            {% include "user/pdf/bill/components/totaux.html.twig" %}
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="bank"></div>
+        <div>{{ elem.footer }}</div>
+    </div>
+</div>
+
+</body>
+</html>

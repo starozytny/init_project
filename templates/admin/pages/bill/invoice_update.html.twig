@@ -1,22 +1,21 @@
 {% extends 'admin/pages/bill/template.html.twig' %}
 
-{% set page_title %}Liste des articles{% endset %}
-
-{% set page_text_infos %}
-    Les données articles permettent de gagner du temps dans la saisie de vos documents. <br>
-    Vous pouvez les modifier ou les supprimer sans qu'il y ait un impact sur les documents en cours ou terminés.
-{% endset %}
+{% set page_title %}Modifier une facture{% endset %}
 
 {% block main_content %}
     <div class="main-content">
         <div class="default-page">
             <div class="col-1">
                 <div class="default-page-content">
-                    <div id="items"
+                    <div id="invoice-update" class="invoice-form"
                          data-donnees="{{ donnees }}"
+                         data-society="{{ society }}"
+                         data-items="{{ items }}"
+                         data-products="{{ products }}"
                          data-taxes="{{ taxes }}"
                          data-unities="{{ unities }}"
-                         data-society-id="{{ society.id }}"
+                         data-customers="{{ customers }}"
+                         data-sites="{{ sites }}"
                     >
                         {% include "dashboard/layout/components/spinner.html.twig" %}
                     </div>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+{% set title_page = "Avoir" %}
+
+{% include "user/pdf/bill/components/footer.html.twig" %}
+
+<div class="main">
+    <div class="header">
+        {% include "user/pdf/bill/components/header_left.html.twig" %}
+        <div class="col-3">
+            <div class="numero-facture"><b>Avoir n°</b>{{ elem.status == 0 ? "Brouillon" : elem.numero }}</div>
+            <div><b>Date de l'avoir : </b>{{ elem.dateAt | date('d/m/Y') }}</div>
+        </div>
+    </div>
+
+    <div class="letter">
+        <div class="from">
+            {% include "user/pdf/bill/components/expeditor.html.twig" %}
+        </div>
+        <div class="to">
+            <div class="concerne">
+                {% include "user/pdf/bill/components/concerne.html.twig" %}
+            </div>
+            <div class="destinataire">
+                {% include "user/pdf/bill/components/destinator.html.twig" %}
+            </div>
+        </div>
+    </div>
+
+    <div class="references">
+        <div class="ref-1">
+            {% if elem.refInvoice is defined %}
+                {{ (elem.refInvoice ? "Réf. Facture : " ~ elem.refInvoice : "") | spacevoid | raw }}
+            {% else %}
+                {{ "" | spacevoid | raw }}
+            {% endif %}
+        </div>
+        {% include "user/pdf/bill/components/reference2.html.twig" %}
+    </div>
+
+    <div class="products">
+        {% include "user/pdf/bill/components/product.html.twig" with { isAvoir: true } %}
+    </div>
+
+    <div class="recap">
+        <div class="tvas-col">
+            {% include "user/pdf/bill/components/tvas.html.twig" with { isAvoir: true } %}
+            <div class="note">
+                {{ elem.note | raw }}
+            </div>
+        </div>
+        <div class="totaux-col">
+            {% include "user/pdf/bill/components/totaux.html.twig" with { isAvoir: true } %}
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="bank"></div>
+        <div>{{ elem.footer }}</div>
+    </div>
+</div>
+
+</body>
+</html>
