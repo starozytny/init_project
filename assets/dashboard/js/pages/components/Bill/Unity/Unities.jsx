@@ -28,7 +28,8 @@ export class Unities extends Component {
             sorter: SORTER,
             pathDeleteElement: URL_DELETE_ELEMENT,
             msgDeleteElement: MSG_DELETE_ELEMENT,
-            sessionName: "bill.unities.pagination"
+            sessionName: "bill.unities.pagination",
+            classes: props.classes ? props.classes : "main-content",
         }
 
         this.layout = React.createRef();

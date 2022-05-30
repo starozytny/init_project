@@ -1,34 +1,34 @@
 import React, { Component } from 'react';
 
 import { Layout }        from "@dashboardComponents/Layout/Page";
+
 import Sort              from "@commonComponents/functions/sort";
 import TopToolbar        from "@commonComponents/functions/topToolbar";
-import Filter            from "@commonComponents/functions/filter";
 
-import { TaxesList } from "@dashboardPages/components/Bill/Taxe/TaxesList";
-import { TaxeFormulaire } from "@dashboardPages/components/Bill/Taxe/TaxeForm";
+import { ContractsListProcess } from "@dashboardPages/components/Bill/Contract/ContractsList";
 
-const URL_DELETE_ELEMENT    = 'api_bill_taxes_delete';
-const MSG_DELETE_ELEMENT    = 'Supprimer cette taxe ?';
-let SORTER = Sort.compareRateInverse;
+let SORTER = Sort.compareNumeroInverse;
 
 let sorters = [
-    { value: 0, label: 'Taux', identifiant: 'sorter-rate' },
+    { value: 0, label: 'Nom', identifiant: 'sorter-name' },
 ]
 
-let sortersFunction = [Sort.compareRateInverse];
+let sortersFunction = [Sort.compareName];
 
-export class Taxes extends Component {
+export class ContractsProcess extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            perPage: 20,
+            perPage: 10,
             currentPage: 0,
             sorter: SORTER,
-            pathDeleteElement: URL_DELETE_ELEMENT,
-            msgDeleteElement: MSG_DELETE_ELEMENT,
-            sessionName: "bill.taxes.pagination",
+            sessionName: "bill.contracts.process.pagination",
+            year: parseInt(props.year),
+            month: parseInt(props.month),
+            society: props.society ? JSON.parse(props.society) : null,
+            relations: props.relations ? JSON.parse(props.relations) : [],
+            invoices: props.invoices ? JSON.parse(props.invoices) : [],
             classes: props.classes ? props.classes : "main-content",
         }
 
@@ -37,23 +37,54 @@ export class Taxes extends Component {
         this.handleGetData = this.handleGetData.bind(this);
         this.handleUpdateList = this.handleUpdateList.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
-        this.handleGetFilters = this.handleGetFilters.bind(this);
         this.handlePerPage = this.handlePerPage.bind(this);
         this.handleChangeCurrentPage = this.handleChangeCurrentPage.bind(this);
         this.handleSorter = this.handleSorter.bind(this);
 
         this.handleContentList = this.handleContentList.bind(this);
-        this.handleContentCreate = this.handleContentCreate.bind(this);
-        this.handleContentUpdate = this.handleContentUpdate.bind(this);
     }
 
     handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees); }
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
-    handleGetFilters = (filters) => { this.layout.current.handleGetFilters(filters, Filter.filterNatif); }
+    handleUpdateRelations = (element, context) => {
+        const { relations } = this.state;
 
-    handleSearch = (search) => { this.layout.current.handleSearch(search, "taxe", true, Filter.filterNatif); }
+        if(context === "create"){
+            this.setState({ relations: [...relations, ...[element]] })
+        }else{
+            let nRelations = [];
+            relations.forEach(rel => {
+                if(rel.id === element.id){
+                    rel = element;
+                }
+
+                nRelations.push(rel);
+            })
+            this.setState({ relations: nRelations })
+        }
+    }
+
+    handleUpdateInvoices = (element, context) => {
+        const { invoices } = this.state;
+
+        if(context === "create"){
+            this.setState({ invoices: [...invoices, ...[element]] })
+        }else{
+            let nInvoices = [];
+            invoices.forEach(rel => {
+                if(rel.id === element.id){
+                    rel = element;
+                }
+
+                nInvoices.push(rel);
+            })
+            this.setState({ invoices: nInvoices })
+        }
+    }
+
+    handleSearch = (search) => { this.layout.current.handleSearch(search, "contract"); }
 
     handlePerPage = (perPage) => { TopToolbar.onPerPage(this, perPage, SORTER) }
 
@@ -62,13 +93,11 @@ export class Taxes extends Component {
     handleSorter = (nb) => { SORTER = TopToolbar.onSorter(this, nb, sortersFunction, this.state.perPage) }
 
     handleContentList = (currentData, changeContext, getFilters, filters, data) => {
-        const { perPage, currentPage } = this.state;
+        const { perPage, currentPage, relations, year, month, society, invoices } = this.state;
 
-        return <TaxesList onChangeContext={changeContext}
+        return <ContractsListProcess onChangeContext={changeContext}
                              //filter-search
                              onSearch={this.handleSearch}
-                             filters={filters}
-                             onGetFilters={this.handleGetFilters}
                              onDelete={this.layout.current.handleDelete}
                              //changeNumberPerPage
                              perPage={perPage}
@@ -81,26 +110,21 @@ export class Taxes extends Component {
                              sorters={sorters}
                              onSorter={this.handleSorter}
                              //data
+                             onUpdateList={this.handleUpdateList}
+                             onUpdateListCustom={this.handleUpdateRelations}
+                             onUpdateInvoices={this.handleUpdateInvoices}
+                             society={society}
+                             relations={relations}
+                             invoices={invoices}
+                             year={year}
+                             month={month}
                              data={currentData} />
-    }
-
-    handleContentCreate = (changeContext) => {
-        const { societyId } = this.props;
-        return <TaxeFormulaire type="create" societyId={societyId}
-                                  onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
-    }
-
-    handleContentUpdate = (changeContext, element) => {
-        const { societyId } = this.props;
-        return <TaxeFormulaire type="update" societyId={societyId}
-                                  element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     render () {
         return <>
             <Layout ref={this.layout} {...this.state} onGetData={this.handleGetData}
                     onContentList={this.handleContentList}
-                    onContentCreate={this.handleContentCreate} onContentUpdate={this.handleContentUpdate}
                     onChangeCurrentPage={this.handleChangeCurrentPage} />
         </>
     }

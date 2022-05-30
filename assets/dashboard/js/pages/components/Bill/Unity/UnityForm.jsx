@@ -118,10 +118,7 @@ class Form extends Component {
                 {success !== false && <Alert type="info">{success}</Alert>}
 
                 <div className="line">
-
-                    <div className="line">
-                        <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange}>Unité</Input>
-                    </div>
+                    <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange}>Unité</Input>
                 </div>
 
                 <div className="line">

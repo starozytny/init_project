@@ -9,7 +9,7 @@ import { ItemsItem } from "@dashboardPages/components/Bill/Item/ItemsItem";
 
 export class ItemsList extends Component {
     render () {
-        const { data, onChangeContext, taille, onSearch, perPage, onPerPage,
+        const { displayImage = false, data, onChangeContext, taille, onSearch, perPage, onPerPage,
             onPaginationClick, currentPage, sorters, onSorter, onDeleteAll } = this.props;
 
         return <>
@@ -31,7 +31,7 @@ export class ItemsList extends Component {
                         <div className="item item-header">
                             <div className="item-header-selector" />
                             <div className="item-content">
-                                <div className="item-body">
+                                <div className={"item-body" + (displayImage ? " item-body-image" : "")}>
                                     <div className="infos infos-col-6">
                                         <div className="col-1">Référence</div>
                                         <div className="col-2">Désignation</div>

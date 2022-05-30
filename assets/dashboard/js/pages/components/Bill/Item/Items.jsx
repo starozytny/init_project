@@ -31,7 +31,8 @@ export class Items extends Component {
             msgDeleteElement: MSG_DELETE_ELEMENT,
             pathDeleteGroup: URL_DELETE_GROUP,
             msgDeleteGroup: MSG_DELETE_GROUP,
-            sessionName: "bill.item.pagination"
+            sessionName: "bill.item.pagination",
+            classes: props.classes ? props.classes : "main-content",
         }
 
         this.layout = React.createRef();

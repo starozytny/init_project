@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+
 import { Select }              from "@dashboardComponents/Tools/Fields";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { DatePick }            from "@dashboardComponents/Tools/DatePicker";
@@ -9,17 +11,20 @@ import Validateur              from "@commonComponents/functions/validateur";
 import helper                  from "@dashboardPages/components/Bill/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
-export function InvoiceGenerateFormulaire ({ onUpdateList, onUpdateDateInvoice, onCloseAside, element, dateInvoice })
+const URL_GENERATE_INVOICE = "api_bill_invoices_generate";
+
+export function InvoiceGenerateFormulaire ({ type, onUpdateList, onUpdateDateInvoice, onCloseAside, element, dateInvoice })
 {
     let form = <div />
     if(element){
         form = <Form
+            type={type}
             dateInvoice={dateInvoice}
 
             element={element}
 
-            dateAt={""}
-            dueAt={""}
+            dateAt={element && element.dateAtJavascript ? Formulaire.setDateOrEmptyIfNull(element.dateAtJavascript) : ""}
+            dueAt={element && element.dueAtJavascript ? Formulaire.setDateOrEmptyIfNull(element.dueAtJavascript) : ""}
             dueType={Formulaire.setValueEmptyIfNull(element.dueType, 2)}
 
             onUpdateList={onUpdateList}
@@ -64,19 +69,7 @@ class Form extends Component {
 
 
     handleChangeDate = (name, e) => {
-        const { dueType } = this.state;
-
-        if(e !== null){
-            e.setHours(0,0,0);
-
-            if(name === "dueAt"){
-                this.setState({ dueType: 0 })
-            }
-
-            if(name === "dateAt"){
-                helper.setDueAt(this, dueType, e);
-            }
-        }
+        helper.changeDateDocument(this, e, name, this.state.dueType);
 
         this.setState({ [name]: e !== null ? e : "" })
     }
@@ -84,7 +77,7 @@ class Form extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const { dateInvoice } = this.props;
+        const { dateInvoice, type } = this.props;
         const { element, dateAt, dueAt, dueType } = this.state;
 
         this.setState({ errors: [], success: false })
@@ -94,14 +87,14 @@ class Form extends Component {
             {type: "text", id: 'dueType',     value: dueType}
         ];
 
-        paramsToValidate = helper.validateDates(paramsToValidate, dateInvoice, dateAt, dueAt, dueType);
+        paramsToValidate = helper.validateDates("invoice", paramsToValidate, dateInvoice, dateAt, dueAt, dueType);
 
         // validate global
         let validate = Validateur.validateur(paramsToValidate)
         if(!validate.code){
             Formulaire.showErrors(this, validate);
         }else{
-            helper.generateInvoice(this, element, dateAt, dueAt, dueType);
+            helper.generateInvoice(this, type, Routing.generate(URL_GENERATE_INVOICE, {'id': element.id}), element, dateAt, dueAt, dueType);
         }
     }
 

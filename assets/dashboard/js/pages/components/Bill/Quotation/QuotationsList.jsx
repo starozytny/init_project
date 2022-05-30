@@ -2,72 +2,42 @@ import React, { Component } from 'react';
 
 import Routing      from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import helper       from "@dashboardPages/components/Bill/functions/helper";
-
 import { Button, ButtonIcon } from "@dashboardComponents/Tools/Button";
 import { Alert }    from "@dashboardComponents/Tools/Alert";
-import { Aside }    from "@dashboardComponents/Tools/Aside";
 import { Search }   from "@dashboardComponents/Layout/Search";
 import { Filter, FilterSelected } from "@dashboardComponents/Layout/Filter";
 import { TopSorterPagination } from "@dashboardComponents/Layout/Pagination";
 
-import { InvoicesItem }   from "@dashboardPages/components/Bill/Invoice/InvoicesItem";
-import { InvoiceGenerateFormulaire } from "@dashboardPages/components/Bill/Invoice/InvoiceGenerate";
-import { InvoicePayementFormulaire } from "@dashboardPages/components/Bill/Invoice/InvoicePayement";
+import helper from "@dashboardPages/components/Bill/functions/helper";
 
-const URL_GENERATE_INVOICE  = "api_bill_invoices_generate";
-const URL_INDEX_ELEMENTS    = "admin_bill_invoices_index";
+import { QuotationsItem } from "@dashboardPages/components/Bill/Quotation/QuotationsItem";
 
-export class InvoicesList extends Component {
+const URL_INDEX_ELEMENTS = "admin_bill_quotations_index";
+
+export class QuotationsList extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            dateInvoice: props.society.dateInvoiceJavascript ? new Date(props.society.dateInvoiceJavascript) : null,
-            element: null
-        }
-
         this.filter = React.createRef();
-        this.asideGenerate = React.createRef();
-        this.asidePayement = React.createRef();
 
         this.handleFilter = this.handleFilter.bind(this);
         this.handleGenerate = this.handleGenerate.bind(this);
-        this.handlePayement = this.handlePayement.bind(this);
-        this.handleUpdateDateInvoice = this.handleUpdateDateInvoice.bind(this);
-        this.handleCloseAside = this.handleCloseAside.bind(this);
     }
 
     handleFilter = (e) => {
         this.filter.current.handleChange(e, true);
     }
 
-    handleUpdateDateInvoice = (dateAt) => { this.setState({ dateInvoice: dateAt }) }
-
-    handleCloseAside = () => {
-        if(this.asideGenerate.current){
-            this.asideGenerate.current.handleClose();
-        }
-
-        if(this.asidePayement.current){
-            this.asidePayement.current.handleClose();
-        }
-    }
-
-    handleGenerate = (elem) => { helper.checkDatesInvoice(this, "invoice", Routing.generate(URL_GENERATE_INVOICE, {'id': elem.id}), elem, this.state.dateInvoice); }
-
-    handlePayement = (elem) => {
-        this.setState({ element: elem })
-        this.asidePayement.current.handleOpen();
+    handleGenerate = (elem) => {
+        helper.generateQuotation(this, elem)
     }
 
     render () {
         const { data, onChangeContext, taille, onGetFilters, filters, onSearch, perPage, onPerPage,
-            onPaginationClick, currentPage, sorters, onSorter, onUpdateList } = this.props;
-        const { element, dateInvoice } = this.state;
+            onPaginationClick, currentPage, sorters, onSorter } = this.props;
 
-        let filtersLabel = ["Brouillon", "A régler", "Payée", "Partiel"];
-        let filtersId    = ["f-br", "f-are", "f-pa", 'f-par'];
+        let filtersLabel = ["Brouillon", "En cours", "Accepté", "Refusé"];
+        let filtersId    = ["f-br", "f-enc", "f-acc", 'f-ref'];
 
         let itemsFilter = [
             { value: 0, id: filtersId[0], label: filtersLabel[0] },
@@ -76,18 +46,11 @@ export class InvoicesList extends Component {
             { value: 3, id: filtersId[3], label: filtersLabel[3] },
         ];
 
-        let contentGenerate = <InvoiceGenerateFormulaire type="invoice" onUpdateList={onUpdateList} onCloseAside={this.handleCloseAside}
-                                                         onUpdateDateInvoice={this.handleUpdateDateInvoice} dateInvoice={dateInvoice}
-                                                         element={element} key={element ? element.id : 1}/>
-
-        let contentPayement = <InvoicePayementFormulaire onUpdateList={onUpdateList} onCloseAside={this.handleCloseAside}
-                                                         element={element} key={element ? element.id : 1}/>
-
         return <>
             <div>
                 <div className="toolbar">
                     <div className="item create">
-                        <Button onClick={() => onChangeContext("create")}>Ajouter une facture</Button>
+                        <Button onClick={() => onChangeContext("create")}>Ajouter un devis</Button>
                     </div>
                     <div className="item filter-search">
                         <Filter ref={this.filter} items={itemsFilter} filters={filters} onGetFilters={onGetFilters} />
@@ -108,7 +71,7 @@ export class InvoicesList extends Component {
                                         <div className="col-1">Numéro</div>
                                         <div className="col-2">Client</div>
                                         <div className="col-3">Date</div>
-                                        <div className="col-4">Date échéance</div>
+                                        <div className="col-4">Date validité</div>
                                         <div className="col-5">Montant TTC</div>
                                         <div className="col-6">Statut</div>
                                         <div className="col-7 actions">Actions</div>
@@ -117,22 +80,21 @@ export class InvoicesList extends Component {
                             </div>
                         </div>
                         {data && data.length !== 0 ? data.map(elem => {
-                            return <InvoicesItem {...this.props} onGenerate={this.handleGenerate} onPayement={this.handlePayement} elem={elem} key={elem.id}/>
+                            return <QuotationsItem {...this.props} elem={elem} key={elem.id}
+                                                   onGenerate={this.handleGenerate}/>
                         }) : <Alert>Aucun résultat</Alert>}
                     </div>
                 </div>
 
-                <div className="page-actions">
+
+                <div clasName="page-actions">
                     <div className="selectors-actions">
                         <div className="item">
-                            <ButtonIcon element="a" icon="briefcase" text="Voir les archivées" onClick={Routing.generate(URL_INDEX_ELEMENTS, {'archive': 1})} />
+                            <ButtonIcon element="a" icon="briefcase" text="Voir les archivés" onClick={Routing.generate(URL_INDEX_ELEMENTS, {'archive': 1})} />
                         </div>
                     </div>
                 </div>
             </div>
-
-            <Aside ref={this.asideGenerate} content={contentGenerate} >Modifier la date de facturation</Aside>
-            <Aside ref={this.asidePayement} content={contentPayement} >Entrer un paiement</Aside>
         </>
     }
 }

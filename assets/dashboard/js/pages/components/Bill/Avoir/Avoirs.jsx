@@ -2,33 +2,40 @@ import React, { Component } from 'react';
 
 import { Layout }        from "@dashboardComponents/Layout/Page";
 import Sort              from "@commonComponents/functions/sort";
-import TopToolbar        from "@commonComponents/functions/topToolbar";
 import Filter            from "@commonComponents/functions/filter";
+import TopToolbar        from "@commonComponents/functions/topToolbar";
 
-import { TaxesList } from "@dashboardPages/components/Bill/Taxe/TaxesList";
-import { TaxeFormulaire } from "@dashboardPages/components/Bill/Taxe/TaxeForm";
+import { DocumentFormulaire } from "@dashboardPages/components/Bill/components/DocumentFormulaire";
+import { AvoirsList } from "@dashboardPages/components/Bill/Avoir/AvoirsList";
 
-const URL_DELETE_ELEMENT    = 'api_bill_taxes_delete';
-const MSG_DELETE_ELEMENT    = 'Supprimer cette taxe ?';
-let SORTER = Sort.compareRateInverse;
+const URL_DELETE_ELEMENT    = 'api_bill_avoirs_delete';
+const MSG_DELETE_ELEMENT    = 'Supprimer ce brouillon ?';
+let SORTER = Sort.compareNumeroInverse;
 
 let sorters = [
-    { value: 0, label: 'Taux', identifiant: 'sorter-rate' },
+    { value: 0, label: 'Numéro', identifiant: 'sorter-numero' },
 ]
 
-let sortersFunction = [Sort.compareRateInverse];
+let sortersFunction = [Sort.compareNumeroInverse];
 
-export class Taxes extends Component {
+export class Avoirs extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            perPage: 20,
+            perPage: 10,
             currentPage: 0,
             sorter: SORTER,
             pathDeleteElement: URL_DELETE_ELEMENT,
             msgDeleteElement: MSG_DELETE_ELEMENT,
-            sessionName: "bill.taxes.pagination",
+            sessionName: "bill.avoirs.pagination",
+            society: props.society ? JSON.parse(props.society) : null,
+            items: props.items ? JSON.parse(props.items) : [],
+            taxes: props.taxes ? JSON.parse(props.taxes) : [],
+            unities: props.unities ? JSON.parse(props.unities) : [],
+            products: props.products ? JSON.parse(props.products) : [],
+            customers: props.customers ? JSON.parse(props.customers) : [],
+            sites: props.sites ? JSON.parse(props.sites) : [],
             classes: props.classes ? props.classes : "main-content",
         }
 
@@ -51,9 +58,9 @@ export class Taxes extends Component {
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
-    handleGetFilters = (filters) => { this.layout.current.handleGetFilters(filters, Filter.filterNatif); }
+    handleGetFilters = (filters) => { this.layout.current.handleGetFilters(filters, Filter.filterStatus); }
 
-    handleSearch = (search) => { this.layout.current.handleSearch(search, "taxe", true, Filter.filterNatif); }
+    handleSearch = (search) => { this.layout.current.handleSearch(search, "avoir", true, Filter.filterStatus); }
 
     handlePerPage = (perPage) => { TopToolbar.onPerPage(this, perPage, SORTER) }
 
@@ -62,14 +69,14 @@ export class Taxes extends Component {
     handleSorter = (nb) => { SORTER = TopToolbar.onSorter(this, nb, sortersFunction, this.state.perPage) }
 
     handleContentList = (currentData, changeContext, getFilters, filters, data) => {
-        const { perPage, currentPage } = this.state;
+        const { perPage, currentPage, society } = this.state;
 
-        return <TaxesList onChangeContext={changeContext}
+        return <AvoirsList onChangeContext={changeContext}
+                             onDelete={this.layout.current.handleDelete}
                              //filter-search
                              onSearch={this.handleSearch}
                              filters={filters}
                              onGetFilters={this.handleGetFilters}
-                             onDelete={this.layout.current.handleDelete}
                              //changeNumberPerPage
                              perPage={perPage}
                              onPerPage={this.handlePerPage}
@@ -81,18 +88,22 @@ export class Taxes extends Component {
                              sorters={sorters}
                              onSorter={this.handleSorter}
                              //data
+                             society={society}
+                             onUpdateList={this.handleUpdateList}
                              data={currentData} />
     }
 
     handleContentCreate = (changeContext) => {
-        const { societyId } = this.props;
-        return <TaxeFormulaire type="create" societyId={societyId}
+        const { society, items, taxes, unities, products, customers, sites } = this.state;
+        return <DocumentFormulaire page="avoir" type="create" society={society}
+                                  taxes={taxes} unities={unities} items={items} products={products} customers={customers} sites={sites}
                                   onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        const { societyId } = this.props;
-        return <TaxeFormulaire type="update" societyId={societyId}
+        const { society, items, taxes, unities, products, customers, sites } = this.state;
+        return <DocumentFormulaire page="avoir" type="update" society={society}
+                                  taxes={taxes} unities={unities} items={items} products={products} customers={customers} sites={sites}
                                   element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 

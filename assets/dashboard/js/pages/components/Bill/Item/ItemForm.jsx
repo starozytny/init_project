@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 
 import axios                   from "axios";
+import toastr                  from "toastr";
+import { uid }                 from "uid";
 import Routing                 from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import { Input, SelectReactSelectize, TextArea } from "@dashboardComponents/Tools/Fields";
 import { Alert }               from "@dashboardComponents/Tools/Alert";
+import { Drop }                from "@dashboardComponents/Tools/Drop";
 import { Button }              from "@dashboardComponents/Tools/Button";
 import { FormLayout }          from "@dashboardComponents/Layout/Elements";
 
 import Validateur              from "@commonComponents/functions/validateur";
 import Helper                  from "@commonComponents/functions/helper";
+import Sanitaze                from "@commonComponents/functions/sanitaze";
 import helper                  from "@dashboardPages/components/Bill/functions/helper";
 import Formulaire              from "@dashboardComponents/functions/Formulaire";
 
@@ -17,6 +21,8 @@ const URL_CREATE_ELEMENT     = "api_bill_items_create";
 const URL_UPDATE_GROUP       = "api_bill_items_update";
 const TXT_CREATE_BUTTON_FORM = "Enregistrer";
 const TXT_UPDATE_BUTTON_FORM = "Enregistrer les modifications";
+
+let i = 0;
 
 export function ItemFormulaire ({ type, onChangeContext, onUpdateList, element, societyId, taxes, unities })
 {
@@ -38,7 +44,9 @@ export function ItemFormulaire ({ type, onChangeContext, onUpdateList, element, 
         taxes={taxes}
         unities={unities}
 
-        reference={element ? Formulaire.setValueEmptyIfNull(element.reference) : "ART"}
+        uid={element ? element.uid : uid()}
+        image={element ? element.imageFile : ""}
+        reference={element ? Formulaire.setValueEmptyIfNull(element.reference) : ""}
         numero={element ? Formulaire.setValueEmptyIfNull(element.numero) : ""}
         name={element ? Formulaire.setValueEmptyIfNull(element.name) : ""}
         content={element ? Formulaire.setValueEmptyIfNull(element.content) : ""}
@@ -50,6 +58,7 @@ export function ItemFormulaire ({ type, onChangeContext, onUpdateList, element, 
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
         messageSuccess={msg}
+        key={i++}
     />
 
     return <>{onChangeContext ? <FormLayout onChangeContext={onChangeContext} form={form}>{title}</FormLayout> : form}</>
@@ -61,6 +70,8 @@ class Form extends Component {
 
         this.state = {
             societyId: props.societyId,
+            uid: props.uid,
+            image: props.image,
             reference: props.reference,
             numero: props.numero,
             name: props.name,
@@ -72,6 +83,8 @@ class Form extends Component {
             errors: [],
             success: false
         }
+
+        this.inputImage = React.createRef();
 
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeCleave = this.handleChangeCleave.bind(this);
@@ -94,8 +107,6 @@ class Form extends Component {
         const { context, url, messageSuccess } = this.props;
         const { name, reference } = this.state;
 
-        let method = context === "create" ? "POST" : "PUT";
-
         this.setState({ errors: [], success: false })
 
         let paramsToValidate = [
@@ -111,6 +122,9 @@ class Form extends Component {
             ];
         }
 
+        let inputImage = this.inputImage.current;
+        let image = inputImage ? inputImage.drop.current.files : [];
+
         // validate global
         let validate = Validateur.validateur(paramsToValidate)
         if(!validate.code){
@@ -119,17 +133,27 @@ class Form extends Component {
             Formulaire.loader(true);
             let self = this;
 
-            axios({ method: method, url: url, data: this.state })
+            let formData = new FormData();
+            if(image[0]){
+                formData.append('image', image[0].file);
+            }
+
+            formData.append("data", JSON.stringify(this.state));
+
+            axios({ method: "POST", url: url, data: formData, headers: {'Content-Type': 'multipart/form-data'} })
                 .then(function (response) {
                     let data = response.data;
+
                     Helper.toTop();
                     if(self.props.onUpdateList){
                         self.props.onUpdateList(data);
                     }
+                    toastr.info(messageSuccess);
                     self.setState({ success: messageSuccess, errors: [] });
                     if(context === "create"){
                         self.setState( {
-                            reference: "ART",
+                            reference: "",
+                            image: "",
                             numero: "",
                             name: "",
                             content: "",
@@ -152,58 +176,84 @@ class Form extends Component {
 
     render () {
         const { context, taxes, unities } = this.props;
-        const { errors, success, reference, numero, name, content, unity, price, codeTva } = this.state;
 
         let [selectTvas, selectUnities] = helper.getTaxesAndUnitiesSelectItems(taxes, unities);
 
-        return <>
-            <form onSubmit={this.handleSubmit}>
+        return <ClassiqueForm {...this.state} refImage={this.inputImage}
+                              context={context} selectTvas={selectTvas} selectUnities={selectUnities}
+                              onChange={this.handleChange} onChangeCleave={this.handleChangeCleave}
+                              onChangeSelect={this.handleChangeSelect} onSubmit={this.handleSubmit} />
+    }
+}
 
-                {success !== false && <Alert type="info">{success}</Alert>}
+function ClassiqueForm (props) {
+    const { refImage, context, errors, success, onSubmit, onChange, onChangeCleave, onChangeSelect, selectTvas, selectUnities,
+        reference, numero, name, content, unity, price, codeTva, rateTva, image } = props;
 
-                <div className="line">
+    return <>
+        <form onSubmit={onSubmit}>
+
+            {success !== false && <Alert type="info">{success}</Alert>}
+
+            <div className="line line-2">
+                <Input valeur={reference} identifiant="reference" errors={errors} onChange={onChange}>Référence (max 10 caractères)</Input>
+                <Input valeur={numero} identifiant="numero" errors={errors} onChange={onChange}>Numéro comptable</Input>
+            </div>
+
+            <div className="line">
+                <div className="form-group">
+                    <div className="line-separator">
+                        <div className="title">Détails</div>
+                    </div>
 
                     <div className="line line-2">
-                        <Input valeur={reference} identifiant="reference" errors={errors} onChange={this.handleChange}>Référence (max 10 caractères)</Input>
-                        <Input valeur={numero} identifiant="numero" errors={errors} onChange={this.handleChange}>Numéro comptable</Input>
+                        <div className="form-group">
+                            <div className="line">
+                                <Input valeur={name} identifiant="name" errors={errors} onChange={onChange}>* Désignation</Input>
+                            </div>
+
+                            <div className="line line-3">
+                                <SelectReactSelectize items={selectUnities} identifiant="unity"
+                                                      valeur={unity} errors={errors} onChange={(e) => onChangeSelect('unity', e)}>
+                                    Unité
+                                </SelectReactSelectize>
+                                <div className="form-group" />
+                                <div className="form-group" />
+                            </div>
+
+                            <div className="line line-3">
+                                <Input type="cleave" valeur={price} identifiant="price" errors={errors} onChange={onChangeCleave}>Prix unitaire</Input>
+                                <SelectReactSelectize items={selectTvas} identifiant="codeTva"
+                                                      valeur={codeTva} errors={errors} onChange={(e) => onChangeSelect('codeTva', e)}>
+                                    Taux de TVA
+                                </SelectReactSelectize>
+                                <div className="form-group">
+                                    <label>Total TTC</label>
+                                    <div>{price !== "" && rateTva !== 0 ? Sanitaze.toFormatCurrency(parseFloat(price) * (rateTva/100) + parseFloat(price)) : ""}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <div className="line">
+                                <TextArea valeur={content} identifiant="content" errors={errors} onChange={onChange}>Description</TextArea>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div className="line">
+            {/*<div className="line line-2">*/}
+            {/*    <div className="form-group" />*/}
+            {/*    <Drop ref={refImage} identifiant="logo" previewFile={image} errors={errors} accept={"image/*"} maxFiles={1}*/}
+            {/*          label="Téléverser une image" labelError="Seules les images sont acceptées.">Image illustration</Drop>*/}
+            {/*</div>*/}
 
-                    <div className="form-group">
-                        <div className="line-separator">
-                            <div className="title">Article</div>
-                        </div>
-
-                        <div className="line line-2">
-                            <Input valeur={name} identifiant="name" errors={errors} onChange={this.handleChange}>* Désignation</Input>
-                            <SelectReactSelectize items={selectUnities} identifiant="unity"
-                                                  valeur={unity} errors={errors} onChange={(e) => this.handleChangeSelect('unity', e)}>
-                                Unité
-                            </SelectReactSelectize>
-                        </div>
-
-                        <div className="line">
-                            <TextArea valeur={content} identifiant="content" errors={errors} onChange={this.handleChange}>Description</TextArea>
-                        </div>
-
-                        <div className="line line-2">
-                            <Input type="cleave" valeur={price} identifiant="price" errors={errors} onChange={this.handleChangeCleave}>Prix unitaire</Input>
-                            <SelectReactSelectize items={selectTvas} identifiant="codeTva"
-                                                  valeur={codeTva} errors={errors} onChange={(e) => this.handleChangeSelect('codeTva', e)}>
-                                Taux de TVA
-                            </SelectReactSelectize>
-                        </div>
-                    </div>
+            <div className="line">
+                <div className="form-button">
+                    <Button isSubmit={true}>{context === "create" ? TXT_CREATE_BUTTON_FORM : TXT_UPDATE_BUTTON_FORM}</Button>
                 </div>
-
-                <div className="line">
-                    <div className="form-button">
-                        <Button isSubmit={true}>{context === "create" ? TXT_CREATE_BUTTON_FORM : TXT_UPDATE_BUTTON_FORM}</Button>
-                    </div>
-                </div>
-            </form>
-        </>
-    }
+            </div>
+        </form>
+    </>
 }

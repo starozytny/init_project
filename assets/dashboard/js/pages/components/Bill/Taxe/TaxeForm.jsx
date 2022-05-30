@@ -24,7 +24,7 @@ export function TaxeFormulaire ({ type, onChangeContext, onUpdateList, element, 
     let msg = "Félicitations ! Vous avez ajouté une nouvelle taxe !"
 
     if(type === "update"){
-        title = "Modifier " + element.code;
+        title = "Modifier le code #" + element.code;
         url = Routing.generate(URL_UPDATE_GROUP, {'id': element.id});
         msg = "Félicitations ! La mise à jour s'est réalisée avec succès !";
     }
@@ -35,8 +35,10 @@ export function TaxeFormulaire ({ type, onChangeContext, onUpdateList, element, 
 
         societyId={societyId}
 
+        isNatif={element ? element.isNatif : false}
         code={element ? Formulaire.setValueEmptyIfNull(element.code) : ""}
         rate={element ? Formulaire.setValueEmptyIfNull(element.rate) : ""}
+        numeroComptable={element ? Formulaire.setValueEmptyIfNull(element.numeroComptable) : ""}
 
         onUpdateList={onUpdateList}
         onChangeContext={onChangeContext}
@@ -54,6 +56,7 @@ class Form extends Component {
             societyId: props.societyId,
             code: props.code,
             rate: props.rate,
+            numeroComptable: props.numeroComptable,
             errors: [],
             success: false
         }
@@ -113,20 +116,29 @@ class Form extends Component {
     }
 
     render () {
-        const { context } = this.props;
-        const { errors, success, code, rate } = this.state;
+        const { context, isNatif } = this.props;
+        const { errors, success, code, rate, numeroComptable } = this.state;
 
         return <>
             <form onSubmit={this.handleSubmit}>
 
                 {success !== false && <Alert type="info">{success}</Alert>}
 
-                <div className="line">
-
-                    <div className="line line-2">
+                <div className="line line-3">
+                    {!isNatif ? <>
                         <Input valeur={code} identifiant="code" errors={errors} onChange={this.handleChange} type="number">Code</Input>
-                        <Input valeur={rate} identifiant="rate" errors={errors} onChange={this.handleChange} type="number" step="any">Rate</Input>
-                    </div>
+                        <Input valeur={rate} identifiant="rate" errors={errors} onChange={this.handleChange} type="number" step="any">Taux en %</Input>
+                    </> : <>
+                        <div className="form-group">
+                            <label>Code</label>
+                            <div>{code}</div>
+                        </div>
+                        <div className="form-group">
+                            <label>Taux en %</label>
+                            <div>{rate}</div>
+                        </div>
+                    </>}
+                    <Input valeur={numeroComptable} identifiant="numeroComptable" errors={errors} onChange={this.handleChange}>Numéro comptable</Input>
                 </div>
 
                 <div className="line">

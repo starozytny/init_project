@@ -6,7 +6,7 @@ import Filter            from "@commonComponents/functions/filter";
 import TopToolbar        from "@commonComponents/functions/topToolbar";
 
 import { InvoicesList }      from "@dashboardPages/components/Bill/Invoice/InvoicesList";
-import { InvoiceFormulaire } from "@dashboardPages/components/Bill/Invoice/InvoiceForm";
+import { DocumentFormulaire } from "@dashboardPages/components/Bill/components/DocumentFormulaire";
 
 const URL_DELETE_ELEMENT    = 'api_bill_invoices_delete';
 const MSG_DELETE_ELEMENT    = 'Supprimer ce brouillon ?';
@@ -35,6 +35,9 @@ export class Invoices extends Component {
             items: props.items ? JSON.parse(props.items) : [],
             products: props.products ? JSON.parse(props.products) : [],
             customers: props.customers ? JSON.parse(props.customers) : [],
+            sites: props.sites ? JSON.parse(props.sites) : [],
+            classes: props.classes ? props.classes : "main-content",
+            filters: props.status ? [parseInt(props.status)] : []
         }
 
         this.layout = React.createRef();
@@ -52,7 +55,7 @@ export class Invoices extends Component {
         this.handleContentUpdate = this.handleContentUpdate.bind(this);
     }
 
-    handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees); }
+    handleGetData = (self) => { self.handleSetDataPagination(this.props.donnees, 'read', 'id', this.state.filters, Filter.filterStatus); }
 
     handleUpdateList = (element, newContext=null) => { this.layout.current.handleUpdateList(element, newContext); }
 
@@ -92,15 +95,17 @@ export class Invoices extends Component {
     }
 
     handleContentCreate = (changeContext) => {
-        const { society, items, taxes, unities, products, customers } = this.state;
-        return <InvoiceFormulaire type="create" society={society} taxes={taxes} unities={unities} items={items} products={products} customers={customers}
-                                  onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        const { society, items, taxes, unities, products, customers, sites } = this.state;
+        return <DocumentFormulaire page="invoice" type="create" society={society}
+                                   taxes={taxes} unities={unities} items={items} products={products} customers={customers} sites={sites}
+                                   onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     handleContentUpdate = (changeContext, element) => {
-        const { society, items, taxes, unities, products, customers } = this.state;
-        return <InvoiceFormulaire type="update" society={society} taxes={taxes} unities={unities} items={items} products={products} customers={customers}
-                                  element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
+        const { society, items, taxes, unities, products, customers, sites } = this.state;
+        return <DocumentFormulaire page="invoice" type="update" society={society}
+                                   taxes={taxes} unities={unities} items={items} products={products} customers={customers} sites={sites}
+                                   element={element} onChangeContext={changeContext} onUpdateList={this.handleUpdateList}/>
     }
 
     render () {

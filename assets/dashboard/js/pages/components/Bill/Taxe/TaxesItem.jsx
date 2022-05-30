@@ -9,7 +9,7 @@ export class TaxesItem extends Component {
         return <div className="item">
             <div className="item-content">
                 <div className="item-body">
-                    <div className="infos infos-col-3">
+                    <div className="infos infos-col-4">
                         <div className="col-1">
                             <div className="sub">{elem.code}</div>
                         </div>
@@ -18,13 +18,13 @@ export class TaxesItem extends Component {
                                 <span>{elem.rate} %</span>
                             </div>
                         </div>
-                        <div className="col-3 actions">
-                            {elem.isNatif ? <>
-                                <div className="badge">Natif</div>
-                            </> : <>
-                                <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
-                                <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
-                            </>}
+                        <div className="col-3">
+                            <span className="sub">{elem.numeroComptable}</span>
+                        </div>
+                        <div className="col-4 actions">
+                            <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
+                            {!elem.isNatif && <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>}
+                            {elem.isNatif && <div className="badge badge-0">Natif</div>}
                         </div>
                     </div>
                 </div>

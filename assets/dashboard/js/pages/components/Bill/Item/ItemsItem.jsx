@@ -7,13 +7,17 @@ import { Selector }   from "@dashboardComponents/Layout/Selector";
 
 export class ItemsItem extends Component {
     render () {
-        const { elem, onChangeContext, onDelete } = this.props;
+        const { displayImage = false, elem, onChangeContext, onDelete } = this.props;
 
         return <div className="item">
             <Selector id={elem.id} />
 
             <div className="item-content">
-                <div className="item-body">
+                <div className={"item-body" + (displayImage ? " item-body-image" : "")}>
+                    {displayImage && <div className="item-image">
+                        <img src={elem.imageFile} alt="Illustration" />
+                    </div>}
+
                     <div className="infos infos-col-6">
                         <div className="col-1">
                             <div className="sub">{elem.reference}</div>

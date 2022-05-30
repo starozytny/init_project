@@ -15,7 +15,7 @@ export class UnitiesItem extends Component {
                         </div>
                         <div className="col-2 actions">
                             {elem.isNatif ? <>
-                                <div className="badge">Natif</div>
+                                <div className="badge badge-0">Natif</div>
                             </> : <>
                                 <ButtonIcon icon="pencil" onClick={() => onChangeContext("update", elem)}>Modifier</ButtonIcon>
                                 <ButtonIcon icon="trash" onClick={() => onDelete(elem)}>Supprimer</ButtonIcon>
