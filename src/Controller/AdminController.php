@@ -2,19 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Bill\BiCustomer;
-use App\Entity\Bill\BiInvoice;
-use App\Entity\Bill\BiItem;
-use App\Entity\Bill\BiProduct;
-use App\Entity\Bill\BiTaxe;
-use App\Entity\Bill\BiUnity;
 use App\Entity\Changelog;
 use App\Entity\Contact;
 use App\Entity\Notification;
 use App\Entity\Settings;
 use App\Entity\Society;
 use App\Entity\User;
-use App\Service\Bill\BillService;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -175,116 +168,6 @@ class AdminController extends AbstractController
         return $this->render('admin/pages/society/index.html.twig', [
             'donnees' => $objs,
             'users' => $users
-        ]);
-    }
-
-    /**
-     * @Route("/facturations/factures", name="bill_invoice_index")
-     */
-    public function invoice(Request $request, SerializerInterface $serializer, BillService $billService): Response
-    {
-        $em = $this->doctrine->getManager();
-        $isArchived = $request->query->get('archive');
-
-        /** @var User $user */
-        $user = $this->getUser();
-        $society  = $em->getRepository(Society::class)->find($user->getSociety()->getId());
-
-        $objs      = $em->getRepository(BiInvoice::class)->findBy(['isArchived' => (bool)$isArchived]);
-        $products  = $em->getRepository(BiProduct::class)->findBy(['society' => $society, 'type' => BiProduct::TYPE_INVOICE]);
-        $items     = $this->getAllData(BiItem::class, $serializer, BiItem::ITEM_READ);
-        $customers = $this->getAllData(BiCustomer::class, $serializer, BiCustomer::CUSTOMER_READ);
-
-        [$taxes, $unities] = $billService->getTaxesAndUnitiesData($society, true);
-
-        $society  = $serializer->serialize($society, 'json', ['groups' => User::ADMIN_READ]);
-        $objs     = $serializer->serialize($objs, 'json', ['groups' => BiInvoice::INVOICE_READ]);
-        $products = $serializer->serialize($products, 'json', ['groups' => BiProduct::PRODUCT_READ]);
-
-        return $this->render('admin/pages/bill/invoice.html.twig', [
-            'donnees' => $objs,
-            'society' => $society,
-            'items' => $items,
-            'taxes' => $taxes,
-            'unities' => $unities,
-            'products' => $products,
-            'customers' => $customers,
-        ]);
-    }
-
-    /**
-     * @Route("/facturations/articles", name="bill_items_index")
-     */
-    public function billItems(SerializerInterface $serializer, BillService $billService): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $society = $user->getSociety();
-        $objs = $this->getAllData(BiItem::class, $serializer, BiItem::ITEM_READ);
-
-        [$taxes, $unities] = $billService->getTaxesAndUnitiesData($society, true);
-
-        return $this->render('admin/pages/bill/item.html.twig', [
-            'donnees' => $objs,
-            'society' => $society,
-            'taxes' => $taxes,
-            'unities' => $unities,
-        ]);
-    }
-
-    /**
-     * @Route("/facturations/taxes", name="bill_taxes_index")
-     */
-    public function taxes(SerializerInterface $serializer): Response
-    {
-        $em = $this->doctrine->getManager();
-
-        /** @var User $user */
-        $user = $this->getUser();
-        $society = $user->getSociety();
-        $objs = $em->getRepository(BiTaxe::class)->findBy(['society' => [null, $society]]);
-
-        $objs = $serializer->serialize($objs, 'json', ['groups' => User::USER_READ]);
-
-        return $this->render('admin/pages/bill/taxe.html.twig', [
-            'donnees' => $objs,
-            'society' => $society,
-        ]);
-    }
-
-    /**
-     * @Route("/facturations/unites", name="bill_unities_index")
-     */
-    public function unities(SerializerInterface $serializer): Response
-    {
-        $em = $this->doctrine->getManager();
-
-        /** @var User $user */
-        $user = $this->getUser();
-        $society = $user->getSociety();
-        $objs = $em->getRepository(BiUnity::class)->findBy(['society' => [null, $society]]);
-
-        $objs = $serializer->serialize($objs, 'json', ['groups' => User::USER_READ]);
-
-        return $this->render('admin/pages/bill/unity.html.twig', [
-            'donnees' => $objs,
-            'society' => $society,
-        ]);
-    }
-
-    /**
-     * @Route("/facturations/clients", name="bill_customers_index")
-     */
-    public function customers(SerializerInterface $serializer): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $society = $user->getSociety();
-        $objs = $this->getAllData(BiCustomer::class, $serializer, BiCustomer::CUSTOMER_READ);
-
-        return $this->render('admin/pages/bill/customer.html.twig', [
-            'donnees' => $objs,
-            'society' => $society
         ]);
     }
 }

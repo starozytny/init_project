@@ -3,12 +3,12 @@
 namespace App\Service\Data\Bill;
 
 use App\Entity\Bill\BiItem;
-use App\Entity\Society;
+use App\Entity\Bill\BiSociety;
 use App\Service\Data\DataConstructor;
 
 class DataItem extends DataConstructor
 {
-    public function setData(BiItem $obj, $data, Society $society): BiItem
+    public function setData(BiItem $obj, $data, BiSociety $society): BiItem
     {
         return ($obj)
             ->setSociety($society)
