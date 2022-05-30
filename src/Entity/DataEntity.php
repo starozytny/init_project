@@ -27,9 +27,10 @@ class DataEntity
      * How long ago
      *
      * @param $date
+     * @param int $subHours
      * @return string|null
      */
-    public function getHowLongAgo($date): ?string
+    public function getHowLongAgo($date, $subHours = 1): ?string
     {
         if($date){
             $frenchFactory = new Factory([
@@ -37,7 +38,7 @@ class DataEntity
                 'timezone' => 'Europe/Paris'
             ]);
             $time = Carbon::instance($date);
-            $time->subHours(1);
+            $time->subHours($subHours);
 
             return str_replace("dans", "il y a", $frenchFactory->make($time)->diffForHumans());
         }

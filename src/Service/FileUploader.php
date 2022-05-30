@@ -28,14 +28,14 @@ class FileUploader
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
         try {
-            if($folder){
-                if(!is_dir($folder)){
-                    mkdir($folder);
-                }
-            }
-
             $directory = $isPublic ? $this->getPublicDirectory() : $this->getPrivateDirectory();
             $directory = $directory . '/' . $folder;
+
+            if($directory){
+                if(!is_dir($directory)){
+                    mkdir($directory);
+                }
+            }
 
             $file->move($directory, $fileName);
         } catch (FileException $e) {
