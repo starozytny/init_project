@@ -3,25 +3,24 @@
 namespace App\Command\Fake\Bill;
 
 use App\Entity\Society;
-use App\Entity\Bill\BiHistory;
-use App\Entity\Bill\BiInvoice;
+use App\Entity\Bill\BiAvoir;
 use App\Entity\Bill\BiItem;
 use App\Entity\Bill\BiProduct;
 use App\Entity\Bill\BiSociety;
 use App\Service\Data\Bill\DataBill;
 use App\Service\DatabaseService;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Faker\Factory;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class FakeInvoiceCreateCommand extends Command
+class FakeAvoirCreateCommand extends Command
 {
-    protected static $defaultName = 'fake:invoices:create';
-    protected static $defaultDescription = 'Create fake invoices';
+    protected static $defaultName = 'fake:avoirs:create';
+    protected static $defaultDescription = 'Create fake avoirs';
     private $em;
     private $registry;
     private $databaseService;
@@ -49,15 +48,15 @@ class FakeInvoiceCreateCommand extends Command
         $io->title('Reset des tables');
         $societies = $this->em->getRepository(Society::class)->findAll();
         foreach($societies as $s){
-            $products = $this->em->getRepository(BiProduct::class)->findBy(['type' => BiProduct::TYPE_INVOICE]);
+            $products = $this->em->getRepository(BiProduct::class)->findBy(['type' => BiProduct::TYPE_AVOIR]);
             foreach($products as $product){
                 $this->em->remove($product);
             }
 
-            $this->databaseService->resetTable($io, [BiHistory::class, BiInvoice::class]);
+            $this->databaseService->resetTable($io, [BiAvoir::class]);
 
             $biSociety = $this->em->getRepository(BiSociety::class)->findOneBy(['code' => $s->getCode()]);
-            $biSociety->setCounterInvoice(0);
+            $biSociety->setCounterAvoir(0);
 
             $items = $this->em->getRepository(BiItem::class)->findBy(['society' => $biSociety]);
             if(!$items){
@@ -74,8 +73,8 @@ class FakeInvoiceCreateCommand extends Command
         }
 
         $fake = Factory::create();
-        $io->title('Création de 2000 facturations fake');
-        for($i=0; $i<2000 ; $i++) {
+        $io->title('Création de 200 devis fake');
+        for($i=0; $i<200 ; $i++) {
 
             $soc = $biSocieties[$fake->numberBetween(0, count($biSocieties) - 1)];
             $society = $soc['society'];
@@ -118,37 +117,12 @@ class FakeInvoiceCreateCommand extends Command
             $totalRemise = $fake->randomFloat(2, 0, $totalHt);
             $totalTtc = ($totalHt - $totalRemise) + $totalTva;
 
-            $today = new \DateTime();
-            $today->setTime(0,0,0);
-            $dateAt = $fake->dateTimeBetween($today->format('Y-m-01'), $today->format('Y-m-31'));
-
-            $dueType = $fake->numberBetween(0, 4);
-
-            $dueAt = null;
-            if($dueType != 1){
-                $dueAt = clone $dateAt;
-                switch ($dueType){
-                    case 4:
-                        $dueAt = $dueAt->modify("+30 day");
-                        break;
-                    case 3:
-                        $dueAt = $dueAt->modify("+14 day");
-                        break;
-                    case 2:
-                        $dueAt = $dueAt->modify("+8 day");
-                        break;
-                    case 0:
-                    default:
-                        break;
-                }
-            }
+            $dateAt = new \DateTime();
+            $dateAt->setTime(0,0,0);
 
             $toName = $fake->name;
 
             $data = [
-                'quotationId' => null,
-                'quotationRef' => null,
-
                 'customer' => null,
                 'refCustomer' => null,
                 'toName' => $toName,
@@ -167,9 +141,6 @@ class FakeInvoiceCreateCommand extends Command
                 'totalTtc' => $totalTtc,
 
                 'dateAt' => $dateAt->format("Y-m-d\\TH:i:s.000Z"),
-                'dueAt' => $dueAt ? $dueAt->format("Y-m-d\\TH:i:s.000Z") : null,
-                'dueType' => $dueType,
-                'payType' => $fake->numberBetween(0, 3),
 
                 'note' => $fake->sentence,
                 'footer' => $fake->sentence,
@@ -183,16 +154,17 @@ class FakeInvoiceCreateCommand extends Command
                 'siZipcode' => null,
                 'siCity' => null,
                 'siCountry' => null,
-                'siEmail' => null,
-                'siPhone1' => null,
+
+                'invoiceId' => null,
+                'invoiceRef' => null,
             ];
 
             $data = json_decode(json_encode($data));
 
-            $new = $this->dataEntity->setDataInvoice(new BiInvoice(), $data, $society);
-            $status = $fake->numberBetween(0, 3);
+            $new = $this->dataEntity->setDataAvoir(new BiAvoir(), $data, $society);
+            $status = $fake->numberBetween(0, 1);
             $new = ($new)
-                ->setNumero($status == 0 ? "Z-Brouillon" : $this->dataEntity->createNumero("invoice", $dateAt, $society))
+                ->setNumero($status == 0 ? "Z-Brouillon" : $this->dataEntity->createNumero("avoir", $dateAt, $society))
                 ->setIsArchived($fake->numberBetween(0, 1))
                 ->setStatus($status)
                 ->setSociety($society)
@@ -201,7 +173,7 @@ class FakeInvoiceCreateCommand extends Command
 
             foreach($products as $product){
                 $product = ($product)
-                    ->setType(BiProduct::TYPE_INVOICE)
+                    ->setType(BiProduct::TYPE_AVOIR)
                     ->setIdentifiant($new->getIdentifiant())
                 ;
 
@@ -211,7 +183,7 @@ class FakeInvoiceCreateCommand extends Command
             $this->em->persist($new);
         }
 
-        $io->text('INVOICES : Invoices fake créés' );
+        $io->text('AVOIRS : Avoirs fake créés' );
         $this->em->flush();
 
         $io->newLine();

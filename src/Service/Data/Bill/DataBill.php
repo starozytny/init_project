@@ -416,7 +416,6 @@ class DataBill extends DataConstructor
 
     public function setDataSite(BiSite $obj, $data, BiCustomer $customer, BiSociety $society): BiSite
     {
-        dump($data);
         return ($obj)
             ->setSociety($society)
             ->setCustomer($customer)

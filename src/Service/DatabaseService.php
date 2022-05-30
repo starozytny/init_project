@@ -4,7 +4,8 @@
 namespace App\Service;
 
 
-use Doctrine\DBAL\DBALException;
+use App\Entity\Society;
+use App\Entity\Bill\BiSociety;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -28,5 +29,26 @@ class DatabaseService
             $this->em->flush();
         }
         $io->text('Reset [OK]');
+    }
+
+    public function resetTableAndGetSocieties(SymfonyStyle $io, array $toDelete): array
+    {
+        $biSocieties = [];
+
+        $societies = $this->em->getRepository(Society::class)->findAll();
+        foreach($societies as $s){
+            $this->resetTable($io, $toDelete);
+
+            $biSociety = $this->em->getRepository(BiSociety::class)->findOneBy(['code' => $s->getCode()]);
+
+            $biSocieties[] = [
+                'manager' => $s->getManager(),
+                'society' => $biSociety
+            ];
+
+            $this->em->flush();
+        }
+
+        return $biSocieties;
     }
 }
