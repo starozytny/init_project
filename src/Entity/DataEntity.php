@@ -176,4 +176,11 @@ class DataEntity
 
         return $value;
     }
+
+    public function getPayTypeFullString($value): string
+    {
+        $values = ["Virement bancaire", "Chèque", "Espèces", "Carte bancaire"];
+
+        return $values[$value];
+    }
 }
