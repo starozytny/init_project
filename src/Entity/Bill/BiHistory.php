@@ -41,7 +41,7 @@ class BiHistory
     private $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity=BiInvoice::class, inversedBy="histories")
+     * @ORM\ManyToOne(targetEntity=BiInvoice::class, fetch="EAGER", inversedBy="histories")
      * @ORM\JoinColumn(nullable=false)
      */
     private $invoice;

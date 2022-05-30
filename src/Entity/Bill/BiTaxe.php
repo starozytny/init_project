@@ -2,7 +2,6 @@
 
 namespace App\Entity\Bill;
 
-use App\Entity\Society;
 use App\Repository\Bill\BiTaxeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -33,13 +32,19 @@ class BiTaxe
     private $rate;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"user:read"})
+     */
+    private $numeroComptable = "44571";
+
+    /**
      * @ORM\Column(type="boolean")
      * @Groups({"user:read"})
      */
     private $isNatif = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Society::class)
+     * @ORM\ManyToOne(targetEntity=BiSociety::class, fetch="EAGER")
      */
     private $society;
 
@@ -84,12 +89,24 @@ class BiTaxe
         return $this;
     }
 
-    public function getSociety(): ?Society
+    public function getNumeroComptable(): ?string
+    {
+        return $this->numeroComptable;
+    }
+
+    public function setNumeroComptable(string $numeroComptable): self
+    {
+        $this->numeroComptable = $numeroComptable;
+
+        return $this;
+    }
+
+    public function getSociety(): ?BiSociety
     {
         return $this->society;
     }
 
-    public function setSociety(?Society $society): self
+    public function setSociety(?BiSociety $society): self
     {
         $this->society = $society;
 

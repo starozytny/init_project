@@ -4,6 +4,7 @@ namespace App\Repository\Bill;
 
 use App\Entity\Bill\BiInvoice;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,12 +15,12 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BiInvoice[]    findAll()
  * @method BiInvoice[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BiInvoiceRepository extends ServiceEntityRepository
+class BiInvoiceRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, BiInvoice::class);
-    }
+//    public function __construct(ManagerRegistry $registry)
+//    {
+//        parent::__construct($registry, BiInvoice::class);
+//    }
 
     /**
      * @throws ORMException
@@ -43,6 +44,63 @@ class BiInvoiceRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+     /**
+      * @return BiInvoice[] Returns an array of BiInvoice objects
+      */
+    public function findWithContractBySociety($value): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.society = :val AND b.contractId IS NOT NULL')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+     /**
+      * @return BiInvoice[] Returns an array of BiInvoice objects
+      */
+    public function findWithCustomerBySociety($value): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.society = :val AND b.customerId IS NOT NULL')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+     /**
+      * @return BiInvoice[] Returns an array of BiInvoice objects
+      */
+    public function findBetweenDates($value, $dateA, $dateB): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.society = :val AND b.dateAt >= :dateA AND b.dateAt <= :dateB')
+            ->setParameter('val', $value)
+            ->setParameter('dateA', $dateA)
+            ->setParameter('dateB', $dateB)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+     /**
+      * @return BiInvoice[] Returns an array of BiInvoice objects
+      */
+    public function findBetweenDatesAndStatus($value, $dateA, $dateB, array $status): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.society = :val AND b.status IN (:status) AND b.dateAt >= :dateA AND b.dateAt <= :dateB')
+            ->setParameter('val', $value)
+            ->setParameter('dateA', $dateA)
+            ->setParameter('dateB', $dateB)
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**

@@ -9,8 +9,10 @@
         "ext-curl": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
+        "ext-intl": "*",
         "ext-json": "*",
         "ext-libxml": "*",
+        "ext-openssl": "*",
         "ext-simplexml": "*",
         "ext-zip": "*",
         "composer/package-versions-deprecated": "1.11.99.1",
@@ -48,14 +50,13 @@
         "symfony/serializer": "5.4.*",
         "symfony/stopwatch": "5.4.*",
         "symfony/twig-bundle": "5.4.*",
+        "symfony/uid": "5.4.*",
         "symfony/validator": "5.4.*",
         "symfony/var-dumper": "5.4.*",
         "symfony/web-link": "5.4.*",
         "symfony/web-profiler-bundle": "5.4.*",
         "symfony/webpack-encore-bundle": "^1.8",
-        "symfony/yaml": "5.3.*",
-      "ext-openssl": "*",
-      "ext-intl": "*"
+        "symfony/yaml": "5.3.*"
     },
     "config": {
         "optimize-autoloader": true,

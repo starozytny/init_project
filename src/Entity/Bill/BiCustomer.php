@@ -3,8 +3,9 @@
 namespace App\Entity\Bill;
 
 use App\Entity\DataEntity;
-use App\Entity\Society;
 use App\Repository\Bill\BiCustomerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -13,18 +14,39 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class BiCustomer extends DataEntity
 {
+    const PREFIX = "CL";
+
     const CUSTOMER_READ = ["customer:read"];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"customer:read"})
+     * @Groups({"customer:read", "site:read", "relation:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customer:read"})
+     */
+    private $numero;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     * @Groups({"customer:read"})
+     */
+    private $useNumero = true;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"customer:read"})
+     */
+    private $payType = BiInvoice::PAY_TYPE_VIREMENT;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"customer:read", "site:read", "relation:read"})
      */
     private $name;
 
@@ -83,7 +105,7 @@ class BiCustomer extends DataEntity
     private $country;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Society::class, inversedBy="biCustomers")
+     * @ORM\ManyToOne(targetEntity=BiSociety::class, fetch="EAGER", inversedBy="biCustomers")
      * @ORM\JoinColumn(nullable=false)
      */
     private $society;
@@ -99,14 +121,38 @@ class BiCustomer extends DataEntity
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity=BiSite::class, mappedBy="customer")
+     */
+    private $sites;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BiContractCustomer::class, mappedBy="customer")
+     */
+    private $contractCustomers;
+
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
+        $this->sites = new ArrayCollection();
+        $this->contractCustomers = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getNumero(): ?string
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(string $numero): self
+    {
+        $this->numero = $numero;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -205,12 +251,12 @@ class BiCustomer extends DataEntity
         return $this;
     }
 
-    public function getSociety(): ?Society
+    public function getSociety(): ?BiSociety
     {
         return $this->society;
     }
 
-    public function setSociety(?Society $society): self
+    public function setSociety(?BiSociety $society): self
     {
         $this->society = $society;
 
@@ -261,6 +307,99 @@ class BiCustomer extends DataEntity
     public function setAddress2(?string $address2): self
     {
         $this->address2 = $address2;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BiSite>
+     */
+    public function getSites(): Collection
+    {
+        return $this->sites;
+    }
+
+    public function addSite(BiSite $site): self
+    {
+        if (!$this->sites->contains($site)) {
+            $this->sites[] = $site;
+            $site->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSite(BiSite $site): self
+    {
+        if ($this->sites->removeElement($site)) {
+            // set the owning side to null (unless already changed)
+            if ($site->getCustomer() === $this) {
+                $site->setCustomer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BiContractCustomer>
+     */
+    public function getContractCustomers(): Collection
+    {
+        return $this->contractCustomers;
+    }
+
+    public function addContractCustomer(BiContractCustomer $contractCustomer): self
+    {
+        if (!$this->contractCustomers->contains($contractCustomer)) {
+            $this->contractCustomers[] = $contractCustomer;
+            $contractCustomer->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContractCustomer(BiContractCustomer $contractCustomer): self
+    {
+        if ($this->contractCustomers->removeElement($contractCustomer)) {
+            // set the owning side to null (unless already changed)
+            if ($contractCustomer->getCustomer() === $this) {
+                $contractCustomer->setCustomer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     * @Groups({"invoice:read"})
+     */
+    public function getPayTypeString(): string
+    {
+        return $this->getPayTypeFullString($this->payType);
+    }
+
+    public function getPayType(): ?int
+    {
+        return $this->payType;
+    }
+
+    public function setPayType(int $payType): self
+    {
+        $this->payType = $payType;
+
+        return $this;
+    }
+
+    public function getUseNumero(): ?bool
+    {
+        return $this->useNumero;
+    }
+
+    public function setUseNumero(bool $useNumero): self
+    {
+        $this->useNumero = $useNumero;
 
         return $this;
     }

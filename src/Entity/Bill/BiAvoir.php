@@ -3,166 +3,132 @@
 namespace App\Entity\Bill;
 
 use App\Entity\DataEntity;
-use App\Repository\Bill\BiInvoiceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\Bill\BiAvoirRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @ORM\Entity(repositoryClass=BiInvoiceRepository::class)
+ * @ORM\Entity(repositoryClass=BiAvoirRepository::class)
  */
-class BiInvoice extends DataEntity
+class BiAvoir extends DataEntity
 {
-    const PREFIX = "FA";
+    const PREFIX = "AV";
 
-    const INVOICE_READ = ['invoice:read'];
-    const CONTRACT_READ = ['invoice-contract:read'];
+    const AVOIR_READ = ['avoir:read'];
 
     const THEME_1 = 1;
 
     const STATUS_DRAFT = 0;
-    const STATUS_TO_PAY = 1;
-    const STATUS_PAID = 2;
-    const STATUS_PAID_PARTIAL = 3;
-
-    const DUE_TYPE_MANUAL = 0;
-    const DUE_TYPE_ACQUITTED = 1;
-    const DUE_TYPE_8 = 2;
-    const DUE_TYPE_14 = 3;
-    const DUE_TYPE_30 = 4;
-
-    const PAY_TYPE_VIREMENT = 0;
-    const PAY_TYPE_CHEQUE = 1;
-    const PAY_TYPE_ESPECES = 2;
-    const PAY_TYPE_CARTE = 3;
+    const STATUS_ACTIF = 1;
 
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"invoice:read", "invoice-contract:read"})
+     * @Groups({"avoir:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $numero = "Z-Brouillon";
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $uid;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $dateAt;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
-     * @Groups({"invoice:read"})
-     */
-    private $dueAt;
-
-    /**
      * @ORM\Column(type="integer")
-     * @Groups({"invoice:read", "invoice-contract:read"})
-     */
-    private $dueType = self::DUE_TYPE_8;
-
-    /**
-     * @ORM\Column(type="integer")
-     * @Groups({"invoice:read", "invoice-contract:read"})
+     * @Groups({"avoir:read", "invoice-contract:read"})
      */
     private $status = self::STATUS_DRAFT;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $totalHt;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $totalRemise;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $totalTva;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"invoice:read", "invoice-contract:read"})
+     * @Groups({"avoir:read", "invoice-contract:read"})
      */
     private $totalTtc;
 
     /**
-     * @ORM\Column(type="float")
-     * @Groups({"invoice:read"})
-     */
-    private $toPay = 0;
-
-    /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $fromName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $fromAddress;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $fromAddress2;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $fromComplement;
 
     /**
      * @ORM\Column(type="string", length=40)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $fromZipcode;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $fromCity;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $fromCountry;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $fromPhone1;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $fromEmail;
 
@@ -178,73 +144,73 @@ class BiInvoice extends DataEntity
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $toName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $toAddress;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $toAddress2;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $toComplement;
 
     /**
      * @ORM\Column(type="string", length=40)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $toZipcode;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $toCity;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $toCountry;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $toEmail;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $toPhone1;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $siEmail;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $siPhone1;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $createdAt;
 
@@ -261,19 +227,19 @@ class BiInvoice extends DataEntity
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $footer;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $note;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $noteProduct;
 
@@ -289,205 +255,103 @@ class BiInvoice extends DataEntity
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $isSent = false;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $isSeen = false;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $isArchived = false;
 
     /**
-     * @ORM\Column(type="boolean")
-     * @Groups({"invoice:read"})
-     */
-    private $isHidden = false;
-
-    /**
-     * @ORM\Column(type="boolean")
-     * @Groups({"invoice:read"})
-     */
-    private $isExported = false;
-
-    /**
-     * @ORM\OneToMany(targetEntity=BiHistory::class, mappedBy="invoice")
-     */
-    private $histories;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $fromBankName;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $fromBankNumero;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $fromBankTitulaire;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $fromBankBic;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $fromBankCode;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $fromBankIban;
-
-    /**
-     * @ORM\Column(type="boolean")
-     * @Groups({"invoice:read"})
-     */
-    private $displayBank = true;
-
-    /**
-     * @ORM\Column(type="integer")
-     * @Groups({"invoice:read", "invoice-contract:read"})
-     */
-    private $payType = self::PAY_TYPE_VIREMENT;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $customerId;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $siteId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $refCustomer;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $refSite;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $siName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $siAddress;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $siAddress2;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $siComplement;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $siZipcode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $siCity;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     private $siCountry;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
-    private $quotationId;
+    private $invoiceId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
-    private $refQuotation;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"invoice:read"})
-     */
-    private $avoirId;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
-     */
-    private $refAvoir;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"invoice:read", "invoice-contract:read"})
-     */
-    private $contractId;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read"})
-     */
-    private $refContract;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"invoice:read", "invoice-contract:read"})
-     */
-    private $relationId;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read", "invoice-contract:read"})
-     */
-    private $refRelation;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"invoice:read", "invoice-contract:read"})
-     */
-    private $numRelation;
+    private $refInvoice;
 
     public function __construct()
     {
         $this->createdAt = $this->initNewDate();
-        $this->histories = new ArrayCollection();
         $this->uid = Uuid::v4();
     }
 
@@ -528,18 +392,6 @@ class BiInvoice extends DataEntity
     public function setDateAt(\DateTimeInterface $dateAt): self
     {
         $this->dateAt = $dateAt;
-
-        return $this;
-    }
-
-    public function getDueAt(): ?\DateTimeInterface
-    {
-        return $this->dueAt;
-    }
-
-    public function setDueAt(?\DateTimeInterface $dueAt): self
-    {
-        $this->dueAt = $dueAt;
 
         return $this;
     }
@@ -765,7 +617,7 @@ class BiInvoice extends DataEntity
 
     /**
      * @return string|null
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     public function getDateAtString(): ?string
     {
@@ -774,29 +626,11 @@ class BiInvoice extends DataEntity
 
     /**
      * @return string|null
-     * @Groups({"invoice:read"})
-     */
-    public function getDueAtString(): ?string
-    {
-        return $this->getFullDateString($this->dueAt, "ll", false);
-    }
-
-    /**
-     * @return string|null
-     * @Groups({"invoice:read", "invoice-contract:read"})
+     * @Groups({"avoir:read", "invoice-contract:read"})
      */
     public function getDateAtJavascript(): ?string
     {
         return $this->setDateJavascript($this->dateAt);
-    }
-
-    /**
-     * @return string|null
-     * @Groups({"invoice:read", "invoice-contract:read"})
-     */
-    public function getDueAtJavascript(): ?string
-    {
-        return $this->setDateJavascript($this->dueAt);
     }
 
     public function getStatus(): ?int
@@ -873,11 +707,11 @@ class BiInvoice extends DataEntity
 
     /**
      * @return string
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     public function getStatusString(): string
     {
-        $values = ["Brouillon", "A régler", "Payée", "Partiel"];
+        $values = ["Brouillon", "Actif"];
 
         return $values[$this->status];
     }
@@ -968,30 +802,7 @@ class BiInvoice extends DataEntity
 
     /**
      * @return string
-     * @Groups({"invoice:read"})
-     */
-    public function getDueTypeString(): string
-    {
-        $values = ["Manuel", "Acquittée", "8 jours", "14 jours", "30 jours"];
-
-        return $values[$this->dueType];
-    }
-
-    public function getDueType(): ?int
-    {
-        return $this->dueType;
-    }
-
-    public function setDueType(int $dueType): self
-    {
-        $this->dueType = $dueType;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     * @Groups({"invoice:read"})
+     * @Groups({"avoir:read"})
      */
     public function getIdentifiant(): string
     {
@@ -1034,72 +845,6 @@ class BiInvoice extends DataEntity
         return $this;
     }
 
-    public function getIsHidden(): ?bool
-    {
-        return $this->isHidden;
-    }
-
-    public function setIsHidden(bool $isHidden): self
-    {
-        $this->isHidden = $isHidden;
-
-        return $this;
-    }
-
-    public function getIsExported(): ?bool
-    {
-        return $this->isExported;
-    }
-
-    public function setIsExported(bool $isExported): self
-    {
-        $this->isExported = $isExported;
-
-        return $this;
-    }
-
-    public function getToPay(): ?float
-    {
-        return $this->toPay;
-    }
-
-    public function setToPay(float $toPay): self
-    {
-        $this->toPay = $toPay;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, BiHistory>
-     */
-    public function getHistories(): Collection
-    {
-        return $this->histories;
-    }
-
-    public function addHistory(BiHistory $history): self
-    {
-        if (!$this->histories->contains($history)) {
-            $this->histories[] = $history;
-            $history->setInvoice($this);
-        }
-
-        return $this;
-    }
-
-    public function removeHistory(BiHistory $history): self
-    {
-        if ($this->histories->removeElement($history)) {
-            // set the owning side to null (unless already changed)
-            if ($history->getInvoice() === $this) {
-                $history->setInvoice(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getFromCountry(): ?string
     {
         return $this->fromCountry;
@@ -1120,90 +865,6 @@ class BiInvoice extends DataEntity
     public function setToCountry(?string $toCountry): self
     {
         $this->toCountry = $toCountry;
-
-        return $this;
-    }
-
-    public function getFromBankName(): ?string
-    {
-        return $this->fromBankName;
-    }
-
-    public function setFromBankName(?string $fromBankName): self
-    {
-        $this->fromBankName = $fromBankName;
-
-        return $this;
-    }
-
-    public function getFromBankNumero(): ?string
-    {
-        return $this->fromBankNumero;
-    }
-
-    public function setFromBankNumero(?string $fromBankNumero): self
-    {
-        $this->fromBankNumero = $fromBankNumero;
-
-        return $this;
-    }
-
-    public function getFromBankTitulaire(): ?string
-    {
-        return $this->fromBankTitulaire;
-    }
-
-    public function setFromBankTitulaire(?string $fromBankTitulaire): self
-    {
-        $this->fromBankTitulaire = $fromBankTitulaire;
-
-        return $this;
-    }
-
-    public function getFromBankBic(): ?string
-    {
-        return $this->fromBankBic;
-    }
-
-    public function setFromBankBic(?string $fromBankBic): self
-    {
-        $this->fromBankBic = $fromBankBic;
-
-        return $this;
-    }
-
-    public function getFromBankCode(): ?string
-    {
-        return $this->fromBankCode;
-    }
-
-    public function setFromBankCode(?string $fromBankCode): self
-    {
-        $this->fromBankCode = $fromBankCode;
-
-        return $this;
-    }
-
-    public function getFromBankIban(): ?string
-    {
-        return $this->cryptBank('decrypt', $this->fromBankIban);
-    }
-
-    public function setFromBankIban(?string $fromBankIban): self
-    {
-        $this->fromBankIban = $this->cryptBank('encrypt', $fromBankIban);
-
-        return $this;
-    }
-
-    public function getDisplayBank(): ?bool
-    {
-        return $this->displayBank;
-    }
-
-    public function setDisplayBank(bool $displayBank): self
-    {
-        $this->displayBank = $displayBank;
 
         return $this;
     }
@@ -1364,131 +1025,26 @@ class BiInvoice extends DataEntity
         return $this;
     }
 
-    public function getQuotationId(): ?int
+    public function getInvoiceId(): ?int
     {
-        return $this->quotationId;
+        return $this->invoiceId;
     }
 
-    public function setQuotationId(?int $quotationId): self
+    public function setInvoiceId(?int $invoiceId): self
     {
-        $this->quotationId = $quotationId;
+        $this->invoiceId = $invoiceId;
 
         return $this;
     }
 
-    public function getRefQuotation(): ?string
+    public function getRefInvoice(): ?string
     {
-        return $this->refQuotation;
+        return $this->refInvoice;
     }
 
-    public function setRefQuotation(?string $refQuotation): self
+    public function setRefInvoice(?string $refInvoice): self
     {
-        $this->refQuotation = $refQuotation;
-
-        return $this;
-    }
-
-    public function getRelationId(): ?int
-    {
-        return $this->relationId;
-    }
-
-    public function setRelationId(?int $relationId): self
-    {
-        $this->relationId = $relationId;
-
-        return $this;
-    }
-
-    public function getRefRelation(): ?string
-    {
-        return $this->refRelation;
-    }
-
-    public function setRefRelation(?string $refRelation): self
-    {
-        $this->refRelation = $refRelation;
-
-        return $this;
-    }
-
-    public function getNumRelation(): ?string
-    {
-        return $this->numRelation;
-    }
-
-    public function setNumRelation(?string $numRelation): self
-    {
-        $this->numRelation = $numRelation;
-
-        return $this;
-    }
-
-    public function getContractId(): ?int
-    {
-        return $this->contractId;
-    }
-
-    public function setContractId(?int $contractId): self
-    {
-        $this->contractId = $contractId;
-
-        return $this;
-    }
-
-    public function getRefContract(): ?string
-    {
-        return $this->refContract;
-    }
-
-    public function setRefContract(?string $refContract): self
-    {
-        $this->refContract = $refContract;
-
-        return $this;
-    }
-
-    public function getAvoirId(): ?int
-    {
-        return $this->avoirId;
-    }
-
-    public function setAvoirId(?int $avoirId): self
-    {
-        $this->avoirId = $avoirId;
-
-        return $this;
-    }
-
-    public function getRefAvoir(): ?string
-    {
-        return $this->refAvoir;
-    }
-
-    public function setRefAvoir(?string $refAvoir): self
-    {
-        $this->refAvoir = $refAvoir;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     * @Groups({"invoice:read"})
-     */
-    public function getPayTypeString(): string
-    {
-        return $this->getPayTypeFullString($this->payType);
-    }
-
-    public function getPayType(): ?int
-    {
-        return $this->payType;
-    }
-
-    public function setPayType(int $payType): self
-    {
-        $this->payType = $payType;
+        $this->refInvoice = $refInvoice;
 
         return $this;
     }

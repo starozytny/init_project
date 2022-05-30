@@ -2,7 +2,6 @@
 
 namespace App\Entity\Bill;
 
-use App\Entity\Society;
 use App\Repository\Bill\BiUnityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -33,7 +32,7 @@ class BiUnity
     private $isNatif = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Society::class)
+     * @ORM\ManyToOne(targetEntity=BiSociety::class, fetch="EAGER")
      */
     private $society;
 
@@ -66,12 +65,12 @@ class BiUnity
         return $this;
     }
 
-    public function getSociety(): ?Society
+    public function getSociety(): ?BiSociety
     {
         return $this->society;
     }
 
-    public function setSociety(?Society $society): self
+    public function setSociety(?BiSociety $society): self
     {
         $this->society = $society;
 

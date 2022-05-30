@@ -4,6 +4,7 @@ namespace App\Repository\Bill;
 
 use App\Entity\Bill\BiCustomer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,12 +15,12 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BiCustomer[]    findAll()
  * @method BiCustomer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BiCustomerRepository extends ServiceEntityRepository
+class BiCustomerRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, BiCustomer::class);
-    }
+//    public function __construct(ManagerRegistry $registry)
+//    {
+//        parent::__construct($registry, BiCustomer::class);
+//    }
 
     /**
      * @throws ORMException

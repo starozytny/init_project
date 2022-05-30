@@ -2,7 +2,6 @@
 
 namespace App\Entity\Bill;
 
-use App\Entity\Society;
 use App\Repository\Bill\BiProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -15,6 +14,9 @@ class BiProduct
     const PRODUCT_READ = ["product:read"];
 
     const TYPE_INVOICE = 0;
+    const TYPE_QUOTATION = 1;
+    const TYPE_CONTRACT = 2;
+    const TYPE_AVOIR = 3;
 
     /**
      * @ORM\Id
@@ -43,7 +45,7 @@ class BiProduct
     private $reference;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"product:read"})
      */
     private $numero;
@@ -97,7 +99,7 @@ class BiProduct
     private $type = self::TYPE_INVOICE;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Society::class)
+     * @ORM\ManyToOne(targetEntity=BiSociety::class, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $society;
@@ -239,12 +241,12 @@ class BiProduct
         return $this;
     }
 
-    public function getSociety(): ?Society
+    public function getSociety(): ?BiSociety
     {
         return $this->society;
     }
 
-    public function setSociety(?Society $society): self
+    public function setSociety(?BiSociety $society): self
     {
         $this->society = $society;
 

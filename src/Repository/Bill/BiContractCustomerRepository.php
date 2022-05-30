@@ -2,7 +2,7 @@
 
 namespace App\Repository\Bill;
 
-use App\Entity\Bill\BiHistory;
+use App\Entity\Bill\BiContractCustomer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -10,23 +10,23 @@ use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method BiHistory|null find($id, $lockMode = null, $lockVersion = null)
- * @method BiHistory|null findOneBy(array $criteria, array $orderBy = null)
- * @method BiHistory[]    findAll()
- * @method BiHistory[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method BiContractCustomer|null find($id, $lockMode = null, $lockVersion = null)
+ * @method BiContractCustomer|null findOneBy(array $criteria, array $orderBy = null)
+ * @method BiContractCustomer[]    findAll()
+ * @method BiContractCustomer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BiHistoryRepository extends EntityRepository
+class BiContractCustomerRepository extends EntityRepository
 {
 //    public function __construct(ManagerRegistry $registry)
 //    {
-//        parent::__construct($registry, BiHistory::class);
+//        parent::__construct($registry, BiContractCustomer::class);
 //    }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(BiHistory $entity, bool $flush = true): void
+    public function add(BiContractCustomer $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -38,7 +38,7 @@ class BiHistoryRepository extends EntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(BiHistory $entity, bool $flush = true): void
+    public function remove(BiContractCustomer $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -46,8 +46,22 @@ class BiHistoryRepository extends EntityRepository
         }
     }
 
+     /**
+      * @return BiContractCustomer[] Returns an array of BiContractCustomer objects
+      */
+    public function findByContractsAndNumeroNotNull(array $contracts): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.contract IN (:val) AND b.numero IS NOT NULL')
+            ->setParameter('val', $contracts)
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
-    //  * @return BiHistory[] Returns an array of BiHistory objects
+    //  * @return BiContractCustomer[] Returns an array of BiContractCustomer objects
     //  */
     /*
     public function findByExampleField($value)
@@ -64,7 +78,7 @@ class BiHistoryRepository extends EntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?BiHistory
+    public function findOneBySomeField($value): ?BiContractCustomer
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.exampleField = :val')

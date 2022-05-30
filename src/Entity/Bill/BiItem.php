@@ -3,7 +3,6 @@
 namespace App\Entity\Bill;
 
 use App\Entity\DataEntity;
-use App\Entity\Society;
 use App\Repository\Bill\BiItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -74,7 +73,7 @@ class BiItem extends DataEntity
     private $codeTva = 0;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Society::class, inversedBy="biItems")
+     * @ORM\ManyToOne(targetEntity=BiSociety::class, fetch="EAGER", inversedBy="biItems")
      * @ORM\JoinColumn(nullable=false)
      */
     private $society;
@@ -84,6 +83,11 @@ class BiItem extends DataEntity
      * @Groups({"item:read"})
      */
     private $image;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $contractLinked = false;
 
     public function getId(): ?int
     {
@@ -162,12 +166,12 @@ class BiItem extends DataEntity
         return $this;
     }
 
-    public function getSociety(): ?Society
+    public function getSociety(): ?BiSociety
     {
         return $this->society;
     }
 
-    public function setSociety(?Society $society): self
+    public function setSociety(?BiSociety $society): self
     {
         $this->society = $society;
 
@@ -204,7 +208,7 @@ class BiItem extends DataEntity
      */
     public function getImageFile(): string
     {
-        return $this->getFileOrDefault($this->image, self::FOLDER_IMAGES, "https://robohash.org/" . $this->image . "?size=64x64");
+        return $this->getFileOrDefault($this->image, self::FOLDER_IMAGES, "/placeholders/items.png");
     }
 
     public function getCodeTva(): ?int
@@ -215,6 +219,18 @@ class BiItem extends DataEntity
     public function setCodeTva(int $codeTva): self
     {
         $this->codeTva = $codeTva;
+
+        return $this;
+    }
+
+    public function getContractLinked(): ?bool
+    {
+        return $this->contractLinked;
+    }
+
+    public function setContractLinked(bool $contractLinked): self
+    {
+        $this->contractLinked = $contractLinked;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Repository\Bill;
 
 use App\Entity\Bill\BiItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,12 +15,12 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BiItem[]    findAll()
  * @method BiItem[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BiItemRepository extends ServiceEntityRepository
+class BiItemRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, BiItem::class);
-    }
+//    public function __construct(ManagerRegistry $registry)
+//    {
+//        parent::__construct($registry, BiItem::class);
+//    }
 
     /**
      * @throws ORMException

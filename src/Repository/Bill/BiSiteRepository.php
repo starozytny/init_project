@@ -2,7 +2,7 @@
 
 namespace App\Repository\Bill;
 
-use App\Entity\Bill\BiHistory;
+use App\Entity\Bill\BiSite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -10,23 +10,23 @@ use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method BiHistory|null find($id, $lockMode = null, $lockVersion = null)
- * @method BiHistory|null findOneBy(array $criteria, array $orderBy = null)
- * @method BiHistory[]    findAll()
- * @method BiHistory[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method BiSite|null find($id, $lockMode = null, $lockVersion = null)
+ * @method BiSite|null findOneBy(array $criteria, array $orderBy = null)
+ * @method BiSite[]    findAll()
+ * @method BiSite[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BiHistoryRepository extends EntityRepository
+class BiSiteRepository extends EntityRepository
 {
 //    public function __construct(ManagerRegistry $registry)
 //    {
-//        parent::__construct($registry, BiHistory::class);
+//        parent::__construct($registry, BiSite::class);
 //    }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(BiHistory $entity, bool $flush = true): void
+    public function add(BiSite $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -38,7 +38,7 @@ class BiHistoryRepository extends EntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(BiHistory $entity, bool $flush = true): void
+    public function remove(BiSite $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -47,7 +47,7 @@ class BiHistoryRepository extends EntityRepository
     }
 
     // /**
-    //  * @return BiHistory[] Returns an array of BiHistory objects
+    //  * @return BiSite[] Returns an array of BiSite objects
     //  */
     /*
     public function findByExampleField($value)
@@ -64,7 +64,7 @@ class BiHistoryRepository extends EntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?BiHistory
+    public function findOneBySomeField($value): ?BiSite
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.exampleField = :val')
