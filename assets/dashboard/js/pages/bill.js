@@ -22,7 +22,7 @@ Routing.setRoutingData(routes);
 
 let el = document.getElementById("invoices");
 if(el){
-    render(<Invoices {...el.dataset}/>, el)
+    render(<Invoices {...el.dataset} classes=" "/>, el)
 }
 
 el = document.getElementById("items");
