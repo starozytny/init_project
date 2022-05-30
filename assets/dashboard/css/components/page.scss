@@ -17,11 +17,11 @@
         position: relative;
         display: block;
         padding: 6px 12px 6px 14px;
-        color: var(--color1);
+        color: var(--grey2);
         @include fontSemibold();
 
         &:hover{
-          color: var(--color0);
+          color: var(--primary);
         }
 
         &:before{
@@ -35,10 +35,10 @@
 
       &.active{
         a{
-          color: var(--color0);
+          color: var(--primary);
 
           &:before{
-            background-color: var(--color0);
+            background-color: var(--primary);
           }
         }
       }

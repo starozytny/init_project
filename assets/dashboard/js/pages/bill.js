@@ -42,7 +42,7 @@ if(el){
 
 el = document.getElementById("customers");
 if(el){
-    render(<Customers {...el.dataset}/>, el)
+    render(<Customers {...el.dataset} classes=" "/>, el)
 }
 
 el = document.getElementById("society");
