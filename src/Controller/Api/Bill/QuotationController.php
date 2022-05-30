@@ -3,8 +3,6 @@
 namespace App\Controller\Api\Bill;
 
 use App\Entity\User;
-use App\Entity\Bill\BiHistory;
-use App\Entity\Bill\BiInvoice;
 use App\Entity\Bill\BiProduct;
 use App\Entity\Bill\BiQuotation;
 use App\Entity\Bill\BiSociety;
@@ -12,24 +10,21 @@ use App\Service\ApiResponse;
 use App\Service\Bill\BillService;
 use App\Service\Data\Bill\DataBill;
 use App\Service\MailerService;
-use App\Service\SanitizeData;
 use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Exception;
 use Mpdf\MpdfException;
 use OpenApi\Annotations as OA;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @Route("/api/bill/invoices", name="api_bill_invoices_")
+ * @Route("/api/bill/quotations", name="api_bill_quotations_")
  */
-class InvoiceController extends AbstractController
+class QuotationController extends AbstractController
 {
     private $billService;
     private $doctrine;
@@ -41,49 +36,10 @@ class InvoiceController extends AbstractController
     }
 
     /**
-     * @Route("/data/{id}", name="data", options={"expose"=true}, methods={"GET"})
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
-     * @OA\Response(
-     *     response=200,
-     *     description="Returns data"
-     * )
-     *
-     * @OA\Response(
-     *     response=400,
-     *     description="JSON empty or missing data or validation failed",
-     * )
-     *
-     * @OA\Tag(name="Bill")
-     *
-     * @param $id
-     * @param ApiResponse $apiResponse
-     * @param SerializerInterface $serializer
-     * @return JsonResponse
-     */
-    public function data($id, ApiResponse $apiResponse, SerializerInterface $serializer): JsonResponse
-    {
-        $mainSociety = $this->billService->getMainSociety($id);
-        $em = $this->doctrine->getManager();
-
-        $society = $this->billService->getSocietyByMainSociety($mainSociety);
-
-        $objs = $em->getRepository(BiInvoice::class)->findBy(['society' => $society]);
-        $objs = $serializer->serialize($objs, 'json', ['groups' => BiInvoice::INVOICE_READ]);
-
-        $params = $this->billService->getDataCommonPage($mainSociety->getManager(), $society, BiProduct::TYPE_QUOTATION, $serializer);
-
-        return $apiResponse->apiJsonResponseCustom(array_merge([
-            'invoices' => $objs,
-        ], $params));
-    }
-
-    /**
      * @throws Exception
      */
-    public function submitForm($type, BiInvoice $obj, Request $request, ApiResponse $apiResponse,
-                               ValidatorService $validator, DataBill $dataEntity, MailerService $mailerService): JsonResponse
+    public function submitForm($type, BiQuotation $obj, Request $request, ApiResponse $apiResponse,
+                               ValidatorService $validator, DataBill $dataEntity): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -111,10 +67,16 @@ class InvoiceController extends AbstractController
             $products[] = $dataEntity->setDataProduct(new BiProduct(), $pr, $society);
         }
 
-        $obj = $dataEntity->setDataInvoice($obj, $data, $society);
-
+        $obj = $dataEntity->setDataQuotation($obj, $data, $society);
         if($type == "update"){
             $obj->setUpdatedAt(new \DateTime());
+        }
+
+        if($toGenerate){
+            $obj = ($obj)
+                ->setNumero($dataEntity->createNumero('quotation', $obj->getDateAt(), $society))
+                ->setStatus(BiQuotation::STATUS_PROCESSING)
+            ;
         }
 
         $noErrors = $validator->validate($obj);
@@ -123,25 +85,11 @@ class InvoiceController extends AbstractController
         }
 
         $em->persist($obj);
+
+        $this->billService->updateProductIdentifiant($user, $obj, $products, BiProduct::TYPE_QUOTATION);
         $em->flush();
 
-        if($data->quotationId){
-            $quotation = $em->getRepository(BiQuotation::class)->find($data->quotationId);
-            ($quotation)
-                ->setInvoiceId($obj->getId())
-                ->setRefInvoice($obj->getNumero())
-                ->setIsArchived(true);
-            ;
-        }
-
-        $this->billService->updateProductIdentifiant($user, $obj, $products, BiProduct::TYPE_INVOICE);
-        $em->flush();
-
-        if($toGenerate){
-            $this->billService->generateAndSendInvoice($obj, $data, $user, $dataEntity, $apiResponse, $mailerService);
-        }
-
-        return $apiResponse->apiJsonResponse($obj, BiInvoice::INVOICE_READ);
+        return $apiResponse->apiJsonResponse($obj, BiQuotation::QUOTATION_READ);
     }
 
     /**
@@ -163,14 +111,12 @@ class InvoiceController extends AbstractController
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
      * @param DataBill $dataEntity
-     * @param MailerService $mailerService
      * @return JsonResponse
      * @throws Exception
      */
-    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse,
-                           DataBill $dataEntity, MailerService $mailerService): JsonResponse
+    public function create(Request $request, ValidatorService $validator, ApiResponse $apiResponse, DataBill $dataEntity): JsonResponse
     {
-        return $this->submitForm("create", new BiInvoice(), $request, $apiResponse, $validator, $dataEntity, $mailerService);
+        return $this->submitForm("create", new BiQuotation(), $request, $apiResponse, $validator, $dataEntity);
     }
 
     /**
@@ -196,20 +142,15 @@ class InvoiceController extends AbstractController
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
      * @param DataBill $dataEntity
-     * @param MailerService $mailerService
      * @return JsonResponse
      * @throws Exception
      */
-    public function update(Request $request, $id, ValidatorService $validator,  ApiResponse $apiResponse,
-                           DataBill $dataEntity, MailerService $mailerService): JsonResponse
+    public function update(Request $request, $id, ValidatorService $validator,  ApiResponse $apiResponse, DataBill $dataEntity): JsonResponse
     {
         $em = $this->doctrine->getManager();
 
-        $obj = $em->getRepository(BiInvoice::class)->find($id);
-        if($obj->getStatus() != BiInvoice::STATUS_DRAFT){
-            return $apiResponse->apiJsonResponseBadRequest("Vous ne pouvez pas modifier cette facture.");
-        }
-        return $this->submitForm("update", $obj, $request, $apiResponse, $validator, $dataEntity, $mailerService);
+        $obj = $em->getRepository(BiQuotation::class)->find($id);
+        return $this->submitForm("update", $obj, $request, $apiResponse, $validator, $dataEntity);
     }
 
     /**
@@ -234,9 +175,9 @@ class InvoiceController extends AbstractController
     {
         $em = $this->doctrine->getManager();
 
-        $obj = $em->getRepository(BiInvoice::class)->find($id);
-        if($obj->getStatus() !== BiInvoice::STATUS_DRAFT){
-            return $apiResponse->apiJsonResponseBadRequest("Vous ne pouvez pas supprimer une facture établie.");
+        $obj = $em->getRepository(BiQuotation::class)->find($id);
+        if($obj->getStatus() !== BiQuotation::STATUS_DRAFT){
+            return $apiResponse->apiJsonResponseBadRequest("Vous ne pouvez pas supprimer un devis établi.");
         }
 
         $products = $em->getRepository(BiProduct::class)->findBy(['identifiant' => $obj->getIdentifiant()]);
@@ -272,8 +213,7 @@ class InvoiceController extends AbstractController
     {
         $em = $this->doctrine->getManager();
 
-        $obj = $em->getRepository(BiInvoice::class)->find($id);
-
+        $obj = $em->getRepository(BiQuotation::class)->find($id);
         $products = $em->getRepository(BiProduct::class)->findBy(['identifiant' => $obj->getIdentifiant()]);
 
         $createdAt = new \DateTime();
@@ -281,18 +221,13 @@ class InvoiceController extends AbstractController
 
         $newObj = clone $obj;
         $newObj = ($newObj)
-            ->setStatus(BiInvoice::STATUS_DRAFT)
+            ->setStatus(BiQuotation::STATUS_DRAFT)
             ->setCreatedAt($createdAt)
             ->setUpdatedAt(null)
             ->setUid(Uuid::v4())
-            ->setQuotationId(null)
-            ->setRefQuotation(null)
-            ->setAvoirId(null)
-            ->setRefAvoir(null)
-            ->setContractId(null)
-            ->setRefContract(null)
-            ->setRelationId(null)
-            ->setRefRelation(null)
+            ->setInvoiceId(null)
+            ->setRefInvoice(null)
+            ->setIsArchived(false);
         ;
         $em->persist($newObj);
         $em->flush();
@@ -309,7 +244,7 @@ class InvoiceController extends AbstractController
 
         $em->flush();
 
-        return $apiResponse->apiJsonResponse($newObj, BiInvoice::INVOICE_READ);
+        return $apiResponse->apiJsonResponse($newObj, BiQuotation::QUOTATION_READ);
     }
 
     /**
@@ -326,7 +261,6 @@ class InvoiceController extends AbstractController
      *
      * @OA\Tag(name="Bill")
      *
-     * @param Request $request
      * @param $id
      * @param ApiResponse $apiResponse
      * @param DataBill $dataEntity
@@ -334,14 +268,27 @@ class InvoiceController extends AbstractController
      * @return JsonResponse
      * @throws Exception
      */
-    public function generate(Request $request, $id, ApiResponse $apiResponse, DataBill $dataEntity, MailerService $mailerService): JsonResponse
+    public function generate($id, ApiResponse $apiResponse, DataBill $dataEntity,
+                             MailerService $mailerService): JsonResponse
     {
         $em = $this->doctrine->getManager();
-        $data = json_decode($request->getContent());
 
-        $obj = $em->getRepository(BiInvoice::class)->find($id);
+        $obj = $em->getRepository(BiQuotation::class)->find($id);
+        $obj = $dataEntity->setDataQuotationGenerated($obj);
+        $obj->setIsSent(true);
 
-        return $this->billService->generateAndSendInvoice($obj, $data, $this->getUser(), $dataEntity, $apiResponse, $mailerService);
+        if(!$mailerService->sendQuotation($obj)){
+            $obj->setIsSent(false);
+            $em->flush();
+
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'message',
+                'message' => "Le message n\'a pas pu être délivré. Veuillez contacter le support."
+            ]]);
+        }
+        $em->flush();
+
+        return $apiResponse->apiJsonResponse($obj, BiQuotation::QUOTATION_READ);
     }
 
     /**
@@ -366,12 +313,59 @@ class InvoiceController extends AbstractController
     {
         $em = $this->doctrine->getManager();
 
-        $obj = $em->getRepository(BiInvoice::class)->find($id);
+        $obj = $em->getRepository(BiQuotation::class)->find($id);
 
         $obj->setIsArchived(!$obj->getIsArchived());
         $em->flush();
 
-        return $apiResponse->apiJsonResponse($obj, BiInvoice::INVOICE_READ);
+        return $apiResponse->apiJsonResponse($obj, BiQuotation::QUOTATION_READ);
+    }
+
+    /**
+     * @Route("/answer/{id}/{answer}", name="answer", options={"expose"=true}, methods={"POST"})
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Return message successful",
+     * )
+     * @OA\Response(
+     *     response=403,
+     *     description="Forbidden for not good role or user",
+     * )
+     *
+     * @OA\Tag(name="Bill")
+     *
+     * @param $id
+     * @param $answer
+     * @param ApiResponse $apiResponse
+     * @return JsonResponse
+     */
+    public function answer($id, $answer, ApiResponse $apiResponse): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        $obj = $em->getRepository(BiQuotation::class)->find($id);
+
+        $status = $obj->getStatus();
+        switch ($answer){
+            case 0:
+                $status = BiQuotation::STATUS_REFUSED;
+                $obj->setIsArchived(true);
+                break;
+            case 1:
+                $status = BiQuotation::STATUS_ACCEPTED;
+                break;
+            case 2:
+                $status = BiQuotation::STATUS_PROCESSING;
+                break;
+            default:
+                break;
+        }
+
+        $obj->setStatus($status);
+        $em->flush();
+
+        return $apiResponse->apiJsonResponse($obj, BiQuotation::QUOTATION_READ);
     }
 
     /**
@@ -397,10 +391,10 @@ class InvoiceController extends AbstractController
     {
         $em = $this->doctrine->getManager();
 
-        $obj = $em->getRepository(BiInvoice::class)->find($id);
+        $obj = $em->getRepository(BiQuotation::class)->find($id);
 
         $obj->setIsSent(true);
-        if(!$mailerService->sendInvoice($obj)){
+        if(!$mailerService->sendQuotation($obj)){
 
             $obj->setIsSent(false);
             $em->flush();
@@ -413,54 +407,7 @@ class InvoiceController extends AbstractController
 
         $em->flush();
 
-        return $apiResponse->apiJsonResponse($obj, BiInvoice::INVOICE_READ);
-    }
-
-    /**
-     * @Route("/payement/{id}", name="payement", options={"expose"=true}, methods={"POST"})
-     *
-     * @OA\Response(
-     *     response=200,
-     *     description="Return message successful",
-     * )
-     * @OA\Response(
-     *     response=403,
-     *     description="Forbidden for not good role or user",
-     * )
-     *
-     * @OA\Tag(name="Bill")
-     *
-     * @param Request $request
-     * @param $id
-     * @param ApiResponse $apiResponse
-     * @param DataBill $dataEntity
-     * @param SanitizeData $sanitizeData
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function payement(Request $request, $id, ApiResponse $apiResponse, DataBill $dataEntity, SanitizeData $sanitizeData): JsonResponse
-    {
-        $em = $this->doctrine->getManager();
-        $data = json_decode($request->getContent());
-
-        $obj = $em->getRepository(BiInvoice::class)->find($id);
-
-        $dateAt = $sanitizeData->createDate($data->dateAt);
-        $price = $sanitizeData->setToFloat($data->price, 0);
-        $name = $data->name ? $sanitizeData->trimData($data->name) : "Paiement du " . $dateAt->format('d/m/Y') . ' de ' . $price;
-
-        $history = $dataEntity->setDataHistory(new BiHistory(), $obj, BiHistory::TYPE_PAYEMENT, $name , $dateAt, $price);
-
-        $remaining = $obj->getToPay() - $price;
-        $obj = ($obj)
-            ->setToPay($remaining)
-            ->setStatus($remaining > 0 ? BiInvoice::STATUS_PAID_PARTIAL : BiInvoice::STATUS_PAID);
-        ;
-
-        $em->persist($history);
-        $em->flush();
-
-        return $apiResponse->apiJsonResponse($obj, BiInvoice::INVOICE_READ);
+        return $apiResponse->apiJsonResponse($obj, BiQuotation::QUOTATION_READ);
     }
 
     /**
@@ -486,8 +433,8 @@ class InvoiceController extends AbstractController
     {
         $em = $this->doctrine->getManager();
 
-        $obj = $em->getRepository(BiInvoice::class)->find($id);
-        $this->billService->getInvoice($this->getUser(), [$obj]);
+        $obj = $em->getRepository(BiQuotation::class)->find($id);
+        $this->billService->getQuotation($this->getUser(), [$obj]);
 
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }

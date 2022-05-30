@@ -2,29 +2,32 @@
 
 namespace App\Controller\Api\Bill;
 
-use App\Entity\Bill\BiUnity;
-use App\Entity\Society;
 use App\Entity\User;
+use App\Entity\Bill\BiUnity;
+use App\Entity\Bill\BiSociety;
 use App\Service\ApiResponse;
+use App\Service\Bill\BillService;
 use App\Service\Data\Bill\DataUnity;
 use App\Service\Data\DataService;
 use App\Service\ValidatorService;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 
 /**
  * @Route("/api/bill/unities", name="api_bill_unities_")
  */
 class UnityController extends AbstractController
 {
+    private $billService;
     private $doctrine;
 
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(ManagerRegistry $doctrine, BillService $billService)
     {
+        $this->billService = $billService;
         $this->doctrine = $doctrine;
     }
 
@@ -38,7 +41,7 @@ class UnityController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $society = $em->getRepository(Society::class)->find($data->societyId);
+        $society = $em->getRepository(BiSociety::class)->find($data->societyId);
         if(!$society){
             return $apiResponse->apiJsonResponseBadRequest('La société est introuvable, veuillez contacter le support.');
         }
@@ -109,14 +112,17 @@ class UnityController extends AbstractController
      * @OA\Tag(name="Bill")
      *
      * @param Request $request
-     * @param BiUnity $obj
+     * @param $id
      * @param ValidatorService $validator
      * @param ApiResponse $apiResponse
      * @param DataUnity $dataEntity
      * @return JsonResponse
      */
-    public function update(Request $request, BiUnity $obj, ValidatorService $validator,  ApiResponse $apiResponse, DataUnity $dataEntity): JsonResponse
+    public function update(Request $request, $id, ValidatorService $validator,  ApiResponse $apiResponse, DataUnity $dataEntity): JsonResponse
     {
+        $em = $this->doctrine->getManager();
+
+        $obj = $em->getRepository(BiUnity::class)->find($id);
         if($obj->getIsNatif()){
             return $apiResponse->apiJsonResponseBadRequest('Vous ne pouvez pas modifier cette unité.');
         }
@@ -133,16 +139,19 @@ class UnityController extends AbstractController
      *
      * @OA\Tag(name="Bill")
      *
-     * @param BiUnity $obj
+     * @param $id
      * @param DataService $dataService
      * @param ApiResponse $apiResponse
      * @return JsonResponse
      */
-    public function delete(BiUnity $obj, DataService $dataService, ApiResponse $apiResponse): JsonResponse
+    public function delete($id, DataService $dataService, ApiResponse $apiResponse): JsonResponse
     {
+        $em = $this->doctrine->getManager();
+
+        $obj = $em->getRepository(BiUnity::class)->find($id);
         if($obj->getIsNatif()){
             return $apiResponse->apiJsonResponseBadRequest('Vous ne pouvez pas modifier cette unité.');
         }
-        return $dataService->delete($obj);
+        return $dataService->delete($this->getUser(), $obj);
     }
 }
