@@ -2,6 +2,11 @@
   position: relative;
   display: inline-block;
 
+  .dropdown-separator{
+    height: 1px;
+    background: var(--greyShadow);
+  }
+
   .btn-icon, .btn{
     position: relative;
 
@@ -26,8 +31,10 @@
     cursor: pointer;
   }
 
-  a, .btn, .btn-icon{
+  a, .btn, .btn-icon, div{
     color: var(--grey3);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 
     &:hover{
       color: var(--txt);
@@ -41,7 +48,7 @@
   top: 42px; right: 0;
   padding: 4px 0;
   background: var(--alpha);
-  box-shadow: 0 4px 12px var(--greyShadow);
+  box-shadow: 0 4px 12px var(--grey);
   opacity: 0;
   z-index: -1;
   transition: all 0.2s ease-in-out;

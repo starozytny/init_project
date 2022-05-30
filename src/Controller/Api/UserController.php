@@ -264,7 +264,7 @@ class UserController extends AbstractController
         $em->flush();
 
         $fileUploader->deleteFile($obj->getAvatar(), self::FOLDER_AVATARS);
-        return $apiResponse->apiJsonResponseSuccessful("Supression réussie !");
+        return $apiResponse->apiJsonResponseSuccessful("Suppression réussie !");
     }
 
     /**
@@ -325,7 +325,7 @@ class UserController extends AbstractController
             $fileUploader->deleteFile($avatar, self::FOLDER_AVATARS);
         }
 
-        return $apiResponse->apiJsonResponseSuccessful("Supression de la sélection réussie !");
+        return $apiResponse->apiJsonResponseSuccessful("Suppression de la sélection réussie !");
     }
 
     /**

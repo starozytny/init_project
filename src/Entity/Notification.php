@@ -112,7 +112,7 @@ class Notification extends DataEntity
      */
     public function getCreatedAtAgo(): ?string
     {
-        return $this->getHowLongAgo($this->createdAt);
+        return $this->getHowLongAgo($this->createdAt, 2);
     }
 
     public function getIsSeen(): ?bool

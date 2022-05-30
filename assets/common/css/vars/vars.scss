@@ -32,6 +32,24 @@
   }
 }
 
+@mixin toolbarSearch(){
+  .toolbar {
+    .filter-search {
+      .search{
+        width: 100%;
+      }
+    }
+  }
+  @media (min-width:768px) {
+    .toolbar{
+      .filter-search{
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  }
+}
+
 @mixin toolbarCreateSearch($width: 170){
   .toolbar{
     .filter-search{

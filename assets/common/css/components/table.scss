@@ -25,6 +25,7 @@
           "warning" var(--warning),
           "primary" var(--primary),
           "success" var(--success),
+          "selected" var(--grey3),
 ;
 
   @each $number, $bg in $status {
@@ -59,6 +60,18 @@
 
       &:hover{
         background-color: var(--primaryNuance0);
+      }
+
+      &.item-sub{
+        padding: 8px 12px;
+      }
+
+      &.item-main {
+        background-color: var(--fondContent);
+      }
+
+      .btn-icon{
+        padding: 0 8px;
       }
     }
 
@@ -207,7 +220,7 @@
       margin-top: 8px;
     }
 
-    .col-1, .col-2, .col-3, .col-4, .col-5{
+    .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7{
       width: 100%;
     }
 
@@ -262,7 +275,6 @@
     & > .items {
       & > .item{
         padding-top: 12px;
-        padding-right: 4px;
       }
       & > .item-header {
         display: flex;
@@ -331,6 +343,12 @@
 
       & > *:not(:first-child) {
         margin-left: 8px;
+      }
+    }
+
+    & > .item:not(.item-header){
+      .actions{
+        margin-right: -6px;
       }
     }
 
@@ -426,6 +444,35 @@
         width: 120px;
       }
     }
+
+    .infos-col-6{
+      .col-1{
+        width: calc(100% - 72% - 96px - 120px);
+        margin-right: 24px;
+      }
+      .col-2{
+        width: calc(18% - 24px);
+        margin-right: 24px;
+      }
+      .col-3{
+        width: calc(18% - 24px);
+        margin-right: 24px;
+        margin-top: 0;
+      }
+      .col-4{
+        width: calc(18% - 24px);
+        margin-right: 24px;
+        margin-top: 0;
+      }
+      .col-5{
+        width: calc(18% - 24px);
+        margin-right: 24px;
+        margin-top: 0;
+      }
+      .col-6{
+        width: 120px;
+      }
+    }
   }
 }
 
@@ -475,6 +522,15 @@
     .infos-col-5{
       .col-1{
         width: calc(100% - 60% - 96px - 128px);
+      }
+      .col-5{
+        width: 128px;
+      }
+    }
+
+    .infos-col-6{
+      .col-1{
+        width: calc(100% - 72% - 96px - 128px);
       }
       .col-5{
         width: 128px;

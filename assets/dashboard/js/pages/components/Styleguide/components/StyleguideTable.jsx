@@ -229,7 +229,7 @@ function TableCol2Image ({ data }) {
                     <div className="item-content">
                         <div className="item-body item-body-image">
                             <div className="item-image">
-                                <img src={`https://robohash.org/${Math.random()}?size=64x64`} alt="Avatar" />
+                                <img src={`https://robohash.org/${Math.random()}`} alt="Avatar" />
                             </div>
                             <div className="infos infos-col-2">
                                 <div className="col-1">
@@ -273,7 +273,7 @@ function TableCol3Image ({ data }) {
                     <div className="item-content">
                         <div className="item-body item-body-image">
                             <div className="item-image">
-                                <img src={`https://robohash.org/${Math.random()}?size=64x64`} alt="Avatar" />
+                                <img src={`https://robohash.org/${Math.random()}`} alt="Avatar" />
                             </div>
                             <div className="infos infos-col-3">
                                 <div className="col-1">
@@ -321,7 +321,7 @@ function TableCol4Image ({ data }) {
                     <div className="item-content">
                         <div className="item-body item-body-image">
                             <div className="item-image">
-                                <img src={`https://robohash.org/${Math.random()}?size=64x64`} alt="Avatar" />
+                                <img src={`https://robohash.org/${Math.random()}`} alt="Avatar" />
                             </div>
                             <div className="infos infos-col-4">
                                 <div className="col-1">

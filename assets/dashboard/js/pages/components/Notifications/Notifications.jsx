@@ -45,8 +45,8 @@ export class Notifications extends Component {
 
     handleContentList = (currentData, changeContext) => {
         return <NotificationsList onChangeContext={changeContext}
-                                  onDelete={this.handleDelete}
-                                  onDeleteAll={this.handleDeleteGroup}
+                                  onDelete={this.layout.current.handleDelete}
+                                  onDeleteAll={this.layout.current.handleDeleteGroup}
                                   onSeen={this.handleSeen}
                                   data={currentData} />
     }

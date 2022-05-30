@@ -77,7 +77,7 @@ function setCityFromZipcode(self, e, arrayPostalCode)
             v = arrayPostalCode.filter(el => el.cp === value)
 
             if(v.length === 1){
-                self.setState({ city: v[0].city })
+                self.setState({ [nameStateCity]: v[0].city })
             }
         }
     }

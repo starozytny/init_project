@@ -307,7 +307,7 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
      */
     public function getCreatedAtAgo(): string
     {
-        return $this->getHowLongAgo($this->getCreatedAt());
+        return $this->getHowLongAgo($this->getCreatedAt(), 2);
     }
 
     public function getLastLogin(): ?\DateTimeInterface
@@ -472,7 +472,7 @@ class User extends DataEntity implements UserInterface, PasswordAuthenticatedUse
      */
     public function getAvatarFile(): string
     {
-        return $this->getFileOrDefault($this->avatar, self::FOLDER_AVATARS, "https://robohash.org/" . $this->username . "?size=64x64");
+        return $this->getFileOrDefault($this->avatar, self::FOLDER_AVATARS, "https://robohash.org/" . $this->username);
     }
 
     /**

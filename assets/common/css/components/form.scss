@@ -215,7 +215,7 @@ select{
 
       &:after{
         font-family: "icomoon" !important;
-        content: "\e90a";
+        content: "\e912";
         top: 10px; left: 10px;
         font-size: 12px;
         z-index: 6;
@@ -232,7 +232,7 @@ select{
         }
 
         &:after{
-          content: "\e90f";
+          content: "\e959";
           color: var(--primary);
         }
       }
