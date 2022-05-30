@@ -1,0 +1,31 @@
+{% extends 'admin/pages/bill/settings/template.html.twig' %}
+
+{% set page_title %}Notes{% endset %}
+{% set submenuActive = "Paramètres" %}
+
+{% block main_content %}
+    <div class="main-content">
+        <div class="default-page default-page-col-2">
+            <div class="col-1">
+                {% include "admin/layout/components/default_menu.html.twig" %}
+            </div>
+
+            <div class="col-2">
+                <div class="default-page-content">
+                    <section>
+                        <h2>Notes</h2>
+                        <div class="text-infos">
+                            <p>
+                                Valeurs par défaut des champs notes pour les devis, factures et avoirs.
+                            </p>
+                        </div>
+                    </section>
+
+                    <div id="notes" data-element="{{ society }}">
+                        {% include "dashboard/layout/components/spinner.html.twig" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,15 +1,5 @@
 {% extends 'admin/layout/layout.html.twig' %}
 
-{% set menu_customer = [
-    { 'value': "clients" ,   'label': "Clients",    'path': path('admin_bill_customers_index') },
-    { 'value': "sites" ,     'label': "Sites",      'path': path('admin_bill_sites_index') },
-] %}
-
-{% set menu_contracts = [
-    { 'value': "traitement" ,  'label': "Traitement", 'path': path('admin_bill_contracts_process', {'year': 'now' | date("Y"), 'month': 'now' | date('n')}) },
-    { 'value': "contrats" ,    'label': "Liste",      'path': path('admin_bill_contracts_index') },
-] %}
-
 {% set submenu = [
     { 'label': "Devis",       'path': path('admin_bill_quotations_index') },
     { 'label': "Factures",    'path': path('admin_bill_invoices_index') },
@@ -18,6 +8,13 @@
     { 'label': "Paramètres",  'path': path('admin_bill_settings_index') },
 ] %}
 
+{% set default_menu = [
+    { 'value': "entreprise" ,   'label': "Entreprise",    'path': path('admin_bill_settings_index') },
+    { 'value': "notes" ,        'label': "Notes",         'path': path('admin_bill_settings_notes') },
+    { 'value': "taxes" ,        'label': "Taxes",         'path': path('admin_bill_settings_taxes_index') },
+    { 'value': "unites" ,       'label': "Unités",        'path': path('admin_bill_settings_unities_index') },
+    { 'value': "comptabilite" , 'label': "Comptabilité",  'path': path('admin_bill_settings_compta_index') }
+] %}
 
 {% block stylesheets %}
     {{ parent() }}

@@ -1,0 +1,38 @@
+{% extends 'admin/pages/bill/settings/template.html.twig' %}
+
+{% set page_title %}Comptabilité{% endset %}
+{% set submenuActive = "Paramètres" %}
+
+
+{% block main_content %}
+    <div class="main-content">
+        <div class="default-page default-page-col-2">
+            <div class="col-1">
+                {% include "admin/layout/components/default_menu.html.twig" %}
+            </div>
+
+            <div class="col-2">
+                <div class="default-page-content">
+                    <section>
+                        <h2>Export comptables des factures</h2>
+                    </section>
+
+                    <div>
+                        <section>
+                            {% if society.dateCompta %}
+                                <div class="text-infos" style="margin-bottom: 8px">
+                                    <p>
+                                        Dernier export comptabilité réalisé le : {{ society.dateComptaString }}
+                                    </p>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <a href="{{ path('admin_bill_export_compta') }}" class="btn btn-primary">Export comptabilité</a>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

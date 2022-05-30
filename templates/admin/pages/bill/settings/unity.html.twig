@@ -1,0 +1,35 @@
+{% extends 'admin/pages/bill/settings/template.html.twig' %}
+
+{% set page_title %}Unités{% endset %}
+{% set submenuActive = "Paramètres" %}
+
+{% block main_content %}
+    <div class="main-content">
+        <div class="default-page default-page-col-2">
+            <div class="col-1">
+                {% include "admin/layout/components/default_menu.html.twig" %}
+            </div>
+
+            <div class="col-2">
+                <div class="default-page-content">
+                    <section>
+                        <h2>Unités</h2>
+                        <div class="text-infos">
+                            <p>
+                                Ajouter une unité pour une personnalisation complète.
+                                <br>
+                                Les unités en <span class="badge badge-0">Natif</span> ne peuvent pas être supprimées ou modifiées.</p>
+                        </div>
+                    </section>
+
+                    <div id="unities"
+                         data-donnees="{{ donnees }}"
+                         data-society-id="{{ society.id }}"
+                    >
+                        {% include "dashboard/layout/components/spinner.html.twig" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
