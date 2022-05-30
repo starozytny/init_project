@@ -1,3 +1,21 @@
 @import "../vars/vars";
 
+@import "../components/planning";
 @import "../../../common/css/pages/bill";
+
+#society, #notes{
+  .form{
+    padding: 0;
+    background-color: transparent;
+
+    .btn-color0{
+      padding: 8px 24px;
+    }
+  }
+}
+
+.text-infos{
+  max-width: 768px;
+  font-size: 16px;
+  color: var(--grey3);
+}

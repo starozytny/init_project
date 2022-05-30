@@ -13,7 +13,7 @@ export class ContractsGenerate extends Component {
     render () {
         const { data, dateInvoice, month, onUpdateData, onUpdateDateElement, onGenerate } = this.props;
 
-        let dateInvoiceString = dateInvoice.toLocaleDateString("fr");
+        let dateInvoiceString = dateInvoice ? dateInvoice.toLocaleDateString("fr") : "";
 
         return <>
             <div className="line">

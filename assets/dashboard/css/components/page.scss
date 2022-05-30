@@ -1,3 +1,130 @@
 @import "../vars/vars";
 
 @import "../../../common/css/components/page";
+
+.page-title{
+  h1 + .text-infos{
+    margin-top: 12px;
+  }
+}
+
+.default-page{
+  .default-page-menu{
+    max-width: 164px;
+
+    .item{
+      a{
+        position: relative;
+        display: block;
+        padding: 6px 12px 6px 14px;
+        color: var(--color1);
+        @include fontSemibold();
+
+        &:hover{
+          color: var(--color0);
+        }
+
+        &:before{
+          content: "";
+          display: block;
+          width: 2px; height: 80%;
+          position: absolute;
+          top: 3px; left: 0;
+        }
+      }
+
+      &.active{
+        a{
+          color: var(--color0);
+
+          &:before{
+            background-color: var(--color0);
+          }
+        }
+      }
+    }
+  }
+
+  .default-page-content{
+    background-color: var(--greyShadow);
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--greyShadow);
+
+    h2{
+      @include fontBold();
+
+      & + .text-infos{
+        margin-top: 12px;
+      }
+    }
+
+    section{
+      &:not(:last-child){
+        padding-bottom: 24px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--grey);
+      }
+    }
+  }
+}
+
+.default-page.default-page-col-2{
+  & > .col-2{
+    margin-top: 24px;
+  }
+}
+
+//                      __   _____ __    ___    __
+//                     | _| |___  / /_  ( _ )  |_ |
+//    _____ _____ _____| |     / / '_ \ / _ \   | |_____ _____ _____
+//   |_____|_____|_____| |    / /| (_) | (_) |  | |_____|_____|_____|
+//                     | |   /_/  \___/ \___/   | |
+//                     |__|                    |__|
+@media (min-width:768px) {
+  .default-page{
+    .default-page-menu{
+      .item {
+        a {
+          padding: 8px 12px 8px 14px;
+        }
+      }
+    }
+  }
+}
+
+//                      __   _  ___ ____  _  _     __
+//                     | _| / |/ _ \___ \| || |   |_ |
+//    _____ _____ _____| |  | | | | |__) | || |_   | |_____ _____ _____
+//   |_____|_____|_____| |  | | |_| / __/|__   _|  | |_____|_____|_____|
+//                     | |  |_|\___/_____|  |_|    | |
+//                     |__|                       |__|
+@media (min-width: 1024px) {
+  .default-page.default-page-col-2{
+    @include flex(row, flex-start, flex-start);
+
+    & > .col-1{
+      width: 170px;
+    }
+
+    & > .col-2{
+      width: calc(100% - 170px - 48px);
+      margin-left: 48px;
+      margin-top: 0;
+    }
+  }
+}
+
+//                      __   _ ____  ___   ___    __
+//                     | _| / |___ \( _ ) / _ \  |_ |
+//    _____ _____ _____| |  | | __) / _ \| | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | |/ __/ (_) | |_| |  | |_____|_____|_____|
+//                     | |  |_|_____\___/ \___/   | |
+//                     |__|                      |__|
+@media (min-width:1280px) {
+  .default-page{
+    .default-page-content{
+      padding: 24px;
+    }
+  }
+}
