@@ -1,0 +1,28 @@
+#quotations{
+
+  .items-default{
+    .infos{
+      .col-5,.col-6{
+        text-align: right;
+
+        .name{
+          align-items: flex-end;
+          margin-bottom: 4px;
+        }
+      }
+    }
+  }
+
+  .badge-0{
+    background-color: var(--grey2);
+  }
+  .badge-1{
+    background-color: var(--warning);
+  }
+  .badge-2{
+    background-color: var(--primary);
+  }
+  .badge-3{
+    background-color: var(--danger);
+  }
+}

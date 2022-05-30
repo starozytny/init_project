@@ -1,0 +1,138 @@
+#contracts-process {
+
+  .dropdown-items{
+    top: 22px;
+  }
+
+  .contracts-process-menu{
+    & > .item{
+      &:not(:last-child){
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--greyShadow);
+      }
+    }
+
+    .item-generate{
+      text-align: center;
+
+      & > div:first-child{
+        margin-bottom: 8px;
+      }
+    }
+
+    .years{
+      .days{
+        justify-content: center;
+        padding-top: 12px;
+
+        .day{
+          color: var(--txt);
+
+          &:hover{
+            color: var(--color0);
+          }
+        }
+
+        .day.active{
+          background-color: var(--color1);
+          cursor: initial;
+        }
+      }
+    }
+
+    .months{
+      @include flex(column, flex-start, flex-start);
+
+      & > a{
+        display: inline-block;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--txt);
+        width: auto;
+        min-width: 114px;
+        padding: 4px 4px 2px 4px;
+        border-radius: 4px;
+
+        & > span{
+          @include flex(row, flex-start, flex-start);
+
+          & > span{
+            display: inline-block;
+
+            &:nth-child(1){
+              width: 20px;
+            }
+
+            &:nth-child(2){
+              margin: 0 6px 0 4px;
+            }
+          }
+        }
+
+        &.disabled{
+          color: var(--grey2);
+        }
+
+        &.active{
+          opacity: 1;
+          cursor: initial;
+          background-color: var(--color1);
+        }
+
+        &:not(:last-child){
+          margin-bottom: 2px;
+        }
+
+        &:not(.active):hover{
+          transform: translateX(3px);
+          color: var(--color0);
+        }
+      }
+    }
+  }
+}
+
+
+
+//                      __   _  ___ ____  _  _     __
+//                     | _| / |/ _ \___ \| || |   |_ |
+//    _____ _____ _____| |  | | | | |__) | || |_   | |_____ _____ _____
+//   |_____|_____|_____| |  | | |_| / __/|__   _|  | |_____|_____|_____|
+//                     | |  |_|\___/_____|  |_|    | |
+//                     |__|                       |__|
+@media (min-width: 1024px) {
+  .aside.generate-general{
+    &.true{
+      width: 90%;
+    }
+  }
+}
+
+//                      __   _ ____  ___   ___    __
+//                     | _| / |___ \( _ ) / _ \  |_ |
+//    _____ _____ _____| |  | | __) / _ \| | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | |/ __/ (_) | |_| |  | |_____|_____|_____|
+//                     | |  |_|_____\___/ \___/   | |
+//                     |__|                      |__|
+@media (min-width:1280px) {
+  .aside.generate-general{
+    &.true{
+      width: 80%;
+    }
+  }
+}
+
+//                      __   _  __    ___   ___    __
+//                     | _| / |/ /_  / _ \ / _ \  |_ |
+//    _____ _____ _____| |  | | '_ \| | | | | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | | (_) | |_| | |_| |  | |_____|_____|_____|
+//                     | |  |_|\___/ \___/ \___/   | |
+//                     |__|                       |__|
+@media (min-width: 1600px){
+  .aside.generate-general{
+    &.true{
+      width: 60%;
+    }
+  }
+}

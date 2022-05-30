@@ -1,69 +1,134 @@
 @import "./split/bill/form";
+@import "./split/bill/contract";
+@import "./split/bill/invoice";
+@import "./split/bill/quotation";
+
+#societies{
+  @include toolbarCreateSearch(192);
+}
 
 #invoices{
-  @include toolbarCreateFilterSearch(185);
+  @include toolbarCreateFilterSearch(192);
 }
 
 #items{
-  @include toolbarCreateSearch(171);
-}
-#taxes{
-  @include toolbarCreateFilterSearch(164);
+  @include toolbarCreateSearch(178);
 }
 
-#unities{
+#taxes{
   @include toolbarCreateFilterSearch(170);
 }
 
-#customers{
-  @include toolbarCreateSearch(164);
+#unities{
+  @include toolbarCreateFilterSearch(176);
 }
 
+#customers{
+  @include toolbarCreateFilterSearch(172);
+}
 
-#invoices{
-  .aside-select{
-    .toolbar{
-      .filter-search{
-        .search{
-          width: 100%;
-        }
-      }
-    }
-  }
+#sites{
+  @include toolbarCreateSearch(158);
+}
+
+#avoirs{
+  @include toolbarCreateFilterSearch(166);
 
   .badge-0{
     background-color: var(--grey2);
   }
+}
 
-  .line-products{
-    margin-top: 24px;
+#contracts{
+  @include toolbarCreateSearch(184);
 
-    .item{
-      @include flex(row, flex-start, flex-start);
+  .toolbar-customer{
+    .filter-search{
       width: 100%;
-
-      &:not(:last-child){
-        margin-bottom: 12px;
-      }
-
-      .col-1{
-        @include fontSemibold();
-        width: calc(100% - 30% - 12px);
-        margin-right: 12px;
-      }
-
-      .col-2{
-        width: 30%;
-
-        .sub{
-          font-size: 15px;
-          color: var(--grey3);
-          margin-top: 2px;
-        }
-      }
+      margin-left: 0;
     }
   }
 
+  .aside{
+    .items.items-default{
+      border: 2px solid var(--greyShadow);
+    }
+  }
+
+  .contract-numero-form{
+    @include flex(row, center, flex-start);
+  }
+
+  .form-group{
+    .items-table{
+      width: 100%;
+    }
+  }
+}
+
+#contracts-process {
+  @include toolbarSearch();
+}
+
+.item-main{
+  .name{
+    text-transform: uppercase;
+  }
+}
+
+#quotations{
+  @include toolbarCreateFilterSearch(170);
+}
+
+
+.item-add{
+  border: 2px solid transparent;
+  border-radius: 0 0 8px 8px;
+
+  .btn-icon{
+    [class^="icon-"]{
+      font-size: 24px;
+    }
+    .icon-add-square{
+      color: var(--primary);
+    }
+    .icon-check{
+      color: var(--warning);
+    }
+  }
+}
+
+.items-table{
+  & > .items {
+    & > .item-add{
+      &:hover{
+        background-color: transparent;
+        border-color: var(--color1);
+      }
+    }
+  }
+}
+
+
+
+#customers{
+  .sites-list-customer-form{
+    width: 100%;
+
+    .items-table{
+      border: 2px solid var(--greyShadow);
+    }
+  }
+}
+
+#contracts{
+  .items-list-contract-form{
+    width: 100%;
+
+    .items-table{
+      border: 2px solid var(--greyShadow);
+    }
+  }
 }
 
 //                      __   _____ __    ___    __
@@ -73,64 +138,8 @@
 //                     | |   /_/  \___/ \___/   | |
 //                     |__|                    |__|
 @media (min-width:768px) {
-
-  #invoices{
-    .aside-select{
-      .toolbar{
-        .filter-search{
-          margin-left: 0;
-          width: 100%;
-        }
-      }
-    }
-  }
-
-
-  .items-default{
-    .infos-col-7{
-      .col-1{
-        width: 120px;
-        margin-right: 24px;
-      }
-      .col-2{
-        width: calc(100% - 680px - 42px);
-        margin-right: 24px;
-        margin-top: 0;
-      }
-
-      .col-3, .col-4{
-        width: 140px;
-        margin-right: 24px;
-      }
-
-      .col-5{
-        width: 180px;
-        margin-right: 24px;
-        margin-top: 0;
-        text-align: right;
-
-        .name{
-          justify-content: flex-end;
-        }
-      }
-      .col-6{
-        width: 100px;
-        margin-right: 24px;
-        margin-top: 0;
-        text-align: right;
-      }
-      .col-7{
-        width: 120px;
-      }
-    }
-
-    .item-header{
-      .infos-col-7{
-        .col-2{
-          width: calc(100% - 680px - 24px);
-        }
-      }
-    }
+  .indent-24{
+    padding-left: 24px;
   }
 }
 
@@ -141,12 +150,86 @@
 //                     | |  |_|\___/_____|  |_|    | |
 //                     |__|                       |__|
 @media (min-width: 1024px) {
-  #invoices{
-    .aside-select{
-      .aside{
-        width: 70%;
+  #contracts {
+    .aside.true {
+      width: 86%;
+    }
+  }
+
+  .default-page.default-page-contract{
+
+    .items-default{
+      .infos-col-7{
+        .col-2{
+          width: calc(100% - 452px - 42px);
+        }
+        .col-3{
+          width: 76px;
+        }
+
+        .col-4, .col-5{
+          width: 108px;
+        }
+
+        .col-7{
+          text-align: right;
+          width: 42px;
+        }
+      }
+    }
+  }
+
+  .items-default{
+    .infos-col-7{
+      .col-1{
+        width: 138px;
+        margin-right: 12px;
+      }
+      .col-2{
+        width: calc(100% - 698px - 42px);
+        margin-right: 12px;
+        margin-top: 0;
+      }
+
+      .col-3, .col-4{
+        width: 140px;
+        margin-right: 12px;
+      }
+
+      .col-5{
+        width: 180px;
+        margin-right: 12px;
+        margin-top: 0;
+        text-align: right;
+
+        .name{
+          justify-content: flex-end;
+        }
+      }
+      .col-6{
+        width: 100px;
+        margin-right: 12px;
+        margin-top: 0;
+        text-align: right;
+      }
+      .col-7{
+        width: 120px;
       }
     }
   }
 }
 
+
+//                      __   _  __    ___   ___    __
+//                     | _| / |/ /_  / _ \ / _ \  |_ |
+//    _____ _____ _____| |  | | '_ \| | | | | | |  | |_____ _____ _____
+//   |_____|_____|_____| |  | | (_) | |_| | |_| |  | |_____|_____|_____|
+//                     | |  |_|\___/ \___/ \___/   | |
+//                     |__|                       |__|
+@media (min-width: 1600px){
+  #contracts {
+    .aside.true {
+      width: 60%;
+    }
+  }
+}
