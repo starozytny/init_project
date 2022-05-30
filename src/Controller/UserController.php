@@ -148,7 +148,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/formation/sessions/{slug}", options={"expose"=true}, name="registration")
+     * @Route("/formations/sessions/{slug}", options={"expose"=true}, name="registration")
      */
     public function registration(FoSession $obj, SerializerInterface $serializer): Response
     {
@@ -193,7 +193,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/formation/sessions/{slug}/modification", options={"expose"=true}, name="registration_update")
+     * @Route("/formations/sessions/{slug}/modification", options={"expose"=true}, name="registration_update")
      */
     public function registrationUpdate(FoSession $obj, SerializerInterface $serializer): Response
     {
